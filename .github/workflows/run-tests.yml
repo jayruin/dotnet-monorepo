@@ -1,0 +1,26 @@
+name: Run Tests
+
+on:
+  workflow_call:
+    inputs:
+      path:
+        required: true
+        type: string
+      dotnet-version:
+        required: true
+        type: string
+
+jobs:
+  run-tests:
+    strategy:
+      max-parallel: 1
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+      - run: dotnet test ${{ inputs.path }}
+        

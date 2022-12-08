@@ -1,0 +1,16 @@
+name: Run Tests Epub
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - src/Epub/**
+      - src/Epub.Tests/**
+  workflow_dispatch:
+jobs:
+  run-tests-epub:
+    uses: ./.github/workflows/run-tests.yml
+    with:
+      path: src/Epub.Tests
+      dotnet-version: "7.0"
