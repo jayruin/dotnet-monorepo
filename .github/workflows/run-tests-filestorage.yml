@@ -11,5 +11,5 @@ jobs:
   run-tests-epub:
     uses: ./.github/workflows/run-tests.yml
     with:
-      path: src/FileStorage.Tests
+      project: FileStorage
       dotnet-version: "7.0"

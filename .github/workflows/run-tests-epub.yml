@@ -12,5 +12,5 @@ jobs:
   run-tests-epub:
     uses: ./.github/workflows/run-tests.yml
     with:
-      path: src/Epub.Tests
+      project: Epub
       dotnet-version: "7.0"

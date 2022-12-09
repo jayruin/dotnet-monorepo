@@ -3,7 +3,7 @@ name: Run Tests
 on:
   workflow_call:
     inputs:
-      path:
+      project:
         required: true
         type: string
       dotnet-version:
@@ -22,5 +22,5 @@ jobs:
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ inputs.dotnet-version }}
-      - run: dotnet test ${{ inputs.path }}
+      - run: dotnet test src/${{ inputs.project }}.Tests
         
