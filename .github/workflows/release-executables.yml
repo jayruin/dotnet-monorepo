@@ -1,0 +1,55 @@
+name: Release Executables
+
+on:
+  workflow_call:
+    inputs:
+      project:
+        required: true
+        type: string
+      dotnet-version:
+        required: true
+        type: string
+      publish-args:
+        required: true
+        type: string
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: git push --delete origin tag ${{ inputs.project }} || true
+      - run: gh release delete ${{ inputs.project }} --yes || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: gh release create ${{ inputs.project }} --title ${{ inputs.project }} --notes ".NET ${{ inputs.dotnet-version }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  publish-and-release-executables:
+    needs: create-release
+    strategy:
+      matrix:
+        include:
+          - runtime: linux-x64
+            os: ubuntu-latest
+            published-executable: ${{ inputs.project }}
+            released-executable: ${{ inputs.project }}-linux
+          - runtime: win-x64
+            os: windows-latest
+            published-executable: ${{ inputs.project }}.exe
+            released-executable: ${{ inputs.project }}-windows.exe
+          - runtime: osx-x64
+            os: macos-latest
+            published-executable: ${{ inputs.project }}
+            released-executable: ${{ inputs.project }}-macos
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+      - run: dotnet publish src/${{ inputs.project }} ${{ inputs.publish-args }}
+      - run: mv ./src/${{ inputs.project }}/bin/Release/net${{ inputs.dotnet-version }}/${{ matrix.runtime }}/publish/${{ matrix.published-executable }} ./${{ matrix.released-executable }}
+      - run: gh release upload ${{ inputs.project }} ./${{ matrix.released-executable }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

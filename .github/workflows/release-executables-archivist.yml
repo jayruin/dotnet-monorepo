@@ -1,0 +1,18 @@
+name: Release Executables Archivist
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - src/Archivist/**
+      - src/Epub/**
+      - src/FileStorage/**
+      - src/ImgProj/**
+  workflow_dispatch:
+jobs:
+  release-executables-archivist:
+    uses: ./.github/workflows/release-executables.yml
+    with:
+      project: Archivist
+      dotnet-version: "7.0"
+      publish-args: "-p:EnableCompressionInSingleFile=true -p:PublishTrimmed=true -p:TrimmerSingleWarn=false"
