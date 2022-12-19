@@ -1,7 +1,7 @@
-﻿using ImgProj.Models;
+﻿using Images;
+using ImgProj.Models;
 using ImgProj.Services.Covers;
 using Epub;
-using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -14,12 +14,15 @@ namespace ImgProj.Services.Exporters;
 
 public sealed class Epub3Exporter : IExporter
 {
+    private readonly IImageLoader _imageLoader;
+
     private readonly ICoverGenerator _coverGenerator;
 
     public ExportFormat ExportFormat => ExportFormat.Epub3;
 
-    public Epub3Exporter(ICoverGenerator coverGenerator)
+    public Epub3Exporter(IImageLoader imageLoader, ICoverGenerator coverGenerator)
     {
+        _imageLoader = imageLoader;
         _coverGenerator = coverGenerator;
     }
 
@@ -109,7 +112,7 @@ public sealed class Epub3Exporter : IExporter
         await epubWriter.AddResourceAsync(pageStream, imageResource);
     }
 
-    private static async Task SavePageXhtmlAsync(EpubWriter epubWriter, ImgProject project, ImmutableArray<int> coordinates, Page page, int pageNumber)
+    private async Task SavePageXhtmlAsync(EpubWriter epubWriter, ImgProject project, ImmutableArray<int> coordinates, Page page, int pageNumber)
     {
         string xhtmlHref = string.Join('/', coordinates.Select(c => c.ToString()).Append($"{pageNumber}.xhtml"));
         EpubResource xhtmlResource = new()
@@ -138,9 +141,9 @@ public sealed class Epub3Exporter : IExporter
         await EpubXml.SaveAsync(pageXhtml, xhtmlStream);
     }
 
-    private static XDocument CreatePageXhtml(Stream pageStream, string src)
+    private XDocument CreatePageXhtml(Stream pageStream, string src)
     {
-        using SKImage image = SKImage.FromEncodedData(pageStream);
+        using IImage image = _imageLoader.LoadImage(pageStream);
         return new XDocument(
             new XDeclaration("1.0", "utf-8", null),
             new XDocumentType("html", null, null, null),

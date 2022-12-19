@@ -1,7 +1,6 @@
 ﻿using FileStorage;
+using Images;
 using ImgProj.Models;
-using ImgProj.Services.ImageGridGenerators;
-using SkiaSharp;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -11,11 +10,11 @@ namespace ImgProj.Services.PageComparers;
 
 public sealed class PageComparer : IPageComparer
 {
-    private readonly IImageGridGenerator _imageGridGenerator;
+    private readonly IImageLoader _imageLoader;
 
-    public PageComparer(IImageGridGenerator imageGridGenerator)
+    public PageComparer(IImageLoader imageLoader)
     {
-        _imageGridGenerator = imageGridGenerator;
+        _imageLoader = imageLoader;
     }
 
     public void CompareVersions(ImgProject project, ImmutableArray<int> coordinates, IDirectory outputDirectory)
@@ -46,26 +45,24 @@ public sealed class PageComparer : IPageComparer
             .ToDictionary(v => v, v => project.GetPages(coordinates, v).ToList());
         for (int i = 0; i < pages[project.MainVersion].Count; i++)
         {
-            List<SKImage?> pageImageVersions = new();
+            List<Stream?> pageStreamVersions = new();
             foreach (string version in project.Metadata.Versions)
             {
                 Page page = pages[version][i];
                 if (page.Version == version)
                 {
-                    using Stream pageStream = page.OpenRead();
-                    SKImage pageImage = SKImage.FromEncodedData(pageStream);
-                    pageImageVersions.Add(pageImage);
+                    Stream pageStream = page.OpenRead();
+                    pageStreamVersions.Add(pageStream);
                 }
-                else pageImageVersions.Add(null);
+                else pageStreamVersions.Add(null);
             }
-            using (SKImage comparisonImage = _imageGridGenerator.CreateGrid(pageImageVersions, rows: 1))
+            using (IImage comparisonImage = _imageLoader.LoadImagesToGrid(pageStreamVersions, rows: 1))
             {
                 IFile outputFile = project.ProjectDirectory.FileStorage.GetFile(outputDirectory.FullPath, $"{pageCount}.compare.jpg");
-                using SKData data = comparisonImage.Encode(SKEncodedImageFormat.Jpeg, 100);
                 using Stream outputStream = outputFile.OpenWrite();
-                data.SaveTo(outputStream);
+                comparisonImage.SaveTo(outputStream, ImageFormat.Jpeg);
             }
-            pageImageVersions.ForEach(image => image?.Dispose());
+            pageStreamVersions.ForEach(image => image?.Dispose());
             pageCount += 1;
         }
         for (int i = 0; i < entry.Entries.Length; i++)

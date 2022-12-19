@@ -1,23 +1,21 @@
-﻿using ImgProj.Models;
-using ImgProj.Services.ImageResizers;
-using SkiaSharp;
+﻿using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
-namespace ImgProj.Services.ImageGridGenerators;
+namespace Images;
 
-public sealed class ImageGridGenerator : IImageGridGenerator
+public sealed class ImageLoader : IImageLoader
 {
-    private readonly IImageResizer _imageResizer;
-
-    public ImageGridGenerator(IImageResizer imageResizer)
+    public IImage LoadImage(Stream stream)
     {
-        _imageResizer = imageResizer;
+        return new Image(SKImage.FromEncodedData(stream));
     }
 
-    public SKImage CreateGrid(IReadOnlyCollection<SKImage?> images, SKColor? backgroundColor = null, int? rows = null, int? columns = null)
+    public IImage LoadImagesToGrid(IEnumerable<Stream?> streams, int? rows = null, int? columns = null, Color? backgroundColor = null)
     {
+        List<SKImage?> images = streams.Select(stream => stream is null ? null : SKImage.FromEncodedData(stream)).ToList();
         (int computedRows, int computedColumns) = GetGridDimensions(images.Count, rows, columns);
         (int gridItemWidth, int gridItemHeight) = GetGridItemSize(images);
         int gridWidth = gridItemWidth * computedColumns;
@@ -26,13 +24,13 @@ public sealed class ImageGridGenerator : IImageGridGenerator
         using SKCanvas canvas = grid.Canvas;
         if (backgroundColor is not null)
         {
-            canvas.Clear((SKColor)backgroundColor);
+            canvas.Clear(backgroundColor.ToInternalColor());
         }
         int i = 0;
         foreach (SKImage? image in images)
         {
             if (image is null) continue;
-            using (SKImage resizedImage = _imageResizer.ResizeImageKeepAspectRatio(image, gridItemWidth, gridItemHeight))
+            using (SKImage resizedImage = Image.ResizeKeepAspectRatio(image, gridItemWidth, gridItemHeight, backgroundColor))
             {
                 int row = i / computedColumns;
                 int column = i % computedColumns;
@@ -48,7 +46,8 @@ public sealed class ImageGridGenerator : IImageGridGenerator
             }
             i += 1;
         }
-        return grid.Snapshot();
+        images.ForEach(image => image?.Dispose());
+        return new Image(grid.Snapshot());
     }
 
     private static (int, int) GetGridDimensions(int itemCount, int? rows, int? columns)
@@ -89,7 +88,7 @@ public sealed class ImageGridGenerator : IImageGridGenerator
         return (computedRows, computedColumns);
     }
 
-    private static (int, int) GetGridItemSize(IReadOnlyCollection<SKImage?> images)
+    private static (int, int) GetGridItemSize(IEnumerable<SKImage?> images)
     {
         Dictionary<AspectRatio, List<SKImage>> aspectRatios = new();
         foreach (SKImage? image in images)

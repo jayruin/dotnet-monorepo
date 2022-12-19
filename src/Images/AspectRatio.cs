@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ImgProj.Models;
+namespace Images;
 
-public sealed record AspectRatio
+internal sealed record AspectRatio
 {
     public int Width { get; }
 

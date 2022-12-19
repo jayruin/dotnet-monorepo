@@ -11,17 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="itext7" Version="7.2.3" />
+    <PackageReference Include="SkiaSharp" Version="2.88.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Epub\Epub.csproj" />
-    <ProjectReference Include="..\FileStorage\FileStorage.csproj" />
-    <ProjectReference Include="..\Images\Images.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <InternalsVisibleTo Include="ImgProj.Tests" />
+    <InternalsVisibleTo Include="Images.Tests" />
   </ItemGroup>
 
 </Project>

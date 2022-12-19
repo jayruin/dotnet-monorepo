@@ -1,15 +1,15 @@
-name: Run Tests ImgProj
+name: Run Tests Images
 on:
   push:
     branches:
       - master
     paths:
-      - src/ImgProj/**
-      - src/ImgProj.Tests/**
+      - src/Images/**
+      - src/Images.Tests/**
   workflow_dispatch:
 jobs:
-  run-tests-imgproj:
+  run-tests-images:
     uses: ./.github/workflows/run-tests.yml
     with:
-      project: ImgProj
+      project: Images
       dotnet-version: "7.0"
