@@ -1,9 +1,10 @@
 ﻿using ImgProj.Models;
 using ImgProj.Services.Covers;
+using iText.IO.Image;
+using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
 using iText.Kernel.Pdf.Navigation;
-using SkiaSharp;
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -16,9 +17,9 @@ public sealed class PdfExporter : IExporter
 {
     private class PdfOutlineItem
     {
-        public string Text { get; init; } = String.Empty;
+        public required string Text { get; init; }
 
-        public int PageNumber { get; init; }
+        public required int PageNumber { get; init; }
 
         public IList<PdfOutlineItem> Children { get; } = new List<PdfOutlineItem>();
     }
@@ -46,13 +47,28 @@ public sealed class PdfExporter : IExporter
             }
         }
         PdfOutlineItem pdfOutlineItem = Traverse(project, entry, coordinates, version, pages);
-        await using MemoryStream memoryStream = new();
         string title = project.GetTitle(coordinates, version);
         string author = string.Join(", ", project.Metadata.Creators.Select(c => project.ChooseRequiredValue(c.Name, version)));
-        DateTime creation = project.GetLatestTimestamp(coordinates, version)?.UtcDateTime ?? DateTime.Now;
-        await WritePagesToPdfAsync(memoryStream, pages, title, author, creation);
-        memoryStream.Seek(0, SeekOrigin.Begin);
-        AddOutline(memoryStream, stream, pdfOutlineItem);
+        WriterProperties writerProperties = new WriterProperties().AddXmpMetadata();
+        PdfWriter pdfWriter = new(stream, writerProperties);
+        PdfDocument pdfDocument = new(pdfWriter);
+        PdfDocumentInfo pdfDocumentInfo = pdfDocument.GetDocumentInfo();
+        pdfDocumentInfo.SetTitle(title);
+        pdfDocumentInfo.SetAuthor(author);
+        foreach (Page page in pages)
+        {
+            await using Stream pageStream = page.OpenRead();
+            await using MemoryStream memoryStream = new();
+            await pageStream.CopyToAsync(memoryStream);
+            ImageData imageData = ImageDataFactory.Create(memoryStream.ToArray());
+            PageSize pageSize = new(imageData.GetWidth(), imageData.GetHeight());
+            PdfPage pdfPage = pdfDocument.AddNewPage(pageSize);
+            PdfCanvas pdfCanvas = new(pdfPage);
+            pdfCanvas.AddImageAt(imageData, 0, 0, false);
+        }
+        PdfOutline pdfOutline = pdfDocument.GetOutlines(true);
+        AddPdfOutlineItem(pdfOutlineItem, pdfDocument, pdfOutline);
+        pdfDocument.Close();
     }
 
     private PdfOutlineItem Traverse(ImgProject project, Entry entry, ImmutableArray<int> coordinates, string version, ICollection<Page> pages)
@@ -72,34 +88,6 @@ public sealed class PdfExporter : IExporter
             pdfOutlineItem.Children.Add(childItem);
         }
         return pdfOutlineItem;
-    }
-
-    private static async Task WritePagesToPdfAsync(Stream stream, IReadOnlyCollection<Page> pages, string title, string author, DateTime creation)
-    {
-        SKDocumentPdfMetadata pdfMetadata = new()
-        {
-            Title = title,
-            Author = author,
-            Creation = creation,
-        };
-        using SKDocument document = SKDocument.CreatePdf(stream, pdfMetadata);
-        foreach (Page page in pages)
-        {
-            await using Stream pageStream = page.OpenRead();
-            using SKImage image = SKImage.FromEncodedData(pageStream);
-            using SKCanvas canvas = document.BeginPage(image.Width, image.Height);
-            canvas.DrawImage(image, 0, 0);
-        }
-    }
-
-    private void AddOutline(Stream sourceStream, Stream destinationStream, PdfOutlineItem pdfOutlineItem)
-    {
-        PdfReader pdfReader = new(sourceStream);
-        PdfWriter pdfWriter = new(destinationStream);
-        PdfDocument pdfDocument = new(pdfReader, pdfWriter);
-        PdfOutline pdfOutline = pdfDocument.GetOutlines(true);
-        AddPdfOutlineItem(pdfOutlineItem, pdfDocument, pdfOutline);
-        pdfDocument.Close();
     }
 
     private void AddPdfOutlineItem(PdfOutlineItem pdfOutlineItem, PdfDocument pdfDocument, PdfOutline pdfOutline)
