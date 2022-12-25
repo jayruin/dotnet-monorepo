@@ -1,10 +1,9 @@
 using Images;
-using ImgProj.Services.Covers;
-using ImgProj.Services.Deleters;
-using ImgProj.Services.Exporters;
-using ImgProj.Services.Importers;
-using ImgProj.Services.Loaders;
-using ImgProj.Services.PageComparers;
+using ImgProj.Comparing;
+using ImgProj.Covers;
+using ImgProj.Deleting;
+using ImgProj.Exporting;
+using ImgProj.Importing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Archivist.Extensions;
@@ -15,7 +14,6 @@ public static class ImgProjectServiceExtensions
     {
         return services
             .AddTransient<IImageLoader, ImageLoader>()
-            .AddTransient<IImgProjectLoader, ImgProjectLoader>()
             .AddTransient<ICoverGenerator, CoverGenerator>()
             .AddTransient<IPageComparer, PageComparer>()
             .AddTransient<IPageDeleter, PageDeleter>()

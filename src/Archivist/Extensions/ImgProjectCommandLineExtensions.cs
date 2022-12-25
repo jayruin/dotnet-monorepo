@@ -1,10 +1,10 @@
 using FileStorage;
-using ImgProj.Models;
-using ImgProj.Services.Deleters;
-using ImgProj.Services.Exporters;
-using ImgProj.Services.Importers;
-using ImgProj.Services.Loaders;
-using ImgProj.Services.PageComparers;
+using ImgProj;
+using ImgProj.Comparing;
+using ImgProj.Deleting;
+using ImgProj.Exporting;
+using ImgProj.Importing;
+using ImgProj.Loading;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -99,15 +99,10 @@ public static class ImgProjectCommandLineExtensions
             _serviceProvider = serviceProvider;
         }
 
-        public async Task<ImgProject> LoadProjectAsync(IDirectory projectDirectory)
-        {
-            return await _serviceProvider.GetRequiredService<IImgProjectLoader>().LoadAsync(projectDirectory);
-        }
-
         public async Task HandleExportCommand(string projectDirectory, string exportFile, ExportFormat exportFormat, IEnumerable<int> coordinates, string? version)
         {
             IFileStorage fileStorage = _serviceProvider.GetRequiredService<IFileStorage>();
-            ImgProject project = await LoadProjectAsync(fileStorage.GetDirectory(projectDirectory));
+            IImgProject project = await ImgProjectLoader.LoadFromDirectoryAsync(fileStorage.GetDirectory(projectDirectory));
             IExporter exporter = _serviceProvider.GetRequiredService<IEnumerable<IExporter>>()
                 .FirstOrDefault(e => e.ExportFormat == exportFormat)
                 ?? throw new ArgumentOutOfRangeException(nameof(exportFormat), "Unsupported format!"); ;
@@ -118,15 +113,15 @@ public static class ImgProjectCommandLineExtensions
         public async Task HandleCompareCommand(string projectDirectory, string outputDirectory, IEnumerable<int> coordinates)
         {
             IFileStorage fileStorage = _serviceProvider.GetRequiredService<IFileStorage>();
-            ImgProject project = await LoadProjectAsync(fileStorage.GetDirectory(projectDirectory));
+            IImgProject project = await ImgProjectLoader.LoadFromDirectoryAsync(fileStorage.GetDirectory(projectDirectory));
             IPageComparer pageComparer = _serviceProvider.GetRequiredService<IPageComparer>();
-            pageComparer.CompareVersions(project, coordinates.ToImmutableArray(), fileStorage.GetDirectory(outputDirectory));
+            pageComparer.ComparePageVersions(project, coordinates.ToImmutableArray(), fileStorage.GetDirectory(outputDirectory));
         }
 
         public async Task HandleDeleteCommand(string projectDirectory, IEnumerable<int> coordinates, string? version)
         {
             IFileStorage fileStorage = _serviceProvider.GetRequiredService<IFileStorage>();
-            ImgProject project = await LoadProjectAsync(fileStorage.GetDirectory(projectDirectory));
+            IImgProject project = await ImgProjectLoader.LoadFromDirectoryAsync(fileStorage.GetDirectory(projectDirectory));
             IPageDeleter deleter = _serviceProvider.GetRequiredService<IPageDeleter>();
             deleter.DeletePages(project, coordinates.ToImmutableArray(), version);
         }
@@ -134,7 +129,7 @@ public static class ImgProjectCommandLineExtensions
         public async Task HandleImportCommand(string projectDirectory, string sourceDirectory, IEnumerable<int> coordinates, string? version, IEnumerable<string> pageRanges)
         {
             IFileStorage fileStorage = _serviceProvider.GetRequiredService<IFileStorage>();
-            ImgProject project = await LoadProjectAsync(fileStorage.GetDirectory(projectDirectory));
+            IImgProject project = await ImgProjectLoader.LoadFromDirectoryAsync(fileStorage.GetDirectory(projectDirectory));
             IPageImporter importer = _serviceProvider.GetRequiredService<IPageImporter>();
             await importer.ImportPagesAsync(project, coordinates.ToImmutableArray(), version, fileStorage.GetDirectory(sourceDirectory), pageRanges.Select(s => new PageRange(s)).ToImmutableArray());
         }
