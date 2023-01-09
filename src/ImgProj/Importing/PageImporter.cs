@@ -21,7 +21,7 @@ public sealed class PageImporter : IPageImporter
         IReadOnlyDictionary<int, IDirectory> pageDirectories = subProject.GetPageDirectories();
         if (pageRanges.Count == 0) pageRanges = ImmutableArray.Create(new PageRange(1, sourceFiles.Count));
         IReadOnlyList<int> pageNumbers = GetPageNumbers(pageRanges);
-        int maxPageCount = Math.Max(pageDirectories.Keys.Max(), sourceFiles.Count);
+        int maxPageCount = Math.Max(pageDirectories.Keys.DefaultIfEmpty().Max(), sourceFiles.Count);
         IFileStorage fileStorage = subProject.ProjectDirectory.FileStorage;
         foreach ((IFile sourceFile, int pageNumber) in Enumerable.Zip(sourceFiles, pageNumbers))
         {
