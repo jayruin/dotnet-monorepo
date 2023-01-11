@@ -15,3 +15,4 @@
 | FileStorage | FileStorage.Tests | [![FileStorage Tests Badge](https://github.com/jayruin/dotnet-monorepo/workflows/Run%20Tests%20FileStorage/badge.svg)](https://github.com/jayruin/dotnet-monorepo/actions/workflows/run-tests-filestorage.yml) |
 | Images | Images.Tests | [![Images Tests Badge](https://github.com/jayruin/dotnet-monorepo/workflows/Run%20Tests%20Images/badge.svg)](https://github.com/jayruin/dotnet-monorepo/actions/workflows/run-tests-images.yml) |
 | ImgProj | ImgProj.Tests | [![ImgProj Tests Badge](https://github.com/jayruin/dotnet-monorepo/workflows/Run%20Tests%20ImgProj/badge.svg)](https://github.com/jayruin/dotnet-monorepo/actions/workflows/run-tests-imgproj.yml) |
+| Subprocesses | Subprocesses.Tests | [![Subprocesses Tests Badge](https://github.com/jayruin/dotnet-monorepo/workflows/Run%20Tests%20Subprocesses/badge.svg)](https://github.com/jayruin/dotnet-monorepo/actions/workflows/run-tests-subprocesses.yml) |
