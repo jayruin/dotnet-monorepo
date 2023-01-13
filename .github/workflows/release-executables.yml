@@ -6,13 +6,11 @@ on:
       project:
         required: true
         type: string
-      dotnet-version:
-        required: true
-        type: string
       publish-args:
         required: true
         type: string
-
+env:
+  DOTNET_VERSION: "7.0"
 jobs:
   create-release:
     runs-on: ubuntu-latest
@@ -22,7 +20,7 @@ jobs:
       - run: gh release delete ${{ inputs.project }} --yes || true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: gh release create ${{ inputs.project }} --title ${{ inputs.project }} --notes ".NET ${{ inputs.dotnet-version }}"
+      - run: gh release create ${{ inputs.project }} --title ${{ inputs.project }} --notes ".NET ${{ env.DOTNET_VERSION }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   publish-and-release-executables:
@@ -47,9 +45,9 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ inputs.dotnet-version }}
+          dotnet-version: ${{ env.DOTNET_VERSION }}
       - run: dotnet publish src/${{ inputs.project }} ${{ inputs.publish-args }}
-      - run: mv ./src/${{ inputs.project }}/bin/Release/net${{ inputs.dotnet-version }}/${{ matrix.runtime }}/publish/${{ matrix.published-executable }} ./${{ matrix.released-executable }}
+      - run: mv ./src/${{ inputs.project }}/bin/Release/net${{ env.DOTNET_VERSION }}/${{ matrix.runtime }}/publish/${{ matrix.published-executable }} ./${{ matrix.released-executable }}
       - run: gh release upload ${{ inputs.project }} ./${{ matrix.released-executable }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

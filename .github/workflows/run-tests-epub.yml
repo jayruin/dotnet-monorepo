@@ -7,11 +7,10 @@ on:
     paths:
       - src/Epub/**
       - src/Epub.Tests/**
-      - src/Directory.Packages.props
+      - src/**.props
   workflow_dispatch:
 jobs:
   run-tests-epub:
     uses: ./.github/workflows/run-tests.yml
     with:
       project: Epub
-      dotnet-version: "7.0"

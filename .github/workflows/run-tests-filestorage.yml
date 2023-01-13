@@ -6,11 +6,10 @@ on:
     paths:
       - src/FileStorage/**
       - src/FileStorage.Tests/**
-      - src/Directory.Packages.props
+      - src/**.props
   workflow_dispatch:
 jobs:
   run-tests-epub:
     uses: ./.github/workflows/run-tests.yml
     with:
       project: FileStorage
-      dotnet-version: "7.0"

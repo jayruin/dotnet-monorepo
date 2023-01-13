@@ -8,11 +8,10 @@ on:
       - src/Databases/**
       - src/Databases.Tests/**
       - src/Testing/**
-      - src/Directory.Packages.props
+      - src/**.props
   workflow_dispatch:
 jobs:
   run-tests-databases:
     uses: ./.github/workflows/run-tests.yml
     with:
       project: Databases
-      dotnet-version: "7.0"

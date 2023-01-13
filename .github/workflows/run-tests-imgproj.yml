@@ -6,11 +6,10 @@ on:
     paths:
       - src/ImgProj/**
       - src/ImgProj.Tests/**
-      - src/Directory.Packages.props
+      - src/**.props
   workflow_dispatch:
 jobs:
   run-tests-imgproj:
     uses: ./.github/workflows/run-tests.yml
     with:
       project: ImgProj
-      dotnet-version: "7.0"
