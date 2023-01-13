@@ -6,6 +6,7 @@ on:
     paths:
       - src/ImgProj/**
       - src/ImgProj.Tests/**
+      - src/Directory.Packages.props
   workflow_dispatch:
 jobs:
   run-tests-imgproj:

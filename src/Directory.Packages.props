@@ -1,0 +1,21 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="MSTest" Version="2.2.10" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="7.0.2" />
+    <PackageVersion Include="Microsoft.Data.SqlClient" Version="5.0.1" />
+    <PackageVersion Include="Npgsql" Version="7.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="itext7" Version="7.2.3" />
+    <PackageVersion Include="SkiaSharp" Version="2.88.3" />
+  </ItemGroup>
+</Project>

@@ -7,6 +7,8 @@ on:
     paths:
       - src/Databases/**
       - src/Databases.Tests/**
+      - src/Testing/**
+      - src/Directory.Packages.props
   workflow_dispatch:
 jobs:
   run-tests-databases:

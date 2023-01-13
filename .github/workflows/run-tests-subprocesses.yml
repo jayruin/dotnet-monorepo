@@ -6,6 +6,7 @@ on:
     paths:
       - src/Subprocesses/**
       - src/Subprocesses.Tests/**
+      - src/Directory.Packages.props
   workflow_dispatch:
 jobs:
   run-tests-subprocesses:
