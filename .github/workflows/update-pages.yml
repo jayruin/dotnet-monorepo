@@ -5,6 +5,7 @@ jobs:
   update-pages:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - run: |
           git checkout --orphan gh-pages
           git rm -rf .
