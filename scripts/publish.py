@@ -10,6 +10,9 @@ args = argparser.parse_args()
 projects_directory = Path(Path(__file__).resolve().parent.parent, "src")
 bin_directory = Path(projects_directory.parent, "bin")
 bin_directory.mkdir(exist_ok=True)
+current_system = platform.system().lower()
+if current_system == "darwin":
+    current_system = "macos"
 for path in projects_directory.iterdir():
     if not path.is_dir():
         continue
@@ -26,9 +29,6 @@ for path in projects_directory.iterdir():
         "--no-build",
         "--output", bin_directory.as_posix()
     ], cwd=projects_directory)
-    current_system = platform.system().lower()
-    if current_system == "darwin":
-        current_system = "macos"
     executable_file = Path(bin_directory, project_name)
     if current_system == "windows":
         executable_file = executable_file.with_suffix(".exe")

@@ -13,6 +13,9 @@ tags_to_reset = [test_results_tag]
 projects_directory = Path(Path(__file__).resolve().parent.parent, "src")
 badges_directory = Path(projects_directory.parent, "badges")
 badges_directory.mkdir(exist_ok=True)
+current_system = platform.system().lower()
+if current_system == "darwin":
+    current_system = "macos"
 for path in projects_directory.iterdir():
     if not path.is_dir() or not path.name.endswith(".Tests"):
         continue
@@ -30,7 +33,9 @@ for path in projects_directory.iterdir():
         if path.is_file()
     ]
     for result_file in result_files:
-        test_result = result_file.replace(result_file.with_stem(project_name))
+        test_result = result_file.replace(
+            result_file.with_stem(f"{project_name}.{current_system}")
+        )
         if args.github:
             run([
                 "gh", "release", "upload",
@@ -47,9 +52,6 @@ for path in projects_directory.iterdir():
                     if key not in keys_to_ignore
                 )
                 passing = len(fails) == 1 and "0" in fails
-                current_system = platform.system().lower()
-                if current_system == "darwin":
-                    current_system = "macos"
                 badges = {
                     "schemaVersion": 1,
                     "label": f"{project_name} - {current_system}",
