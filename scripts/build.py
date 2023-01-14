@@ -2,18 +2,18 @@ from pathlib import Path
 from subprocess import run
 
 projects_directory = Path(Path(__file__).resolve().parent.parent, "src")
-for path in projects_directory.iterdir():
-    if not path.is_dir():
-        continue
-    project_name = path.name
-    csproj_file = Path(path, f"{project_name}.csproj")
-    if not csproj_file.is_file():
-        continue
+projects = [
+    path
+    for path in projects_directory.iterdir()
+    if path.is_dir() and Path(path, f"{path.name}.csproj").is_file()
+]
+for project in projects:
     run([
         "dotnet", "clean",
         "--configuration", "Release"
-    ], cwd=path)
+    ], cwd=project)
+for project in projects:
     run([
         "dotnet", "build",
         "--configuration", "Release"
-    ], cwd=path)
+    ], cwd=project)
