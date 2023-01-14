@@ -21,6 +21,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   test-and-publish:
+    needs: reset-tags
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -34,11 +35,9 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - run: python scripts/build.py
+      - run: python scripts/test.py --github
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: python scripts/test.py
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: python scripts/publish.py
+      - run: python scripts/publish.py --github
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
