@@ -22,7 +22,7 @@ for path in projects_directory.iterdir():
     project_name = path.name
     run([
         "dotnet", "test", project_name,
-        "--configuration", "Release"
+        "--configuration", "Release",
         "--no-build",
         "--logger", "trx",
         "--logger", "html"
