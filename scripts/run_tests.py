@@ -8,8 +8,11 @@ import xml.etree.ElementTree as ET
 argparser = ArgumentParser()
 argparser.add_argument("--github", action="store_true")
 args = argparser.parse_args()
-tags_to_reset = ["test-results"]
+test_results_tag = "test-results"
+tags_to_reset = [test_results_tag]
 projects_directory = Path(Path(__file__).resolve().parent.parent, "src")
+badges_directory = Path(projects_directory.parent, "badges")
+badges_directory.mkdir(exist_ok=True)
 for path in projects_directory.iterdir():
     if not path.is_dir() or not path.name.endswith(".Tests"):
         continue
@@ -29,7 +32,10 @@ for path in projects_directory.iterdir():
     for result_file in result_files:
         test_result = result_file.replace(result_file.with_stem(project_name))
         if args.github:
-            run(["gh", "release", "upload", project_name, test_result])
+            run([
+                "gh", "release", "upload",
+                test_results_tag, test_result.as_posix()
+            ])
         if test_result.suffix == ".trx":
             trx = ET.parse(test_result)
             counters = trx.find("./{*}ResultSummary/{*}Counters")
@@ -41,7 +47,9 @@ for path in projects_directory.iterdir():
                     if key not in keys_to_ignore
                 )
                 passing = len(fails) == 1 and "0" in fails
-                current_system = platform.system()
+                current_system = platform.system().lower()
+                if current_system == "darwin":
+                    current_system = "macos"
                 badges = {
                     "schemaVersion": 1,
                     "label": f"{project_name} - {current_system}",
@@ -49,10 +57,13 @@ for path in projects_directory.iterdir():
                     "color": "success" if passing else "critical"
                 }
                 badges_file = Path(
-                    projects_directory.parent,
-                    f"{project_name}.Badges.{current_system}.json"
+                    badges_directory,
+                    f"{project_name}.badges.{current_system}.json"
                 )
                 with open(badges_file, "w", encoding="utf-8") as f:
                     json.dump(badges, f, indent=4)
                 if args.github:
-                    run(["gh", "release", "upload", project_name, badges_file])
+                    run([
+                        "gh", "release", "upload",
+                        test_results_tag, badges_file
+                    ])
