@@ -1,0 +1,44 @@
+name: Test And Publish
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - src/**
+  workflow_dispatch:
+env:
+  DOTNET_VERSION: "7.0"
+  PYTHON_VERSION: "3.10"
+jobs:
+  reset-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - run: python scripts/reset_tags.py
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  test-and-publish:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - run: python scripts/build.py
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: python scripts/test.py
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: python scripts/publish.py
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
