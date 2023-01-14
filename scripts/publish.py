@@ -23,6 +23,7 @@ for path in projects_directory.iterdir():
         continue
     run([
         "dotnet", "publish", project_name,
+        "--no-build",
         "--output", bin_directory.as_posix()
     ], cwd=projects_directory)
     current_system = platform.system().lower()
