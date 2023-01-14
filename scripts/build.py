@@ -11,9 +11,9 @@ for path in projects_directory.iterdir():
         continue
     run([
         "dotnet", "clean",
-        "--configuration", "release"
+        "--configuration", "Release"
     ], cwd=path)
     run([
         "dotnet", "build",
-        "--configuration", "release"
+        "--configuration", "Release"
     ], cwd=path)
