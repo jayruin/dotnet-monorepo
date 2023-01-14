@@ -10,6 +10,10 @@ for path in projects_directory.iterdir():
     if not csproj_file.is_file():
         continue
     run([
+        "dotnet", "clean",
+        "--configuration", "release"
+    ], cwd=path)
+    run([
         "dotnet", "build",
         "--configuration", "release"
     ], cwd=path)
