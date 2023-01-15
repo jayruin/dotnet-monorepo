@@ -1,10 +1,9 @@
-﻿using FileStorage;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Archivist.Tests.FileStorage;
+namespace FileStorage.Tests;
 
 [TestClass]
 public abstract class FileStorageTests

@@ -1,7 +1,6 @@
-﻿using FileStorage;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Archivist.Tests.FileStorage;
+namespace FileStorage.Tests;
 
 [TestClass]
 public class MockFileStorageTests : FileStorageTests

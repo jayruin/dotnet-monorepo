@@ -1,29 +1,26 @@
-﻿using FileStorage;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Testing;
 
-namespace Archivist.Tests.FileStorage;
+namespace FileStorage.Tests;
 
 [TestClass]
 public class FileSystemTests : FileStorageTests
 {
-    private string _tempDirectoryPath = string.Empty;
+    private TempDirectory? _tempDirectory;
 
     [TestInitialize]
     public override void Initialize()
     {
-        _tempDirectoryPath = Path.Join(Path.GetTempPath(), Path.GetRandomFileName());
-        Directory.CreateDirectory(_tempDirectoryPath);
+        _tempDirectory = new();
         FileStorage = new FileSystem()
         {
-            BasePath = _tempDirectoryPath,
+            BasePath = _tempDirectory.DirectoryPath,
         };
     }
 
     [TestCleanup]
     public override void Cleanup()
     {
-        try { Directory.Delete(_tempDirectoryPath, true); }
-        catch { }
+        _tempDirectory?.Dispose();
     }
 }
