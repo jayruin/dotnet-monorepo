@@ -1,11 +1,11 @@
-﻿using FileStorage.FileSystem;
+﻿using FileStorage.Filesystem;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing;
 
 namespace FileStorage.Tests;
 
 [TestClass]
-public class FileSystemFileStorageTests : FileStorageTests
+public class FilesystemFileStorageTests : FileStorageTests
 {
     private TempDirectory? _tempDirectory;
 
@@ -13,7 +13,7 @@ public class FileSystemFileStorageTests : FileStorageTests
     public override void Initialize()
     {
         _tempDirectory = new();
-        FileStorage = new FileSystemFileStorage()
+        FileStorage = new FilesystemFileStorage()
         {
             BasePath = _tempDirectory.DirectoryPath,
         };
