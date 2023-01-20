@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace FileStorage;
+namespace FileStorage.Mock;
 
 public sealed class MockFile : IFile
 {

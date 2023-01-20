@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FileStorage;
+namespace FileStorage.Mock;
 
 public sealed class MockDirectory : IDirectory
 {

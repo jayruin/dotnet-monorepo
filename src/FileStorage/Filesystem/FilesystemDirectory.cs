@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace FileStorage;
+namespace FileStorage.Filesystem;
 
-public sealed class FsDirectory : IDirectory
+public sealed class FilesystemDirectory : IDirectory
 {
-    private readonly FileSystem _fileSystem;
+    private readonly FilesystemFileStorage _filesystem;
 
-    public IFileStorage FileStorage => _fileSystem;
+    public IFileStorage FileStorage => _filesystem;
 
     public string FullPath { get; }
 
@@ -17,11 +17,11 @@ public sealed class FsDirectory : IDirectory
 
     public bool Exists => Directory.Exists(FullPath);
 
-    public FsDirectory(FileSystem fileSystem, string path)
+    public FilesystemDirectory(FilesystemFileStorage filesystem, string path)
     {
         try
         {
-            _fileSystem = fileSystem;
+            _filesystem = filesystem;
             FullPath = Path.GetFullPath(path);
             Name = Path.GetFileName(FullPath);
         }
@@ -36,7 +36,7 @@ public sealed class FsDirectory : IDirectory
         try
         {
             return Directory.EnumerateFiles(FullPath)
-                .Select(f => new FsFile(_fileSystem, f));
+                .Select(f => new FilesystemFile(_filesystem, f));
         }
         catch (Exception exception)
         {
@@ -49,7 +49,7 @@ public sealed class FsDirectory : IDirectory
         try
         {
             return Directory.EnumerateDirectories(FullPath)
-                .Select(d => new FsDirectory(_fileSystem, d));
+                .Select(d => new FilesystemDirectory(_filesystem, d));
         }
         catch (Exception exception)
         {

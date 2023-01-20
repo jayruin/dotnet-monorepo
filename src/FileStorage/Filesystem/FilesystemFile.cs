@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 
-namespace FileStorage;
+namespace FileStorage.Filesystem;
 
-public sealed class FsFile : IFile
+public sealed class FilesystemFile : IFile
 {
-    private readonly FileSystem _fileSystem;
+    private readonly FilesystemFileStorage _filesystem;
 
-    public IFileStorage FileStorage => _fileSystem;
+    public IFileStorage FileStorage => _filesystem;
 
     public string FullPath { get; }
 
@@ -19,11 +19,11 @@ public sealed class FsFile : IFile
 
     public bool Exists => File.Exists(FullPath);
 
-    public FsFile(FileSystem fileSystem, string path)
+    public FilesystemFile(FilesystemFileStorage filesystem, string path)
     {
         try
         {
-            _fileSystem = fileSystem;
+            _filesystem = filesystem;
             FullPath = Path.GetFullPath(path);
             Name = Path.GetFileName(FullPath);
             Stem = Path.GetFileNameWithoutExtension(FullPath);

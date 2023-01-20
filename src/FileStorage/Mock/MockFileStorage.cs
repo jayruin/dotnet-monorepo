@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace FileStorage;
+namespace FileStorage.Mock;
 
 public sealed class MockFileStorage : IFileStorage
 {

@@ -1,5 +1,6 @@
 ﻿using Archivist.Extensions;
 using FileStorage;
+using FileStorage.Filesystem;
 using Microsoft.Extensions.DependencyInjection;
 using System.CommandLine;
 using System.CommandLine.Parsing;
@@ -12,7 +13,7 @@ class Program
     static async Task<int> Main(string[] args)
     {
         await using ServiceProvider serviceProvider = new ServiceCollection()
-            .AddTransient<IFileStorage, FileSystem>()
+            .AddTransient<IFileStorage, FilesystemFileStorage>()
             .AddImgProjectServices()
             .BuildServiceProvider();
 

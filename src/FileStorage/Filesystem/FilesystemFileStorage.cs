@@ -1,9 +1,8 @@
 ﻿using System.IO;
-using System.Linq;
 
-namespace FileStorage;
+namespace FileStorage.Filesystem;
 
-public sealed class FileSystem : IFileStorage
+public sealed class FilesystemFileStorage : IFileStorage
 {
     public string BasePath { get; set; } = string.Empty;
 
@@ -19,11 +18,11 @@ public sealed class FileSystem : IFileStorage
 
     public IFile GetFile(params string[] paths)
     {
-        return new FsFile(this, JoinPaths(paths));
+        return new FilesystemFile(this, JoinPaths(paths));
     }
 
     public IDirectory GetDirectory(params string[] paths)
     {
-        return new FsDirectory(this, JoinPaths(paths));
+        return new FilesystemDirectory(this, JoinPaths(paths));
     }
 }
