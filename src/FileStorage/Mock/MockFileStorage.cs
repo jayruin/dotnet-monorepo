@@ -31,17 +31,17 @@ public sealed class MockFileStorage : IFileStorage
         return new MockFile(this, JoinPaths(paths));
     }
 
-    public string JoinPaths(params string[] paths)
+    internal string JoinPaths(params string[] paths)
     {
         return string.Join(_separator, paths.Where(p => !string.IsNullOrEmpty(p)));
     }
 
-    public string[] SplitPath(string path)
+    internal string[] SplitPath(string path)
     {
         return path.Split(_separator);
     }
 
-    public void CreateDirectory(string path)
+    internal void CreateDirectory(string path)
     {
         if (IsRootPath(path)) return;
         string[] pathParts = SplitPath(path);
@@ -57,7 +57,7 @@ public sealed class MockFileStorage : IFileStorage
         _directories.Add(path);
     }
 
-    public void DeleteDirectory(string path)
+    internal void DeleteDirectory(string path)
     {
         EnsureDirectoryExists(path);
         _files.Keys
@@ -67,12 +67,12 @@ public sealed class MockFileStorage : IFileStorage
         _directories.RemoveWhere(d => d.StartsWith(path));
     }
 
-    public void DeleteFile(string path)
+    internal void DeleteFile(string path)
     {
         _files.Remove(path);
     }
 
-    public IEnumerable<MockFile> EnumerateFiles(string path)
+    internal IEnumerable<MockFile> EnumerateFiles(string path)
     {
         EnsureDirectoryExists(path);
         foreach (string filePath in _files.Keys)
@@ -84,7 +84,7 @@ public sealed class MockFileStorage : IFileStorage
         }
     }
 
-    public IEnumerable<MockDirectory> EnumerateDirectories(string path)
+    internal IEnumerable<MockDirectory> EnumerateDirectories(string path)
     {
         EnsureDirectoryExists(path);
         foreach (string directoryPath in _directories)
@@ -96,13 +96,13 @@ public sealed class MockFileStorage : IFileStorage
         }
     }
 
-    public Stream OpenRead(string path)
+    internal Stream OpenRead(string path)
     {
         EnsureFileExists(path);
         return new MemoryStream(_files[path], false);
     }
 
-    public Stream OpenWrite(string path)
+    internal Stream OpenWrite(string path)
     {
         string[] pathParts = SplitPath(path);
         if (pathParts.Length > 1)
@@ -112,13 +112,13 @@ public sealed class MockFileStorage : IFileStorage
         return new MockWritableFileStream(path, _files);
     }
 
-    public bool DirectoryExists(string path)
+    internal bool DirectoryExists(string path)
     {
         if (IsRootPath(path)) return true;
         return _directories.Contains(path);
     }
 
-    public bool FileExists(string path)
+    internal bool FileExists(string path)
     {
         return _files.ContainsKey(path);
     }
