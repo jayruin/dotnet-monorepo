@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 
-namespace FileStorage.Filesystem;
+namespace FileStorage.Zip;
 
-public sealed class FilesystemFile : IFile
+public sealed class ZipFile : IFile
 {
-    private readonly FilesystemFileStorage _filesystem;
+    private readonly ZipFileStorage _zipFileStorage;
 
-    public IFileStorage FileStorage => _filesystem;
+    public IFileStorage FileStorage => _zipFileStorage;
 
     public string FullPath { get; }
 
@@ -17,14 +17,14 @@ public sealed class FilesystemFile : IFile
 
     public string Extension { get; }
 
-    public bool Exists => File.Exists(FullPath);
+    public bool Exists => _zipFileStorage.Archive.GetEntry(FullPath) is not null;
 
-    public FilesystemFile(FilesystemFileStorage filesystem, string path)
+    public ZipFile(ZipFileStorage zipFileStorage, string path)
     {
-        _filesystem = filesystem;
+        _zipFileStorage = zipFileStorage;
         try
         {
-            FullPath = Path.GetFullPath(path);
+            FullPath = path;
             Name = Path.GetFileName(FullPath);
             Stem = Path.GetFileNameWithoutExtension(FullPath);
             Extension = Path.GetExtension(FullPath);
@@ -37,35 +37,42 @@ public sealed class FilesystemFile : IFile
 
     public Stream OpenRead()
     {
-        return Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+        return Open();
     }
 
     public Stream OpenWrite()
     {
-        return Open(FileMode.Create, FileAccess.Write, FileShare.None);
-    }
-
-    private FileStream Open(FileMode mode, FileAccess access, FileShare share)
-    {
-        try
+        if (Exists)
         {
-            return new FileStream(FullPath, mode, access, share);
+            Delete();
         }
-        catch (Exception exception)
-        {
-            throw new FileStorageException(exception);
-        }
+        _zipFileStorage.Archive.CreateEntry(FullPath);
+        return Open();
     }
 
     public void Delete()
     {
         try
         {
-            File.Delete(FullPath);
+            _zipFileStorage.Archive.GetEntry(FullPath)?.Delete();
         }
         catch (Exception exception)
         {
             throw new FileStorageException(exception);
         }
+    }
+
+    private Stream Open()
+    {
+        Stream? stream;
+        try
+        {
+            stream = _zipFileStorage.Archive.GetEntry(FullPath)?.Open();
+        }
+        catch (Exception exception)
+        {
+            throw new FileStorageException(exception);
+        }
+        return stream ?? throw new FileStorageException();
     }
 }

@@ -19,9 +19,9 @@ public sealed class FilesystemDirectory : IDirectory
 
     public FilesystemDirectory(FilesystemFileStorage filesystem, string path)
     {
+        _filesystem = filesystem;
         try
         {
-            _filesystem = filesystem;
             FullPath = Path.GetFullPath(path);
             Name = Path.GetFileName(FullPath);
         }
