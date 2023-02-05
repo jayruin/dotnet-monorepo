@@ -45,6 +45,11 @@ public sealed class FilesystemFile : IFile
         return Open(FileMode.Create, FileAccess.Write, FileShare.None);
     }
 
+    public Stream OpenReadWrite()
+    {
+        return Open(FileMode.Create, FileAccess.ReadWrite, FileShare.None);
+    }
+
     private FileStream Open(FileMode mode, FileAccess access, FileShare share)
     {
         try

@@ -20,5 +20,7 @@ public interface IFile
 
     public Stream OpenWrite();
 
+    public Stream OpenReadWrite();
+
     public void Delete();
 }
