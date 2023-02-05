@@ -17,6 +17,22 @@ public abstract class FileStorageTests
     public abstract void Cleanup();
 
     [TestMethod]
+    public void TestEmptyFilePaths()
+    {
+        IFile file1 = FileStorage.GetFile("", "a", "");
+        IFile file2 = FileStorage.GetFile("a");
+        Assert.AreEqual(file2.FullPath, file1.FullPath);
+    }
+
+    [TestMethod]
+    public void TestEmptyDirectoryPaths()
+    {
+        IDirectory directory1 = FileStorage.GetDirectory("", "a", "");
+        IDirectory directory2 = FileStorage.GetDirectory("a");
+        Assert.AreEqual(directory1.FullPath, directory2.FullPath);
+    }
+
+    [TestMethod]
     public void TestFileName()
     {
         IFile file = FileStorage.GetFile("dir", "file.txt");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 
 namespace FileStorage.Zip;
 
@@ -15,16 +16,22 @@ public sealed class ZipFileStorage : IFileStorage, IDisposable
 
     public IFile GetFile(params string[] paths)
     {
-        return new ZipFile(this, string.Join('/', paths));
+        return new ZipFile(this, JoinPaths(paths));
     }
 
     public IDirectory GetDirectory(params string[] paths)
     {
-        return new ZipDirectory(this, string.Join('/', paths));
+        return new ZipDirectory(this, JoinPaths(paths));
     }
 
     public void Dispose()
     {
         Archive.Dispose();
+    }
+
+    internal string JoinPaths(params string[] paths)
+    {
+        paths = paths.Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
+        return string.Join('/', paths);
     }
 }

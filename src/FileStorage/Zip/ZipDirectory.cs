@@ -77,7 +77,7 @@ public sealed class ZipDirectory : IDirectory
     {
         foreach (ZipArchiveEntry entry in _zipFileStorage.Archive.Entries)
         {
-            if (!entry.FullName.StartsWith(_archivePath) || entry.FullName == _archivePath) continue;
+            if (_archivePath != "/" && !entry.FullName.StartsWith(_archivePath) || entry.FullName == _archivePath) continue;
             if (recurse) yield return entry;
             int count = 0;
             foreach (char c in entry.FullName[_archivePath.Length..])
