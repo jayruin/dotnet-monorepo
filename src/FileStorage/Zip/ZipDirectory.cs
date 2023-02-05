@@ -20,7 +20,8 @@ public sealed class ZipDirectory : IDirectory
 
     public string Name { get; }
 
-    public bool Exists => _zipFileStorage.Archive.Entries.FirstOrDefault(e => e.FullName.StartsWith(_archivePath)) is not null;
+    public bool Exists => _archivePath == "/" || _zipFileStorage.Archive.Entries
+        .FirstOrDefault(e => e.FullName.StartsWith(_archivePath)) is not null;
 
     public ZipDirectory(ZipFileStorage zipFileStorage, string path)
     {

@@ -33,6 +33,14 @@ public abstract class FileStorageTests
     }
 
     [TestMethod]
+    public void TestDeleteEmptyPathDirectory()
+    {
+        IDirectory directory = FileStorage.GetDirectory("");
+        Assert.IsTrue(directory.Exists);
+        directory.Delete();
+    }
+
+    [TestMethod]
     public void TestFileName()
     {
         IFile file = FileStorage.GetFile("dir", "file.txt");

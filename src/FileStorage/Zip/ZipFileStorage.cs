@@ -29,7 +29,7 @@ public sealed class ZipFileStorage : IFileStorage, IDisposable
         Archive.Dispose();
     }
 
-    internal string JoinPaths(params string[] paths)
+    internal static string JoinPaths(params string[] paths)
     {
         paths = paths.Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
         return string.Join('/', paths);
