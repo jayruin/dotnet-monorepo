@@ -79,14 +79,17 @@ public sealed class ZipDirectory : IDirectory
             if (_archivePath != "/" && !entry.FullName.StartsWith(_archivePath) || entry.FullName == _archivePath) continue;
             if (recurse) yield return entry;
             int count = 0;
-            foreach (char c in entry.FullName[_archivePath.Length..])
+            var subPath = _archivePath == "/"
+                ? entry.FullName
+                : entry.FullName[_archivePath.Length..];
+            foreach (char c in subPath)
             {
                 if (c == '/')
                 {
                     count += 1;
                 }
             }
-            if (count <= 1)
+            if (count == 0 || count == 1 && subPath.EndsWith('/'))
             {
                 yield return entry;
             }

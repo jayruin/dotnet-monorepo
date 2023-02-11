@@ -170,6 +170,88 @@ public abstract class FileStorageTests
     }
 
     [TestMethod]
+    public void TestDirectoryEnumerateFilesDirectoriesNested()
+    {
+        FileStorage.GetFile("file1.txt").OpenWrite().Dispose();
+        FileStorage.GetDirectory("dir1").Create();
+        FileStorage.GetFile("dir1", "file11.txt").OpenWrite().Dispose();
+        FileStorage.GetFile("dir1", "file12.txt").OpenWrite().Dispose();
+        FileStorage.GetDirectory("dir2").Create();
+        FileStorage.GetDirectory("dir2", "dir21").Create();
+        FileStorage.GetFile("dir2", "dir21", "file211.txt").OpenWrite().Dispose();
+        FileStorage.GetFile("dir2", "dir21", "file212.txt").OpenWrite().Dispose();
+        FileStorage.GetDirectory("dir2", "dir22").Create();
+        FileStorage.GetFile("dir2", "dir22", "file221.txt").OpenWrite().Dispose();
+        FileStorage.GetFile("dir2", "dir22", "file222.txt").OpenWrite().Dispose();
+
+        ISet<string> actual;
+        ISet<string> expected;
+
+        actual = FileStorage.GetDirectory("").EnumerateFiles().Select(f => f.Name).ToHashSet();
+        expected = new HashSet<string>()
+        {
+            "file1.txt",
+        };
+        Assert.IsTrue(actual.SetEquals(expected));
+
+        actual = FileStorage.GetDirectory("").EnumerateDirectories().Select(d => d.Name).ToHashSet();
+        expected = new HashSet<string>()
+        {
+            "dir1",
+            "dir2",
+        };
+        Assert.IsTrue(actual.SetEquals(expected));
+
+        actual = FileStorage.GetDirectory("dir1").EnumerateFiles().Select(f => f.Name).ToHashSet();
+        expected = new HashSet<string>()
+        {
+            "file11.txt",
+            "file12.txt",
+        };
+        Assert.IsTrue(actual.SetEquals(expected));
+
+        actual = FileStorage.GetDirectory("dir1").EnumerateDirectories().Select(d => d.Name).ToHashSet();
+        expected = new HashSet<string>();
+        Assert.IsTrue(actual.SetEquals(expected));
+
+        actual = FileStorage.GetDirectory("dir2").EnumerateFiles().Select(f => f.Name).ToHashSet();
+        expected = new HashSet<string>();
+        Assert.IsTrue(actual.SetEquals(expected));
+
+        actual = FileStorage.GetDirectory("dir2").EnumerateDirectories().Select(d => d.Name).ToHashSet();
+        expected = new HashSet<string>()
+        {
+            "dir21",
+            "dir22",
+        };
+        Assert.IsTrue(actual.SetEquals(expected));
+
+        actual = FileStorage.GetDirectory("dir2", "dir21").EnumerateFiles().Select(f => f.Name).ToHashSet();
+        expected = new HashSet<string>()
+        {
+            "file211.txt",
+            "file212.txt",
+        };
+        Assert.IsTrue(actual.SetEquals(expected));
+
+        actual = FileStorage.GetDirectory("dir2", "dir21").EnumerateDirectories().Select(d => d.Name).ToHashSet();
+        expected = new HashSet<string>();
+        Assert.IsTrue(actual.SetEquals(expected));
+
+        actual = FileStorage.GetDirectory("dir2", "dir22").EnumerateFiles().Select(f => f.Name).ToHashSet();
+        expected = new HashSet<string>()
+        {
+            "file221.txt",
+            "file222.txt",
+        };
+        Assert.IsTrue(actual.SetEquals(expected));
+
+        actual = FileStorage.GetDirectory("dir2", "dir22").EnumerateDirectories().Select(d => d.Name).ToHashSet();
+        expected = new HashSet<string>();
+        Assert.IsTrue(actual.SetEquals(expected));
+    }
+
+    [TestMethod]
     public void TestFileOpenReadWrite()
     {
         IFile file = FileStorage.GetFile("file.txt");

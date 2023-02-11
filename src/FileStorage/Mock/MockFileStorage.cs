@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -146,7 +147,17 @@ public sealed class MockFileStorage : IFileStorage
 
     private bool IsChildPath(string parentPath, string path)
     {
-        if (IsRootPath(parentPath)) return true;
+        if (IsRootPath(parentPath))
+        {
+            int count = 0;
+            int n = 0;
+            while ((n = path.IndexOf(_separator, n, StringComparison.Ordinal)) != -1)
+            {
+                n += _separator.Length;
+                count += 1;
+            }
+            return count == 0;
+        }
         return path.StartsWith(parentPath) && SplitPath(path)[SplitPath(parentPath).Length..].Length == 1;
     }
 
