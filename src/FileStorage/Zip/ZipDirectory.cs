@@ -38,16 +38,16 @@ public sealed class ZipDirectory : IDirectory
 
     public IEnumerable<IFile> EnumerateFiles()
     {
-        return EnumerateEntries(false)
-            .Where(e => !e.FullName.EndsWith('/'))
-            .Select(e => new ZipFile(_zipFileStorage, e.FullName));
+        return EnumerateEntryPaths(false)
+            .Where(p => !p.EndsWith('/'))
+            .Select(p => new ZipFile(_zipFileStorage, p));
     }
 
     public IEnumerable<IDirectory> EnumerateDirectories()
     {
-        return EnumerateEntries(false)
-            .Where(e => e.FullName.EndsWith('/'))
-            .Select(e => e.FullName[..^1])
+        return EnumerateEntryPaths(false)
+            .Where(p => p.EndsWith('/'))
+            .Select(p => p[..^1])
             .Select(p => new ZipDirectory(_zipFileStorage, p));
     }
 
@@ -66,33 +66,42 @@ public sealed class ZipDirectory : IDirectory
             throw new FileStorageException();
         }
         _zipFileStorage.Archive.GetEntry(_archivePath)?.Delete();
-        foreach (ZipArchiveEntry entry in EnumerateEntries(true).ToList())
+        foreach (string entryPath in EnumerateEntryPaths(true).ToList())
         {
-            entry.Delete();
+            _zipFileStorage.Archive.GetEntry(entryPath)?.Delete();
         }
     }
 
-    private IEnumerable<ZipArchiveEntry> EnumerateEntries(bool recurse)
+    private IEnumerable<string> EnumerateEntryPaths(bool recurse)
     {
+        ISet<string> result = new HashSet<string>();
         foreach (ZipArchiveEntry entry in _zipFileStorage.Archive.Entries)
         {
             if (_archivePath != "/" && !entry.FullName.StartsWith(_archivePath) || entry.FullName == _archivePath) continue;
-            if (recurse) yield return entry;
-            int count = 0;
-            var subPath = _archivePath == "/"
-                ? entry.FullName
-                : entry.FullName[_archivePath.Length..];
-            foreach (char c in subPath)
+            if (recurse)
             {
-                if (c == '/')
-                {
-                    count += 1;
-                }
+                result.Add(entry.FullName);
             }
-            if (count == 0 || count == 1 && subPath.EndsWith('/'))
+            else if (_archivePath == "/")
             {
-                yield return entry;
+                string truncatedPath = entry.FullName.Split('/')[0];
+                if (entry.FullName.IndexOf('/') != -1)
+                {
+                    truncatedPath += '/';
+                }
+                result.Add(truncatedPath);
+            }
+            else if (entry.FullName.StartsWith(_archivePath))
+            {
+                string relativePath = entry.FullName[_archivePath.Length..];
+                string truncatedPath = relativePath.Split('/')[0];
+                if (relativePath.IndexOf('/') != -1)
+                {
+                    truncatedPath += '/';
+                }
+                result.Add(_archivePath + truncatedPath);
             }
         }
+        return result;
     }
 }
