@@ -9,9 +9,14 @@ public sealed class ZipFileStorage : IFileStorage, IDisposable
 {
     internal ZipArchive Archive { get; set; }
 
-    public ZipFileStorage(Stream stream)
+    public ZipFileStorage(Stream stream, bool read, bool write)
     {
-        Archive = new ZipArchive(stream, ZipArchiveMode.Update, true);
+        ZipArchiveMode mode;
+        if (read && write) mode = ZipArchiveMode.Update;
+        else if (read) mode = ZipArchiveMode.Read;
+        else if (write) mode = ZipArchiveMode.Create;
+        else throw new InvalidOperationException();
+        Archive = new ZipArchive(stream, mode, true);
     }
 
     public IFile GetFile(params string[] paths)

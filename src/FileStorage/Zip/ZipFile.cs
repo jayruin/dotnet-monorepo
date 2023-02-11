@@ -50,11 +50,6 @@ public sealed class ZipFile : IFile
         return Open();
     }
 
-    public Stream OpenReadWrite()
-    {
-        return OpenWrite();
-    }
-
     public void Delete()
     {
         try

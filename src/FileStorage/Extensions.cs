@@ -14,6 +14,7 @@ public static class Extensions
 
     public static async Task CopyToAsync(this IDirectory source, IDirectory destination)
     {
+        destination.Create();
         foreach (IFile file in source.EnumerateFiles())
         {
             await file.CopyToAsync(destination.FileStorage.GetFile(destination.FullPath, file.Name));

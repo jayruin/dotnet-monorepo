@@ -14,7 +14,7 @@ public class ZipFileStorageTests : FileStorageTests
     public override void Initialize()
     {
         _stream = new MemoryStream();
-        _zipFileStorage = new ZipFileStorage(_stream);
+        _zipFileStorage = new ZipFileStorage(_stream, true, true);
         FileStorage = _zipFileStorage;
     }
 

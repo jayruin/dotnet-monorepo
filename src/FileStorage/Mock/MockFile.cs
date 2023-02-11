@@ -37,11 +37,6 @@ public sealed class MockFile : IFile
         return _mockFileStorage.OpenWrite(FullPath);
     }
 
-    public Stream OpenReadWrite()
-    {
-        return OpenWrite();
-    }
-
     public void Delete()
     {
         _mockFileStorage.DeleteFile(FullPath);
