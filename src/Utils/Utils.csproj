@@ -11,11 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Utils\Utils.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <InternalsVisibleTo Include="Epub.Tests" />
+    <InternalsVisibleTo Include="Utils.Tests" />
   </ItemGroup>
 
 </Project>

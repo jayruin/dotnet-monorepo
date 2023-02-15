@@ -1,11 +1,10 @@
 ﻿using ImgProj.Covers;
-using ImgProj.Utility;
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using Utils;
 
 namespace ImgProj.Exporting;
 
@@ -36,7 +35,7 @@ public sealed class CbzExporter : IExporter
         int pageNumber = 1;
         foreach (IPage page in pages)
         {
-            ZipArchiveEntry zipArchiveEntry = zipArchive.CreateEntry($"{StringFormatter.PadPageNumber(pageNumber, pageCount)}{page.Extension}", CompressionLevel.NoCompression);
+            ZipArchiveEntry zipArchiveEntry = zipArchive.CreateEntry($"{pageNumber.ToPaddedString(pageCount)}{page.Extension}", CompressionLevel.NoCompression);
             await using (Stream zipArchiveEntryStream = zipArchiveEntry.Open())
             {
                 await using Stream pageStream = page.OpenRead();

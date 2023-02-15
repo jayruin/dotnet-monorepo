@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Xml.Linq;
+using Utils;
 
 namespace Epub;
 
@@ -43,10 +44,8 @@ public sealed class EpubReader : IDisposable
     private XDocument GetContainerDocument()
     {
         ZipArchiveEntry containerXml = _zipArchive.GetEntry("META-INF/container.xml") ?? throw new ContainerXmlNotFoundException();
-        using (Stream containerXmlStream = containerXml.Open())
-        {
-            return XDocument.Load(containerXmlStream);
-        }
+        using Stream containerXmlStream = containerXml.Open();
+        return XDocument.Load(containerXmlStream);
     }
 
     private XDocument GetOpfDocument()
@@ -58,10 +57,8 @@ public sealed class EpubReader : IDisposable
             ?.Attribute("full-path")
             ?.Value ?? throw new PackageDocumentNotFoundException();
         ZipArchiveEntry? opfFile = _zipArchive.GetEntry(opfPath) ?? throw new PackageDocumentNotFoundException();
-        using(Stream opfStream = opfFile.Open())
-        {
-            return XDocument.Load(opfStream);
-        }
+        using Stream opfStream = opfFile.Open();
+        return XDocument.Load(opfStream);
     }
 
     private EpubVersion GetEpubVersion()
@@ -70,26 +67,12 @@ public sealed class EpubReader : IDisposable
             .Element(_opfNamespace + "package")
             ?.Attribute("version")
             ?.Value;
-        switch (version)
+        return version switch
         {
-            case "3.0": return EpubVersion.Epub3;
-            case "2.0": return EpubVersion.Epub2;
-            default: return EpubVersion.Unknown;
-        }
-    }
-
-    private DateTimeOffset ParseDateTimeOffset(string? input, DateTimeOffset defaultValue)
-    {
-        return DateTimeOffset.TryParse(input, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out DateTimeOffset dateTimeOffset)
-            ? dateTimeOffset
-            : defaultValue;
-    }
-
-    private DateTimeOffset? ParseDateTimeOffset(string? input)
-    {
-        return DateTimeOffset.TryParse(input, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out DateTimeOffset dateTimeOffset)
-            ? dateTimeOffset
-            : null;
+            "3.0" => EpubVersion.Epub3,
+            "2.0" => EpubVersion.Epub2,
+            _ => EpubVersion.Unknown,
+        };
     }
 
     public IEnumerable<string> EnumerateResources() => _zipArchive.Entries.Select(e => e.FullName);
@@ -98,10 +81,10 @@ public sealed class EpubReader : IDisposable
 
     public DateTimeOffset GuessLastModified()
     {
-        return ParseDateTimeOffset(GetModified())
+        return GetModified().ToDateTimeOffsetNullable(null)
             ?? _zipArchive.Entries
                 .Select(e => e.LastWriteTime)
-                .Append(ParseDateTimeOffset(GetDate(), DateTimeOffset.MinValue))
+                .Append(GetDate().ToDateTimeOffset(DateTimeOffset.MinValue))
                 .Max();
     }
 

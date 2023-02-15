@@ -1,5 +1,4 @@
 ﻿using FileStorage;
-using ImgProj.Utility;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -7,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Utils;
 
 namespace ImgProj.Importing;
 
@@ -27,7 +27,7 @@ public sealed class PageImporter : IPageImporter
         {
             if (!pageDirectories.TryGetValue(pageNumber, out IDirectory? pageDirectory))
             {
-                pageDirectory = fileStorage.GetDirectory(subProject.ProjectDirectory.FullPath, StringFormatter.PadPageNumber(pageNumber, maxPageCount));
+                pageDirectory = fileStorage.GetDirectory(subProject.ProjectDirectory.FullPath, pageNumber.ToPaddedString(maxPageCount));
                 pageDirectory.Create();
             }
             IFile pageFile = fileStorage.GetFile(pageDirectory.FullPath, $"{version}{sourceFile.Extension}");

@@ -1,8 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace ImgProj.Utility;
+namespace Utils;
 
-internal static partial class RegexProvider
+public static partial class RegexProvider
 {
     [GeneratedRegex(@"\d+", RegexOptions.Compiled)]
     public static partial Regex DigitSequence();
