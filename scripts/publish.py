@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 from pathlib import Path
 import platform
+import shutil
 from subprocess import run
 import xml.etree.ElementTree as ET
 
@@ -26,12 +27,38 @@ for path in projects_directory.iterdir():
         continue
     run([
         "dotnet", "publish", project_name,
-        "--no-build",
-        "--output", bin_directory.as_posix()
+        "--no-build"
     ], cwd=projects_directory)
     executable_file = Path(bin_directory, project_name)
     if current_system == "windows":
         executable_file = executable_file.with_suffix(".exe")
+    original_executable_file = Path(
+        path,
+        "bin",
+        "Release"
+    )
+    original_executable_file = Path(
+        original_executable_file,
+        [
+            version_path
+            for version_path in original_executable_file.iterdir()
+            if version_path.is_dir()
+        ][0]
+    )
+    original_executable_file = Path(
+        original_executable_file,
+        [
+            runtime_path
+            for runtime_path in original_executable_file.iterdir()
+            if runtime_path.is_dir()
+        ][0]
+    )
+    original_executable_file = Path(
+        original_executable_file,
+        "publish",
+        executable_file.name
+    )
+    shutil.copy(original_executable_file, executable_file)
     executable_file = executable_file.replace(
         executable_file.with_stem(f"{project_name}-{current_system}")
     )
