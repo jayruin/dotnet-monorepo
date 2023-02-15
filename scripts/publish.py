@@ -35,7 +35,8 @@ for path in projects_directory.iterdir():
         continue
     run([
         "dotnet", "publish", project_name,
-        "--no-build"
+        "--no-build",
+        "--runtime", rid
     ], cwd=projects_directory)
     executable_file = Path(bin_directory, project_name)
     if current_system == "windows":
