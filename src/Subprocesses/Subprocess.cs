@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,13 +9,13 @@ public sealed record Subprocess
 {
     public required string Name { get; init; }
 
-    public IEnumerable<string> Arguments { get; init; } = Enumerable.Empty<string>();
+    public ImmutableArray<string> Arguments { get; init; } = ImmutableArray<string>.Empty;
 
     public string WorkingDirectory { get; init; } = string.Empty;
 
     public Subprocess WithArguments(params string[] arguments)
     {
-        return this with { Arguments = arguments };
+        return this with { Arguments = arguments.ToImmutableArray() };
     }
 
     public async Task<CompletedSubprocess> RunAsync()
