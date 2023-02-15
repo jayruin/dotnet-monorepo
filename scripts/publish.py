@@ -14,6 +14,14 @@ bin_directory.mkdir(exist_ok=True)
 current_system = platform.system().lower()
 if current_system == "darwin":
     current_system = "macos"
+if current_system == "linux":
+    rid = "linux-x64"
+elif current_system == "windows":
+    rid = "win-x64"
+elif current_system == "macos":
+    rid = "osx-x64"
+else:
+    rid = ""
 for path in projects_directory.iterdir():
     if not path.is_dir():
         continue
@@ -43,18 +51,8 @@ for path in projects_directory.iterdir():
             version_path
             for version_path in original_executable_file.iterdir()
             if version_path.is_dir()
-        ][0]
-    )
-    original_executable_file = Path(
-        original_executable_file,
-        [
-            runtime_path
-            for runtime_path in original_executable_file.iterdir()
-            if runtime_path.is_dir()
-        ][0]
-    )
-    original_executable_file = Path(
-        original_executable_file,
+        ][0],
+        rid,
         "publish",
         executable_file.name
     )
