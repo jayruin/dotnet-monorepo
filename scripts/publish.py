@@ -25,9 +25,6 @@ else:
 for path in projects_directory.iterdir():
     if not path.is_dir():
         continue
-    debug_file = Path(path, "obj", "project.assets.json")
-    if debug_file.exists():
-        print(debug_file.read_text())
     project_name = path.name
     csproj_file = Path(path, f"{project_name}.csproj")
     if not csproj_file.is_file():
