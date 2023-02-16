@@ -33,5 +33,7 @@ for project in projects:
     run([
         "dotnet", "build",
         "--configuration", "Release",
-        "--no-restore"
+        "--no-restore",
+        "--runtime", rid,
+        "--self-contained", "true"
     ], cwd=project)
