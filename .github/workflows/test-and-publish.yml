@@ -13,11 +13,14 @@ jobs:
   reset-tags:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-      - run: python scripts/reset_tags.py
+      - name: Reset Tags
+        run: python scripts/github.py reset-tags
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   test-and-publish:
@@ -27,26 +30,36 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-dotnet@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      - uses: actions/setup-python@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-      - run: python scripts/build.py
-      - run: python scripts/test.py --github
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: python scripts/publish.py --github
+      - name: Restore
+        run: python scripts/dotnet.py -r
+      - name: Build
+        run: python scripts/dotnet.py -b
+      - name: Test
+        run: python scripts/dotnet.py -t
+      - name: Publish
+        run: python scripts/dotnet.py -p
+      - name: Create Releases
+        run: python scripts/github.py create-releases
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   update-pages:
     needs: test-and-publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - run: |
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Update gh-pages
+        run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git checkout --orphan gh-pages
