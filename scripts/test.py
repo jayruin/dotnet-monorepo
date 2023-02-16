@@ -16,6 +16,14 @@ badges_directory.mkdir(exist_ok=True)
 current_system = platform.system().lower()
 if current_system == "darwin":
     current_system = "macos"
+if current_system == "linux":
+    rid = "linux-x64"
+elif current_system == "windows":
+    rid = "win-x64"
+elif current_system == "macos":
+    rid = "osx-x64"
+else:
+    rid = ""
 for path in projects_directory.iterdir():
     if not path.is_dir() or not path.name.endswith(".Tests"):
         continue
@@ -25,7 +33,8 @@ for path in projects_directory.iterdir():
         "--configuration", "Release",
         "--no-build",
         "--logger", "trx",
-        "--logger", "html"
+        "--logger", "html",
+        "--runtime", rid
     ], cwd=projects_directory)
     test_results_directory = Path(path, "TestResults")
     result_files = [
