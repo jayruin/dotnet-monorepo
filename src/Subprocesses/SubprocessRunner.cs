@@ -1,38 +1,26 @@
-﻿using System.Collections.Immutable;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Subprocesses;
 
-public sealed record Subprocess
+public class SubprocessRunner : ISubprocessRunner
 {
-    public required string Name { get; init; }
-
-    public ImmutableArray<string> Arguments { get; init; } = ImmutableArray<string>.Empty;
-
-    public string WorkingDirectory { get; init; } = string.Empty;
-
-    public Subprocess WithArguments(params string[] arguments)
-    {
-        return this with { Arguments = arguments.ToImmutableArray() };
-    }
-
-    public async Task<CompletedSubprocess> RunAsync()
+    public async Task<CompletedSubprocess> RunAsync(string name, string workingDirectory, params string[] arguments)
     {
         StringBuilder standardOutputStringBuilder = new();
         StringBuilder standardErrorStringBuilder = new();
         using Process process = new();
         process.StartInfo = new ProcessStartInfo
         {
-            FileName = Name,
+            FileName = name,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             StandardOutputEncoding = Encoding.UTF8,
             StandardErrorEncoding = Encoding.UTF8,
-            WorkingDirectory = WorkingDirectory,
+            WorkingDirectory = workingDirectory,
         };
-        foreach (string argument in Arguments)
+        foreach (string argument in arguments)
         {
             process.StartInfo.ArgumentList.Add(argument);
         }
@@ -44,8 +32,8 @@ public sealed record Subprocess
         await process.WaitForExitAsync();
         return new CompletedSubprocess
         {
-            Name = Name,
-            Arguments = Arguments,
+            Name = name,
+            Arguments = arguments,
             ExitCode = process.ExitCode,
             StandardOutput = standardOutputStringBuilder.ToString(),
             StandardError = standardErrorStringBuilder.ToString(),

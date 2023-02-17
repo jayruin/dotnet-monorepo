@@ -1,27 +1,24 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Threading.Tasks;
 
 namespace Subprocesses.Tests;
 
 [TestClass]
-public class SubprocessTests
+public class SubprocessRunnerTests
 {
-    private readonly static Subprocess _subprocess = new() { Name = "dotnet", };
-
     [TestMethod]
     public async Task TestZeroExitCode()
     {
-        Subprocess subprocess = _subprocess.WithArguments("--help");
-        CompletedSubprocess completedSubprocess = await subprocess.RunAsync();
+        SubprocessRunner runner = new();
+        CompletedSubprocess completedSubprocess = await runner.RunAsync("dotnet", "", "--help");
         Assert.AreEqual(0, completedSubprocess.ExitCode);
     }
 
     [TestMethod]
     public async Task TestNonZeroExitCode()
     {
-        Subprocess subprocess = _subprocess.WithArguments("add", "package");
-        CompletedSubprocess completedSubprocess = await subprocess.RunAsync();
+        SubprocessRunner runner = new();
+        CompletedSubprocess completedSubprocess = await runner.RunAsync("dotnet", "", "add", "package");
         SubprocessException subprocessException = Assert.ThrowsException<SubprocessException>(completedSubprocess.EnsureZeroExitCode);
         Assert.AreNotEqual(0, subprocessException.CompletedSubprocess.ExitCode);
     }
