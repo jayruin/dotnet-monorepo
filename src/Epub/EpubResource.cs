@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Epub;
 
-public class EpubResource
+public sealed class EpubResource
 {
     public string Href { get; set; } = string.Empty;
 

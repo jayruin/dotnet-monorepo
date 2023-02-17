@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Subprocesses;
 
-public class SubprocessRunner : ISubprocessRunner
+public sealed class SubprocessRunner : ISubprocessRunner
 {
     public async Task<CompletedSubprocess> RunAsync(string name, string workingDirectory, params string[] arguments)
     {
