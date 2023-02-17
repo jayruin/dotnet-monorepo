@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+using Utils;
 
 namespace Epub;
 
@@ -10,31 +11,31 @@ public static class EpubMediaTypeProvider
     public static string GuessMediaType(string path)
     {
         _mapping.TryGetValue(GetExtension(path) ?? string.Empty, out string? mediaType);
-        return mediaType ?? EpubMimetypes.Application.OctetStream;
+        return mediaType ?? Mimetypes.Application.OctetStream;
     }
 
     private static IImmutableDictionary<string, string> CreateMapping()
     {
         ImmutableDictionary<string, string>.Builder builder = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.OrdinalIgnoreCase);
 
-        builder.Add(".epub", EpubMimetypes.Application.EpubZip);
-        builder.Add(".ncx", EpubMimetypes.Application.Ncx);
-        builder.Add(string.Empty, EpubMimetypes.Application.OctetStream);
-        builder.Add(".opf", EpubMimetypes.Application.OebpsPackageXml);
-        builder.Add(".xhtml", EpubMimetypes.Application.XhtmlXml);
+        builder.Add(".epub", Mimetypes.Application.EpubZip);
+        builder.Add(".ncx", Mimetypes.Application.Ncx);
+        builder.Add(string.Empty, Mimetypes.Application.OctetStream);
+        builder.Add(".opf", Mimetypes.Application.OebpsPackageXml);
+        builder.Add(".xhtml", Mimetypes.Application.XhtmlXml);
 
-        builder.Add(".otf", EpubMimetypes.Font.Otf);
-        builder.Add(".ttf", EpubMimetypes.Font.Ttf);
-        builder.Add(".woff", EpubMimetypes.Font.Woff);
-        builder.Add(".woff2", EpubMimetypes.Font.Woff2);
+        builder.Add(".otf", Mimetypes.Font.Otf);
+        builder.Add(".ttf", Mimetypes.Font.Ttf);
+        builder.Add(".woff", Mimetypes.Font.Woff);
+        builder.Add(".woff2", Mimetypes.Font.Woff2);
 
-        builder.Add(".gif", EpubMimetypes.Image.Gif);
-        builder.Add(".jpg", EpubMimetypes.Image.Jpeg);
-        builder.Add(".png", EpubMimetypes.Image.Png);
-        builder.Add(".svg", EpubMimetypes.Image.SvgXml);
+        builder.Add(".gif", Mimetypes.Image.Gif);
+        builder.Add(".jpg", Mimetypes.Image.Jpeg);
+        builder.Add(".png", Mimetypes.Image.Png);
+        builder.Add(".svg", Mimetypes.Image.SvgXml);
 
-        builder.Add(".css", EpubMimetypes.Text.Css);
-        builder.Add(".js", EpubMimetypes.Text.Javascript);
+        builder.Add(".css", Mimetypes.Text.Css);
+        builder.Add(".js", Mimetypes.Text.Javascript);
 
         return builder.ToImmutable();
     }

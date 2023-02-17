@@ -1,6 +1,6 @@
-namespace Epub;
+﻿namespace Utils;
 
-public static class EpubMimetypes
+public static class Mimetypes
 {
     public static class Application
     {

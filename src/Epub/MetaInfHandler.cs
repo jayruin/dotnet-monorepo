@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using Utils;
 
 namespace Epub;
 
@@ -22,7 +23,7 @@ public sealed class MetaInfHandler
                 new XElement((XNamespace)EpubXmlNamespaces.Container + "rootfiles",
                     new XElement((XNamespace)EpubXmlNamespaces.Container + "rootfile",
                         new XAttribute("full-path", packageDocumentPath),
-                        new XAttribute("media-type", EpubMimetypes.Application.OebpsPackageXml)
+                        new XAttribute("media-type", Mimetypes.Application.OebpsPackageXml)
                     )
                 )
             )
