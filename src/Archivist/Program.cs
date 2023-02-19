@@ -12,13 +12,20 @@ class Program
 {
     static async Task<int> Main(string[] args)
     {
+        ServiceProviderOptions serviceProviderOptions = new()
+        {
+            ValidateOnBuild = true,
+            ValidateScopes = true,
+        };
         await using ServiceProvider serviceProvider = new ServiceCollection()
             .AddTransient<IFileStorage, FilesystemFileStorage>()
             .AddImgProjectServices()
-            .BuildServiceProvider();
+            .BuildServiceProvider(serviceProviderOptions);
+
+        await using AsyncServiceScope serviceScope = serviceProvider.CreateAsyncScope();
 
         Command rootCommand = new RootCommand()
-            .AddImgSubcommand(serviceProvider);
+            .AddImgSubcommand(serviceScope.ServiceProvider);
 
         return await rootCommand.InvokeAsync(args);
     }
