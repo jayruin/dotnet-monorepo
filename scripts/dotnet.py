@@ -172,8 +172,7 @@ class Dotnet:
                 "--no-build",
                 "--runtime", self.runtime,
             ], cwd=project_directory)
-            shutil.rmtree(bin_directory, ignore_errors=True)
-            bin_directory.mkdir()
+            bin_directory.mkdir(exist_ok=True)
             executable_file = Path(bin_directory, project_directory.name)
             if self.current_system == "windows":
                 executable_file = executable_file.with_suffix(".exe")
