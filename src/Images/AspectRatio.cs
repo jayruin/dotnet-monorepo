@@ -2,7 +2,7 @@
 
 namespace Images;
 
-internal sealed record AspectRatio
+internal sealed class AspectRatio
 {
     public int Width { get; }
 

@@ -2,7 +2,7 @@
 
 namespace Subprocesses;
 
-public sealed record CompletedSubprocess
+public sealed class CompletedSubprocess
 {
     public required string Name { get; init; }
 

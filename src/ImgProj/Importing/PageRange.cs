@@ -4,7 +4,7 @@ using Utils;
 
 namespace ImgProj.Importing;
 
-public sealed partial record PageRange
+public sealed class PageRange
 {
     public int Start { get; }
 
