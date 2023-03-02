@@ -10,9 +10,4 @@ public sealed class SubprocessException : Exception
     {
         CompletedSubprocess = completedSubprocess;
     }
-
-    public override string ToString()
-    {
-        return CompletedSubprocess.ToString();
-    }
 }
