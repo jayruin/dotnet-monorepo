@@ -55,20 +55,17 @@ class Dotnet:
 
         self.nuget = Nuget()
 
-    def get_dotnet_version(self) -> str:
+    def get_framework(self) -> str:
         build_props_file = Path(
             self.projects_directory,
             "Directory.Build.props"
         )
         build_props = ET.parse(build_props_file)
-        element = build_props.find("./PropertyGroup/DotnetVersion")
-        dotnet_version = None if element is None else element.text
-        if element is None or dotnet_version is None:
+        element = build_props.find("./PropertyGroup/TargetFramework")
+        target_framework = None if element is None else element.text
+        if element is None or target_framework is None:
             raise RuntimeError("Could not determine dotnet version!")
-        return dotnet_version
-
-    def get_framework(self) -> str:
-        return f"net{self.get_dotnet_version()}"
+        return target_framework
 
     def get_project_directories(self) -> Iterable[Path]:
         for path in self.projects_directory.iterdir():

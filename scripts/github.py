@@ -25,13 +25,13 @@ class GitHub:
         for project_directory in self.dotnet.get_project_directories():
             if self.dotnet.is_executable(project_directory):
                 tags_to_reset.append(project_directory.name)
-        dotnet_version = self.dotnet.get_dotnet_version()
+        target_framework = self.dotnet.get_framework()
         for tag in tags_to_reset:
             run(["git", "push", "--delete", "origin", "tag", tag,])
             run(["gh", "release", "delete", tag, "--yes",])
             run([
                 "gh", "release", "create", tag, "--title", tag,
-                "--notes", f".NET {dotnet_version}",
+                "--notes", target_framework,
             ])
 
     def create_releases(self) -> None:
