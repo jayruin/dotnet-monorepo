@@ -9,5 +9,5 @@ public sealed class EpubResource
 
     public IEnumerable<string> ManifestProperties { get; set; } = Enumerable.Empty<string>();
 
-    public IEnumerable<string> SpineProperties { get; set; } =Enumerable.Empty<string>();
+    public IEnumerable<string> SpineProperties { get; set; } = Enumerable.Empty<string>();
 }

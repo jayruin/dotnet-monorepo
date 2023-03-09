@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
-using System.Text.Json.Serialization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ImgProj.Loading;
@@ -87,7 +87,7 @@ public static class ImgProjectLoader
             };
         }
 
-        foreach(string version in versions)
+        foreach (string version in versions)
         {
             MergeWithParentMetadataAndJson(mutableMetadataVersions[version], parentMetadataVersions[version], entryJson, mainVersion, coordinate);
         }

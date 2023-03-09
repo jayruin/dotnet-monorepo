@@ -1,6 +1,6 @@
-﻿using System.IO;
-using FileStorage.Zip;
+﻿using FileStorage.Zip;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
 
 namespace FileStorage.Tests;
 

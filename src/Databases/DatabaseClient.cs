@@ -1,5 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using Npgsql;
 using System;
 using System.Collections.Generic;

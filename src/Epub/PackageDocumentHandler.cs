@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Xml.Linq;
 
 namespace Epub;
@@ -60,7 +59,7 @@ internal sealed class PackageDocumentHandler
             new XAttribute("unique-identifier", "publication-id"),
             new XAttribute("version", version)
         );
-        _document =  new(
+        _document = new(
             new XDeclaration("1.0", "utf-8", null),
             _packageElement
         );
