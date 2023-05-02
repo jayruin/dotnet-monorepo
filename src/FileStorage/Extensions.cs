@@ -24,4 +24,14 @@ public static class Extensions
             await directory.CopyToAsync(destination.FileStorage.GetDirectory(destination.FullPath, directory.Name));
         }
     }
+
+    public static IFile GetFile(this IDirectory directory, string name)
+    {
+        return directory.FileStorage.GetFile(directory.FullPath, name);
+    }
+
+    public static IDirectory GetDirectory(this IDirectory directory, string name)
+    {
+        return directory.FileStorage.GetDirectory(directory.FullPath, name);
+    }
 }

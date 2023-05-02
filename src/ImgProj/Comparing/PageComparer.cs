@@ -58,7 +58,7 @@ public sealed class PageComparer : IPageComparer
             }
             using (IImage comparisonImage = _imageLoader.LoadImagesToGrid(pageStreams, rows: 1))
             {
-                IFile outputFile = outputDirectory.FileStorage.GetFile(outputDirectory.FullPath, $"{pageCount}.compare.jpg");
+                IFile outputFile = outputDirectory.GetFile($"{pageCount}.compare.jpg");
                 using Stream outputStream = outputFile.OpenWrite();
                 comparisonImage.SaveTo(outputStream, ImageFormat.Jpeg);
             }

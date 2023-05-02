@@ -22,15 +22,14 @@ public sealed class PageImporter : IPageImporter
         if (pageRanges.Count == 0) pageRanges = ImmutableArray.Create(new PageRange(1, sourceFiles.Count));
         IReadOnlyList<int> pageNumbers = GetPageNumbers(pageRanges);
         int maxPageCount = Math.Max(pageDirectories.Keys.DefaultIfEmpty().Max(), sourceFiles.Count);
-        IFileStorage fileStorage = subProject.ProjectDirectory.FileStorage;
         foreach ((IFile sourceFile, int pageNumber) in Enumerable.Zip(sourceFiles, pageNumbers))
         {
             if (!pageDirectories.TryGetValue(pageNumber, out IDirectory? pageDirectory))
             {
-                pageDirectory = fileStorage.GetDirectory(subProject.ProjectDirectory.FullPath, pageNumber.ToPaddedString(maxPageCount));
+                pageDirectory = subProject.ProjectDirectory.GetDirectory(pageNumber.ToPaddedString(maxPageCount));
                 pageDirectory.Create();
             }
-            IFile pageFile = fileStorage.GetFile(pageDirectory.FullPath, $"{version}{sourceFile.Extension}");
+            IFile pageFile = pageDirectory.GetFile($"{version}{sourceFile.Extension}");
             await using Stream destinationStream = pageFile.OpenWrite();
             await using Stream sourceStream = sourceFile.OpenRead();
             await sourceStream.CopyToAsync(destinationStream);

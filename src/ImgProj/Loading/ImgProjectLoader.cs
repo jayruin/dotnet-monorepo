@@ -14,7 +14,7 @@ public static class ImgProjectLoader
 {
     public static async Task<IImgProject> LoadFromDirectoryAsync(IDirectory projectDirectory)
     {
-        IFile metadataFile = projectDirectory.FileStorage.GetFile(projectDirectory.FullPath, ".metadata.json");
+        IFile metadataFile = projectDirectory.GetFile(".metadata.json");
         JsonSerializerOptions jsonSerializerOptions = new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -101,7 +101,7 @@ public static class ImgProjectLoader
         var childProjectsBuilder = ImmutableArray.CreateBuilder<IImgProject>();
         for (int i = 0; i < entryJson.Entries.Count; i++)
         {
-            IDirectory childProjectDirectory = projectDirectory.FileStorage.GetDirectory(projectDirectory.FullPath, $"_{i + 1}");
+            IDirectory childProjectDirectory = projectDirectory.GetDirectory($"_{i + 1}");
             EntryJson childEntryJson = entryJson.Entries[i];
             IImgProject childProject = LoadProject(childProjectDirectory, metadataVersions, childEntryJson, versions, i + 1);
             childProjectsBuilder.Add(childProject);
