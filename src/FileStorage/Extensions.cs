@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FileStorage;
@@ -25,13 +26,13 @@ public static class Extensions
         }
     }
 
-    public static IFile GetFile(this IDirectory directory, string name)
+    public static IFile GetFile(this IDirectory directory, params string[] paths)
     {
-        return directory.FileStorage.GetFile(directory.FullPath, name);
+        return directory.FileStorage.GetFile(paths.Prepend(directory.FullPath).ToArray());
     }
 
-    public static IDirectory GetDirectory(this IDirectory directory, string name)
+    public static IDirectory GetDirectory(this IDirectory directory, params string[] paths)
     {
-        return directory.FileStorage.GetDirectory(directory.FullPath, name);
+        return directory.FileStorage.GetDirectory(paths.Prepend(directory.FullPath).ToArray());
     }
 }
