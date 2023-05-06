@@ -18,11 +18,11 @@ public static class Extensions
         destination.Create();
         foreach (IFile file in source.EnumerateFiles())
         {
-            await file.CopyToAsync(destination.FileStorage.GetFile(destination.FullPath, file.Name));
+            await file.CopyToAsync(destination.GetFile(file.Name));
         }
         foreach (IDirectory directory in source.EnumerateDirectories())
         {
-            await directory.CopyToAsync(destination.FileStorage.GetDirectory(destination.FullPath, directory.Name));
+            await directory.CopyToAsync(destination.GetDirectory(directory.Name));
         }
     }
 
