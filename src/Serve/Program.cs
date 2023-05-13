@@ -5,6 +5,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Serve;
@@ -26,7 +27,7 @@ class Program
     {
         var builder = WebApplication.CreateSlimBuilder();
         builder.Logging.AddConsole();
-        builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(path, ExclusionFilters.None));
+        builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.GetFullPath(path), ExclusionFilters.None));
         builder.Services.AddSingleton<IContentTypeProvider>(new FileExtensionContentTypeProvider());
         if (tempMode is TempMode.Memory)
         {
