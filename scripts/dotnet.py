@@ -67,6 +67,18 @@ class Dotnet:
             raise RuntimeError("Could not determine dotnet version!")
         return target_framework
 
+    def get_project_framework(self, project_directory: Path) -> str:
+        csproj_file = Path(
+            project_directory,
+            f"{project_directory.name}.csproj"
+        )
+        csproj = ET.parse(csproj_file)
+        element = csproj.find("./PropertyGroup/TargetFramework")
+        if element is not None:
+            if element.text is not None:
+                return element.text
+        return self.framework
+
     def get_project_directories(self) -> Iterable[Path]:
         for path in self.projects_directory.iterdir():
             if path.is_dir() and Path(path, f"{path.name}.csproj").is_file():
@@ -114,6 +126,7 @@ class Dotnet:
         for project_directory in self.get_project_directories():
             run([
                 "dotnet", "restore",
+                f"{project_directory.name}.csproj",
                 "--runtime", self.runtime,
             ], cwd=project_directory)
 
@@ -121,6 +134,7 @@ class Dotnet:
         for project_directory in self.get_project_directories():
             run([
                 "dotnet", "clean",
+                f"{project_directory.name}.csproj",
                 "--configuration", self.configuration,
             ], cwd=project_directory)
 
@@ -128,6 +142,7 @@ class Dotnet:
         for project_directory in self.get_project_directories():
             run([
                 "dotnet", "build",
+                f"{project_directory.name}.csproj",
                 "--configuration", self.configuration,
                 "--no-restore",
                 "--runtime", self.runtime,
@@ -140,6 +155,7 @@ class Dotnet:
                 continue
             run([
                 "dotnet", "test",
+                f"{project_directory.name}.csproj",
                 "--configuration", self.configuration,
                 "--no-build",
                 "--logger", "trx",
@@ -166,6 +182,7 @@ class Dotnet:
                 continue
             run([
                 "dotnet", "publish",
+                f"{project_directory.name}.csproj",
                 "--no-build",
                 "--runtime", self.runtime,
             ], cwd=project_directory)
@@ -180,7 +197,7 @@ class Dotnet:
             )
             original_executable_file = Path(
                 original_executable_file,
-                self.framework,
+                self.get_project_framework(project_directory),
                 self.runtime,
                 "publish",
                 executable_file.name
