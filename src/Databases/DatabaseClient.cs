@@ -1,7 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.Data.Sqlite;
-using Npgsql;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Globalization;
@@ -10,48 +7,36 @@ using System.Threading.Tasks;
 
 namespace Databases;
 
-public sealed class DatabaseClient : IDatabaseClient
+public class DatabaseClient : IDatabaseClient
 {
-    public DatabaseProvider DefaultProvider { get; set; } = DatabaseProvider.None;
+    private readonly DbProviderFactory _providerFactory;
 
-    public string DefaultConnectionString { get; set; } = string.Empty;
+    public string? ConnectionString { get; set; }
 
-    public DbProviderFactory GetFactory(DatabaseProvider provider)
+    public DatabaseClient(DbProviderFactory providerFactory)
     {
-        return provider switch
-        {
-            DatabaseProvider.Sqlite => SqliteFactory.Instance,
-            DatabaseProvider.Sqlserver => SqlClientFactory.Instance,
-            DatabaseProvider.Postgresql => NpgsqlFactory.Instance,
-            _ => throw new ArgumentException("No provider specified!", nameof(provider)),
-        };
+        _providerFactory = providerFactory;
     }
 
-    public async Task ExecuteNonQueryAsync(DatabaseProvider provider, string connectionString,
-        FormattableString commandText)
+    public async Task ExecuteNonQueryAsync(FormattableString commandText)
     {
-        DbProviderFactory providerFactory = GetFactory(provider);
-        await using DbConnection connection = PrepareConnection(providerFactory, connectionString);
+        await using DbConnection connection = PrepareConnection(_providerFactory, ConnectionString);
         await connection.OpenAsync();
         await using DbCommand command = PrepareCommand(connection, commandText);
         await command.ExecuteNonQueryAsync();
     }
 
-    public void ExecuteNonQuery(DatabaseProvider provider, string connectionString,
-        FormattableString commandText)
+    public void ExecuteNonQuery(FormattableString commandText)
     {
-        DbProviderFactory providerFactory = GetFactory(provider);
-        using DbConnection connection = PrepareConnection(providerFactory, connectionString);
+        using DbConnection connection = PrepareConnection(_providerFactory, ConnectionString);
         connection.Open();
         using DbCommand command = PrepareCommand(connection, commandText);
         command.ExecuteNonQuery();
     }
 
-    public async IAsyncEnumerable<T> ExecuteQueryAsync<T>(DatabaseProvider provider, string connectionString,
-        FormattableString commandText, Func<IDatabaseRow, Task<T>> mapper)
+    public async IAsyncEnumerable<T> ExecuteQueryAsync<T>(FormattableString commandText, Func<IDatabaseRow, Task<T>> mapper)
     {
-        DbProviderFactory providerFactory = GetFactory(provider);
-        await using DbConnection connection = PrepareConnection(providerFactory, connectionString);
+        await using DbConnection connection = PrepareConnection(_providerFactory, ConnectionString);
         await connection.OpenAsync();
         await using DbCommand command = PrepareCommand(connection, commandText);
         await using DbDataReader dataReader = await command.ExecuteReaderAsync();
@@ -62,11 +47,9 @@ public sealed class DatabaseClient : IDatabaseClient
         }
     }
 
-    public IEnumerable<T> ExecuteQuery<T>(DatabaseProvider provider, string connectionString,
-        FormattableString commandText, Func<IDatabaseRow, T> mapper)
+    public IEnumerable<T> ExecuteQuery<T>(FormattableString commandText, Func<IDatabaseRow, T> mapper)
     {
-        DbProviderFactory providerFactory = GetFactory(provider);
-        using DbConnection connection = PrepareConnection(providerFactory, connectionString);
+        using DbConnection connection = PrepareConnection(_providerFactory, ConnectionString);
         connection.Open();
         using DbCommand command = PrepareCommand(connection, commandText);
         DbDataReader dataReader = command.ExecuteReader();
@@ -77,7 +60,7 @@ public sealed class DatabaseClient : IDatabaseClient
         }
     }
 
-    private static DbConnection PrepareConnection(DbProviderFactory providerFactory, string connectionString)
+    private static DbConnection PrepareConnection(DbProviderFactory providerFactory, string? connectionString)
     {
         ArgumentException.ThrowIfNullOrEmpty(connectionString, nameof(connectionString));
         DbConnection connection = providerFactory.CreateConnection()
@@ -102,16 +85,4 @@ public sealed class DatabaseClient : IDatabaseClient
         }
         return command;
     }
-
-    public Task ExecuteNonQueryAsync(FormattableString commandText)
-        => ExecuteNonQueryAsync(DefaultProvider, DefaultConnectionString, commandText);
-
-    public void ExecuteNonQuery(FormattableString commandText)
-        => ExecuteNonQuery(DefaultProvider, DefaultConnectionString, commandText);
-
-    public IAsyncEnumerable<T> ExecuteQueryAsync<T>(FormattableString commandText, Func<IDatabaseRow, Task<T>> mapper)
-        => ExecuteQueryAsync<T>(DefaultProvider, DefaultConnectionString, commandText, mapper);
-
-    public IEnumerable<T> ExecuteQuery<T>(FormattableString commandText, Func<IDatabaseRow, T> mapper)
-        => ExecuteQuery<T>(DefaultProvider, DefaultConnectionString, commandText, mapper);
 }

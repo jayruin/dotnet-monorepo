@@ -13,16 +13,12 @@ public class SqliteTests
     public void TestReadWriteRows()
     {
         using TempFile tempFile = new();
-        string connectionString = $"Data Source={tempFile.FilePath};";
-        IDatabaseClient databaseClient = new DatabaseClient
-        {
-            DefaultProvider = DatabaseProvider.Sqlite,
-            DefaultConnectionString = connectionString,
-        };
-        databaseClient.ExecuteNonQuery($"CREATE TABLE TESTTABLE (ID INT PRIMARY KEY NOT NULL, VALUE TEXT NOT NULL);");
-        databaseClient.ExecuteNonQuery($"INSERT INTO TESTTABLE (ID, VALUE) VALUES ({1}, {"a"})");
-        databaseClient.ExecuteNonQuery($"INSERT INTO TESTTABLE (ID, VALUE) VALUES ({2}, {"b"})");
-        List<string> results = databaseClient
+        ISqliteClient client = new SqliteClient();
+        client.SetConnectionString(tempFile.FilePath, SqliteOpenMode.ReadWriteCreate);
+        client.ExecuteNonQuery($"CREATE TABLE TESTTABLE (ID INT PRIMARY KEY NOT NULL, VALUE TEXT NOT NULL);");
+        client.ExecuteNonQuery($"INSERT INTO TESTTABLE (ID, VALUE) VALUES ({1}, {"a"})");
+        client.ExecuteNonQuery($"INSERT INTO TESTTABLE (ID, VALUE) VALUES ({2}, {"b"})");
+        List<string> results = client
             .ExecuteQuery($"SELECT * FROM TESTTABLE", row => $"{row.GetValue<int>(0)}{row.GetValue<string>(1)}")
             .ToList();
         Assert.AreEqual(2, results.Count);
@@ -34,17 +30,13 @@ public class SqliteTests
     public async Task TestReadWriteRowsAsync()
     {
         using TempFile tempFile = new();
-        string connectionString = $"Data Source={tempFile.FilePath};";
-        IDatabaseClient databaseClient = new DatabaseClient
-        {
-            DefaultProvider = DatabaseProvider.Sqlite,
-            DefaultConnectionString = connectionString,
-        };
-        await databaseClient.ExecuteNonQueryAsync($"CREATE TABLE TESTTABLE (ID INT PRIMARY KEY NOT NULL, VALUE TEXT NOT NULL);");
-        await databaseClient.ExecuteNonQueryAsync($"INSERT INTO TESTTABLE (ID, VALUE) VALUES ({1}, {"a"})");
-        await databaseClient.ExecuteNonQueryAsync($"INSERT INTO TESTTABLE (ID, VALUE) VALUES ({2}, {"b"})");
+        ISqliteClient client = new SqliteClient();
+        client.SetConnectionString(tempFile.FilePath, SqliteOpenMode.ReadWriteCreate);
+        await client.ExecuteNonQueryAsync($"CREATE TABLE TESTTABLE (ID INT PRIMARY KEY NOT NULL, VALUE TEXT NOT NULL);");
+        await client.ExecuteNonQueryAsync($"INSERT INTO TESTTABLE (ID, VALUE) VALUES ({1}, {"a"})");
+        await client.ExecuteNonQueryAsync($"INSERT INTO TESTTABLE (ID, VALUE) VALUES ({2}, {"b"})");
         List<string> results = new();
-        IAsyncEnumerable<string> queryResults = databaseClient
+        IAsyncEnumerable<string> queryResults = client
             .ExecuteQueryAsync($"SELECT * FROM TESTTABLE", async row => $"{await row.GetValueAsync<int>(0)}{await row.GetValueAsync<string>(1)}");
         await foreach (string queryResult in queryResults)
         {
