@@ -14,10 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Epub\Epub.csproj" />
-    <ProjectReference Include="..\FileStorage\FileStorage.csproj" />
-    <ProjectReference Include="..\Images\Images.csproj" />
-    <ProjectReference Include="..\Utils\Utils.csproj" />
+    <ProjectReference Include="$(Proj_Epub)" />
+    <ProjectReference Include="$(Proj_FileStorage)" />
+    <ProjectReference Include="$(Proj_Images)" />
+    <ProjectReference Include="$(Proj_Utils)" />
   </ItemGroup>
 
   <ItemGroup>
