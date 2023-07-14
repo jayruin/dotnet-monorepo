@@ -33,16 +33,22 @@ class Nuget:
 
 
 class Project:
-    def __init__(self, csproj_file: Path) -> None:
+    def __init__(self, csproj_file: Path, framework: str) -> None:
         self.csproj_file = csproj_file
         self.name = csproj_file.stem
         self.directory = csproj_file.parent
 
         csproj = ET.parse(csproj_file)
-        element = csproj.find("./PropertyGroup/OutputType")
-        self.is_executable = element is not None and element.text == "Exe"
+        output_type_element = csproj.find("./PropertyGroup/OutputType")
+        self.is_executable = output_type_element is not None and output_type_element.text == "Exe"
 
         self.is_test = self.name.endswith(".Tests")
+
+        self.framework = framework
+        target_framework_element = csproj.find("./PropertyGroup/TargetFramework")
+        if target_framework_element is not None:
+            if target_framework_element.text is not None:
+                self.framework = target_framework_element.text
 
 
 class Dotnet:
@@ -80,24 +86,12 @@ class Dotnet:
             raise RuntimeError("Could not determine dotnet version!")
         return target_framework
 
-    def get_project_framework(self, project_directory: Path) -> str:
-        csproj_file = Path(
-            project_directory,
-            f"{project_directory.name}.csproj"
-        )
-        csproj = ET.parse(csproj_file)
-        element = csproj.find("./PropertyGroup/TargetFramework")
-        if element is not None:
-            if element.text is not None:
-                return element.text
-        return self.framework
-
     def get_projects(self, directory: Path | None = None) -> Iterable[Project]:
         if directory is None:
             directory = self.projects_directory
         for path in directory.iterdir():
             if path.is_file() and path.suffix == ".csproj" and path.stem:
-                yield Project(path)
+                yield Project(path, self.framework)
             elif path.is_dir():
                 yield from self.get_projects(path)
 
@@ -205,7 +199,7 @@ class Dotnet:
             )
             original_executable_file = Path(
                 original_executable_file,
-                self.get_project_framework(project.directory),
+                project.framework,
                 self.runtime,
                 "publish",
                 executable_file.name
