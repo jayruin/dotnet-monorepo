@@ -32,6 +32,19 @@ class Nuget:
             return ""
 
 
+class Project:
+    def __init__(self, csproj_file: Path) -> None:
+        self.csproj_file = csproj_file
+        self.name = csproj_file.stem
+        self.directory = csproj_file.parent
+
+        csproj = ET.parse(csproj_file)
+        element = csproj.find("./PropertyGroup/OutputType")
+        self.is_executable = element is not None and element.text == "Exe"
+
+        self.is_test = self.name.endswith(".Tests")
+
+
 class Dotnet:
     def __init__(self, projects_directory: Path) -> None:
         self.projects_directory = projects_directory
@@ -79,19 +92,14 @@ class Dotnet:
                 return element.text
         return self.framework
 
-    def get_project_directories(self) -> Iterable[Path]:
-        for path in self.projects_directory.iterdir():
-            if path.is_dir() and Path(path, f"{path.name}.csproj").is_file():
-                yield path
-
-    def is_executable(self, project_directory: Path) -> bool:
-        csproj_file = Path(
-            project_directory,
-            f"{project_directory.name}.csproj"
-        )
-        csproj = ET.parse(csproj_file)
-        element = csproj.find("./PropertyGroup/OutputType")
-        return element is not None and element.text == "Exe"
+    def get_projects(self, directory: Path | None = None) -> Iterable[Project]:
+        if directory is None:
+            directory = self.projects_directory
+        for path in directory.iterdir():
+            if path.is_file() and path.suffix == ".csproj" and path.stem:
+                yield Project(path)
+            elif path.is_dir():
+                yield from self.get_projects(path)
 
     def update(self) -> None:
         packages_props_file = Path(
@@ -113,57 +121,57 @@ class Dotnet:
         packages_props.write(packages_props_file)
 
     def zero(self) -> None:
-        for project_directory in self.get_project_directories():
+        for project in self.get_projects():
             directories_to_delete = [
-                Path(project_directory, "bin"),
-                Path(project_directory, "obj"),
-                Path(project_directory, "TestResults"),
+                Path(project.directory, "bin"),
+                Path(project.directory, "obj"),
+                Path(project.directory, "TestResults"),
             ]
             for directory_to_delete in directories_to_delete:
                 shutil.rmtree(directory_to_delete, ignore_errors=True)
 
     def restore(self) -> None:
-        for project_directory in self.get_project_directories():
+        for project in self.get_projects():
             run([
                 "dotnet", "restore",
-                f"{project_directory.name}.csproj",
+                project.csproj_file.name,
                 "--runtime", self.runtime,
-            ], cwd=project_directory)
+            ], cwd=project.directory)
 
     def clean(self) -> None:
-        for project_directory in self.get_project_directories():
+        for project in self.get_projects():
             run([
                 "dotnet", "clean",
-                f"{project_directory.name}.csproj",
+                project.csproj_file.name,
                 "--configuration", self.configuration,
-            ], cwd=project_directory)
+            ], cwd=project.directory)
 
     def build(self) -> None:
-        for project_directory in self.get_project_directories():
+        for project in self.get_projects():
             run([
                 "dotnet", "build",
-                f"{project_directory.name}.csproj",
+                project.csproj_file.name,
                 "--configuration", self.configuration,
                 "--no-restore",
                 "--runtime", self.runtime,
                 "--self-contained", "true",
-            ], cwd=project_directory)
+            ], cwd=project.directory)
 
     def test(self) -> None:
-        for project_directory in self.get_project_directories():
-            if not project_directory.name.endswith(".Tests"):
+        for project in self.get_projects():
+            if not project.is_test:
                 continue
             run([
                 "dotnet", "test",
-                f"{project_directory.name}.csproj",
+                project.csproj_file.name,
                 "--configuration", self.configuration,
                 "--no-build",
                 "--logger", "trx",
                 "--logger", "html",
                 "--runtime", self.runtime,
-            ], cwd=project_directory)
+            ], cwd=project.directory)
 
-            test_results_directory = Path(project_directory, "TestResults")
+            test_results_directory = Path(project.directory, "TestResults")
             result_files = [
                 path
                 for path in test_results_directory.iterdir()
@@ -172,32 +180,32 @@ class Dotnet:
             for result_file in result_files:
                 result_file.replace(
                     result_file.with_stem(
-                        f"{project_directory.name}.{self.current_system}"
+                        f"{project.name}.{self.current_system}"
                     )
                 )
 
     def publish(self, bin_directory: Path) -> None:
-        for project_directory in self.get_project_directories():
-            if not self.is_executable(project_directory):
+        for project in self.get_projects():
+            if not project.is_executable:
                 continue
             run([
                 "dotnet", "publish",
-                f"{project_directory.name}.csproj",
+                project.csproj_file.name,
                 "--no-build",
                 "--runtime", self.runtime,
-            ], cwd=project_directory)
+            ], cwd=project.directory)
             bin_directory.mkdir(exist_ok=True)
-            executable_file = Path(bin_directory, project_directory.name)
+            executable_file = Path(bin_directory, project.name)
             if self.current_system == "windows":
                 executable_file = executable_file.with_suffix(".exe")
             original_executable_file = Path(
-                project_directory,
+                project.directory,
                 "bin",
                 self.configuration
             )
             original_executable_file = Path(
                 original_executable_file,
-                self.get_project_framework(project_directory),
+                self.get_project_framework(project.directory),
                 self.runtime,
                 "publish",
                 executable_file.name
@@ -205,7 +213,7 @@ class Dotnet:
             shutil.copy(original_executable_file, executable_file)
             executable_file = executable_file.replace(
                 executable_file.with_stem(
-                    f"{project_directory.name}-{self.current_system}"
+                    f"{project.directory.name}-{self.current_system}"
                 )
             )
 
