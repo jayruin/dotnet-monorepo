@@ -1,4 +1,4 @@
-﻿using ImgProj.Covers;
+using ImgProj.Covers;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;

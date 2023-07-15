@@ -1,4 +1,4 @@
-﻿using Archivist.Extensions;
+using Archivist.Extensions;
 using FileStorage;
 using FileStorage.Filesystem;
 using Microsoft.Extensions.DependencyInjection;

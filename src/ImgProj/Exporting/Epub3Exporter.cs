@@ -1,4 +1,4 @@
-﻿using Epub;
+using Epub;
 using FileStorage;
 using Images;
 using ImgProj.Covers;

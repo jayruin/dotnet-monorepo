@@ -1,4 +1,4 @@
-﻿using ImgProj.Core;
+using ImgProj.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;

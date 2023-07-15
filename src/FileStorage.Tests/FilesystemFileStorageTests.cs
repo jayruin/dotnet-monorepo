@@ -1,4 +1,4 @@
-﻿using FileStorage.Filesystem;
+using FileStorage.Filesystem;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing;
 

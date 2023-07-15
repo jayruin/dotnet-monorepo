@@ -1,4 +1,4 @@
-﻿using FileStorage;
+using FileStorage;
 using ImgProj.Core;
 using System;
 using System.Collections.Generic;

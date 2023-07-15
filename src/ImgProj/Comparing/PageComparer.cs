@@ -1,4 +1,4 @@
-﻿using FileStorage;
+using FileStorage;
 using Images;
 using System.Collections.Generic;
 using System.Collections.Immutable;

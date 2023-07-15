@@ -1,4 +1,4 @@
-﻿using FileStorage;
+using FileStorage;
 using System.IO;
 
 namespace ImgProj.Core;

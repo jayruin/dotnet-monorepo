@@ -1,4 +1,4 @@
-﻿using ImgProj.Covers;
+using ImgProj.Covers;
 using iText.IO.Image;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;

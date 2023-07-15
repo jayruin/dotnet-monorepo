@@ -1,4 +1,4 @@
-﻿namespace Databases;
+namespace Databases;
 
 public interface ISqliteClient : IDatabaseClient
 {

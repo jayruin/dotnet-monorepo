@@ -1,4 +1,4 @@
-﻿using FileStorage;
+using FileStorage;
 using System.Collections.Immutable;
 
 namespace ImgProj.Comparing;

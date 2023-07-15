@@ -1,4 +1,4 @@
-﻿namespace ImgProj.Covers;
+namespace ImgProj.Covers;
 
 public interface ICoverGenerator
 {

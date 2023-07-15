@@ -1,4 +1,4 @@
-﻿using FileStorage;
+using FileStorage;
 using Images;
 using iText.IO.Image;
 using iText.Kernel.Geom;

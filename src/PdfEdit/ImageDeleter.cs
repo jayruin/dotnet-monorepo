@@ -1,4 +1,4 @@
-﻿using FileStorage;
+using FileStorage;
 using Images;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Data;

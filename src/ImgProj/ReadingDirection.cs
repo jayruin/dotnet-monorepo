@@ -1,4 +1,4 @@
-﻿namespace ImgProj;
+namespace ImgProj;
 
 public enum ReadingDirection
 {

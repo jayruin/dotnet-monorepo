@@ -1,4 +1,4 @@
-﻿namespace Epub;
+namespace Epub;
 
 public class InvalidEpubVersionException : EpubException
 {

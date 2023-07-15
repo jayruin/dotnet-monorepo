@@ -1,4 +1,4 @@
-﻿namespace ImgProj.Exporting;
+namespace ImgProj.Exporting;
 
 public enum ExportFormat
 {

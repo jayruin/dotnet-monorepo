@@ -1,4 +1,4 @@
-﻿using FileStorage.Mock;
+using FileStorage.Mock;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FileStorage.Tests;

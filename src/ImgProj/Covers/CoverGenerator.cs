@@ -1,4 +1,4 @@
-﻿using Images;
+using Images;
 using ImgProj.Core;
 using System.Collections.Generic;
 using System.IO;

@@ -1,4 +1,4 @@
-﻿namespace FileStorage;
+namespace FileStorage;
 
 public interface IFileStorage
 {

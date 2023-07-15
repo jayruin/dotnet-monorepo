@@ -1,4 +1,4 @@
-﻿namespace Serve;
+namespace Serve;
 
 public enum TempMode
 {

@@ -1,4 +1,4 @@
-﻿namespace Images;
+namespace Images;
 
 public enum ImageFormat
 {
