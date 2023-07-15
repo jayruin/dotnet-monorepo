@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace FileCaching;
+namespace Caching;
 
 public sealed class MemoryFileCache : IFileCache
 {

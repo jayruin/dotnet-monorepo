@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace FileCaching;
+namespace Caching;
 
 public sealed class TempFileCache : IFileCache
 {

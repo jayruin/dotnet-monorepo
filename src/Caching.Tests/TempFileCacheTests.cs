@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace FileCaching.Tests;
+namespace Caching.Tests;
 
 [TestClass]
 public class TempFileCacheTests : FileCacheTests

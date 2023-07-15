@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace FileCaching;
+namespace Caching;
 
 internal sealed class TempCachedFile : ICachedFile
 {

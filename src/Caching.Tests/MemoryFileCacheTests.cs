@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FileCaching.Tests;
+namespace Caching.Tests;
 
 [TestClass]
 public class MemoryFileCacheTests : FileCacheTests

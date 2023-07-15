@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace FileCaching;
+namespace Caching;
 
 public interface ICachedFile
 {

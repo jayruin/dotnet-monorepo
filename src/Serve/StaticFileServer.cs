@@ -1,3 +1,4 @@
+using Caching;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
@@ -46,10 +47,10 @@ public sealed class StaticFileServer : IStaticFileServer
         """;
     private readonly IFileProvider _fileProvider;
     private readonly IContentTypeProvider _contentTypeProvider;
-    private readonly ITemp _temp;
+    private readonly IStreamCache _temp;
     private readonly ImmutableArray<string> _sizeUnits = ImmutableArray.Create("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB");
 
-    public StaticFileServer(IFileProvider fileProvider, IContentTypeProvider contentTypeProvider, ITemp temp)
+    public StaticFileServer(IFileProvider fileProvider, IContentTypeProvider contentTypeProvider, IStreamCache temp)
     {
         _fileProvider = fileProvider;
         _contentTypeProvider = contentTypeProvider;
@@ -147,7 +148,7 @@ public sealed class StaticFileServer : IStaticFileServer
 
     private async Task<Stream> CreateZipFromDirectoryAsync(string path)
     {
-        Stream stream = _temp.GetStream();
+        Stream stream = _temp.CreateStream();
         using (ZipArchive archive = new(stream, ZipArchiveMode.Create, true))
         {
             await AddToZipArchiveAsync(archive, path, path);

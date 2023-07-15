@@ -15,4 +15,8 @@
     <PackageReference Include="System.CommandLine" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="$(Proj_Caching)" />
+  </ItemGroup>
+
 </Project>

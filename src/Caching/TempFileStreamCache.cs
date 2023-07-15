@@ -1,10 +1,10 @@
 using System.IO;
 
-namespace Serve;
+namespace Caching;
 
-public class FileTemp : ITemp
+public sealed class TempFileStreamCache : IStreamCache
 {
-    public Stream GetStream()
+    public Stream CreateStream()
     {
         return new FileStream(Path.GetTempFileName(), FileMode.Open, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose);
     }

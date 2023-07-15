@@ -1,3 +1,4 @@
+using Caching;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,11 +30,11 @@ class Program
         builder.Services.AddSingleton<IContentTypeProvider>(new FileExtensionContentTypeProvider());
         if (tempMode is TempMode.Memory)
         {
-            builder.Services.AddSingleton<ITemp, MemoryTemp>();
+            builder.Services.AddSingleton<IStreamCache, MemoryStreamCache>();
         }
         else if (tempMode is TempMode.File)
         {
-            builder.Services.AddSingleton<ITemp, FileTemp>();
+            builder.Services.AddSingleton<IStreamCache, TempFileStreamCache>();
         }
         builder.Services.AddSingleton<IStaticFileServer, StaticFileServer>();
 
