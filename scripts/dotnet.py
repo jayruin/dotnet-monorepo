@@ -40,12 +40,15 @@ class Project:
 
         csproj = ET.parse(csproj_file)
         output_type_element = csproj.find("./PropertyGroup/OutputType")
-        self.is_executable = output_type_element is not None and output_type_element.text == "Exe"
+        self.is_executable = (output_type_element is not None and
+                              output_type_element.text == "Exe")
 
         self.is_test = self.name.endswith(".Tests")
 
         self.framework = framework
-        target_framework_element = csproj.find("./PropertyGroup/TargetFramework")
+        target_framework_element = csproj.find(
+            "./PropertyGroup/TargetFramework"
+        )
         if target_framework_element is not None:
             if target_framework_element.text is not None:
                 self.framework = target_framework_element.text
@@ -71,6 +74,9 @@ class Dotnet:
         self.runtime = runtime
         self.framework = self.get_framework()
         self.configuration = "Release"
+
+        self.bin_directory = Path(projects_directory.parent, "bin")
+        self.test_results_directory_name = "TestResults"
 
         self.nuget = Nuget()
 
@@ -119,7 +125,7 @@ class Dotnet:
             directories_to_delete = [
                 Path(project.directory, "bin"),
                 Path(project.directory, "obj"),
-                Path(project.directory, "TestResults"),
+                Path(project.directory, self.test_results_directory_name),
             ]
             for directory_to_delete in directories_to_delete:
                 shutil.rmtree(directory_to_delete, ignore_errors=True)
@@ -165,7 +171,10 @@ class Dotnet:
                 "--runtime", self.runtime,
             ], cwd=project.directory)
 
-            test_results_directory = Path(project.directory, "TestResults")
+            test_results_directory = Path(
+                project.directory,
+                self.test_results_directory_name
+            )
             result_files = [
                 path
                 for path in test_results_directory.iterdir()
@@ -178,7 +187,7 @@ class Dotnet:
                     )
                 )
 
-    def publish(self, bin_directory: Path) -> None:
+    def publish(self) -> None:
         for project in self.get_projects():
             if not project.is_executable:
                 continue
@@ -188,8 +197,8 @@ class Dotnet:
                 "--no-build",
                 "--runtime", self.runtime,
             ], cwd=project.directory)
-            bin_directory.mkdir(exist_ok=True)
-            executable_file = Path(bin_directory, project.name)
+            self.bin_directory.mkdir(exist_ok=True)
+            executable_file = Path(self.bin_directory, project.name)
             if self.current_system == "windows":
                 executable_file = executable_file.with_suffix(".exe")
             original_executable_file = Path(
@@ -223,7 +232,6 @@ def main() -> None:
     argparser.add_argument("-p", "--publish", action="store_true")
     args = argparser.parse_args()
     projects_directory = Path(Path(__file__).resolve().parent.parent, "src")
-    bin_directory = Path(projects_directory.parent, "bin")
     dotnet = Dotnet(projects_directory)
     if args.update:
         dotnet.update()
@@ -238,7 +246,7 @@ def main() -> None:
     if args.test:
         dotnet.test()
     if args.publish:
-        dotnet.publish(bin_directory)
+        dotnet.publish()
 
 
 if __name__ == "__main__":
