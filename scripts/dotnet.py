@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from collections import deque
 from collections.abc import Iterable
 import json
 from pathlib import Path
@@ -53,6 +54,11 @@ class Project:
             if target_framework_element.text is not None:
                 self.framework = target_framework_element.text
 
+        self.referenced_project_names = [
+            element.attrib["Include"][2:-1].split("_")[1]
+            for element in csproj.findall(".//ProjectReference")
+        ]
+
 
 class Dotnet:
     def __init__(self, projects_directory: Path) -> None:
@@ -76,6 +82,7 @@ class Dotnet:
         self.configuration = "Release"
 
         self.bin_directory = Path(projects_directory.parent, "bin")
+        self.sln_directory = projects_directory
         self.test_results_directory_name = "TestResults"
 
         self.nuget = Nuget()
@@ -100,6 +107,36 @@ class Dotnet:
                 yield Project(path, self.framework)
             elif path.is_dir():
                 yield from self.get_projects(path)
+
+    def sln(self) -> None:
+        for path in self.sln_directory.iterdir():
+            if path.is_file() and path.suffix == ".sln":
+                path.unlink()
+        projects = {project.name: project for project in self.get_projects()}
+        for project in projects.values():
+            if project.is_test:
+                continue
+            sln_project_names: set[str] = set()
+            search: deque[str] = deque()
+            search.append(project.name)
+            while search:
+                current_project_name = search.popleft()
+                current_project = projects[current_project_name]
+                sln_project_names.add(current_project.name)
+                if not current_project.is_test:
+                    test_project_name = f"{current_project_name}.Tests"
+                    if test_project_name in projects:
+                        sln_project_names.add(test_project_name)
+                search.extend(current_project.referenced_project_names)
+            run([
+                "dotnet", "new", "sln",
+                "--name", project.name,
+            ], cwd=self.sln_directory)
+            for sln_project_name in sorted(sln_project_names):
+                run([
+                    "dotnet", "sln", f"{project.name}.sln",
+                    "add", projects[sln_project_name].csproj_file.as_posix(),
+                ], cwd=self.sln_directory)
 
     def update(self) -> None:
         packages_props_file = Path(
@@ -223,6 +260,7 @@ class Dotnet:
 
 def main() -> None:
     argparser = ArgumentParser()
+    argparser.add_argument("-s", "--sln", action="store_true")
     argparser.add_argument("-u", "--update", action="store_true")
     argparser.add_argument("-z", "--zero", action="store_true")
     argparser.add_argument("-r", "--restore", action="store_true")
@@ -233,6 +271,8 @@ def main() -> None:
     args = argparser.parse_args()
     projects_directory = Path(Path(__file__).resolve().parent.parent, "src")
     dotnet = Dotnet(projects_directory)
+    if args.sln:
+        dotnet.sln()
     if args.update:
         dotnet.update()
     if args.zero:
