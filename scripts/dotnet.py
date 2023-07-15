@@ -127,7 +127,17 @@ class Dotnet:
                     test_project_name = f"{current_project_name}.Tests"
                     if test_project_name in projects:
                         sln_project_names.add(test_project_name)
-                search.extend(current_project.referenced_project_names)
+                        test_project = projects[test_project_name]
+                        search.extend(
+                            set(
+                                test_project.referenced_project_names
+                            ) - sln_project_names
+                        )
+                search.extend(
+                    set(
+                        current_project.referenced_project_names
+                    ) - sln_project_names
+                )
             run([
                 "dotnet", "new", "sln",
                 "--name", project.name,
