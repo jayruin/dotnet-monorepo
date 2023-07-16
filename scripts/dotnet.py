@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from collections import deque
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence, Set
 import json
 from pathlib import Path
 import platform
@@ -59,6 +59,8 @@ class Project:
             for element in csproj.findall(".//ProjectReference")
         ]
 
+        self.dependencies: list[Project] = []
+
 
 class Dotnet:
     def __init__(self, projects_directory: Path) -> None:
@@ -87,6 +89,42 @@ class Dotnet:
 
         self.nuget = Nuget()
 
+        self.projects_map = {
+            project.name: project
+            for project in self.get_projects_without_dependencies()
+        }
+        for project in self.projects_map.values():
+            dependency_names: set[str] = set()
+            search: deque[str] = deque()
+            search.append(project.name)
+            while search:
+                current_project_name = search.popleft()
+                current_project = self.projects_map[current_project_name]
+                dependency_names.add(current_project.name)
+                if not current_project.is_test:
+                    test_project_name = f"{current_project_name}.Tests"
+                    if test_project_name in self.projects_map:
+                        dependency_names.add(test_project_name)
+                        test_project = self.projects_map[test_project_name]
+                        search.extend(
+                            set(
+                                test_project.referenced_project_names
+                            ) - dependency_names
+                        )
+                search.extend(
+                    set(
+                        current_project.referenced_project_names
+                    ) - dependency_names
+                )
+            project.dependencies = sorted(
+                [self.projects_map[name] for name in dependency_names],
+                key=lambda p: p.name
+            )
+        self.projects = sorted(
+            self.projects_map.values(),
+            key=lambda p: p.name
+        )
+
     def get_framework(self) -> str:
         build_props_file = Path(
             self.projects_directory,
@@ -99,53 +137,53 @@ class Dotnet:
             raise RuntimeError("Could not determine dotnet version!")
         return target_framework
 
-    def get_projects(self, directory: Path | None = None) -> Iterable[Project]:
+    def get_projects_without_dependencies(
+        self,
+        directory: Path | None = None
+    ) -> Iterable[Project]:
         if directory is None:
             directory = self.projects_directory
         for path in directory.iterdir():
             if path.is_file() and path.suffix == ".csproj" and path.stem:
                 yield Project(path, self.framework)
             elif path.is_dir():
-                yield from self.get_projects(path)
+                yield from self.get_projects_without_dependencies(path)
 
-    def sln(self) -> None:
+    def get_all_dependencies(
+        self,
+        project_names: Set[str]
+    ) -> Sequence[Project]:
+        if not project_names:
+            return self.projects
+        project_names_lower = {
+            project_name.lower(): project_name
+            for project_name in self.projects_map.keys()
+        }
+        projects_set: set[Project] = set()
+        for project_name in project_names:
+            if not project_name.lower() in project_names_lower:
+                continue
+            for dependency in self.projects_map[
+                project_names_lower[project_name.lower()]
+            ].dependencies:
+                projects_set.add(dependency)
+        return sorted(projects_set, key=lambda p: p.name)
+
+    def sln(self, projects: Sequence[Project]) -> None:
         for path in self.sln_directory.iterdir():
             if path.is_file() and path.suffix == ".sln":
                 path.unlink()
-        projects = {project.name: project for project in self.get_projects()}
-        for project in projects.values():
+        for project in projects:
             if project.is_test:
                 continue
-            sln_project_names: set[str] = set()
-            search: deque[str] = deque()
-            search.append(project.name)
-            while search:
-                current_project_name = search.popleft()
-                current_project = projects[current_project_name]
-                sln_project_names.add(current_project.name)
-                if not current_project.is_test:
-                    test_project_name = f"{current_project_name}.Tests"
-                    if test_project_name in projects:
-                        sln_project_names.add(test_project_name)
-                        test_project = projects[test_project_name]
-                        search.extend(
-                            set(
-                                test_project.referenced_project_names
-                            ) - sln_project_names
-                        )
-                search.extend(
-                    set(
-                        current_project.referenced_project_names
-                    ) - sln_project_names
-                )
             run([
                 "dotnet", "new", "sln",
                 "--name", project.name,
             ], cwd=self.sln_directory)
-            for sln_project_name in sorted(sln_project_names):
+            for dependency in project.dependencies:
                 run([
                     "dotnet", "sln", f"{project.name}.sln",
-                    "add", projects[sln_project_name].csproj_file.as_posix(),
+                    "add", dependency.csproj_file.as_posix(),
                 ], cwd=self.sln_directory)
 
     def update(self) -> None:
@@ -167,8 +205,8 @@ class Dotnet:
                 package.attrib["Version"] = latest_version
         packages_props.write(packages_props_file)
 
-    def zero(self) -> None:
-        for project in self.get_projects():
+    def zero(self, projects: Sequence[Project]) -> None:
+        for project in projects:
             directories_to_delete = [
                 Path(project.directory, "bin"),
                 Path(project.directory, "obj"),
@@ -177,24 +215,24 @@ class Dotnet:
             for directory_to_delete in directories_to_delete:
                 shutil.rmtree(directory_to_delete, ignore_errors=True)
 
-    def restore(self) -> None:
-        for project in self.get_projects():
+    def restore(self, projects: Sequence[Project]) -> None:
+        for project in projects:
             run([
                 "dotnet", "restore",
                 project.csproj_file.name,
                 "--runtime", self.runtime,
             ], cwd=project.directory)
 
-    def clean(self) -> None:
-        for project in self.get_projects():
+    def clean(self, projects: Sequence[Project]) -> None:
+        for project in projects:
             run([
                 "dotnet", "clean",
                 project.csproj_file.name,
                 "--configuration", self.configuration,
             ], cwd=project.directory)
 
-    def build(self) -> None:
-        for project in self.get_projects():
+    def build(self, projects: Sequence[Project]) -> None:
+        for project in projects:
             run([
                 "dotnet", "build",
                 project.csproj_file.name,
@@ -204,8 +242,8 @@ class Dotnet:
                 "--self-contained", "true",
             ], cwd=project.directory)
 
-    def test(self) -> None:
-        for project in self.get_projects():
+    def test(self, projects: Sequence[Project]) -> None:
+        for project in projects:
             if not project.is_test:
                 continue
             run([
@@ -234,8 +272,8 @@ class Dotnet:
                     )
                 )
 
-    def publish(self) -> None:
-        for project in self.get_projects():
+    def publish(self, projects: Sequence[Project]) -> None:
+        for project in projects:
             if not project.is_executable:
                 continue
             run([
@@ -278,25 +316,27 @@ def main() -> None:
     argparser.add_argument("-b", "--build", action="store_true")
     argparser.add_argument("-t", "--test", action="store_true")
     argparser.add_argument("-p", "--publish", action="store_true")
+    argparser.add_argument("projects", nargs="*")
     args = argparser.parse_args()
     projects_directory = Path(Path(__file__).resolve().parent.parent, "src")
     dotnet = Dotnet(projects_directory)
+    projects = dotnet.get_all_dependencies(set(args.projects))
     if args.sln:
-        dotnet.sln()
+        dotnet.sln(projects)
     if args.update:
         dotnet.update()
     if args.zero:
-        dotnet.zero()
+        dotnet.zero(projects)
     if args.restore:
-        dotnet.restore()
+        dotnet.restore(projects)
     if args.clean:
-        dotnet.clean()
+        dotnet.clean(projects)
     if args.build:
-        dotnet.build()
+        dotnet.build(projects)
     if args.test:
-        dotnet.test()
+        dotnet.test(projects)
     if args.publish:
-        dotnet.publish()
+        dotnet.publish(projects)
 
 
 if __name__ == "__main__":
