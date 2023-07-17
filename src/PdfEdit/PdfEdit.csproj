@@ -4,15 +4,6 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <PublishRelease>true</PublishRelease>
-    <PublishSelfContained>true</PublishSelfContained>
-    <PublishSingleFile>true</PublishSingleFile>
-    <PublishReadyToRun>true</PublishReadyToRun>
-    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-    <DebugType>embedded</DebugType>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="itext7" />
     <PackageReference Include="System.CommandLine" />

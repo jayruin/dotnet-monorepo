@@ -279,6 +279,7 @@ class Dotnet:
             run([
                 "dotnet", "publish",
                 project.csproj_file.name,
+                "--configuration", self.configuration,
                 "--no-build",
                 "--runtime", self.runtime,
             ], cwd=project.directory)

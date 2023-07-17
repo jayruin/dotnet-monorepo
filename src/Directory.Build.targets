@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup Condition="'$(OutputType)' == 'Exe'">
+    <PublishSelfContained>true</PublishSelfContained>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishSingleFile Condition="'$(PublishAot)' != 'true'">true</PublishSingleFile>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+  </PropertyGroup>
+</Project>

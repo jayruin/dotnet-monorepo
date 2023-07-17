@@ -4,5 +4,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
   <Import Project="$(MSBuildThisFileDirectory)*Projects.props" />
 </Project>
