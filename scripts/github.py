@@ -20,7 +20,7 @@ class GitHub:
 
     def reset_tags(self) -> None:
         tags_to_reset = [self.test_results_tag]
-        for project in self.dotnet.get_projects():
+        for project in self.dotnet.projects:
             if project.is_executable:
                 tags_to_reset.append(project.name)
         for tag in tags_to_reset:
@@ -40,7 +40,7 @@ class GitHub:
                 "gh", "release", "upload",
                 tag_name, executable_file.as_posix(),
             ])
-        for project in self.dotnet.get_projects():
+        for project in self.dotnet.projects:
             test_results_directory = Path(
                 project.directory,
                 self.dotnet.test_results_directory_name
