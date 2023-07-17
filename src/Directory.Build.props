@@ -4,35 +4,5 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <Proj_Databases>$(MSBuildThisFileDirectory)**\Databases.csproj</Proj_Databases>
-    <Proj_Databases_Tests>$(MSBuildThisFileDirectory)**\Databases.Tests.csproj</Proj_Databases_Tests>
-
-    <Proj_Epub>$(MSBuildThisFileDirectory)**\Epub.csproj</Proj_Epub>
-    <Proj_Epub_Tests>$(MSBuildThisFileDirectory)**\Epub.Tests.csproj</Proj_Epub_Tests>
-
-    <Proj_Caching>$(MSBuildThisFileDirectory)**\Caching.csproj</Proj_Caching>
-    <Proj_Caching_Tests>$(MSBuildThisFileDirectory)**\Caching.Tests.csproj</Proj_Caching_Tests>
-
-    <Proj_FileStorage>$(MSBuildThisFileDirectory)**\FileStorage.csproj</Proj_FileStorage>
-    <Proj_FileStorage_Tests>$(MSBuildThisFileDirectory)**\FileStorage.Tests.csproj</Proj_FileStorage_Tests>
-
-    <Proj_Images>$(MSBuildThisFileDirectory)**\Images.csproj</Proj_Images>
-    <Proj_Images_Tests>$(MSBuildThisFileDirectory)**\Images.csproj</Proj_Images_Tests>
-
-    <Proj_ImgProj>$(MSBuildThisFileDirectory)**\ImgProj.csproj</Proj_ImgProj>
-    <Proj_ImgProj_Tests>$(MSBuildThisFileDirectory)**\ImgProj.csproj</Proj_ImgProj_Tests>
-
-    <Proj_ImgProj>$(MSBuildThisFileDirectory)**\ImgProj.csproj</Proj_ImgProj>
-    <Proj_ImgProj_Tests>$(MSBuildThisFileDirectory)**\ImgProj.csproj</Proj_ImgProj_Tests>
-
-    <Proj_Subprocesses>$(MSBuildThisFileDirectory)**\Subprocesses.csproj</Proj_Subprocesses>
-    <Proj_Subprocesses_Tests>$(MSBuildThisFileDirectory)**\Subprocesses.csproj</Proj_Subprocesses_Tests>
-
-    <Proj_Testing>$(MSBuildThisFileDirectory)**\Testing.csproj</Proj_Testing>
-    <Proj_Testing_Tests>$(MSBuildThisFileDirectory)**\Testing.csproj</Proj_Testing_Tests>
-
-    <Proj_Utils>$(MSBuildThisFileDirectory)**\Utils.csproj</Proj_Utils>
-    <Proj_Utils_Tests>$(MSBuildThisFileDirectory)**\Utils.csproj</Proj_Utils_Tests>
-  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)*Projects.props" />
 </Project>
