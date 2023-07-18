@@ -169,22 +169,30 @@ class Dotnet:
                 projects_set.add(dependency)
         return sorted(projects_set, key=lambda p: p.name)
 
-    def sln(self, projects: Sequence[Project]) -> None:
-        for path in self.sln_directory.iterdir():
-            if path.is_file() and path.suffix == ".sln":
+    def clear_sln(self, path: Path | None = None) -> None:
+        if path is None:
+            path = self.projects_directory
+        if path.is_file():
+            if path.suffix == ".sln":
                 path.unlink()
+        elif path.is_dir():
+            for sub_path in path.iterdir():
+                self.clear_sln(sub_path)
+
+    def sln(self, projects: Sequence[Project]) -> None:
+        self.clear_sln()
         for project in projects:
             if project.is_test:
                 continue
             run([
                 "dotnet", "new", "sln",
                 "--name", project.name,
-            ], cwd=self.sln_directory)
+            ], cwd=project.directory)
             for dependency in project.dependencies:
                 run([
                     "dotnet", "sln", f"{project.name}.sln",
                     "add", dependency.csproj_file.as_posix(),
-                ], cwd=self.sln_directory)
+                ], cwd=project.directory)
 
     def update(self) -> None:
         packages_props_file = Path(
