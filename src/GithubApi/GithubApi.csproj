@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(Proj_Utils)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="GithubApi.Tests" />
+  </ItemGroup>
+
+</Project>

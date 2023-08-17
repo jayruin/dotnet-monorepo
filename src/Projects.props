@@ -1,16 +1,19 @@
 <Project>
   <PropertyGroup>
+    <Proj_Caching>$(MSBuildThisFileDirectory)**\Caching.csproj</Proj_Caching>
+    <Proj_Caching_Tests>$(MSBuildThisFileDirectory)**\Caching.Tests.csproj</Proj_Caching_Tests>
+
     <Proj_Databases>$(MSBuildThisFileDirectory)**\Databases.csproj</Proj_Databases>
     <Proj_Databases_Tests>$(MSBuildThisFileDirectory)**\Databases.Tests.csproj</Proj_Databases_Tests>
 
     <Proj_Epub>$(MSBuildThisFileDirectory)**\Epub.csproj</Proj_Epub>
     <Proj_Epub_Tests>$(MSBuildThisFileDirectory)**\Epub.Tests.csproj</Proj_Epub_Tests>
 
-    <Proj_Caching>$(MSBuildThisFileDirectory)**\Caching.csproj</Proj_Caching>
-    <Proj_Caching_Tests>$(MSBuildThisFileDirectory)**\Caching.Tests.csproj</Proj_Caching_Tests>
-
     <Proj_FileStorage>$(MSBuildThisFileDirectory)**\FileStorage.csproj</Proj_FileStorage>
     <Proj_FileStorage_Tests>$(MSBuildThisFileDirectory)**\FileStorage.Tests.csproj</Proj_FileStorage_Tests>
+
+    <Proj_GithubApi>$(MSBuildThisFileDirectory)**\GithubApi.csproj</Proj_GithubApi>
+    <Proj_GithubApi_Tests>$(MSBuildThisFileDirectory)**\GithubApi.Tests.csproj</Proj_GithubApi_Tests>
 
     <Proj_Images>$(MSBuildThisFileDirectory)**\Images.csproj</Proj_Images>
     <Proj_Images_Tests>$(MSBuildThisFileDirectory)**\Images.csproj</Proj_Images_Tests>
