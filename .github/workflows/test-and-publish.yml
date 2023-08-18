@@ -46,6 +46,8 @@ jobs:
         run: python scripts/dotnet.py -b
       - name: Test
         run: python scripts/dotnet.py -t
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish
         run: python scripts/dotnet.py -p
       - name: Create Releases

@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Net.Http;
 
 namespace GithubApi.Tests;
@@ -13,7 +14,7 @@ public abstract class IntegrationTests
     public void Initialize()
     {
         HttpClient = new();
-        ApiClient = new GithubApiClient(HttpClient);
+        ApiClient = new GithubApiClient(HttpClient, Environment.GetEnvironmentVariable("GH_TOKEN"));
     }
 
     [TestCleanup]
