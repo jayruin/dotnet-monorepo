@@ -32,7 +32,7 @@ class GitHub:
             run([
                 "gh", "release", "create", tag, "--title", tag,
                 "--notes", tag,
-            ])
+            ], check=True)
 
     def create_releases(self) -> None:
         current_system = self.dotnet.current_system
@@ -50,7 +50,7 @@ class GitHub:
             run([
                 "gh", "release", "upload",
                 tag_name, executable_file.as_posix(),
-            ])
+            ], check=True)
         for project in self.dotnet.projects:
             test_results_directory = Path(
                 project.directory,
@@ -64,7 +64,7 @@ class GitHub:
                 run([
                     "gh", "release", "upload",
                     self.test_results_tag, test_result.as_posix(),
-                ])
+                ], check=True)
                 if test_result.suffix != ".trx":
                     continue
                 trx = ET.parse(test_result)
@@ -111,7 +111,7 @@ class GitHub:
                 run([
                     "gh", "release", "upload",
                     self.test_results_tag, badges_file.as_posix(),
-                ])
+                ], check=True)
         index_html_file = Path(self.projects_directory, "index.html")
         index_css_file = Path(self.projects_directory, "index.css")
         self.write_index_html(index_html_file)
@@ -120,7 +120,7 @@ class GitHub:
             run([
                 "gh", "release", "upload",
                 self.test_results_tag, file.as_posix(),
-            ])
+            ], check=True)
             file.unlink()
 
     def write_index_html(self, path: Path) -> None:
