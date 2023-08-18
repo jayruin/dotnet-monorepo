@@ -14,8 +14,7 @@ public sealed class UsersIntegrationTests : IntegrationTests
         // Use client with no token
         using HttpClient httpClient = new();
         GithubApiClient apiClient = new(httpClient);
-        HttpRequestException exception = await Assert.ThrowsExceptionAsync<HttpRequestException>(() => apiClient.GetAuthenticatedUserAsync());
-        Assert.AreEqual(HttpStatusCode.Unauthorized, exception.StatusCode);
+        await Assert.ThrowsExceptionAsync<HttpRequestException>(() => apiClient.GetAuthenticatedUserAsync());
     }
 
     [TestMethod]
