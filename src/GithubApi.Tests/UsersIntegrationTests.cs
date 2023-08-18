@@ -11,8 +11,11 @@ public sealed class UsersIntegrationTests : IntegrationTests
     [TestMethod]
     public async Task TestGetAuthenticatedUser()
     {
-        HttpRequestException exception = await Assert.ThrowsExceptionAsync<HttpRequestException>(() => ApiClient.GetAuthenticatedUserAsync());
-        Assert.AreEqual(exception.StatusCode, HttpStatusCode.Unauthorized);
+        // Use client with no token
+        using HttpClient httpClient = new();
+        GithubApiClient apiClient = new(httpClient);
+        HttpRequestException exception = await Assert.ThrowsExceptionAsync<HttpRequestException>(() => apiClient.GetAuthenticatedUserAsync());
+        Assert.AreEqual(HttpStatusCode.Unauthorized, exception.StatusCode);
     }
 
     [TestMethod]

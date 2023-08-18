@@ -14,6 +14,7 @@ public abstract class IntegrationTests
     public void Initialize()
     {
         HttpClient = new();
+        // If running on gh actions, might run into rate limit without token
         ApiClient = new GithubApiClient(HttpClient, Environment.GetEnvironmentVariable("GH_TOKEN"));
     }
 
