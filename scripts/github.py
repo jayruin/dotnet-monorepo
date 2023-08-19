@@ -18,6 +18,7 @@ class GitHub:
         projects_directory: Path
     ) -> None:
         self.projects_directory = projects_directory
+        self.repo_directory = self.projects_directory.parent
         self.dotnet = Dotnet(projects_directory)
         self.test_results_tag = "test-results"
 
@@ -27,12 +28,16 @@ class GitHub:
             if project.is_executable:
                 tags_to_reset.append(project.name)
         for tag in tags_to_reset:
-            run(["git", "push", "--delete", "origin", "tag", tag,])
-            run(["gh", "release", "delete", tag, "--yes",])
+            run([
+                "git", "push", "--delete", "origin", "tag", tag,
+            ], cwd=self.repo_directory)
+            run([
+                "gh", "release", "delete", tag, "--yes",
+            ], cwd=self.repo_directory)
             run([
                 "gh", "release", "create", tag, "--title", tag,
                 "--notes", tag,
-            ], check=True)
+            ], cwd=self.repo_directory, check=True)
 
     def create_releases(self) -> None:
         current_system = self.dotnet.current_system
@@ -50,7 +55,7 @@ class GitHub:
             run([
                 "gh", "release", "upload",
                 tag_name, executable_file.as_posix(),
-            ], check=True)
+            ], cwd=self.repo_directory, check=True)
         for project in self.dotnet.projects:
             test_results_directory = Path(
                 project.directory,
@@ -64,7 +69,7 @@ class GitHub:
                 run([
                     "gh", "release", "upload",
                     self.test_results_tag, test_result.as_posix(),
-                ], check=True)
+                ], cwd=self.repo_directory, check=True)
                 if test_result.suffix != ".trx":
                     continue
                 trx = ET.parse(test_result)
@@ -111,17 +116,7 @@ class GitHub:
                 run([
                     "gh", "release", "upload",
                     self.test_results_tag, badges_file.as_posix(),
-                ], check=True)
-        index_html_file = Path(self.projects_directory, "index.html")
-        index_css_file = Path(self.projects_directory, "index.css")
-        self.write_index_html(index_html_file)
-        self.write_index_css(index_css_file)
-        for file in [index_html_file, index_css_file]:
-            run([
-                "gh", "release", "upload",
-                self.test_results_tag, file.as_posix(),
-            ], check=True)
-            file.unlink()
+                ], cwd=self.repo_directory, check=True)
 
     def write_index_html(self, path: Path) -> None:
         implementation = getDOMImplementation()
@@ -193,6 +188,33 @@ class GitHub:
         """
         path.write_text(inspect.cleandoc(text), encoding="utf-8")
 
+    def update_pages(self) -> None:
+        index_html_file = Path(self.projects_directory, "index.html")
+        index_css_file = Path(self.projects_directory, "index.css")
+        self.write_index_html(index_html_file)
+        self.write_index_css(index_css_file)
+        for file in [index_html_file, index_css_file]:
+            run([
+                "gh", "release", "upload",
+                self.test_results_tag, file.as_posix(),
+            ], check=True)
+            file.unlink()
+        commands = [
+            [
+                "git", "config",
+                "user.email", "github-actions[bot]@users.noreply.github.com",
+            ],
+            ["git", "config", "user.name", "github-actions[bot]",],
+            ["git", "checkout", "--orphan", "gh-pages",],
+            ["git", "rm", "-rf", ".",],
+            ["gh", "release", "download", "test-results",],
+            ["git", "add", "*.trx", "*.html", "*.svg", "*.css",],
+            ["git", "commit", "-m", "Update Pages",],
+            ["git", "push", "--set-upstream", "origin", "gh-pages", "-f",],
+        ]
+        for command in commands:
+            run(command, cwd=self.repo_directory, check=True)
+
 
 def main() -> None:
     argparser = ArgumentParser()
@@ -202,6 +224,7 @@ def main() -> None:
     )
     subparsers.add_parser("reset-tags")
     subparsers.add_parser("create-releases")
+    subparsers.add_parser("update-pages")
     args = argparser.parse_args()
     projects_directory = Path(Path(__file__).resolve().parent.parent, "src")
     gh = GitHub(projects_directory)
@@ -209,6 +232,8 @@ def main() -> None:
         gh.reset_tags()
     if args.subcommand == "create-releases":
         gh.create_releases()
+    if args.subcommand == "update-pages":
+        gh.update_pages()
 
 
 if __name__ == "__main__":
