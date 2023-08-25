@@ -102,7 +102,9 @@ public sealed class GithubApiClient : IGithubApiClient
             {
                 if (item is not null) yield return item;
             }
-            nextPageUri = LinkParser.GetNextUri(response.Headers.GetValues("link").FirstOrDefault());
+            nextPageUri = response.Headers.TryGetValues("link", out IEnumerable<string>? linkValues)
+                ? LinkParser.GetNextUri(linkValues?.FirstOrDefault())
+                : null;
         }
     }
 }
