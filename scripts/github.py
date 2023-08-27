@@ -197,6 +197,7 @@ class GitHub:
             run([
                 "gh", "release", "upload",
                 self.test_results_tag, file.as_posix(),
+                "--clobber",
             ], check=True)
             file.unlink()
         commands = [
