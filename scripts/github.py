@@ -22,18 +22,22 @@ class GitHub:
         self.dotnet = Dotnet(projects_directory)
         self.test_results_tag = "test-results"
 
-    def reset_tags(self) -> None:
-        tags_to_reset = [self.test_results_tag]
+    def delete_tags(self) -> None:
+        tags = [self.test_results_tag]
         for project in self.dotnet.projects:
             if project.is_executable:
-                tags_to_reset.append(project.name)
-        for tag in tags_to_reset:
+                tags.append(project.name)
+        for tag in tags:
             run([
-                "git", "push", "--delete", "origin", "tag", tag,
+                "gh", "release", "delete", tag, "--yes", "--cleanup-tag",
             ], cwd=self.repo_directory)
-            run([
-                "gh", "release", "delete", tag, "--yes",
-            ], cwd=self.repo_directory)
+
+    def create_tags(self) -> None:
+        tags = [self.test_results_tag]
+        for project in self.dotnet.projects:
+            if project.is_executable:
+                tags.append(project.name)
+        for tag in tags:
             run([
                 "gh", "release", "create", tag, "--title", tag,
                 "--notes", tag,
@@ -223,14 +227,17 @@ def main() -> None:
         title="subcommands",
         dest="subcommand"
     )
-    subparsers.add_parser("reset-tags")
+    subparsers.add_parser("delete-tags")
+    subparsers.add_parser("create-tags")
     subparsers.add_parser("create-releases")
     subparsers.add_parser("update-pages")
     args = argparser.parse_args()
     projects_directory = Path(Path(__file__).resolve().parent.parent, "src")
     gh = GitHub(projects_directory)
-    if args.subcommand == "reset-tags":
-        gh.reset_tags()
+    if args.subcommand == "delete-tags":
+        gh.delete_tags()
+    if args.subcommand == "create-tags":
+        gh.create_tags()
     if args.subcommand == "create-releases":
         gh.create_releases()
     if args.subcommand == "update-pages":
