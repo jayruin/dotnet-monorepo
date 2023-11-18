@@ -1,14 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <IsTrimmable>true</IsTrimmable>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <!-- Produces trim warnings -->
-    <PublishTrimmed>true</PublishTrimmed>
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
-  </PropertyGroup>
+  <Import Project="$(Props_Executable)" />
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" />

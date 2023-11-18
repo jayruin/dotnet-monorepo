@@ -1,0 +1,24 @@
+<Project>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <Choose>
+    <When Condition="'$(IsAotCompatible)' == 'true'">
+      <PropertyGroup>
+        <PublishAot>true</PublishAot>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(IsTrimmable)' == 'true'">
+      <PropertyGroup>
+        <PublishSingleFile>true</PublishSingleFile>
+        <PublishTrimmed>true</PublishTrimmed>
+        <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <PublishSingleFile>true</PublishSingleFile>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+</Project>

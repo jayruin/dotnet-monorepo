@@ -7,7 +7,6 @@ on:
       - src/**
   workflow_dispatch:
 env:
-  DOTNET_VERSION: "8.0"
   PYTHON_VERSION: "3.11"
 jobs:
   reset-tags:
@@ -35,7 +34,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          global-json-file: src/global.json
       - name: Setup Python
         uses: actions/setup-python@v4
         with:

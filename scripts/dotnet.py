@@ -41,8 +41,13 @@ class Project:
 
         csproj = ET.parse(csproj_file)
         output_type_element = csproj.find("./PropertyGroup/OutputType")
-        self.is_executable = (output_type_element is not None and
-                              output_type_element.text == "Exe")
+        imports_executables_props = False
+        for import_element in csproj.findall("./Import"):
+            if import_element.attrib["Project"] == "$(Props_Executable)":
+                imports_executables_props = True
+        exe_output_type = (output_type_element is not None and
+                           output_type_element.text == "Exe")
+        self.is_executable = imports_executables_props or exe_output_type
 
         self.is_test = self.name.endswith(".Tests")
 
@@ -84,7 +89,6 @@ class Dotnet:
         self.configuration = "Release"
 
         self.bin_directory = Path(projects_directory.parent, "bin")
-        self.sln_directory = projects_directory
         self.test_results_directory_name = "TestResults"
 
         self.nuget = Nuget()
@@ -216,8 +220,9 @@ class Dotnet:
     def zero(self, projects: Sequence[Project]) -> None:
         for project in projects:
             directories_to_delete = [
-                Path(project.directory, "bin"),
-                Path(project.directory, "obj"),
+                Path(self.projects_directory, "artifacts", "bin"),
+                Path(self.projects_directory, "artifacts", "obj"),
+                Path(self.projects_directory, "artifacts", "publish"),
                 Path(project.directory, self.test_results_directory_name),
             ]
             for directory_to_delete in directories_to_delete:
@@ -228,7 +233,6 @@ class Dotnet:
             run([
                 "dotnet", "restore",
                 project.csproj_file.name,
-                "--runtime", self.runtime,
             ], cwd=project.directory)
 
     def clean(self, projects: Sequence[Project]) -> None:
@@ -246,8 +250,6 @@ class Dotnet:
                 project.csproj_file.name,
                 "--configuration", self.configuration,
                 "--no-restore",
-                "--runtime", self.runtime,
-                "--self-contained", "true",
             ], cwd=project.directory)
 
     def test(self, projects: Sequence[Project]) -> None:
@@ -261,7 +263,6 @@ class Dotnet:
                 "--no-build",
                 "--logger", "trx",
                 "--logger", "html",
-                "--runtime", self.runtime,
             ], cwd=project.directory)
 
             test_results_directory = Path(
@@ -289,22 +290,17 @@ class Dotnet:
                 project.csproj_file.name,
                 "--configuration", self.configuration,
                 "--no-build",
-                "--runtime", self.runtime,
             ], cwd=project.directory)
             self.bin_directory.mkdir(exist_ok=True)
             executable_file = Path(self.bin_directory, project.name)
             if self.current_system == "windows":
                 executable_file = executable_file.with_suffix(".exe")
             original_executable_file = Path(
-                project.directory,
-                "bin",
-                self.configuration
-            )
-            original_executable_file = Path(
-                original_executable_file,
-                project.framework,
-                self.runtime,
+                self.projects_directory,
+                "artifacts",
                 "publish",
+                project.name,
+                f"{self.configuration.lower()}_{self.runtime}",
                 executable_file.name
             )
             shutil.copy(original_executable_file, executable_file)

@@ -1,12 +1,29 @@
 <Project>
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
+    <SelfContained>true</SelfContained>
+    <!-- <PublishSelfContained>true</PublishSelfContained> -->
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Props_Executable>$(MSBuildThisFileDirectory)*Executable.props</Props_Executable>
+  </PropertyGroup>
+
   <Import Project="$(MSBuildThisFileDirectory)*Projects.props" />
+
+  <PropertyGroup>
+    <RuntimeIdentifier Condition="$([System.OperatingSystem]::IsLinux())">linux-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="$([System.OperatingSystem]::IsWindows())">win-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="$([System.OperatingSystem]::IsMacOS())">osx-x64</RuntimeIdentifier>
+  </PropertyGroup>
 </Project>
