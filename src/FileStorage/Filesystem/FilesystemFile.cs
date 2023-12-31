@@ -5,9 +5,9 @@ namespace FileStorage.Filesystem;
 
 public sealed class FilesystemFile : IFile
 {
-    private readonly FilesystemFileStorage _filesystem;
+    private readonly FilesystemFileStorage _fileStorage;
 
-    public IFileStorage FileStorage => _filesystem;
+    public IFileStorage FileStorage => _fileStorage;
 
     public string FullPath { get; }
 
@@ -19,9 +19,9 @@ public sealed class FilesystemFile : IFile
 
     public bool Exists => File.Exists(FullPath);
 
-    public FilesystemFile(FilesystemFileStorage filesystem, string path)
+    public FilesystemFile(FilesystemFileStorage fileStorage, string path)
     {
-        _filesystem = filesystem;
+        _fileStorage = fileStorage;
         try
         {
             FullPath = Path.GetFullPath(path);

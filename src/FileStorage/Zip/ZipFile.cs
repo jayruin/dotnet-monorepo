@@ -5,9 +5,9 @@ namespace FileStorage.Zip;
 
 public sealed class ZipFile : IFile
 {
-    private readonly ZipFileStorage _zipFileStorage;
+    private readonly ZipFileStorage _fileStorage;
 
-    public IFileStorage FileStorage => _zipFileStorage;
+    public IFileStorage FileStorage => _fileStorage;
 
     public string FullPath { get; }
 
@@ -17,11 +17,11 @@ public sealed class ZipFile : IFile
 
     public string Extension { get; }
 
-    public bool Exists => _zipFileStorage.Archive.GetEntry(FullPath) is not null;
+    public bool Exists => _fileStorage.Archive.GetEntry(FullPath) is not null;
 
-    public ZipFile(ZipFileStorage zipFileStorage, string path)
+    public ZipFile(ZipFileStorage fileStorage, string path)
     {
-        _zipFileStorage = zipFileStorage;
+        _fileStorage = fileStorage;
         try
         {
             FullPath = path;
@@ -46,7 +46,7 @@ public sealed class ZipFile : IFile
         {
             Delete();
         }
-        _zipFileStorage.Archive.CreateEntry(FullPath);
+        _fileStorage.Archive.CreateEntry(FullPath);
         return Open();
     }
 
@@ -54,7 +54,7 @@ public sealed class ZipFile : IFile
     {
         try
         {
-            _zipFileStorage.Archive.GetEntry(FullPath)?.Delete();
+            _fileStorage.Archive.GetEntry(FullPath)?.Delete();
         }
         catch (Exception exception)
         {
@@ -67,7 +67,7 @@ public sealed class ZipFile : IFile
         Stream? stream;
         try
         {
-            stream = _zipFileStorage.Archive.GetEntry(FullPath)?.Open();
+            stream = _fileStorage.Archive.GetEntry(FullPath)?.Open();
         }
         catch (Exception exception)
         {

@@ -7,9 +7,9 @@ namespace FileStorage.Filesystem;
 
 public sealed class FilesystemDirectory : IDirectory
 {
-    private readonly FilesystemFileStorage _filesystem;
+    private readonly FilesystemFileStorage _fileStorage;
 
-    public IFileStorage FileStorage => _filesystem;
+    public IFileStorage FileStorage => _fileStorage;
 
     public string FullPath { get; }
 
@@ -17,9 +17,9 @@ public sealed class FilesystemDirectory : IDirectory
 
     public bool Exists => Directory.Exists(FullPath);
 
-    public FilesystemDirectory(FilesystemFileStorage filesystem, string path)
+    public FilesystemDirectory(FilesystemFileStorage fileStorage, string path)
     {
-        _filesystem = filesystem;
+        _fileStorage = fileStorage;
         try
         {
             FullPath = Path.GetFullPath(path);
@@ -36,7 +36,7 @@ public sealed class FilesystemDirectory : IDirectory
         try
         {
             return Directory.EnumerateFiles(FullPath)
-                .Select(f => new FilesystemFile(_filesystem, f));
+                .Select(f => new FilesystemFile(_fileStorage, f));
         }
         catch (Exception exception)
         {
@@ -49,7 +49,7 @@ public sealed class FilesystemDirectory : IDirectory
         try
         {
             return Directory.EnumerateDirectories(FullPath)
-                .Select(d => new FilesystemDirectory(_filesystem, d));
+                .Select(d => new FilesystemDirectory(_fileStorage, d));
         }
         catch (Exception exception)
         {

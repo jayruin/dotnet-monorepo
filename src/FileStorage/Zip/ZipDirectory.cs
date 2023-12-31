@@ -8,22 +8,22 @@ namespace FileStorage.Zip;
 
 public sealed class ZipDirectory : IDirectory
 {
-    private readonly ZipFileStorage _zipFileStorage;
+    private readonly ZipFileStorage _fileStorage;
 
     private readonly string _archivePath;
 
-    public IFileStorage FileStorage => _zipFileStorage;
+    public IFileStorage FileStorage => _fileStorage;
 
     public string FullPath { get; }
 
     public string Name { get; }
 
-    public bool Exists => _archivePath == "/" || _zipFileStorage.Archive.Entries
+    public bool Exists => _archivePath == "/" || _fileStorage.Archive.Entries
         .FirstOrDefault(e => e.FullName.StartsWith(_archivePath)) is not null;
 
-    public ZipDirectory(ZipFileStorage zipFileStorage, string path)
+    public ZipDirectory(ZipFileStorage fileStorage, string path)
     {
-        _zipFileStorage = zipFileStorage;
+        _fileStorage = fileStorage;
         try
         {
             FullPath = path;
@@ -40,7 +40,7 @@ public sealed class ZipDirectory : IDirectory
     {
         return EnumerateEntryPaths(false)
             .Where(p => !p.EndsWith('/'))
-            .Select(p => new ZipFile(_zipFileStorage, p));
+            .Select(p => new ZipFile(_fileStorage, p));
     }
 
     public IEnumerable<IDirectory> EnumerateDirectories()
@@ -48,14 +48,14 @@ public sealed class ZipDirectory : IDirectory
         return EnumerateEntryPaths(false)
             .Where(p => p.EndsWith('/'))
             .Select(p => p[..^1])
-            .Select(p => new ZipDirectory(_zipFileStorage, p));
+            .Select(p => new ZipDirectory(_fileStorage, p));
     }
 
     public void Create()
     {
         if (!Exists)
         {
-            _zipFileStorage.Archive.CreateEntry(_archivePath);
+            _fileStorage.Archive.CreateEntry(_archivePath);
         }
     }
 
@@ -65,17 +65,17 @@ public sealed class ZipDirectory : IDirectory
         {
             throw new FileStorageException();
         }
-        _zipFileStorage.Archive.GetEntry(_archivePath)?.Delete();
+        _fileStorage.Archive.GetEntry(_archivePath)?.Delete();
         foreach (string entryPath in EnumerateEntryPaths(true).ToList())
         {
-            _zipFileStorage.Archive.GetEntry(entryPath)?.Delete();
+            _fileStorage.Archive.GetEntry(entryPath)?.Delete();
         }
     }
 
     private IEnumerable<string> EnumerateEntryPaths(bool recurse)
     {
         ISet<string> result = new HashSet<string>();
-        foreach (ZipArchiveEntry entry in _zipFileStorage.Archive.Entries)
+        foreach (ZipArchiveEntry entry in _fileStorage.Archive.Entries)
         {
             if (_archivePath != "/" && !entry.FullName.StartsWith(_archivePath) || entry.FullName == _archivePath) continue;
             if (recurse)
@@ -85,7 +85,7 @@ public sealed class ZipDirectory : IDirectory
             else if (_archivePath == "/")
             {
                 string truncatedPath = entry.FullName.Split('/')[0];
-                if (entry.FullName.IndexOf('/') != -1)
+                if (entry.FullName.Contains('/'))
                 {
                     truncatedPath += '/';
                 }
@@ -95,7 +95,7 @@ public sealed class ZipDirectory : IDirectory
             {
                 string relativePath = entry.FullName[_archivePath.Length..];
                 string truncatedPath = relativePath.Split('/')[0];
-                if (relativePath.IndexOf('/') != -1)
+                if (relativePath.Contains('/'))
                 {
                     truncatedPath += '/';
                 }

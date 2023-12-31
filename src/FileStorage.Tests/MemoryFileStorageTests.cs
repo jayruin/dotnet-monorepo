@@ -1,15 +1,15 @@
-using FileStorage.Mock;
+using FileStorage.Memory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FileStorage.Tests;
 
 [TestClass]
-public class MockFileStorageTests : FileStorageTests
+public class MemoryFileStorageTests : FileStorageTests
 {
     [TestInitialize]
     public override void Initialize()
     {
-        FileStorage = new MockFileStorage();
+        FileStorage = new MemoryFileStorage();
     }
 
     [TestCleanup]

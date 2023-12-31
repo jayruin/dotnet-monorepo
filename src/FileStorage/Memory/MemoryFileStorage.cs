@@ -3,33 +3,33 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace FileStorage.Mock;
+namespace FileStorage.Memory;
 
-public sealed class MockFileStorage : IFileStorage
+public sealed class MemoryFileStorage : IFileStorage
 {
     private readonly string _separator;
 
-    private readonly Dictionary<string, byte[]> _files = new();
+    private readonly Dictionary<string, byte[]> _files = [];
 
-    private readonly HashSet<string> _directories = new();
+    private readonly HashSet<string> _directories = [];
 
-    public MockFileStorage() : this("/")
+    public MemoryFileStorage() : this("/")
     {
     }
 
-    public MockFileStorage(string separator)
+    public MemoryFileStorage(string separator)
     {
         _separator = separator;
     }
 
     public IDirectory GetDirectory(params string[] paths)
     {
-        return new MockDirectory(this, JoinPaths(paths));
+        return new MemoryDirectory(this, JoinPaths(paths));
     }
 
     public IFile GetFile(params string[] paths)
     {
-        return new MockFile(this, JoinPaths(paths));
+        return new MemoryFile(this, JoinPaths(paths));
     }
 
     internal string JoinPaths(params string[] paths)
@@ -73,26 +73,26 @@ public sealed class MockFileStorage : IFileStorage
         _files.Remove(path);
     }
 
-    internal IEnumerable<MockFile> EnumerateFiles(string path)
+    internal IEnumerable<MemoryFile> EnumerateFiles(string path)
     {
         EnsureDirectoryExists(path);
         foreach (string filePath in _files.Keys)
         {
             if (IsChildPath(path, filePath))
             {
-                yield return new MockFile(this, filePath);
+                yield return new MemoryFile(this, filePath);
             }
         }
     }
 
-    internal IEnumerable<MockDirectory> EnumerateDirectories(string path)
+    internal IEnumerable<MemoryDirectory> EnumerateDirectories(string path)
     {
         EnsureDirectoryExists(path);
         foreach (string directoryPath in _directories)
         {
             if (IsChildPath(path, directoryPath))
             {
-                yield return new MockDirectory(this, directoryPath);
+                yield return new MemoryDirectory(this, directoryPath);
             }
         }
     }
