@@ -29,7 +29,7 @@ public static class ImgProjectLoader
         return LoadProject(projectDirectory, metadataJson);
     }
 
-    private static ImgProject LoadProject(IDirectory projectDirectory, MetadataJson metadataJson)
+    internal static ImgProject LoadProject(IDirectory projectDirectory, MetadataJson metadataJson)
     {
         ImmutableArray<string> versions = metadataJson.Versions.ToImmutableArray();
         if (metadataJson.Root is null)
