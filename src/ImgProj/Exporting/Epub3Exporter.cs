@@ -32,6 +32,15 @@ public sealed class Epub3Exporter : IExporter
         IMetadataVersion metadata = subProject.MetadataVersions[version];
         await using EpubWriter epubWriter = await EpubWriter.CreateAsync(stream, EpubVersion.Epub3);
         List<IPage> pages = new();
+        IPage? cover = coordinates.Length == 0
+            ? _coverGenerator.CreateCoverGrid(subProject, version)
+            : subProject.EnumeratePages(version, true).FirstOrDefault();
+        if (cover is not null)
+        {
+            await using Stream destinationCoverStream = epubWriter.CreateRasterCover(cover.Extension, true);
+            await using Stream sourceCoverStream = cover.OpenRead();
+            await sourceCoverStream.CopyToAsync(destinationCoverStream);
+        }
         EpubNavItem navItem = await TraverseAsync(subProject, coordinates, version, pages, epubWriter);
         epubWriter.Title = metadata.TitleParts.Count > 0
             ? string.Join(" - ", metadata.TitleParts)
@@ -56,15 +65,6 @@ public sealed class Epub3Exporter : IExporter
             epubWriter.Direction = EpubDirection.RightToLeft;
         }
         epubWriter.AddToc(new List<EpubNavItem>() { navItem, }, false);
-        IPage? cover = coordinates.Length == 0
-            ? _coverGenerator.CreateCoverGrid(subProject, version)
-            : pages.FirstOrDefault();
-        if (cover is not null)
-        {
-            await using Stream destinationCoverStream = epubWriter.CreateRasterCover(cover.Extension, false);
-            await using Stream sourceCoverStream = cover.OpenRead();
-            await sourceCoverStream.CopyToAsync(destinationCoverStream);
-        }
     }
 
     private async Task<EpubNavItem> TraverseAsync(IImgProject project, ImmutableArray<int> coordinates, string version, ICollection<IPage> pages, EpubWriter epubWriter)
