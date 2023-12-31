@@ -205,10 +205,17 @@ public static class ImgProjectLoader
         ImmutableArray<int> relativeCoordinates = ImmutableArray.Create(coordinate);
         foreach (IPageSpread pageSpread in parentMetadata.PageSpreads)
         {
-            IPageSpread? relativePageSpread = pageSpread.RelativeTo(relativeCoordinates);
-            if (relativePageSpread is not null)
+            if (coordinate == 0)
             {
-                metadata.PageSpreads.Add(relativePageSpread);
+                metadata.PageSpreads.Add(pageSpread);
+            }
+            else
+            {
+                IPageSpread? relativePageSpread = pageSpread.RelativeTo(relativeCoordinates);
+                if (relativePageSpread is not null)
+                {
+                    metadata.PageSpreads.Add(relativePageSpread);
+                }
             }
         }
 
