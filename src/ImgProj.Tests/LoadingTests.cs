@@ -67,4 +67,27 @@ public class LoadingTests
         CollectionAssert.AreEqual(pageSpread.Left, (int[])[1]);
         CollectionAssert.AreEqual(pageSpread.Right, (int[])[2]);
     }
+
+    [TestMethod]
+    [DataRow(ReadingDirection.LTR)]
+    [DataRow(ReadingDirection.RTL)]
+    public void TestLoadReadingDirection(ReadingDirection readingDirection)
+    {
+        string version = "main";
+        IDirectory projectDirectory = FileStorage.GetDirectory(string.Empty);
+        MetadataJson metadataJson = new()
+        {
+            Versions = [version],
+            Direction = readingDirection,
+            Root = new EntryJson()
+            {
+                Entries = [
+                    new EntryJson(),
+                ],
+            },
+        };
+        IImgProject imgProject = ImgProjectLoader.LoadProject(projectDirectory, metadataJson);
+        Assert.AreEqual(readingDirection, imgProject.MetadataVersions[version].ReadingDirection);
+        Assert.AreEqual(readingDirection, imgProject.GetSubProject([1]).MetadataVersions[version].ReadingDirection);
+    }
 }
