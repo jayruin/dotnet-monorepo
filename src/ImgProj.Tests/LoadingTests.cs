@@ -3,7 +3,6 @@ using FileStorage.Memory;
 using ImgProj.Loading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Immutable;
-using System.Linq;
 
 namespace ImgProj.Tests;
 
@@ -50,14 +49,14 @@ public class LoadingTests
         IImmutableList<IPageSpread> pageSpreads = imgProject.MetadataVersions[version].PageSpreads;
         Assert.AreEqual(1, pageSpreads.Count);
         IPageSpread pageSpread = pageSpreads[0];
-        Assert.IsTrue(pageSpread.Left.SequenceEqual([1, 2, 1]));
-        Assert.IsTrue(pageSpread.Right.SequenceEqual([1, 2, 2]));
+        CollectionAssert.AreEqual(pageSpread.Left, (int[])[1, 2, 1]);
+        CollectionAssert.AreEqual(pageSpread.Right, (int[])[1, 2, 2]);
 
         pageSpreads = imgProject.GetSubProject([1]).MetadataVersions[version].PageSpreads;
         Assert.AreEqual(1, pageSpreads.Count);
         pageSpread = pageSpreads[0];
-        Assert.IsTrue(pageSpread.Left.SequenceEqual([2, 1]));
-        Assert.IsTrue(pageSpread.Right.SequenceEqual([2, 2]));
+        CollectionAssert.AreEqual(pageSpread.Left, (int[])[2, 1]);
+        CollectionAssert.AreEqual(pageSpread.Right, (int[])[2, 2]);
 
         pageSpreads = imgProject.GetSubProject([1, 1]).MetadataVersions[version].PageSpreads;
         Assert.AreEqual(0, pageSpreads.Count);
@@ -65,7 +64,7 @@ public class LoadingTests
         pageSpreads = imgProject.GetSubProject([1, 2]).MetadataVersions[version].PageSpreads;
         Assert.AreEqual(1, pageSpreads.Count);
         pageSpread = pageSpreads[0];
-        Assert.IsTrue(pageSpread.Left.SequenceEqual([1]));
-        Assert.IsTrue(pageSpread.Right.SequenceEqual([2]));
+        CollectionAssert.AreEqual(pageSpread.Left, (int[])[1]);
+        CollectionAssert.AreEqual(pageSpread.Right, (int[])[2]);
     }
 }
