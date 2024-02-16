@@ -1,13 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="itext7" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="$(Proj_Epub)" />
     <ProjectReference Include="$(Proj_FileStorage)" />
     <ProjectReference Include="$(Proj_Images)" />
+    <ProjectReference Include="$(Proj_Pdfs)" />
     <ProjectReference Include="$(Proj_Utils)" />
   </ItemGroup>
 

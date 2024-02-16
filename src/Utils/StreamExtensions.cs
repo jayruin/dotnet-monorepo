@@ -9,6 +9,7 @@ public static class StreamExtensions
 {
     public static async Task<byte[]> ToByteArrayAsync(this Stream stream, CancellationToken cancellationToken = default)
     {
+        if (stream is MemoryStream memoryStream) return memoryStream.ToArray();
         if (stream.CanSeek)
         {
             stream.Seek(0, SeekOrigin.Begin);
@@ -22,10 +23,10 @@ public static class StreamExtensions
         {
             streamLength = null;
         }
-        using MemoryStream memoryStream = streamLength is long length
+        using MemoryStream newMemoryStream = streamLength is long length
             ? new((int)(length & int.MaxValue))
             : new();
-        await stream.CopyToAsync(memoryStream, cancellationToken);
-        return memoryStream.ToArray();
+        await stream.CopyToAsync(newMemoryStream, cancellationToken);
+        return newMemoryStream.ToArray();
     }
 }

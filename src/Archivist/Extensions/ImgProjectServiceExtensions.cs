@@ -5,6 +5,7 @@ using ImgProj.Deleting;
 using ImgProj.Exporting;
 using ImgProj.Importing;
 using Microsoft.Extensions.DependencyInjection;
+using Pdfs;
 
 namespace Archivist.Extensions;
 
@@ -14,6 +15,7 @@ public static class ImgProjectServiceExtensions
     {
         return services
             .AddTransient<IImageLoader, ImageLoader>()
+            .AddTransient<IPdfLoader, PdfLoader>()
             .AddTransient<ICoverGenerator, CoverGenerator>()
             .AddTransient<IPageComparer, PageComparer>()
             .AddTransient<IPageDeleter, PageDeleter>()
