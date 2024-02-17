@@ -32,20 +32,20 @@ public sealed class MemoryFileStorage : IFileStorage
         return new MemoryFile(this, JoinPaths(paths));
     }
 
-    internal string JoinPaths(params string[] paths)
+    public string[] SplitFullPath(string fullPath)
     {
-        return string.Join(_separator, paths.Where(p => !string.IsNullOrEmpty(p)));
+        return fullPath.Split(_separator);
     }
 
-    internal string[] SplitPath(string path)
+    internal string JoinPaths(params string[] paths)
     {
-        return path.Split(_separator);
+        return string.Join(_separator, paths.Where(p => !string.IsNullOrWhiteSpace(p)));
     }
 
     internal void CreateDirectory(string path)
     {
         if (IsRootPath(path)) return;
-        string[] pathParts = SplitPath(path);
+        string[] pathParts = SplitFullPath(path);
         for (int i = 0; i < pathParts.Length; i++)
         {
             string subPath = JoinPaths(pathParts[..^i]);
@@ -105,7 +105,7 @@ public sealed class MemoryFileStorage : IFileStorage
 
     internal Stream OpenWrite(string path)
     {
-        string[] pathParts = SplitPath(path);
+        string[] pathParts = SplitFullPath(path);
         if (pathParts.Length > 1)
         {
             EnsureDirectoryExists(JoinPaths(pathParts[..^1]));
@@ -158,7 +158,7 @@ public sealed class MemoryFileStorage : IFileStorage
             }
             return count == 0;
         }
-        return path.StartsWith(parentPath) && SplitPath(path)[SplitPath(parentPath).Length..].Length == 1;
+        return path.StartsWith(parentPath) && SplitFullPath(path)[SplitFullPath(parentPath).Length..].Length == 1;
     }
 
     private class MockWritableFileStream : Stream

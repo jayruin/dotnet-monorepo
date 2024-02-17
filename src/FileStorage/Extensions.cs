@@ -35,4 +35,18 @@ public static class Extensions
     {
         return directory.FileStorage.GetDirectory(paths.Prepend(directory.FullPath).ToArray());
     }
+
+    public static IDirectory? GetParentDirectory(this IFile file)
+    {
+        string[] pathParts = file.FileStorage.SplitFullPath(file.FullPath);
+        if (pathParts.Length < 2) return null;
+        return file.FileStorage.GetDirectory(pathParts[..^1]);
+    }
+
+    public static IDirectory? GetParentDirectory(this IDirectory directory)
+    {
+        string[] pathParts = directory.FileStorage.SplitFullPath(directory.FullPath);
+        if (pathParts.Length < 2) return null;
+        return directory.FileStorage.GetDirectory(pathParts[..^1]);
+    }
 }

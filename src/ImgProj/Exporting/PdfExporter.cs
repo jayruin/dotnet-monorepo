@@ -68,7 +68,7 @@ public sealed class PdfExporter : IExporter
         PdfOutlineItem pdfOutlineItem = new()
         {
             Text = title,
-            PageNumber = pageNumber,
+            Page = pageNumber,
             Children = children,
         };
         return pdfOutlineItem;

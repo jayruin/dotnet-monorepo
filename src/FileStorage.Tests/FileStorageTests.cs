@@ -302,4 +302,12 @@ public abstract class FileStorageTests
         file.Delete();
         Assert.IsFalse(file.Exists);
     }
+
+    [TestMethod]
+    public void TestParentDirectory()
+    {
+        IDirectory directory = FileStorage.GetDirectory("dir");
+        IFile file = directory.GetFile("file.txt");
+        Assert.AreEqual(directory.FullPath, file.GetParentDirectory()?.FullPath);
+    }
 }

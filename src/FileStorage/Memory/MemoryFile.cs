@@ -22,7 +22,7 @@ public sealed class MemoryFile : IFile
     {
         _fileStorage = fileStorage;
         FullPath = path;
-        Name = _fileStorage.SplitPath(FullPath)[^1];
+        Name = _fileStorage.SplitFullPath(FullPath)[^1];
         Stem = Path.GetFileNameWithoutExtension(Name);
         Extension = Path.GetExtension(Name);
     }

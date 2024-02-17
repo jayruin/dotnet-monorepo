@@ -2,7 +2,11 @@ using iText.IO.Image;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
+using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Navigation;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.IO;
 
 namespace Pdfs;
 
@@ -19,6 +23,8 @@ internal sealed class PdfWritableDocument : IPdfWritableDocument
     {
         _pdfDocument.Close();
     }
+
+    public int NumberOfPages => _pdfDocument.GetNumberOfPages();
 
     public void SetAuthor(string author)
     {
@@ -51,7 +57,7 @@ internal sealed class PdfWritableDocument : IPdfWritableDocument
     private void AddOutlineItem(PdfOutlineItem pdfOutlineItem, PdfOutline pdfOutline)
     {
         PdfOutline newPdfOutline = pdfOutline.AddOutline(pdfOutlineItem.Text);
-        PdfPage pdfPage = _pdfDocument.GetPage(pdfOutlineItem.PageNumber);
+        PdfPage pdfPage = _pdfDocument.GetPage(pdfOutlineItem.Page);
         PdfDestination pdfDestination = PdfExplicitDestination.CreateFit(pdfPage);
         newPdfOutline.AddDestination(pdfDestination);
         foreach (PdfOutlineItem child in pdfOutlineItem.Children)
@@ -59,5 +65,44 @@ internal sealed class PdfWritableDocument : IPdfWritableDocument
             AddOutlineItem(child, newPdfOutline);
         }
         newPdfOutline.SetOpen(false);
+    }
+
+    public PdfCopyPagesResult CopyPages(Stream stream, string? password, ImmutableArray<PdfImageFilter> imageFilters)
+    {
+        using PdfDocument otherPdfDocument = PdfLoader.InternalOpenRead(stream, password);
+        ClearOutline(otherPdfDocument);
+        IReadOnlyList<byte[]> deletedImages = DeleteImages(otherPdfDocument, imageFilters);
+        int pagesCopied = otherPdfDocument.CopyPagesTo(1, otherPdfDocument.GetNumberOfPages(), _pdfDocument).Count;
+        return new()
+        {
+            Pages = pagesCopied,
+            DeletedImages = deletedImages,
+        };
+    }
+
+    private static void ClearOutline(PdfDocument pdfDocument)
+    {
+        pdfDocument.GetOutlines(true)?.RemoveOutline();
+        for (int i = 1; i <= pdfDocument.GetNumberOfPages(); i++)
+        {
+            IList<PdfOutline>? pageOutlines = pdfDocument.GetPage(i).GetOutlines(true);
+            if (pageOutlines is null) continue;
+            foreach (PdfOutline pageOutline in pageOutlines)
+            {
+                pageOutline.RemoveOutline();
+            }
+        }
+    }
+
+    private static IReadOnlyList<byte[]> DeleteImages(PdfDocument pdfDocument, ImmutableArray<PdfImageFilter> imageFilters)
+    {
+        if (imageFilters.Length == 0) return [];
+        ImageDeleter imageDeleter = new(imageFilters);
+        PdfCanvasProcessor processor = new(imageDeleter);
+        for (int i = 1; i <= pdfDocument.GetNumberOfPages(); i++)
+        {
+            processor.ProcessPageContent(pdfDocument.GetPage(i));
+        }
+        return imageDeleter.DeletedImages;
     }
 }

@@ -18,7 +18,7 @@ public sealed class MemoryDirectory : IDirectory
     {
         _fileStorage = fileStorage;
         FullPath = path;
-        Name = _fileStorage.SplitPath(FullPath)[^1];
+        Name = _fileStorage.SplitFullPath(FullPath)[^1];
     }
 
     public IEnumerable<IFile> EnumerateFiles()

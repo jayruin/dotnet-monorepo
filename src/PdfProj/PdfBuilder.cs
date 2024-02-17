@@ -1,0 +1,227 @@
+using FileStorage;
+using Images;
+using Pdfs;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
+
+namespace PdfProj;
+
+public sealed class PdfBuilder : IPdfBuilder
+{
+    private readonly IPdfLoader _pdfLoader;
+
+    private readonly IImageLoader _imageLoader;
+
+    public PdfBuilder(IPdfLoader pdfLoader, IImageLoader imageLoader)
+    {
+        _pdfLoader = pdfLoader;
+        _imageLoader = imageLoader;
+    }
+
+    public async Task BuildAsync(IFile targetJson, IFile output, IDirectory? trash)
+    {
+        if (trash is not null)
+        {
+            if (trash.Exists) trash.Delete();
+            trash.Create();
+        }
+        await using Stream outputStream = output.OpenWrite();
+        using IPdfWritableDocument outputPdf = _pdfLoader.OpenWrite(outputStream);
+        BuildTarget target = await LoadBuildTargetAsync(targetJson);
+        if (target is RecipeTarget recipeTarget && string.IsNullOrWhiteSpace(recipeTarget.Title))
+        {
+            AddCoverImageToPdf(outputPdf, target);
+        }
+        List<PdfOutlineItem> outline = [];
+        await AddToPdfAsync(outputPdf, target, outline, trash);
+        foreach (PdfOutlineItem outlineItem in outline)
+        {
+            outputPdf.AddOutlineItem(outlineItem);
+        }
+    }
+
+    private async Task AddToPdfAsync(IPdfWritableDocument outputPdf, BuildTarget target, List<PdfOutlineItem> currentOutline, IDirectory? trash)
+    {
+        if (target is MetadataTarget metadataTarget)
+        {
+            int offset = outputPdf.NumberOfPages;
+            await using Stream pdfStream = metadataTarget.PdfFile.OpenRead();
+            PdfCopyPagesResult copyPagesResult = outputPdf.CopyPages(pdfStream, metadataTarget.Password, metadataTarget.Filters);
+            if (trash is not null)
+            {
+                int counter = 1;
+                foreach (byte[] deletedImageData in copyPagesResult.DeletedImages)
+                {
+                    await using MemoryStream memoryStream = new(deletedImageData, false);
+                    IImage image = _imageLoader.LoadImage(memoryStream);
+                    await using Stream trashStream = trash.GetFile($"{metadataTarget.PdfFile.Name}-{counter}.jpg").OpenWrite();
+                    image.SaveTo(trashStream, ImageFormat.Jpeg);
+                    counter += 1;
+                }
+            }
+            ImmutableArray<PdfOutlineItem> shiftedOutline = metadataTarget.Outline.Select(o => o.Shift(offset)).ToImmutableArray();
+            if (string.IsNullOrWhiteSpace(metadataTarget.Title))
+            {
+                currentOutline.AddRange(shiftedOutline);
+            }
+            else
+            {
+                PdfOutlineItem outlineItem = new()
+                {
+                    Text = metadataTarget.Title,
+                    Page = offset + 1,
+                    Children = shiftedOutline,
+                };
+                currentOutline.Add(outlineItem);
+            }
+        }
+        else if (target is RecipeTarget recipeTarget)
+        {
+            if (string.IsNullOrWhiteSpace(recipeTarget.Title))
+            {
+                foreach (BuildTarget subTarget in recipeTarget.Targets)
+                {
+                    await AddToPdfAsync(outputPdf, subTarget, currentOutline, trash);
+                }
+            }
+            else
+            {
+                bool hasCover = AddCoverImageToPdf(outputPdf, recipeTarget);
+                int offset = outputPdf.NumberOfPages;
+                List<PdfOutlineItem> children = [];
+                foreach (BuildTarget subTarget in recipeTarget.Targets)
+                {
+                    await AddToPdfAsync(outputPdf, subTarget, children, trash);
+                }
+                PdfOutlineItem outlineItem = new()
+                {
+                    Text = recipeTarget.Title,
+                    Page = offset + (hasCover ? 0 : 1),
+                    Children = [.. children],
+                };
+                currentOutline.Add(outlineItem);
+            }
+        }
+    }
+
+    private bool AddCoverImageToPdf(IPdfWritableDocument pdf, BuildTarget target)
+    {
+        if (target.Covers.Length == 1)
+        {
+            using Stream coverStream = target.Covers[0].OpenRead();
+            AddImagePageToPdf(pdf, _imageLoader.LoadImage(coverStream));
+            return true;
+        }
+        else if (target.Covers.Length > 1)
+        {
+            List<Stream> coverStreams = target.Covers.Select(c => c.OpenRead()).ToList();
+            AddImagePageToPdf(pdf, _imageLoader.LoadImagesToGrid(coverStreams));
+            foreach (Stream coverStream in coverStreams)
+            {
+                coverStream.Dispose();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private static void AddImagePageToPdf(IPdfWritableDocument pdf, IImage image)
+    {
+        using MemoryStream memoryStream = new();
+        image.SaveTo(memoryStream, ImageFormat.Jpeg);
+        pdf.AddImagePage(memoryStream.ToArray());
+    }
+
+    private static async Task<BuildTarget> LoadBuildTargetAsync(IFile jsonFile)
+    {
+        await using Stream stream = jsonFile.OpenRead();
+        if (jsonFile.Name.EndsWith(".metadata.json"))
+        {
+            MetadataJson metadata = await JsonSerializer.DeserializeAsync(stream, JsonContext.Default.MetadataJson) ?? throw new JsonException();
+            IDirectory parentDirectory = jsonFile.GetParentDirectory() ?? throw new FileStorageException();
+            IFile? cover = string.IsNullOrWhiteSpace(metadata.Cover) ? null : parentDirectory.GetFile(metadata.Cover);
+            IFile pdfFile = parentDirectory.GetFile(metadata.Path);
+            return new MetadataTarget(jsonFile, cover, pdfFile, metadata.Password, metadata.Outline, metadata.Title, metadata.Filters);
+        }
+        else if (jsonFile.Name.EndsWith(".recipe.json"))
+        {
+            RecipeJson recipe = await JsonSerializer.DeserializeAsync(stream, JsonContext.Default.RecipeJson) ?? throw new JsonException();
+            IDirectory parentDirectory = jsonFile.GetParentDirectory() ?? throw new FileStorageException();
+            IFile? cover = string.IsNullOrWhiteSpace(recipe.Cover) ? null : parentDirectory.GetFile(recipe.Cover);
+            ImmutableArray<BuildTarget>.Builder targetsBuilder = ImmutableArray.CreateBuilder<BuildTarget>();
+            foreach (string entry in recipe.Entries)
+            {
+                targetsBuilder.Add(await LoadBuildTargetAsync(parentDirectory.GetFile(entry)));
+            }
+            return new RecipeTarget(jsonFile, cover, recipe.Title, targetsBuilder.ToImmutable());
+        }
+        throw new InvalidOperationException();
+    }
+
+    private abstract class BuildTarget
+    {
+        public abstract IFile JsonFile { get; }
+
+        public abstract ImmutableArray<IFile> Covers { get; }
+    }
+
+    private sealed class MetadataTarget : BuildTarget
+    {
+        public override IFile JsonFile { get; }
+
+        public override ImmutableArray<IFile> Covers { get; }
+
+        public IFile PdfFile { get; }
+
+        public string? Password { get; }
+        public ImmutableArray<PdfOutlineItem> Outline { get; }
+
+        public string? Title { get; }
+
+        public ImmutableArray<PdfImageFilter> Filters { get; }
+
+        public MetadataTarget(IFile jsonFile, IFile? cover,
+            IFile pdfFile,
+            string? password,
+            ImmutableArray<PdfOutlineItem> outline,
+            string? title,
+            ImmutableArray<PdfImageFilter> filters)
+        {
+            JsonFile = jsonFile;
+            Covers = cover is null ? [] : [cover];
+            PdfFile = pdfFile;
+            Password = password;
+            Outline = outline;
+            Title = title;
+            Filters = filters;
+        }
+    }
+
+    private sealed class RecipeTarget : BuildTarget
+    {
+        public override IFile JsonFile { get; }
+
+        public override ImmutableArray<IFile> Covers { get; }
+
+        public string? Title { get; }
+
+        public ImmutableArray<BuildTarget> Targets { get; }
+
+        public RecipeTarget(IFile jsonFile, IFile? cover,
+            string? title,
+            ImmutableArray<BuildTarget> targets)
+        {
+            JsonFile = jsonFile;
+            Covers = cover is null
+                ? targets.SelectMany(e => e.Covers).ToImmutableArray()
+                : [cover];
+            Title = title;
+            Targets = targets;
+        }
+    }
+}

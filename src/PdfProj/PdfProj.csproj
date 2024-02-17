@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="$(Proj_FileStorage)" />
+    <ProjectReference Include="$(Proj_Images)" />
+    <ProjectReference Include="$(Proj_Pdfs)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="PdfProj.Tests" />
+  </ItemGroup>
+
+</Project>

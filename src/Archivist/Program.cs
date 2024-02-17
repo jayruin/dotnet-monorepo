@@ -20,12 +20,14 @@ class Program
         await using ServiceProvider serviceProvider = new ServiceCollection()
             .AddTransient<IFileStorage, FilesystemFileStorage>()
             .AddImgProjectServices()
+            .AddPdfProjectServices()
             .BuildServiceProvider(serviceProviderOptions);
 
         await using AsyncServiceScope serviceScope = serviceProvider.CreateAsyncScope();
 
         Command rootCommand = new RootCommand()
-            .AddImgSubcommand(serviceScope.ServiceProvider);
+            .AddImgSubcommand(serviceScope.ServiceProvider)
+            .AddPdfSubcommand(serviceScope.ServiceProvider);
 
         return await rootCommand.InvokeAsync(args);
     }

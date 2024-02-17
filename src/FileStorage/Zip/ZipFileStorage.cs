@@ -24,6 +24,11 @@ public sealed class ZipFileStorage : IFileStorage, IDisposable
         return new ZipDirectory(this, JoinPaths(paths));
     }
 
+    public string[] SplitFullPath(string fullPath)
+    {
+        return fullPath.Split('/').Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
+    }
+
     public void Dispose()
     {
         Archive.Dispose();
@@ -31,7 +36,6 @@ public sealed class ZipFileStorage : IFileStorage, IDisposable
 
     internal static string JoinPaths(params string[] paths)
     {
-        paths = paths.Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
-        return string.Join('/', paths);
+        return string.Join('/', paths.Where(p => !string.IsNullOrWhiteSpace(p)));
     }
 }

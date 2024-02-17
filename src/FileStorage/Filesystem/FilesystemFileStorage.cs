@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 
 namespace FileStorage.Filesystem;
@@ -24,5 +25,20 @@ public sealed class FilesystemFileStorage : IFileStorage
     public IDirectory GetDirectory(params string[] paths)
     {
         return new FilesystemDirectory(this, JoinPaths(paths));
+    }
+
+    public string[] SplitFullPath(string fullPath)
+    {
+        Stack<string> parts = new();
+        string? current = fullPath;
+        while (!string.IsNullOrEmpty(current))
+        {
+            string part = Path.GetPathRoot(current) == current
+                ? current
+                : Path.GetFileName(current);
+            parts.Push(part);
+            current = Path.GetDirectoryName(current);
+        }
+        return [.. parts];
     }
 }
