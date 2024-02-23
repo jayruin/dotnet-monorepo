@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Utils;
 
 namespace PdfProj;
 
@@ -33,6 +34,7 @@ public sealed class PdfBuilder : IPdfBuilder
         await using Stream outputStream = output.OpenWrite();
         using IPdfWritableDocument outputPdf = _pdfLoader.OpenWrite(outputStream);
         BuildTarget target = await LoadBuildTargetAsync(targetJson);
+        SetPdfTitle(outputPdf, target);
         if (target is RecipeTarget recipeTarget && string.IsNullOrWhiteSpace(recipeTarget.Title))
         {
             AddCoverImageToPdf(outputPdf, target);
@@ -109,6 +111,29 @@ public sealed class PdfBuilder : IPdfBuilder
         }
     }
 
+    private static void SetPdfTitle(IPdfWritableDocument pdf, BuildTarget target)
+    {
+        string title = string.Empty;
+        if (target is MetadataTarget metadataTarget && !string.IsNullOrWhiteSpace(metadataTarget.Title))
+        {
+            title = metadataTarget.Title;
+        }
+        else if (target is RecipeTarget recipeTarget)
+        {
+            List<string> titles = [];
+            foreach (BuildTarget subTarget in recipeTarget.Targets)
+            {
+                if (subTarget.Title is null) continue;
+                titles.Add(subTarget.Title);
+            }
+            title = titles.LongestCommonPrefix().Trim();
+        }
+        if (!string.IsNullOrWhiteSpace(title))
+        {
+            pdf.SetTitle(title);
+        }
+    }
+
     private bool AddCoverImageToPdf(IPdfWritableDocument pdf, BuildTarget target)
     {
         if (target.Covers.Length == 1)
@@ -167,6 +192,8 @@ public sealed class PdfBuilder : IPdfBuilder
     {
         public abstract IFile JsonFile { get; }
 
+        public abstract string? Title { get; }
+
         public abstract ImmutableArray<IFile> Covers { get; }
     }
 
@@ -174,14 +201,14 @@ public sealed class PdfBuilder : IPdfBuilder
     {
         public override IFile JsonFile { get; }
 
+        public override string? Title { get; }
+
         public override ImmutableArray<IFile> Covers { get; }
 
         public IFile PdfFile { get; }
 
         public string? Password { get; }
         public ImmutableArray<PdfOutlineItem> Outline { get; }
-
-        public string? Title { get; }
 
         public ImmutableArray<PdfImageFilter> Filters { get; }
 
@@ -206,9 +233,9 @@ public sealed class PdfBuilder : IPdfBuilder
     {
         public override IFile JsonFile { get; }
 
-        public override ImmutableArray<IFile> Covers { get; }
+        public override string? Title { get; }
 
-        public string? Title { get; }
+        public override ImmutableArray<IFile> Covers { get; }
 
         public ImmutableArray<BuildTarget> Targets { get; }
 

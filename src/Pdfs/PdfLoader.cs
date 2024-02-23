@@ -8,7 +8,9 @@ public sealed class PdfLoader : IPdfLoader
 {
     public IPdfWritableDocument OpenWrite(Stream stream)
     {
-        WriterProperties writerProperties = new WriterProperties().AddXmpMetadata();
+        WriterProperties writerProperties = new WriterProperties()
+            .AddXmpMetadata()
+            .SetPdfVersion(PdfVersion.PDF_1_7);
         PdfWriter pdfWriter = new(stream, writerProperties);
         PdfDocument pdfDocument = new(pdfWriter);
         return new PdfWritableDocument(pdfDocument);
