@@ -113,21 +113,24 @@ public sealed class PdfBuilder : IPdfBuilder
 
     private static void SetPdfTitle(IPdfWritableDocument pdf, BuildTarget target)
     {
-        string title = string.Empty;
-        if (target is MetadataTarget metadataTarget && !string.IsNullOrWhiteSpace(metadataTarget.Title))
+        List<string> titles = [];
+        Stack<BuildTarget> stack = [];
+        stack.Push(target);
+        while (stack.TryPop(out BuildTarget? currentTarget))
         {
-            title = metadataTarget.Title;
-        }
-        else if (target is RecipeTarget recipeTarget)
-        {
-            List<string> titles = [];
-            foreach (BuildTarget subTarget in recipeTarget.Targets)
+            if (!string.IsNullOrWhiteSpace(currentTarget.Title))
             {
-                if (subTarget.Title is null) continue;
-                titles.Add(subTarget.Title);
+                titles.Add(currentTarget.Title);
             }
-            title = titles.LongestCommonPrefix().Trim();
+            else
+            {
+                foreach (BuildTarget subTarget in currentTarget.Targets)
+                {
+                    stack.Push(subTarget);
+                }
+            }
         }
+        string title = titles.LongestCommonPrefix().Trim();
         if (!string.IsNullOrWhiteSpace(title))
         {
             pdf.SetTitle(title);
@@ -195,6 +198,8 @@ public sealed class PdfBuilder : IPdfBuilder
         public abstract string? Title { get; }
 
         public abstract ImmutableArray<IFile> Covers { get; }
+
+        public abstract ImmutableArray<BuildTarget> Targets { get; }
     }
 
     private sealed class MetadataTarget : BuildTarget
@@ -204,6 +209,8 @@ public sealed class PdfBuilder : IPdfBuilder
         public override string? Title { get; }
 
         public override ImmutableArray<IFile> Covers { get; }
+
+        public override ImmutableArray<BuildTarget> Targets => [];
 
         public IFile PdfFile { get; }
 
@@ -237,7 +244,7 @@ public sealed class PdfBuilder : IPdfBuilder
 
         public override ImmutableArray<IFile> Covers { get; }
 
-        public ImmutableArray<BuildTarget> Targets { get; }
+        public override ImmutableArray<BuildTarget> Targets { get; }
 
         public RecipeTarget(IFile jsonFile, IFile? cover,
             string? title,
