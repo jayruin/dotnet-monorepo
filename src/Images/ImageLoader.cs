@@ -13,24 +13,44 @@ public sealed class ImageLoader : IImageLoader
         return new Image(SKImage.FromEncodedData(stream));
     }
 
-    public IImage LoadImagesToGrid(IEnumerable<Stream?> streams, int? rows = null, int? columns = null, Color? backgroundColor = null)
+    public IImage LoadImagesToGrid(IEnumerable<Stream?> streams, ImageGridOptions? options = null)
     {
+        options ??= new();
         List<SKImage?> images = streams.Select(stream => stream is null ? null : SKImage.FromEncodedData(stream)).ToList();
-        (int computedRows, int computedColumns) = GetGridDimensions(images.Count, rows, columns);
+        (int computedRows, int computedColumns) = GetGridDimensions(images.Count, options.Rows, options.Columns);
         (int gridItemWidth, int gridItemHeight) = GetGridItemSize(images);
+        if (!options.Expand)
+        {
+            AspectRatio gridItemAspectRatio = new(gridItemWidth, gridItemHeight);
+            if (computedRows < computedColumns)
+            {
+                gridItemWidth = Convert.ToInt32(gridItemWidth / computedColumns);
+                gridItemHeight = Convert.ToInt32(gridItemWidth / gridItemAspectRatio);
+            }
+            else if (computedColumns < computedRows)
+            {
+                gridItemHeight = Convert.ToInt32(gridItemHeight / computedRows);
+                gridItemWidth = Convert.ToInt32(gridItemHeight * gridItemAspectRatio);
+            }
+            else
+            {
+                gridItemWidth = Convert.ToInt32(gridItemWidth / computedColumns);
+                gridItemHeight = Convert.ToInt32(gridItemHeight / computedRows);
+            }
+        }
         int gridWidth = gridItemWidth * computedColumns;
         int gridHeight = gridItemHeight * computedRows;
         using SKSurface grid = SKSurface.Create(new SKImageInfo(gridWidth, gridHeight));
         using SKCanvas canvas = grid.Canvas;
-        if (backgroundColor is not null)
+        if (options.BackgroundColor is not null)
         {
-            canvas.Clear(backgroundColor.ToInternalColor());
+            canvas.Clear(options.BackgroundColor.ToInternalColor());
         }
         int i = 0;
         foreach (SKImage? image in images)
         {
             if (image is null) continue;
-            using (SKImage resizedImage = Image.ResizeKeepAspectRatio(image, gridItemWidth, gridItemHeight, backgroundColor))
+            using (SKImage resizedImage = Image.ResizeKeepAspectRatio(image, gridItemWidth, gridItemHeight, options.BackgroundColor))
             {
                 int row = i / computedColumns;
                 int column = i % computedColumns;
@@ -45,8 +65,8 @@ public sealed class ImageLoader : IImageLoader
                 canvas.DrawImage(resizedImage, point, paint);
             }
             i += 1;
+            image.Dispose();
         }
-        images.ForEach(image => image?.Dispose());
         return new Image(grid.Snapshot());
     }
 
@@ -90,12 +110,12 @@ public sealed class ImageLoader : IImageLoader
 
     private static (int, int) GetGridItemSize(IEnumerable<SKImage?> images)
     {
-        Dictionary<AspectRatio, List<SKImage>> aspectRatios = new();
+        Dictionary<AspectRatio, List<SKImage>> aspectRatios = [];
         foreach (SKImage? image in images)
         {
             if (image is null) continue;
             AspectRatio aspectRatio = new(image.Width, image.Height);
-            if (!aspectRatios.ContainsKey(aspectRatio)) aspectRatios.Add(aspectRatio, new List<SKImage>());
+            if (!aspectRatios.ContainsKey(aspectRatio)) aspectRatios.Add(aspectRatio, []);
             aspectRatios[aspectRatio].Add(image);
         }
         SKImage chosenImage = aspectRatios.Values

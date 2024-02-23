@@ -7,5 +7,5 @@ public interface IImageLoader
 {
     public IImage LoadImage(Stream stream);
 
-    public IImage LoadImagesToGrid(IEnumerable<Stream?> streams, int? rows = null, int? columns = null, Color? backgroundColor = null);
+    public IImage LoadImagesToGrid(IEnumerable<Stream?> streams, ImageGridOptions? options = null);
 }

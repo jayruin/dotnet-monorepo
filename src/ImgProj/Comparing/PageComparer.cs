@@ -26,7 +26,7 @@ public sealed class PageComparer : IPageComparer
 
     private static void CleanDirectory(IDirectory outputDirectory)
     {
-        List<IFile> filesToDelete = new();
+        List<IFile> filesToDelete = [];
         foreach (IFile file in outputDirectory.EnumerateFiles())
         {
             string[] nameParts = file.Name.Split('.');
@@ -45,7 +45,7 @@ public sealed class PageComparer : IPageComparer
             .ToList());
         for (int i = 0; i < pages[project.MainVersion].Count; i++)
         {
-            List<Stream?> pageStreams = new();
+            List<Stream?> pageStreams = [];
             foreach (string version in project.MetadataVersions.Keys)
             {
                 IPage page = pages[version][i];
@@ -56,7 +56,7 @@ public sealed class PageComparer : IPageComparer
                 }
                 else pageStreams.Add(null);
             }
-            using (IImage comparisonImage = _imageLoader.LoadImagesToGrid(pageStreams, rows: 1))
+            using (IImage comparisonImage = _imageLoader.LoadImagesToGrid(pageStreams, new(Rows: 1, Expand: true)))
             {
                 IFile outputFile = outputDirectory.GetFile($"{pageCount}.compare.jpg");
                 using Stream outputStream = outputFile.OpenWrite();
