@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="2921a10f-b853-4bee-a396-688ddcd1f4ab" name="@Mac-1708824680763 2024-02-25 02:07:18" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2024-02-25T02:07:18.8415910+00:00" queuing="2024-02-25T02:07:18.8415910+00:00" start="2024-02-25T02:07:18.1519590+00:00" finish="2024-02-25T02:07:18.8484160+00:00" />
+  <TestSettings name="default" id="9e76809a-ed60-434c-84e7-ba48cbaed8ec">
+    <Deployment runDeploymentRoot="_Mac-1708824680763_2024-02-25_02_07_18" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="8fc77e5c-ebd8-4238-a0b8-36080ccd469b" testId="17c52fff-5cdf-b2e5-127a-c58bad2ccdce" testName="TestWidthHeight (10,5,2,1)" computerName="Mac-1708824680763" duration="00:00:00.0003928" startTime="2024-02-25T02:07:18.7031280+00:00" endTime="2024-02-25T02:07:18.7038800+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8fc77e5c-ebd8-4238-a0b8-36080ccd469b" />
+    <UnitTestResult executionId="5ed59fa7-f8e4-4cec-9f72-bafd0edfb18f" testId="54545c05-a34f-a46f-e489-73c397c00788" testName="TestWidthHeight (5,10,1,2)" computerName="Mac-1708824680763" duration="00:00:00.0000047" startTime="2024-02-25T02:07:18.7042270+00:00" endTime="2024-02-25T02:07:18.7043600+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5ed59fa7-f8e4-4cec-9f72-bafd0edfb18f" />
+    <UnitTestResult executionId="7593ff9d-df07-406f-9617-593a910bf367" testId="9f3d3f05-38bc-f8ba-43c3-a0c3785bb324" testName="TestWidthHeight (1,1,1,1)" computerName="Mac-1708824680763" duration="00:00:00.0033763" startTime="2024-02-25T02:07:18.6784290+00:00" endTime="2024-02-25T02:07:18.6981520+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7593ff9d-df07-406f-9617-593a910bf367" />
+    <UnitTestResult executionId="722413b8-1d43-40ef-8b6a-348a8d7f59bf" testId="7ce79051-9961-6f38-c6db-7c98f3d30763" testName="TestInvalidHeight" computerName="Mac-1708824680763" duration="00:00:00.0001833" startTime="2024-02-25T02:07:18.7070650+00:00" endTime="2024-02-25T02:07:18.7082860+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="722413b8-1d43-40ef-8b6a-348a8d7f59bf" />
+    <UnitTestResult executionId="561c667d-3743-46bd-8309-76bbf41f4022" testId="b7b5b20f-fed4-beaf-aac6-60097e117abe" testName="TestInvalidWidth" computerName="Mac-1708824680763" duration="00:00:00.0014963" startTime="2024-02-25T02:07:18.7043850+00:00" endTime="2024-02-25T02:07:18.7070210+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="561c667d-3743-46bd-8309-76bbf41f4022" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestInvalidWidth" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/images.tests/release_osx-x64/images.tests.dll" id="b7b5b20f-fed4-beaf-aac6-60097e117abe">
+      <Execution id="561c667d-3743-46bd-8309-76bbf41f4022" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Images.Tests/release_osx-x64/Images.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Images.Tests.AspectRatioTests" name="TestInvalidWidth" />
+    </UnitTest>
+    <UnitTest name="TestWidthHeight (1,1,1,1)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/images.tests/release_osx-x64/images.tests.dll" id="9f3d3f05-38bc-f8ba-43c3-a0c3785bb324">
+      <Execution id="7593ff9d-df07-406f-9617-593a910bf367" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Images.Tests/release_osx-x64/Images.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Images.Tests.AspectRatioTests" name="TestWidthHeight" />
+    </UnitTest>
+    <UnitTest name="TestWidthHeight (5,10,1,2)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/images.tests/release_osx-x64/images.tests.dll" id="54545c05-a34f-a46f-e489-73c397c00788">
+      <Execution id="5ed59fa7-f8e4-4cec-9f72-bafd0edfb18f" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Images.Tests/release_osx-x64/Images.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Images.Tests.AspectRatioTests" name="TestWidthHeight" />
+    </UnitTest>
+    <UnitTest name="TestWidthHeight (10,5,2,1)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/images.tests/release_osx-x64/images.tests.dll" id="17c52fff-5cdf-b2e5-127a-c58bad2ccdce">
+      <Execution id="8fc77e5c-ebd8-4238-a0b8-36080ccd469b" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Images.Tests/release_osx-x64/Images.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Images.Tests.AspectRatioTests" name="TestWidthHeight" />
+    </UnitTest>
+    <UnitTest name="TestInvalidHeight" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/images.tests/release_osx-x64/images.tests.dll" id="7ce79051-9961-6f38-c6db-7c98f3d30763">
+      <Execution id="722413b8-1d43-40ef-8b6a-348a8d7f59bf" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Images.Tests/release_osx-x64/Images.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Images.Tests.AspectRatioTests" name="TestInvalidHeight" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="17c52fff-5cdf-b2e5-127a-c58bad2ccdce" executionId="8fc77e5c-ebd8-4238-a0b8-36080ccd469b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="54545c05-a34f-a46f-e489-73c397c00788" executionId="5ed59fa7-f8e4-4cec-9f72-bafd0edfb18f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9f3d3f05-38bc-f8ba-43c3-a0c3785bb324" executionId="7593ff9d-df07-406f-9617-593a910bf367" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7ce79051-9961-6f38-c6db-7c98f3d30763" executionId="722413b8-1d43-40ef-8b6a-348a8d7f59bf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b7b5b20f-fed4-beaf-aac6-60097e117abe" executionId="561c667d-3743-46bd-8309-76bbf41f4022" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="5" executed="5" passed="5" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+</TestRun>
