@@ -25,6 +25,7 @@ public sealed class PdfLoader : IPdfLoader
             readerProperties = readerProperties.SetPassword(encoding.GetBytes(password));
         }
         PdfReader pdfReader = new(stream, readerProperties);
+        pdfReader.SetUnethicalReading(true);
         PdfDocument pdfDocument = new(pdfReader);
         return pdfDocument;
     }
