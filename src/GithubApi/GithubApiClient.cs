@@ -57,6 +57,10 @@ public sealed class GithubApiClient : IGithubApiClient
     {
         return EnumeratePagesAsync($"repos/{owner}/{repo}/releases/{releaseId}/assets", JsonContext.ReleaseAsset, paginationOptions, cancellationToken);
     }
+    public Task<Release> GetLatestReleaseAsync(string owner, string repo, CancellationToken cancellationToken = default)
+    {
+        return _httpClient.GetJsonAsync($"repos/{owner}/{repo}/releases/latest", JsonContext.Release, cancellationToken);
+    }
 
     // Repositories
     public Task<Repository> GetRepositoryAsync(string owner, string repo, CancellationToken cancellationToken = default)

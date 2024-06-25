@@ -13,6 +13,7 @@ public interface IGithubApiClient
     // Releases
     IAsyncEnumerable<Release> GetReleasesAsync(string owner, string repo, PaginationOptions? paginationOptions = null, CancellationToken cancellationToken = default);
     IAsyncEnumerable<ReleaseAsset> GetReleaseAssetsAsync(string owner, string repo, int releaseId, PaginationOptions? paginationOptions = null, CancellationToken cancellationToken = default);
+    Task<Release> GetLatestReleaseAsync(string owner, string repo, CancellationToken cancellationToken = default);
 
     // Repositories
     Task<Repository> GetRepositoryAsync(string owner, string repo, CancellationToken cancellationToken = default);
