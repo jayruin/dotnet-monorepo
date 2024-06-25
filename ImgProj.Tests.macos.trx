@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="1761ca73-c7ab-465c-83d2-1b94f29704b9" name="@Mac-1719355463591 2024-06-25 23:11:12" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2024-06-25T23:11:12.6665750+00:00" queuing="2024-06-25T23:11:12.6665750+00:00" start="2024-06-25T23:11:12.5921140+00:00" finish="2024-06-25T23:11:12.6668270+00:00" />
+  <TestSettings name="default" id="cf0c1e51-50ae-4d27-a564-f369231c4a8c">
+    <Deployment runDeploymentRoot="_Mac-1719355463591_2024-06-25_23_11_12" />
+  </TestSettings>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="0" executed="0" passed="0" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <RunInfos>
+      <RunInfo computerName="Mac-1719355463591" outcome="Error" timestamp="2024-06-25T23:11:12.6495480+00:00">
+        <Text>Could not find 'dotnet' host for the 'X64' architecture.&#xD;
+&#xD;
+You can resolve the problem by installing the 'X64' .NET.&#xD;
+&#xD;
+The specified framework can be found at:&#xD;
+  - https://aka.ms/dotnet-download&#xD;
+</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>
