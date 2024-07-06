@@ -2,7 +2,7 @@ name: Test And Publish
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - src/**
   workflow_dispatch:
