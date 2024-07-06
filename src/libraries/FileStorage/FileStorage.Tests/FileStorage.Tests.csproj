@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="MSTest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(Proj_FileStorage)" />
+    <ProjectReference Include="$(Proj_Temp)" />
+  </ItemGroup>
+
+</Project>
