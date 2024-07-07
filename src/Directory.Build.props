@@ -19,7 +19,7 @@
     <Props_Executable>$(MSBuildThisFileDirectory)*Executable.props</Props_Executable>
   </PropertyGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)*Projects.props" />
+  <Import Project="$(MSBuildThisFileDirectory)**\*Projects.props" />
 
   <PropertyGroup>
     <RuntimeIdentifier Condition="$([System.OperatingSystem]::IsLinux())">linux-x64</RuntimeIdentifier>
