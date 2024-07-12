@@ -20,7 +20,7 @@ public sealed class GithubApiClient : IGithubApiClient
 
     private readonly HttpClient _httpClient;
 
-    public GithubApiClient(HttpClient httpClient, string? authToken = null, ProductInfoHeaderValue? userAgent = null)
+    public GithubApiClient(HttpClient httpClient, string? authToken = null, string? userAgent = null)
     {
         _httpClient = httpClient;
         _httpClient.BaseAddress = new("https://api.github.com/");
@@ -30,7 +30,7 @@ public sealed class GithubApiClient : IGithubApiClient
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
         }
         _httpClient.DefaultRequestHeaders.Add("X-GitHub-Api-Version", "2022-11-28");
-        _httpClient.DefaultRequestHeaders.UserAgent.Add(userAgent ?? new ProductInfoHeaderValue(new ProductHeaderValue("Mozilla", "5.0")));
+        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent ?? "Mozilla/5.0");
     }
 
     public async Task<Stream> DownloadAsync(string url, CancellationToken cancellationToken = default)
