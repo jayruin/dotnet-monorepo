@@ -8,7 +8,8 @@ namespace Utils;
 
 public static class Validation
 {
-    public static bool IsRegex(string s, Regex regex, [NotNullWhen(false)] out string? message, [CallerArgumentExpression(nameof(s))] string parameterName = "parameter")
+    public static bool IsRegex(string s, Regex regex, [NotNullWhen(false)] out string? message,
+        [CallerArgumentExpression(nameof(s))] string parameterName = "parameter")
     {
         Match match = regex.Match(s);
         if (match.Success)
@@ -20,18 +21,20 @@ public static class Validation
         return false;
     }
 
-    public static bool IsRegexOrNullOrWhiteSpace(string? s, Regex regex, [NotNullWhen(false)] out string? message)
+    public static bool IsRegexOrNullOrWhiteSpace(string? s, Regex regex, [NotNullWhen(false)] out string? message,
+        [CallerArgumentExpression(nameof(s))] string parameterName = "parameter")
     {
         if (!string.IsNullOrWhiteSpace(s))
         {
-            return IsRegex(s, regex, out message);
+            return IsRegex(s, regex, out message, parameterName);
         }
         message = null;
         return true;
     }
 
-    public static bool IsEnum<TEnum>(TEnum e, [NotNullWhen(false)] out string? message, [CallerArgumentExpression(nameof(e))] string parameterName = "parameter")
-        where TEnum : struct, Enum
+    public static bool IsEnum<TEnum>(TEnum e, [NotNullWhen(false)] out string? message,
+        [CallerArgumentExpression(nameof(e))] string parameterName = "parameter")
+            where TEnum : struct, Enum
     {
         if (!Enum.IsDefined(e))
         {
@@ -42,7 +45,8 @@ public static class Validation
         return true;
     }
 
-    public static bool IsPath(string p, [NotNullWhen(false)] out string? message, [CallerArgumentExpression(nameof(p))] string parameterName = "parameter")
+    public static bool IsPath(string p, [NotNullWhen(false)] out string? message,
+        [CallerArgumentExpression(nameof(p))] string parameterName = "parameter")
     {
         // TODO better path validation
         string errorMessage = $"{parameterName} = {p} is not a valid path";
@@ -64,11 +68,12 @@ public static class Validation
         return true;
     }
 
-    public static bool IsPathOrNullOrWhiteSpace(string? p, [NotNullWhen(false)] out string? message)
+    public static bool IsPathOrNullOrWhiteSpace(string? p, [NotNullWhen(false)] out string? message,
+        [CallerArgumentExpression(nameof(p))] string parameterName = "parameter")
     {
         if (!string.IsNullOrWhiteSpace(p))
         {
-            return IsPath(p, out message);
+            return IsPath(p, out message, parameterName);
         }
         message = null;
         return true;
