@@ -46,4 +46,18 @@ public class SqliteTests
         Assert.AreEqual("1a", results[0]);
         Assert.AreEqual("2b", results[1]);
     }
+
+    [TestMethod]
+    public void TestNullIsHandled()
+    {
+        using TempFile tempFile = new();
+        ISqliteClient client = new SqliteClient();
+        client.SetConnectionString(tempFile.FilePath, SqliteOpenMode.ReadWriteCreate);
+        client.ExecuteNonQuery($"CREATE TABLE TESTTABLE (ID INT PRIMARY KEY NOT NULL, VALUE TEXT);");
+        client.ExecuteNonQuery($"INSERT INTO TESTTABLE (ID, VALUE) VALUES ({1}, {null})");
+        bool isNull = client
+            .ExecuteQuery($"SELECT * FROM TESTTABLE", row => row.IsDBNull(1))
+            .First();
+        Assert.IsTrue(isNull);
+    }
 }

@@ -80,7 +80,7 @@ public class DatabaseClient : IDatabaseClient
         {
             DbParameter parameter = command.CreateParameter();
             parameter.ParameterName = $"@p{i}";
-            parameter.Value = commandText.GetArgument(i);
+            parameter.Value = commandText.GetArgument(i) ?? DBNull.Value;
             command.Parameters.Add(parameter);
         }
         return command;
