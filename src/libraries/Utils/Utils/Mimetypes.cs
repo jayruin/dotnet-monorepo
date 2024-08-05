@@ -15,6 +15,11 @@ public static class Mimetypes
         public const string XhtmlXml = "application/xhtml+xml";
     }
 
+    public static class Audio
+    {
+        public const string Mpeg = "audio/mpeg";
+    }
+
     public static class Font
     {
         public const string Otf = "font/otf";
