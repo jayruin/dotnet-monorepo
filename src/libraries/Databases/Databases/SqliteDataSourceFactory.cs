@@ -1,15 +1,12 @@
 using Microsoft.Data.Sqlite;
 using System;
+using System.Data.Common;
 
 namespace Databases;
 
-public sealed class SqliteClient : DatabaseClient, ISqliteClient
+public sealed class SqliteDataSourceFactory : ISqliteDataSourceFactory
 {
-    public SqliteClient() : base(SqliteFactory.Instance)
-    {
-    }
-
-    public void SetConnectionString(string file, SqliteOpenMode mode)
+    public DbDataSource CreateDataSource(string file, SqliteOpenMode mode)
     {
         Microsoft.Data.Sqlite.SqliteOpenMode internalMode = mode switch
         {
@@ -19,10 +16,11 @@ public sealed class SqliteClient : DatabaseClient, ISqliteClient
             SqliteOpenMode.Memory => Microsoft.Data.Sqlite.SqliteOpenMode.Memory,
             _ => throw new ArgumentOutOfRangeException(nameof(mode)),
         };
-        ConnectionString = new SqliteConnectionStringBuilder()
+        string connectionString = new SqliteConnectionStringBuilder()
         {
             DataSource = file,
             Mode = internalMode,
         }.ToString();
+        return SqliteFactory.Instance.CreateDataSource(connectionString);
     }
 }
