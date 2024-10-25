@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ImgProj.Comparing;
 
@@ -16,12 +17,12 @@ public sealed class PageComparer : IPageComparer
         _imageLoader = imageLoader;
     }
 
-    public void ComparePageVersions(IImgProject project, ImmutableArray<int> coordinates, IDirectory outputDirectory)
+    public async Task ComparePageVersionsAsync(IImgProject project, ImmutableArray<int> coordinates, IDirectory outputDirectory)
     {
         IImgProject subProject = project.GetSubProject(coordinates);
         outputDirectory.Create();
         CleanDirectory(outputDirectory);
-        Traverse(subProject, outputDirectory, 1);
+        await TraverseAsync(subProject, outputDirectory, 1);
     }
 
     private static void CleanDirectory(IDirectory outputDirectory)
@@ -38,7 +39,7 @@ public sealed class PageComparer : IPageComparer
         filesToDelete.ForEach(f => f.Delete());
     }
 
-    private int Traverse(IImgProject project, IDirectory outputDirectory, int pageCount)
+    private async Task<int> TraverseAsync(IImgProject project, IDirectory outputDirectory, int pageCount)
     {
         Dictionary<string, List<IPage>> pages = project.MetadataVersions.Keys
             .ToDictionary(v => v, v => project.EnumeratePages(v, false)
@@ -56,11 +57,11 @@ public sealed class PageComparer : IPageComparer
                 }
                 else pageStreams.Add(null);
             }
-            using (IImage comparisonImage = _imageLoader.LoadImagesToGrid(pageStreams, new(Rows: 1, Expand: true)))
+            using (IImage comparisonImage = await _imageLoader.LoadImagesToGridAsync(pageStreams, new(Rows: 1, Expand: true)))
             {
                 IFile outputFile = outputDirectory.GetFile($"{pageCount}.compare.jpg");
                 using Stream outputStream = outputFile.OpenWrite();
-                comparisonImage.SaveTo(outputStream, ImageFormat.Jpeg);
+                await comparisonImage.SaveToAsync(outputStream, ImageFormat.Jpeg);
             }
             foreach (Stream? pageStream in pageStreams)
             {
@@ -70,7 +71,7 @@ public sealed class PageComparer : IPageComparer
         }
         foreach (IImgProject childProject in project.ChildProjects)
         {
-            pageCount = Traverse(childProject, outputDirectory, pageCount);
+            pageCount = await TraverseAsync(childProject, outputDirectory, pageCount);
         }
         return pageCount;
     }

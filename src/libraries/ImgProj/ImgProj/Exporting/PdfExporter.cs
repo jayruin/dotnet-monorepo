@@ -29,7 +29,7 @@ public sealed class PdfExporter : IExporter
         version ??= subProject.MainVersion;
         IMetadataVersion metadata = subProject.MetadataVersions[version];
         List<IPage> pages = [];
-        IPage? cover = _coverGenerator.CreateCoverGrid(subProject, version);
+        IPage? cover = await _coverGenerator.CreateCoverGridAsync(subProject, version);
         if (cover is not null)
         {
             pages.Add(cover);

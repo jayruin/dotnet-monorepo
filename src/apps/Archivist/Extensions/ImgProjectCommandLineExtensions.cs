@@ -115,7 +115,7 @@ public static class ImgProjectCommandLineExtensions
             IFileStorage fileStorage = _serviceProvider.GetRequiredService<IFileStorage>();
             IImgProject project = await ImgProjectLoader.LoadFromDirectoryAsync(fileStorage.GetDirectory(projectDirectory));
             IPageComparer pageComparer = _serviceProvider.GetRequiredService<IPageComparer>();
-            pageComparer.ComparePageVersions(project, coordinates.ToImmutableArray(), fileStorage.GetDirectory(outputDirectory));
+            await pageComparer.ComparePageVersionsAsync(project, coordinates.ToImmutableArray(), fileStorage.GetDirectory(outputDirectory));
         }
 
         public async Task HandleDeleteCommand(string projectDirectory, IEnumerable<int> coordinates, string? version)

@@ -1,9 +1,10 @@
 using FileStorage;
 using System.Collections.Immutable;
+using System.Threading.Tasks;
 
 namespace ImgProj.Comparing;
 
 public interface IPageComparer
 {
-    public void ComparePageVersions(IImgProject project, ImmutableArray<int> coordinates, IDirectory outputDirectory);
+    public Task ComparePageVersionsAsync(IImgProject project, ImmutableArray<int> coordinates, IDirectory outputDirectory);
 }

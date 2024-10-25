@@ -37,7 +37,7 @@ public sealed class PdfBuilder : IPdfBuilder
         SetPdfTitle(outputPdf, target);
         if (target is RecipeTarget recipeTarget && string.IsNullOrWhiteSpace(recipeTarget.Title))
         {
-            AddCoverImageToPdf(outputPdf, target);
+            await AddCoverImageToPdfAsync(outputPdf, target);
         }
         List<PdfOutlineItem> outline = [];
         await AddToPdfAsync(outputPdf, target, outline, trash);
@@ -60,9 +60,9 @@ public sealed class PdfBuilder : IPdfBuilder
                 foreach (byte[] deletedImageData in copyPagesResult.DeletedImages)
                 {
                     await using MemoryStream memoryStream = new(deletedImageData, false);
-                    IImage image = _imageLoader.LoadImage(memoryStream);
+                    using IImage image = await _imageLoader.LoadImageAsync(memoryStream);
                     await using Stream trashStream = trash.GetFile($"{metadataTarget.PdfFile.Name}-{counter}.jpg").OpenWrite();
-                    image.SaveTo(trashStream, ImageFormat.Jpeg);
+                    await image.SaveToAsync(trashStream, ImageFormat.Jpeg);
                     counter += 1;
                 }
             }
@@ -93,7 +93,7 @@ public sealed class PdfBuilder : IPdfBuilder
             }
             else
             {
-                bool hasCover = AddCoverImageToPdf(outputPdf, recipeTarget);
+                bool hasCover = await AddCoverImageToPdfAsync(outputPdf, recipeTarget);
                 int offset = outputPdf.NumberOfPages;
                 List<PdfOutlineItem> children = [];
                 foreach (BuildTarget subTarget in recipeTarget.Targets)
@@ -137,31 +137,33 @@ public sealed class PdfBuilder : IPdfBuilder
         }
     }
 
-    private bool AddCoverImageToPdf(IPdfWritableDocument pdf, BuildTarget target)
+    private async Task<bool> AddCoverImageToPdfAsync(IPdfWritableDocument pdf, BuildTarget target)
     {
         if (target.Covers.Length == 1)
         {
-            using Stream coverStream = target.Covers[0].OpenRead();
-            AddImagePageToPdf(pdf, _imageLoader.LoadImage(coverStream));
+            await using Stream coverStream = target.Covers[0].OpenRead();
+            using IImage coverImage = await _imageLoader.LoadImageAsync(coverStream);
+            await AddImagePageToPdfAsync(pdf, coverImage);
             return true;
         }
         else if (target.Covers.Length > 1)
         {
             List<Stream> coverStreams = target.Covers.Select(c => c.OpenRead()).ToList();
-            AddImagePageToPdf(pdf, _imageLoader.LoadImagesToGrid(coverStreams));
+            using IImage coverGrid = await _imageLoader.LoadImagesToGridAsync(coverStreams);
+            await AddImagePageToPdfAsync(pdf, coverGrid);
             foreach (Stream coverStream in coverStreams)
             {
-                coverStream.Dispose();
+                await coverStream.DisposeAsync();
             }
             return true;
         }
         return false;
     }
 
-    private static void AddImagePageToPdf(IPdfWritableDocument pdf, IImage image)
+    private static async Task AddImagePageToPdfAsync(IPdfWritableDocument pdf, IImage image)
     {
-        using MemoryStream memoryStream = new();
-        image.SaveTo(memoryStream, ImageFormat.Jpeg);
+        await using MemoryStream memoryStream = new();
+        await image.SaveToAsync(memoryStream, ImageFormat.Jpeg);
         pdf.AddImagePage(memoryStream.ToArray());
     }
 

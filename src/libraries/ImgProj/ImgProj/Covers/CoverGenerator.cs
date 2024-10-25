@@ -3,6 +3,7 @@ using ImgProj.Core;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ImgProj.Covers;
 
@@ -15,7 +16,7 @@ public sealed class CoverGenerator : ICoverGenerator
         _imageLoader = imageLoader;
     }
 
-    public IPage? CreateCoverGrid(IImgProject project, string version)
+    public async Task<IPage?> CreateCoverGridAsync(IImgProject project, string version)
     {
         IMetadataVersion metadata = project.MetadataVersions[version];
         if (metadata.Cover.Count == 0) return null;
@@ -23,13 +24,13 @@ public sealed class CoverGenerator : ICoverGenerator
             .Select(c => project.GetPage(c, version))
             .Select(p => p.OpenRead())
             .ToList();
-        using IImage coverGrid = _imageLoader.LoadImagesToGrid(imageStreams);
-        using MemoryStream memoryStream = new();
-        coverGrid.SaveTo(memoryStream, ImageFormat.Jpeg);
+        using IImage coverGrid = await _imageLoader.LoadImagesToGridAsync(imageStreams);
+        await using MemoryStream memoryStream = new();
+        await coverGrid.SaveToAsync(memoryStream, ImageFormat.Jpeg);
         byte[] data = memoryStream.ToArray();
         foreach (Stream imageStream in imageStreams)
         {
-            imageStream.Dispose();
+            await imageStream.DisposeAsync();
         }
         return new MemoryPage(data, version, ".jpg");
     }

@@ -31,9 +31,9 @@ public sealed class Epub3Exporter : IExporter
         version ??= subProject.MainVersion;
         IMetadataVersion metadata = subProject.MetadataVersions[version];
         await using EpubWriter epubWriter = await EpubWriter.CreateAsync(stream, EpubVersion.Epub3);
-        List<IPage> pages = new();
+        List<IPage> pages = [];
         IPage? cover = coordinates.Length == 0
-            ? _coverGenerator.CreateCoverGrid(subProject, version)
+            ? await _coverGenerator.CreateCoverGridAsync(subProject, version)
             : subProject.EnumeratePages(version, true).FirstOrDefault();
         if (cover is not null)
         {
@@ -76,7 +76,7 @@ public sealed class Epub3Exporter : IExporter
         {
             Text = title,
         };
-        List<EpubNavItem> children = new();
+        List<EpubNavItem> children = [];
         int pageNumber = 1;
         foreach (IPage page in project.EnumeratePages(version, false))
         {
@@ -124,7 +124,7 @@ public sealed class Epub3Exporter : IExporter
         {
             Href = xhtmlHref,
         };
-        List<string> spineProperties = new();
+        List<string> spineProperties = [];
         foreach (IPageSpread pageSpread in project.MetadataVersions[page.Version].PageSpreads)
         {
             if (pageSpread.Left.Length == 1 && pageSpread.Left[0] == pageNumber)
@@ -143,13 +143,13 @@ public sealed class Epub3Exporter : IExporter
 
         await using Stream xhtmlStream = epubWriter.CreateResource(xhtmlResource);
         await using Stream pageStream = page.OpenRead();
-        XDocument pageXhtml = CreatePageXhtml(pageStream, $"{pageNumber}{page.Extension}");
+        XDocument pageXhtml = await CreatePageXhtmlAsync(pageStream, $"{pageNumber}{page.Extension}");
         await EpubXml.SaveAsync(pageXhtml, xhtmlStream);
     }
 
-    private XDocument CreatePageXhtml(Stream pageStream, string src)
+    private async Task<XDocument> CreatePageXhtmlAsync(Stream pageStream, string src)
     {
-        using IImage image = _imageLoader.LoadImage(pageStream);
+        using IImage image = await _imageLoader.LoadImageAsync(pageStream);
         return new XDocument(
             new XDeclaration("1.0", "utf-8", null),
             new XDocumentType("html", null, null, null),

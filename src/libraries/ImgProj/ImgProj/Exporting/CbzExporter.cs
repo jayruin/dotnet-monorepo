@@ -23,8 +23,8 @@ public sealed class CbzExporter : IExporter
     {
         IImgProject subProject = project.GetSubProject(coordinates);
         version ??= subProject.MainVersion;
-        List<IPage> pages = new();
-        IPage? cover = _coverGenerator.CreateCoverGrid(subProject, version);
+        List<IPage> pages = [];
+        IPage? cover = await _coverGenerator.CreateCoverGridAsync(subProject, version);
         if (cover is not null)
         {
             pages.Add(cover);
