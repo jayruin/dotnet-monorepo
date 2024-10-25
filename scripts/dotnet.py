@@ -183,6 +183,18 @@ class Dotnet:
             for sub_path in path.iterdir():
                 self.clear_sln(sub_path)
 
+    def sln_mono(self) -> None:
+        self.clear_sln(Path(self.projects_directory, "Monorepo.sln"))
+        run([
+            "dotnet", "new", "sln",
+            "--name", "Monorepo",
+        ], cwd=self.projects_directory)
+        for project in self.projects:
+            run([
+                "dotnet", "sln", "Monorepo.sln",
+                "add", project.csproj_file.as_posix(),
+            ], cwd=self.projects_directory)
+
     def sln(self, projects: Sequence[Project]) -> None:
         self.clear_sln()
         for project in projects:
@@ -313,6 +325,7 @@ class Dotnet:
 
 def main() -> None:
     argparser = ArgumentParser()
+    argparser.add_argument("--sln-mono", action="store_true")
     argparser.add_argument("-s", "--sln", action="store_true")
     argparser.add_argument("-u", "--update", action="store_true")
     argparser.add_argument("-z", "--zero", action="store_true")
@@ -326,6 +339,8 @@ def main() -> None:
     projects_directory = Path(Path(__file__).resolve().parent.parent, "src")
     dotnet = Dotnet(projects_directory)
     projects = dotnet.get_all_dependencies(set(args.projects))
+    if args.sln_mono:
+        dotnet.sln_mono()
     if args.sln:
         dotnet.sln(projects)
     if args.update:
