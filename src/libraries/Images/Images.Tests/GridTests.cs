@@ -110,11 +110,19 @@ public class GridTests
             };
             yield return new object?[]
             {
-                new (int, int)?[] { null, (50, 100), (50, 100) },
+                new (int, int)?[] { null, null, null, null, (50, 100) },
                 null, null, true,
-                2, 2,
+                3, 3,
                 50, 100,
-                100, 200,
+                150, 300,
+            };
+            yield return new object?[]
+            {
+                new (int, int)?[] { null, (50, 100), (50, 100) },
+                1, null, true,
+                1, 3,
+                50, 100,
+                150, 100,
             };
         }
     }
