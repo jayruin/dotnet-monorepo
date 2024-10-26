@@ -28,9 +28,6 @@ class GitHub:
 
     def delete_tags(self) -> None:
         tags = self.get_tags()
-        for project in self.dotnet.projects:
-            if project.is_executable:
-                tags.append(project.name)
         for tag in tags:
             run([
                 "gh", "release", "delete", tag, "--yes", "--cleanup-tag",
