@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="ff54f767-31d9-4f7f-9019-c7b09e5e72bc" name="runneradmin@fv-az653-527 2024-10-26 03:19:09" runUser="fv-az653-527\runneradmin" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2024-10-26T03:19:09.5870677+00:00" queuing="2024-10-26T03:19:09.5870678+00:00" start="2024-10-26T03:19:07.6847061+00:00" finish="2024-10-26T03:19:11.2765678+00:00" />
+  <TestSettings name="default" id="8196d94b-7cf8-4e5b-9325-26afaa6d5edd">
+    <Deployment runDeploymentRoot="runneradmin_fv-az653-527_2024-10-26_03_19_09" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="f55e27f7-45c4-4bfa-8506-9f381682c15f" testId="a927e0e6-cfb7-42b0-d7b8-248ae94ffe95" testName="TestDownloadReleaseAsync" computerName="fv-az653-527" duration="00:00:00.7266018" startTime="2024-10-26T03:19:09.4586831+00:00" endTime="2024-10-26T03:19:10.1855939+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f55e27f7-45c4-4bfa-8506-9f381682c15f" />
+    <UnitTestResult executionId="d176ea44-8b9d-4196-a833-306e9e2ff37e" testId="18e3bf83-b852-f57a-8be8-d3201868483f" testName="TestGetAuthenticatedUser" computerName="fv-az653-527" duration="00:00:00.1591649" startTime="2024-10-26T03:19:10.6902667+00:00" endTime="2024-10-26T03:19:10.8497549+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d176ea44-8b9d-4196-a833-306e9e2ff37e" />
+    <UnitTestResult executionId="36e0ac7d-1be2-45f9-8ff2-cf08e48ff36f" testId="28f7566a-9810-bcfe-c1c2-5fcfb197ba6d" testName="TestGetNextUri" computerName="fv-az653-527" duration="00:00:00.0043200" startTime="2024-10-26T03:19:08.1194379+00:00" endTime="2024-10-26T03:19:08.1345738+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="36e0ac7d-1be2-45f9-8ff2-cf08e48ff36f" />
+    <UnitTestResult executionId="0c9e7a75-246f-419f-8de7-fcc9478c39a0" testId="2eefcad6-faf7-7cc7-9c2f-dca48c77896c" testName="TestGetNonexistentUserAsync" computerName="fv-az653-527" duration="00:00:00.1835466" startTime="2024-10-26T03:19:11.0428399+00:00" endTime="2024-10-26T03:19:11.2273355+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0c9e7a75-246f-419f-8de7-fcc9478c39a0" />
+    <UnitTestResult executionId="7af80669-3c1e-4bdc-b9d7-1934a39e1b95" testId="2000ca48-da97-6fa3-733d-4dd9907e20f2" testName="TestGetUserAsync" computerName="fv-az653-527" duration="00:00:00.1926287" startTime="2024-10-26T03:19:10.8498659+00:00" endTime="2024-10-26T03:19:11.0427020+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7af80669-3c1e-4bdc-b9d7-1934a39e1b95" />
+    <UnitTestResult executionId="51ca2555-30d0-4a0e-aa5c-e26106c28f8a" testId="7cd10470-c134-ff49-b160-52fb039d37a7" testName="TestGetReleaseAssetsAsync" computerName="fv-az653-527" duration="00:00:00.4345022" startTime="2024-10-26T03:19:09.0238265+00:00" endTime="2024-10-26T03:19:09.4585861+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="51ca2555-30d0-4a0e-aa5c-e26106c28f8a" />
+    <UnitTestResult executionId="269319aa-27f2-4ec3-b45a-678e070d3902" testId="6d99fdb5-4856-aa0f-b6de-3f28ad0663eb" testName="TestGetNonexistentRepositoryAsync" computerName="fv-az653-527" duration="00:00:00.1986250" startTime="2024-10-26T03:19:10.4912873+00:00" endTime="2024-10-26T03:19:10.6901674+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="269319aa-27f2-4ec3-b45a-678e070d3902" />
+    <UnitTestResult executionId="1e2ddd3f-3f31-4f66-8160-588d4e4a68f9" testId="92c7dc40-b765-efc1-18fc-5f4b1ac0111f" testName="TestGetReleasesAsync" computerName="fv-az653-527" duration="00:00:00.8844156" startTime="2024-10-26T03:19:08.1384025+00:00" endTime="2024-10-26T03:19:09.0231688+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1e2ddd3f-3f31-4f66-8160-588d4e4a68f9" />
+    <UnitTestResult executionId="ae51ce04-a0b1-4b00-8098-d42e950f2c9f" testId="fa4561c9-2a7e-735f-4063-3029bfedba0b" testName="TestGetRepositoryAsync" computerName="fv-az653-527" duration="00:00:00.3047524" startTime="2024-10-26T03:19:10.1857415+00:00" endTime="2024-10-26T03:19:10.4911727+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ae51ce04-a0b1-4b00-8098-d42e950f2c9f" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestGetUserAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\githubapi.tests\release_win-x64\githubapi.tests.dll" id="2000ca48-da97-6fa3-733d-4dd9907e20f2">
+      <Execution id="7af80669-3c1e-4bdc-b9d7-1934a39e1b95" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\GithubApi.Tests\release_win-x64\GithubApi.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="GithubApi.Tests.UsersIntegrationTests" name="TestGetUserAsync" />
+    </UnitTest>
+    <UnitTest name="TestGetNonexistentRepositoryAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\githubapi.tests\release_win-x64\githubapi.tests.dll" id="6d99fdb5-4856-aa0f-b6de-3f28ad0663eb">
+      <Execution id="269319aa-27f2-4ec3-b45a-678e070d3902" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\GithubApi.Tests\release_win-x64\GithubApi.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="GithubApi.Tests.RepositoriesIntegrationTests" name="TestGetNonexistentRepositoryAsync" />
+    </UnitTest>
+    <UnitTest name="TestDownloadReleaseAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\githubapi.tests\release_win-x64\githubapi.tests.dll" id="a927e0e6-cfb7-42b0-d7b8-248ae94ffe95">
+      <Execution id="f55e27f7-45c4-4bfa-8506-9f381682c15f" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\GithubApi.Tests\release_win-x64\GithubApi.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="GithubApi.Tests.ReleasesIntegrationTests" name="TestDownloadReleaseAsync" />
+    </UnitTest>
+    <UnitTest name="TestGetRepositoryAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\githubapi.tests\release_win-x64\githubapi.tests.dll" id="fa4561c9-2a7e-735f-4063-3029bfedba0b">
+      <Execution id="ae51ce04-a0b1-4b00-8098-d42e950f2c9f" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\GithubApi.Tests\release_win-x64\GithubApi.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="GithubApi.Tests.RepositoriesIntegrationTests" name="TestGetRepositoryAsync" />
+    </UnitTest>
+    <UnitTest name="TestGetReleasesAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\githubapi.tests\release_win-x64\githubapi.tests.dll" id="92c7dc40-b765-efc1-18fc-5f4b1ac0111f">
+      <Execution id="1e2ddd3f-3f31-4f66-8160-588d4e4a68f9" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\GithubApi.Tests\release_win-x64\GithubApi.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="GithubApi.Tests.ReleasesIntegrationTests" name="TestGetReleasesAsync" />
+    </UnitTest>
+    <UnitTest name="TestGetNextUri" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\githubapi.tests\release_win-x64\githubapi.tests.dll" id="28f7566a-9810-bcfe-c1c2-5fcfb197ba6d">
+      <Execution id="36e0ac7d-1be2-45f9-8ff2-cf08e48ff36f" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\GithubApi.Tests\release_win-x64\GithubApi.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="GithubApi.Tests.LinkParserTests" name="TestGetNextUri" />
+    </UnitTest>
+    <UnitTest name="TestGetAuthenticatedUser" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\githubapi.tests\release_win-x64\githubapi.tests.dll" id="18e3bf83-b852-f57a-8be8-d3201868483f">
+      <Execution id="d176ea44-8b9d-4196-a833-306e9e2ff37e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\GithubApi.Tests\release_win-x64\GithubApi.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="GithubApi.Tests.UsersIntegrationTests" name="TestGetAuthenticatedUser" />
+    </UnitTest>
+    <UnitTest name="TestGetNonexistentUserAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\githubapi.tests\release_win-x64\githubapi.tests.dll" id="2eefcad6-faf7-7cc7-9c2f-dca48c77896c">
+      <Execution id="0c9e7a75-246f-419f-8de7-fcc9478c39a0" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\GithubApi.Tests\release_win-x64\GithubApi.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="GithubApi.Tests.UsersIntegrationTests" name="TestGetNonexistentUserAsync" />
+    </UnitTest>
+    <UnitTest name="TestGetReleaseAssetsAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\githubapi.tests\release_win-x64\githubapi.tests.dll" id="7cd10470-c134-ff49-b160-52fb039d37a7">
+      <Execution id="51ca2555-30d0-4a0e-aa5c-e26106c28f8a" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\GithubApi.Tests\release_win-x64\GithubApi.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="GithubApi.Tests.ReleasesIntegrationTests" name="TestGetReleaseAssetsAsync" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="a927e0e6-cfb7-42b0-d7b8-248ae94ffe95" executionId="f55e27f7-45c4-4bfa-8506-9f381682c15f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18e3bf83-b852-f57a-8be8-d3201868483f" executionId="d176ea44-8b9d-4196-a833-306e9e2ff37e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="28f7566a-9810-bcfe-c1c2-5fcfb197ba6d" executionId="36e0ac7d-1be2-45f9-8ff2-cf08e48ff36f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2eefcad6-faf7-7cc7-9c2f-dca48c77896c" executionId="0c9e7a75-246f-419f-8de7-fcc9478c39a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2000ca48-da97-6fa3-733d-4dd9907e20f2" executionId="7af80669-3c1e-4bdc-b9d7-1934a39e1b95" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7cd10470-c134-ff49-b160-52fb039d37a7" executionId="51ca2555-30d0-4a0e-aa5c-e26106c28f8a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6d99fdb5-4856-aa0f-b6de-3f28ad0663eb" executionId="269319aa-27f2-4ec3-b45a-678e070d3902" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92c7dc40-b765-efc1-18fc-5f4b1ac0111f" executionId="1e2ddd3f-3f31-4f66-8160-588d4e4a68f9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fa4561c9-2a7e-735f-4063-3029bfedba0b" executionId="ae51ce04-a0b1-4b00-8098-d42e950f2c9f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="9" executed="9" passed="9" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+</TestRun>
