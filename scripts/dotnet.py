@@ -71,6 +71,12 @@ class Dotnet:
     def __init__(self, projects_directory: Path) -> None:
         self.projects_directory = projects_directory
 
+        self.supported_systems = [
+            "linux",
+            "windows",
+            "macos",
+        ]
+
         current_system = platform.system().lower()
         if current_system == "darwin":
             current_system = "macos"
@@ -316,11 +322,6 @@ class Dotnet:
                 executable_file.name
             )
             shutil.copy(original_executable_file, executable_file)
-            executable_file = executable_file.replace(
-                executable_file.with_stem(
-                    f"{project.directory.name}-{self.current_system}"
-                )
-            )
 
 
 def main() -> None:

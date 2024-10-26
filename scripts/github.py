@@ -22,8 +22,12 @@ class GitHub:
         self.dotnet = Dotnet(projects_directory)
         self.test_results_tag = "test-results"
 
+    def get_tags(self) -> list[str]:
+        tags = [self.test_results_tag, *self.dotnet.supported_systems]
+        return tags
+
     def delete_tags(self) -> None:
-        tags = [self.test_results_tag]
+        tags = self.get_tags()
         for project in self.dotnet.projects:
             if project.is_executable:
                 tags.append(project.name)
@@ -33,10 +37,7 @@ class GitHub:
             ], cwd=self.repo_directory)
 
     def create_tags(self) -> None:
-        tags = [self.test_results_tag]
-        for project in self.dotnet.projects:
-            if project.is_executable:
-                tags.append(project.name)
+        tags = self.get_tags()
         for tag in tags:
             run([
                 "gh", "release", "create", tag, "--title", tag,
@@ -54,11 +55,9 @@ class GitHub:
         else:
             raise RuntimeError("Invalid system")
         for executable_file in self.dotnet.bin_directory.iterdir():
-            parts = executable_file.stem.split("-")
-            tag_name = "-".join(parts[:-1])
             run([
                 "gh", "release", "upload",
-                tag_name, executable_file.as_posix(),
+                current_system, executable_file.as_posix(),
             ], cwd=self.repo_directory, check=True)
         for project in self.dotnet.projects:
             test_results_directory = Path(
