@@ -106,7 +106,7 @@ public static class ImgProjectCommandLineExtensions
             IExporter exporter = _serviceProvider.GetRequiredService<IEnumerable<IExporter>>()
                 .FirstOrDefault(e => e.ExportFormat == exportFormat)
                 ?? throw new ArgumentOutOfRangeException(nameof(exportFormat), "Unsupported format!"); ;
-            await using Stream stream = fileStorage.GetFile(exportFile).OpenWrite();
+            await using Stream stream = await fileStorage.GetFile(exportFile).OpenWriteAsync();
             await exporter.ExportAsync(project, stream, coordinates.ToImmutableArray(), version);
         }
 
@@ -123,7 +123,7 @@ public static class ImgProjectCommandLineExtensions
             IFileStorage fileStorage = _serviceProvider.GetRequiredService<IFileStorage>();
             IImgProject project = await ImgProjectLoader.LoadFromDirectoryAsync(fileStorage.GetDirectory(projectDirectory));
             IPageDeleter deleter = _serviceProvider.GetRequiredService<IPageDeleter>();
-            deleter.DeletePages(project, coordinates.ToImmutableArray(), version);
+            await deleter.DeletePagesAsync(project, coordinates.ToImmutableArray(), version);
         }
 
         public async Task HandleImportCommand(string projectDirectory, string sourceDirectory, IEnumerable<int> coordinates, string? version, IEnumerable<string> pageRanges)

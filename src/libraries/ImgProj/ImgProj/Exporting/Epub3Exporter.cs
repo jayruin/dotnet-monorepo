@@ -34,11 +34,11 @@ public sealed class Epub3Exporter : IExporter
         List<IPage> pages = [];
         IPage? cover = coordinates.Length == 0
             ? await _coverGenerator.CreateCoverGridAsync(subProject, version)
-            : subProject.EnumeratePages(version, true).FirstOrDefault();
+            : await subProject.EnumeratePagesAsync(version, true).FirstOrDefaultAsync();
         if (cover is not null)
         {
             await using Stream destinationCoverStream = epubWriter.CreateRasterCover(cover.Extension, true);
-            await using Stream sourceCoverStream = cover.OpenRead();
+            await using Stream sourceCoverStream = await cover.OpenReadAsync();
             await sourceCoverStream.CopyToAsync(destinationCoverStream);
         }
         EpubNavItem navItem = await TraverseAsync(subProject, coordinates, version, pages, epubWriter);
@@ -78,7 +78,7 @@ public sealed class Epub3Exporter : IExporter
         };
         List<EpubNavItem> children = [];
         int pageNumber = 1;
-        foreach (IPage page in project.EnumeratePages(version, false))
+        await foreach (IPage page in project.EnumeratePagesAsync(version, false))
         {
             pages.Add(page);
             await SavePageAsync(epubWriter, coordinates, page, pageNumber);
@@ -113,7 +113,7 @@ public sealed class Epub3Exporter : IExporter
         {
             Href = imageHref,
         };
-        await using Stream pageStream = page.OpenRead();
+        await using Stream pageStream = await page.OpenReadAsync();
         await epubWriter.AddResourceAsync(pageStream, imageResource);
     }
 
@@ -142,7 +142,7 @@ public sealed class Epub3Exporter : IExporter
         }
 
         await using Stream xhtmlStream = epubWriter.CreateResource(xhtmlResource);
-        await using Stream pageStream = page.OpenRead();
+        await using Stream pageStream = await page.OpenReadAsync();
         XDocument pageXhtml = await CreatePageXhtmlAsync(pageStream, $"{pageNumber}{page.Extension}");
         await EpubXml.SaveAsync(pageXhtml, xhtmlStream);
     }

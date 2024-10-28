@@ -4,9 +4,7 @@ namespace ImgProj;
 
 public interface IPageSpread
 {
-    public ImmutableArray<int> Left { get; }
-
-    public ImmutableArray<int> Right { get; }
-
-    public IPageSpread? RelativeTo(ImmutableArray<int> coordinates);
+    ImmutableArray<int> Left { get; }
+    ImmutableArray<int> Right { get; }
+    IPageSpread? RelativeTo(ImmutableArray<int> coordinates);
 }

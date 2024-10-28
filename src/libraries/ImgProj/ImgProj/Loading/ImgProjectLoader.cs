@@ -23,7 +23,7 @@ public static class ImgProjectLoader
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
             },
         };
-        await using Stream stream = metadataFile.OpenRead();
+        await using Stream stream = await metadataFile.OpenReadAsync();
         MetadataJsonContext metadataContext = new(jsonSerializerOptions);
         MetadataJson metadataJson = await JsonSerializer.DeserializeAsync(stream, metadataContext.MetadataJson) ?? throw new JsonException();
         return LoadProject(projectDirectory, metadataJson);

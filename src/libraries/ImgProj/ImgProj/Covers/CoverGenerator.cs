@@ -1,8 +1,8 @@
 using Images;
 using ImgProj.Core;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ImgProj.Covers;
@@ -20,10 +20,12 @@ public sealed class CoverGenerator : ICoverGenerator
     {
         IMetadataVersion metadata = project.MetadataVersions[version];
         if (metadata.Cover.Count == 0) return null;
-        List<Stream> imageStreams = metadata.Cover
-            .Select(c => project.GetPage(c, version))
-            .Select(p => p.OpenRead())
-            .ToList();
+        List<Stream> imageStreams = [];
+        foreach (ImmutableArray<int> pageCoordinates in metadata.Cover)
+        {
+            IPage page = await project.GetPageAsync(pageCoordinates, version);
+            imageStreams.Add(await page.OpenReadAsync());
+        }
         using IImage coverGrid = await _imageLoader.LoadImagesToGridAsync(imageStreams);
         await using MemoryStream memoryStream = new();
         await coverGrid.SaveToAsync(memoryStream, ImageFormat.Jpeg);

@@ -6,7 +6,6 @@ namespace ImgProj.Exporting;
 
 public interface IExporter
 {
-    public ExportFormat ExportFormat { get; }
-
-    public Task ExportAsync(IImgProject project, Stream stream, ImmutableArray<int> coordinates, string? version);
+    ExportFormat ExportFormat { get; }
+    Task ExportAsync(IImgProject project, Stream stream, ImmutableArray<int> coordinates, string? version);
 }

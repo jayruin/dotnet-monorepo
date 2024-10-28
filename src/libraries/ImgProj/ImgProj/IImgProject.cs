@@ -1,28 +1,20 @@
 using FileStorage;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Threading.Tasks;
 
 namespace ImgProj;
 
 public interface IImgProject
 {
-    public IDirectory ProjectDirectory { get; set; }
-
-    public string MainVersion { get; }
-
-    public IImmutableDictionary<string, IMetadataVersion> MetadataVersions { get; }
-
-    public IImmutableList<IImgProject> ChildProjects { get; }
-
-    public IImmutableSet<string> ValidPageExtensions { get; }
-
-    public IImgProject GetSubProject(ImmutableArray<int> coordinates);
-
-    public IEnumerable<IPage> EnumeratePages(string version, bool recursive);
-
-    public IPage GetPage(ImmutableArray<int> pageCoordinates, string version);
-
-    public IReadOnlyDictionary<int, IDirectory> GetPageDirectories();
-
-    public IFile FindPageFile(IDirectory pageDirectory, string version);
+    IDirectory ProjectDirectory { get; set; }
+    string MainVersion { get; }
+    IImmutableDictionary<string, IMetadataVersion> MetadataVersions { get; }
+    IImmutableList<IImgProject> ChildProjects { get; }
+    IImmutableSet<string> ValidPageExtensions { get; }
+    IImgProject GetSubProject(ImmutableArray<int> coordinates);
+    IAsyncEnumerable<IPage> EnumeratePagesAsync(string version, bool recursive);
+    Task<IPage> GetPageAsync(ImmutableArray<int> pageCoordinates, string version);
+    Task<IReadOnlyDictionary<int, IDirectory>> GetPageDirectoriesAsync();
+    Task<IFile> FindPageFileAsync(IDirectory pageDirectory, string version);
 }

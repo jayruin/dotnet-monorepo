@@ -34,7 +34,7 @@ public sealed class PdfExporter : IExporter
         {
             pages.Add(cover);
         }
-        PdfOutlineItem pdfOutlineItem = Traverse(subProject, version, pages);
+        PdfOutlineItem pdfOutlineItem = await TraverseAsync(subProject, version, pages);
         string title = metadata.TitleParts.Count > 0
             ? string.Join(" - ", metadata.TitleParts)
             : $"No Title";
@@ -46,25 +46,28 @@ public sealed class PdfExporter : IExporter
         pdf.SetAuthor(author);
         foreach (IPage page in pages)
         {
-            await using Stream pageStream = page.OpenRead();
+            await using Stream pageStream = await page.OpenReadAsync();
             pdf.AddImagePage(await pageStream.ToByteArrayAsync());
         }
         pdf.AddOutlineItem(pdfOutlineItem);
     }
 
-    private static PdfOutlineItem Traverse(IImgProject project, string version, ICollection<IPage> pages)
+    private static async Task<PdfOutlineItem> TraverseAsync(IImgProject project, string version, ICollection<IPage> pages)
     {
         string title = project.MetadataVersions[version].TitleParts.Count > 0
             ? project.MetadataVersions[version].TitleParts[^1]
             : $"No Title";
         int pageNumber = pages.Count + 1;
-        foreach (IPage page in project.EnumeratePages(version, false))
+        await foreach (IPage page in project.EnumeratePagesAsync(version, false))
         {
             pages.Add(page);
         }
-        ImmutableArray<PdfOutlineItem> children = project.ChildProjects
-            .Select(childProject => Traverse(childProject, version, pages))
-            .ToImmutableArray();
+        ImmutableArray<PdfOutlineItem>.Builder childrenBuilder = ImmutableArray.CreateBuilder<PdfOutlineItem>();
+        foreach (IImgProject childProject in project.ChildProjects)
+        {
+            childrenBuilder.Add(await TraverseAsync(childProject, version, pages));
+        }
+        ImmutableArray<PdfOutlineItem> children = childrenBuilder.ToImmutable();
         PdfOutlineItem pdfOutlineItem = new()
         {
             Text = title,

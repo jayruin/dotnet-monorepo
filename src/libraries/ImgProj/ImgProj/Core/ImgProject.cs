@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ImgProj.Core;
 
@@ -53,18 +54,18 @@ internal sealed class ImgProject : IImgProject
         return project;
     }
 
-    public IEnumerable<IPage> EnumeratePages(string version, bool recursive)
+    public async IAsyncEnumerable<IPage> EnumeratePagesAsync(string version, bool recursive)
     {
         Stack<IImgProject> stack = new();
         stack.Push(this);
         while (stack.Count > 0)
         {
             IImgProject project = stack.Pop();
-            IReadOnlyDictionary<int, IDirectory> pageDirectories = project.GetPageDirectories();
+            IReadOnlyDictionary<int, IDirectory> pageDirectories = await project.GetPageDirectoriesAsync();
             int pageNumber = 1;
             while (pageDirectories.ContainsKey(pageNumber))
             {
-                IFile pageFile = project.FindPageFile(pageDirectories[pageNumber], version);
+                IFile pageFile = await project.FindPageFileAsync(pageDirectories[pageNumber], version);
                 yield return new Page(pageFile);
                 pageNumber += 1;
             }
@@ -76,7 +77,7 @@ internal sealed class ImgProject : IImgProject
         }
     }
 
-    public IPage GetPage(ImmutableArray<int> pageCoordinates, string version)
+    public async Task<IPage> GetPageAsync(ImmutableArray<int> pageCoordinates, string version)
     {
         if (pageCoordinates.Length == 0)
         {
@@ -85,16 +86,15 @@ internal sealed class ImgProject : IImgProject
         ImmutableArray<int> coordinates = pageCoordinates[..^1];
         int pageNumber = pageCoordinates[^1];
         IImgProject project = GetSubProject(coordinates);
-        return project.EnumeratePages(version, false).ElementAt(pageNumber - 1);
+        return await project.EnumeratePagesAsync(version, false).ElementAtAsync(pageNumber - 1);
     }
 
-    public IReadOnlyDictionary<int, IDirectory> GetPageDirectories()
+    public async Task<IReadOnlyDictionary<int, IDirectory>> GetPageDirectoriesAsync()
     {
         try
         {
             Dictionary<int, IDirectory> pageDirectories = new();
-            IEnumerable<IDirectory> directories = ProjectDirectory.EnumerateDirectories();
-            foreach (IDirectory directory in directories)
+            await foreach (IDirectory directory in ProjectDirectory.EnumerateDirectoriesAsync())
             {
                 if (int.TryParse(directory.Name, NumberStyles.None, CultureInfo.InvariantCulture, out int pageNumber))
                 {
@@ -112,10 +112,10 @@ internal sealed class ImgProject : IImgProject
         }
     }
 
-    public IFile FindPageFile(IDirectory pageDirectory, string version)
+    public async Task<IFile> FindPageFileAsync(IDirectory pageDirectory, string version)
     {
         IFile? mainVersionFile = null;
-        foreach (IFile file in pageDirectory.EnumerateFiles())
+        await foreach (IFile file in pageDirectory.EnumerateFilesAsync())
         {
             if (!ValidPageExtensions.Contains(file.Extension)) continue;
             if (file.Stem == version)

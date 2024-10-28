@@ -2,7 +2,6 @@ using FileStorage;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -17,8 +16,8 @@ public sealed class PageImporter : IPageImporter
     {
         IImgProject subProject = project.GetSubProject(coordinates);
         version ??= subProject.MainVersion;
-        IReadOnlyList<IFile> sourceFiles = GetSourceFiles(sourceDirectory, subProject.ValidPageExtensions);
-        IReadOnlyDictionary<int, IDirectory> pageDirectories = subProject.GetPageDirectories();
+        IReadOnlyList<IFile> sourceFiles = await GetSourceFilesAsync(sourceDirectory, subProject.ValidPageExtensions);
+        IReadOnlyDictionary<int, IDirectory> pageDirectories = await subProject.GetPageDirectoriesAsync();
         if (pageRanges.Count == 0) pageRanges = ImmutableArray.Create(new PageRange(1, sourceFiles.Count));
         IReadOnlyList<int> pageNumbers = GetPageNumbers(pageRanges);
         int maxPageCount = Math.Max(pageDirectories.Keys.DefaultIfEmpty().Max(), sourceFiles.Count);
@@ -27,23 +26,21 @@ public sealed class PageImporter : IPageImporter
             if (!pageDirectories.TryGetValue(pageNumber, out IDirectory? pageDirectory))
             {
                 pageDirectory = subProject.ProjectDirectory.GetDirectory(pageNumber.ToPaddedString(maxPageCount));
-                pageDirectory.Create();
+                await pageDirectory.CreateAsync();
             }
             IFile pageFile = pageDirectory.GetFile($"{version}{sourceFile.Extension}");
-            await using Stream destinationStream = pageFile.OpenWrite();
-            await using Stream sourceStream = sourceFile.OpenRead();
-            await sourceStream.CopyToAsync(destinationStream);
+            await sourceFile.CopyToAsync(pageFile);
         }
     }
 
-    private static IReadOnlyList<IFile> GetSourceFiles(IDirectory sourceDirectory, IReadOnlyCollection<string> validPageExtensions)
+    private static async Task<IReadOnlyList<IFile>> GetSourceFilesAsync(IDirectory sourceDirectory, IReadOnlyCollection<string> validPageExtensions)
     {
         Regex regex = RegexProvider.DigitSequence();
-        return sourceDirectory.EnumerateFiles()
+        return await sourceDirectory.EnumerateFilesAsync()
             .Where(f => validPageExtensions.Contains(f.Extension))
             .Where(f => regex.Matches(f.Name).Count > 0)
             .OrderBy(f => regex.Matches(f.Name).Select(m => int.Parse(m.Value)), new IntSequenceComparer())
-            .ToList();
+            .ToListAsync();
     }
 
     private static IReadOnlyList<int> GetPageNumbers(IEnumerable<PageRange> pageRanges)

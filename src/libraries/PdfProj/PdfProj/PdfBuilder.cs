@@ -28,10 +28,10 @@ public sealed class PdfBuilder : IPdfBuilder
     {
         if (trash is not null)
         {
-            if (trash.Exists()) trash.Delete();
-            trash.Create();
+            if (await trash.ExistsAsync()) await trash.DeleteAsync();
+            await trash.CreateAsync();
         }
-        await using Stream outputStream = output.OpenWrite();
+        await using Stream outputStream = await output.OpenWriteAsync();
         using IPdfWritableDocument outputPdf = _pdfLoader.OpenWrite(outputStream);
         BuildTarget target = await LoadBuildTargetAsync(targetJson);
         SetPdfTitle(outputPdf, target);
@@ -52,7 +52,7 @@ public sealed class PdfBuilder : IPdfBuilder
         if (target is MetadataTarget metadataTarget)
         {
             int offset = outputPdf.NumberOfPages;
-            await using Stream pdfStream = metadataTarget.PdfFile.OpenRead();
+            await using Stream pdfStream = await metadataTarget.PdfFile.OpenReadAsync();
             PdfCopyPagesResult copyPagesResult = outputPdf.CopyPages(pdfStream, metadataTarget.Password, metadataTarget.Filters);
             if (trash is not null)
             {
@@ -61,7 +61,7 @@ public sealed class PdfBuilder : IPdfBuilder
                 {
                     await using MemoryStream memoryStream = new(deletedImageData, false);
                     using IImage image = await _imageLoader.LoadImageAsync(memoryStream);
-                    await using Stream trashStream = trash.GetFile($"{metadataTarget.PdfFile.Name}-{counter}.jpg").OpenWrite();
+                    await using Stream trashStream = await trash.GetFile($"{metadataTarget.PdfFile.Name}-{counter}.jpg").OpenWriteAsync();
                     await image.SaveToAsync(trashStream, ImageFormat.Jpeg);
                     counter += 1;
                 }
@@ -141,14 +141,18 @@ public sealed class PdfBuilder : IPdfBuilder
     {
         if (target.Covers.Length == 1)
         {
-            await using Stream coverStream = target.Covers[0].OpenRead();
+            await using Stream coverStream = await target.Covers[0].OpenReadAsync();
             using IImage coverImage = await _imageLoader.LoadImageAsync(coverStream);
             await AddImagePageToPdfAsync(pdf, coverImage);
             return true;
         }
         else if (target.Covers.Length > 1)
         {
-            List<Stream> coverStreams = target.Covers.Select(c => c.OpenRead()).ToList();
+            List<Stream> coverStreams = [];
+            foreach (IFile cover in target.Covers)
+            {
+                coverStreams.Add(await cover.OpenReadAsync());
+            }
             using IImage coverGrid = await _imageLoader.LoadImagesToGridAsync(coverStreams);
             await AddImagePageToPdfAsync(pdf, coverGrid);
             foreach (Stream coverStream in coverStreams)
@@ -169,7 +173,7 @@ public sealed class PdfBuilder : IPdfBuilder
 
     private static async Task<BuildTarget> LoadBuildTargetAsync(IFile jsonFile)
     {
-        await using Stream stream = jsonFile.OpenRead();
+        await using Stream stream = await jsonFile.OpenReadAsync();
         if (jsonFile.Name.EndsWith(".metadata.json"))
         {
             MetadataJson metadata = await JsonSerializer.DeserializeAsync(stream, JsonContext.Default.MetadataJson) ?? throw new JsonException();

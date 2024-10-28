@@ -20,15 +20,15 @@ public sealed class PageComparer : IPageComparer
     public async Task ComparePageVersionsAsync(IImgProject project, ImmutableArray<int> coordinates, IDirectory outputDirectory)
     {
         IImgProject subProject = project.GetSubProject(coordinates);
-        outputDirectory.Create();
-        CleanDirectory(outputDirectory);
+        await outputDirectory.CreateAsync();
+        await CleanDirectoryAsync(outputDirectory);
         await TraverseAsync(subProject, outputDirectory, 1);
     }
 
-    private static void CleanDirectory(IDirectory outputDirectory)
+    private static async Task CleanDirectoryAsync(IDirectory outputDirectory)
     {
         List<IFile> filesToDelete = [];
-        foreach (IFile file in outputDirectory.EnumerateFiles())
+        await foreach (IFile file in outputDirectory.EnumerateFilesAsync())
         {
             string[] nameParts = file.Name.Split('.');
             if (nameParts.Length == 3 && nameParts[0].All(char.IsDigit) && nameParts[1] == "compare" && nameParts[2] == "jpg")
@@ -36,14 +36,19 @@ public sealed class PageComparer : IPageComparer
                 filesToDelete.Add(file);
             }
         }
-        filesToDelete.ForEach(f => f.Delete());
+        foreach (IFile fileToDelete in filesToDelete)
+        {
+            await fileToDelete.DeleteAsync();
+        }
     }
 
     private async Task<int> TraverseAsync(IImgProject project, IDirectory outputDirectory, int pageCount)
     {
-        Dictionary<string, List<IPage>> pages = project.MetadataVersions.Keys
-            .ToDictionary(v => v, v => project.EnumeratePages(v, false)
-            .ToList());
+        Dictionary<string, List<IPage>> pages = [];
+        foreach (string version in project.MetadataVersions.Keys)
+        {
+            pages.Add(version, await project.EnumeratePagesAsync(version, false).ToListAsync());
+        }
         for (int i = 0; i < pages[project.MainVersion].Count; i++)
         {
             List<Stream?> pageStreams = [];
@@ -52,7 +57,7 @@ public sealed class PageComparer : IPageComparer
                 IPage page = pages[version][i];
                 if (page.Version == version)
                 {
-                    Stream pageStream = page.OpenRead();
+                    Stream pageStream = await page.OpenReadAsync();
                     pageStreams.Add(pageStream);
                 }
                 else pageStreams.Add(null);
@@ -60,12 +65,13 @@ public sealed class PageComparer : IPageComparer
             using (IImage comparisonImage = await _imageLoader.LoadImagesToGridAsync(pageStreams, new(Rows: 1, Expand: true)))
             {
                 IFile outputFile = outputDirectory.GetFile($"{pageCount}.compare.jpg");
-                using Stream outputStream = outputFile.OpenWrite();
+                await using Stream outputStream = await outputFile.OpenWriteAsync();
                 await comparisonImage.SaveToAsync(outputStream, ImageFormat.Jpeg);
             }
             foreach (Stream? pageStream in pageStreams)
             {
-                pageStream?.Dispose();
+                if (pageStream is null) continue;
+                await pageStream.DisposeAsync();
             }
             pageCount += 1;
         }

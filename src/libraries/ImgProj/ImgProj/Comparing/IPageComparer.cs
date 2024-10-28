@@ -6,5 +6,5 @@ namespace ImgProj.Comparing;
 
 public interface IPageComparer
 {
-    public Task ComparePageVersionsAsync(IImgProject project, ImmutableArray<int> coordinates, IDirectory outputDirectory);
+    Task ComparePageVersionsAsync(IImgProject project, ImmutableArray<int> coordinates, IDirectory outputDirectory);
 }

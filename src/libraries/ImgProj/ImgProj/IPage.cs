@@ -1,12 +1,11 @@
 using System.IO;
+using System.Threading.Tasks;
 
 namespace ImgProj;
 
 public interface IPage
 {
-    public string Version { get; }
-
-    public string Extension { get; }
-
-    public Stream OpenRead();
+    string Version { get; }
+    string Extension { get; }
+    Task<Stream> OpenReadAsync();
 }

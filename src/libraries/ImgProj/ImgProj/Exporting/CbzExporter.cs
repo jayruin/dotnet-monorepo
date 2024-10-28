@@ -29,7 +29,10 @@ public sealed class CbzExporter : IExporter
         {
             pages.Add(cover);
         }
-        pages.AddRange(subProject.EnumeratePages(version, true));
+        await foreach (IPage page in subProject.EnumeratePagesAsync(version, true))
+        {
+            pages.Add(page);
+        }
         using ZipArchive zipArchive = new(stream, ZipArchiveMode.Create, true);
         int pageCount = pages.Count;
         int pageNumber = 1;
@@ -38,7 +41,7 @@ public sealed class CbzExporter : IExporter
             ZipArchiveEntry zipArchiveEntry = zipArchive.CreateEntry($"{pageNumber.ToPaddedString(pageCount)}{page.Extension}", CompressionLevel.NoCompression);
             await using (Stream zipArchiveEntryStream = zipArchiveEntry.Open())
             {
-                await using Stream pageStream = page.OpenRead();
+                await using Stream pageStream = await page.OpenReadAsync();
                 await pageStream.CopyToAsync(zipArchiveEntryStream);
             }
             pageNumber += 1;
