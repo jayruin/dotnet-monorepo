@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FileStorage.Zip;
 
-public sealed class ZipDirectory : IDirectory
+internal sealed class ZipDirectory : IDirectory
 {
     private readonly ZipFileStorage _fileStorage;
+    private readonly SyncToAsyncDirectoryAdapter _asyncAdapter;
 
     private readonly string _archivePath;
 
@@ -16,10 +20,13 @@ public sealed class ZipDirectory : IDirectory
 
     public string FullPath { get; }
 
+    public ImmutableArray<string> PathParts { get; }
+
     public string Name { get; }
 
-    public bool Exists => _archivePath == "/" || _fileStorage.Archive.Entries
-        .FirstOrDefault(e => e.FullName.StartsWith(_archivePath)) is not null;
+    public string Stem { get; }
+
+    public string Extension { get; }
 
     public ZipDirectory(ZipFileStorage fileStorage, string path)
     {
@@ -27,41 +34,53 @@ public sealed class ZipDirectory : IDirectory
         try
         {
             FullPath = path;
+            PathParts = ZipFileStorage.SplitFullPath(FullPath).ToImmutableArray();
             Name = Path.GetFileName(FullPath);
+            Stem = Path.GetFileNameWithoutExtension(FullPath);
+            Extension = Path.GetExtension(FullPath);
             _archivePath = FullPath + '/';
         }
         catch (Exception exception)
         {
             throw new FileStorageException(exception);
         }
+        _asyncAdapter = new(this);
     }
 
-    public IEnumerable<IFile> EnumerateFiles()
-    {
-        return EnumerateEntryPaths(false)
-            .Where(p => !p.EndsWith('/'))
-            .Select(p => new ZipFile(_fileStorage, p));
-    }
+    public bool Exists() => _archivePath == "/"
+        || _fileStorage.Archive.Entries
+            .FirstOrDefault(e => e.FullName.StartsWith(_archivePath)) is not null;
 
-    public IEnumerable<IDirectory> EnumerateDirectories()
-    {
-        return EnumerateEntryPaths(false)
-            .Where(p => p.EndsWith('/'))
-            .Select(p => p[..^1])
-            .Select(p => new ZipDirectory(_fileStorage, p));
-    }
+    public Task<bool> ExistsAsync(CancellationToken cancellationToken = default) => _asyncAdapter.ExistsAsync(cancellationToken);
+
+    public IEnumerable<IFile> EnumerateFiles() => EnumerateEntryPaths(false)
+        .Where(p => !p.EndsWith('/'))
+        .Select(p => new ZipFile(_fileStorage, p));
+
+    public IAsyncEnumerable<IFile> EnumerateFilesAsync(CancellationToken cancellationToken = default) =>
+        _asyncAdapter.EnumerateFilesAsync(cancellationToken);
+
+    public IEnumerable<IDirectory> EnumerateDirectories() => EnumerateEntryPaths(false)
+        .Where(p => p.EndsWith('/'))
+        .Select(p => p[..^1])
+        .Select(p => new ZipDirectory(_fileStorage, p));
+
+    public IAsyncEnumerable<IDirectory> EnumerateDirectoriesAsync(CancellationToken cancellationToken = default)
+        => _asyncAdapter.EnumerateDirectoriesAsync(cancellationToken);
 
     public void Create()
     {
-        if (!Exists)
+        if (!Exists())
         {
             _fileStorage.Archive.CreateEntry(_archivePath);
         }
     }
 
+    public Task CreateAsync(CancellationToken cancellationToken = default) => _asyncAdapter.CreateAsync(cancellationToken);
+
     public void Delete()
     {
-        if (!Exists)
+        if (!Exists())
         {
             throw new FileStorageException();
         }
@@ -72,9 +91,11 @@ public sealed class ZipDirectory : IDirectory
         }
     }
 
+    public Task DeleteAsync(CancellationToken cancellationToken = default) => _asyncAdapter.DeleteAsync(cancellationToken);
+
     private IEnumerable<string> EnumerateEntryPaths(bool recurse)
     {
-        ISet<string> result = new HashSet<string>();
+        HashSet<string> result = [];
         foreach (ZipArchiveEntry entry in _fileStorage.Archive.Entries)
         {
             if (_archivePath != "/" && !entry.FullName.StartsWith(_archivePath) || entry.FullName == _archivePath) continue;

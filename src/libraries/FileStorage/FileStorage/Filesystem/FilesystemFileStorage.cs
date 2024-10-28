@@ -1,21 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace FileStorage.Filesystem;
 
 public sealed class FilesystemFileStorage : IFileStorage
 {
     public string BasePath { get; set; } = string.Empty;
-
-    private string JoinPaths(params string[] paths)
-    {
-        string path = Path.Join(paths);
-        if (!Path.IsPathFullyQualified(path))
-        {
-            path = Path.Join(BasePath, path);
-        }
-        return path;
-    }
 
     public IFile GetFile(params string[] paths)
     {
@@ -27,7 +18,7 @@ public sealed class FilesystemFileStorage : IFileStorage
         return new FilesystemDirectory(this, JoinPaths(paths));
     }
 
-    public string[] SplitFullPath(string fullPath)
+    internal static IEnumerable<string> SplitFullPath(string fullPath)
     {
         Stack<string> parts = new();
         string? current = fullPath;
@@ -39,6 +30,16 @@ public sealed class FilesystemFileStorage : IFileStorage
             parts.Push(part);
             current = Path.GetDirectoryName(current);
         }
-        return [.. parts];
+        return parts;
+    }
+
+    private string JoinPaths(IEnumerable<string> paths)
+    {
+        string path = Path.Join(paths.ToArray());
+        if (!Path.IsPathFullyQualified(path))
+        {
+            path = Path.Join(BasePath, path);
+        }
+        return path;
     }
 }

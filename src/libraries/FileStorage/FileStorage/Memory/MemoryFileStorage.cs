@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 
@@ -32,20 +33,20 @@ public sealed class MemoryFileStorage : IFileStorage
         return new MemoryFile(this, JoinPaths(paths));
     }
 
-    public string[] SplitFullPath(string fullPath)
-    {
-        return fullPath.Split(_separator);
-    }
-
-    internal string JoinPaths(params string[] paths)
+    internal string JoinPaths(IEnumerable<string> paths)
     {
         return string.Join(_separator, paths.Where(p => !string.IsNullOrWhiteSpace(p)));
+    }
+
+    internal IEnumerable<string> SplitFullPath(string fullPath)
+    {
+        return fullPath.Split(_separator);
     }
 
     internal void CreateDirectory(string path)
     {
         if (IsRootPath(path)) return;
-        string[] pathParts = SplitFullPath(path);
+        ImmutableArray<string> pathParts = SplitFullPath(path).ToImmutableArray();
         for (int i = 0; i < pathParts.Length; i++)
         {
             string subPath = JoinPaths(pathParts[..^i]);
@@ -105,7 +106,7 @@ public sealed class MemoryFileStorage : IFileStorage
 
     internal Stream OpenWrite(string path)
     {
-        string[] pathParts = SplitFullPath(path);
+        ImmutableArray<string> pathParts = SplitFullPath(path).ToImmutableArray();
         if (pathParts.Length > 1)
         {
             EnsureDirectoryExists(JoinPaths(pathParts[..^1]));
@@ -158,7 +159,9 @@ public sealed class MemoryFileStorage : IFileStorage
             }
             return count == 0;
         }
-        return path.StartsWith(parentPath) && SplitFullPath(path)[SplitFullPath(parentPath).Length..].Length == 1;
+        ImmutableArray<string> pathParts = SplitFullPath(path).ToImmutableArray();
+        ImmutableArray<string> parentPathParts = SplitFullPath(parentPath).ToImmutableArray();
+        return path.StartsWith(parentPath) && pathParts[parentPathParts.Length..].Length == 1;
     }
 
     private class MockWritableFileStream : Stream

@@ -36,7 +36,7 @@ public abstract class FileStorageTests
     public void TestDeleteEmptyPathDirectory()
     {
         IDirectory directory = FileStorage.GetDirectory("");
-        Assert.IsTrue(directory.Exists);
+        Assert.IsTrue(directory.Exists());
         directory.Delete();
     }
 
@@ -96,22 +96,22 @@ public abstract class FileStorageTests
     {
         IDirectory directory = FileStorage.GetDirectory("a", "b", "c");
         directory.Create();
-        Assert.IsTrue(FileStorage.GetDirectory("a", "b", "c").Exists);
-        Assert.IsTrue(FileStorage.GetDirectory("a", "b").Exists);
-        Assert.IsTrue(FileStorage.GetDirectory("a").Exists);
+        Assert.IsTrue(FileStorage.GetDirectory("a", "b", "c").Exists());
+        Assert.IsTrue(FileStorage.GetDirectory("a", "b").Exists());
+        Assert.IsTrue(FileStorage.GetDirectory("a").Exists());
     }
 
     [TestMethod]
     public void TestDirectoryCreateExisting()
     {
         IDirectory directory = FileStorage.GetDirectory("dir");
-        Assert.IsFalse(directory.Exists);
+        Assert.IsFalse(directory.Exists());
         directory.Create();
-        Assert.IsTrue(directory.Exists);
+        Assert.IsTrue(directory.Exists());
         directory.Create();
-        Assert.IsTrue(directory.Exists);
+        Assert.IsTrue(directory.Exists());
         directory.Delete();
-        Assert.IsFalse(directory.Exists);
+        Assert.IsFalse(directory.Exists());
         Assert.ThrowsException<FileStorageException>(() => directory.Delete());
     }
 
@@ -119,7 +119,7 @@ public abstract class FileStorageTests
     public void TestDeleteNonExistent()
     {
         IDirectory directory = FileStorage.GetDirectory("dir");
-        Assert.IsFalse(directory.Exists);
+        Assert.IsFalse(directory.Exists());
         Assert.ThrowsException<FileStorageException>(() => directory.Delete());
     }
 
@@ -127,11 +127,11 @@ public abstract class FileStorageTests
     public void TestDirectoryDeleteExistingDirectory()
     {
         IDirectory directory = FileStorage.GetDirectory("dir");
-        Assert.IsFalse(directory.Exists);
+        Assert.IsFalse(directory.Exists());
         directory.Create();
-        Assert.IsTrue(directory.Exists);
+        Assert.IsTrue(directory.Exists());
         directory.Delete();
-        Assert.IsFalse(directory.Exists);
+        Assert.IsFalse(directory.Exists());
         Assert.ThrowsException<FileStorageException>(() => directory.Delete());
     }
 
@@ -140,7 +140,7 @@ public abstract class FileStorageTests
     {
         IDirectory directory = FileStorage.GetDirectory(string.Empty);
         directory.Create();
-        Assert.IsTrue(directory.Exists);
+        Assert.IsTrue(directory.Exists());
     }
 
     [TestMethod]
@@ -149,19 +149,19 @@ public abstract class FileStorageTests
     public void TestDirectoryEnumerateFilesDirectories(string startingDirectoryName)
     {
         IDirectory startingDirectory = FileStorage.GetDirectory(startingDirectoryName);
-        string[] directoryNames = new[] { "dir1", "dir2" };
+        string[] directoryNames = ["dir1", "dir2"];
         foreach (string directoryName in directoryNames)
         {
             IDirectory directory = FileStorage.GetDirectory(startingDirectoryName, directoryName);
             directory.Create();
-            Assert.IsTrue(directory.Exists);
+            Assert.IsTrue(directory.Exists());
         }
-        string[] fileNames = new[] { "file1.txt", "file2.txt" };
+        string[] fileNames = ["file1.txt", "file2.txt"];
         foreach (string fileName in fileNames)
         {
             IFile file = FileStorage.GetFile(startingDirectoryName, fileName);
             file.OpenWrite().Dispose();
-            Assert.IsTrue(file.Exists);
+            Assert.IsTrue(file.Exists());
         }
         ISet<string> actualDirectoryNames = startingDirectory.EnumerateDirectories().Select(d => d.Name).ToHashSet();
         Assert.IsTrue(actualDirectoryNames.SetEquals(directoryNames.ToHashSet()));
@@ -255,14 +255,14 @@ public abstract class FileStorageTests
     public void TestFileOpenReadWrite()
     {
         IFile file = FileStorage.GetFile("file.txt");
-        Assert.IsFalse(file.Exists);
+        Assert.IsFalse(file.Exists());
         string input = "Hello World!";
         using (Stream writeStream = file.OpenWrite())
         {
             using StreamWriter streamWriter = new(writeStream);
             streamWriter.Write(input);
         }
-        Assert.IsTrue(file.Exists);
+        Assert.IsTrue(file.Exists());
         using Stream readStream = file.OpenRead();
         using StreamReader streamReader = new(readStream);
         Assert.AreEqual(input, streamReader.ReadToEnd());
@@ -272,20 +272,20 @@ public abstract class FileStorageTests
     public void TestFileOpenReadWriteExistingFile()
     {
         IFile file = FileStorage.GetFile("file.txt");
-        Assert.IsFalse(file.Exists);
+        Assert.IsFalse(file.Exists());
         string input = "Hello World!";
         using (Stream writeStream = file.OpenWrite())
         {
             using StreamWriter streamWriter = new(writeStream);
             streamWriter.Write(input + input);
         }
-        Assert.IsTrue(file.Exists);
+        Assert.IsTrue(file.Exists());
         using (Stream writeStream = file.OpenWrite())
         {
             using StreamWriter streamWriter = new(writeStream);
             streamWriter.Write(input);
         }
-        Assert.IsTrue(file.Exists);
+        Assert.IsTrue(file.Exists());
         using Stream readStream = file.OpenRead();
         using StreamReader streamReader = new(readStream);
         Assert.AreEqual(input, streamReader.ReadToEnd());
@@ -296,11 +296,11 @@ public abstract class FileStorageTests
     {
         IFile file = FileStorage.GetFile("file.txt");
         file.OpenWrite().Dispose();
-        Assert.IsTrue(file.Exists);
+        Assert.IsTrue(file.Exists());
         file.Delete();
-        Assert.IsFalse(file.Exists);
+        Assert.IsFalse(file.Exists());
         file.Delete();
-        Assert.IsFalse(file.Exists);
+        Assert.IsFalse(file.Exists());
     }
 
     [TestMethod]

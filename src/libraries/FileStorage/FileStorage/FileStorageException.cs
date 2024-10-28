@@ -2,7 +2,7 @@ using System;
 
 namespace FileStorage;
 
-public class FileStorageException : Exception
+public sealed class FileStorageException : Exception
 {
     public FileStorageException() : base()
     {

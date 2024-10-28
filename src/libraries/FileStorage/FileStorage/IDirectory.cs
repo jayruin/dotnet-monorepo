@@ -1,22 +1,19 @@
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FileStorage;
 
-public interface IDirectory
+public interface IDirectory : IPath
 {
-    public IFileStorage FileStorage { get; }
-
-    public string FullPath { get; }
-
-    public string Name { get; }
-
-    public bool Exists { get; }
-
-    public IEnumerable<IFile> EnumerateFiles();
-
-    public IEnumerable<IDirectory> EnumerateDirectories();
-
-    public void Create();
-
-    public void Delete();
+    bool Exists();
+    Task<bool> ExistsAsync(CancellationToken cancellationToken = default);
+    IEnumerable<IFile> EnumerateFiles();
+    IAsyncEnumerable<IFile> EnumerateFilesAsync(CancellationToken cancellationToken = default);
+    IEnumerable<IDirectory> EnumerateDirectories();
+    IAsyncEnumerable<IDirectory> EnumerateDirectoriesAsync(CancellationToken cancellationToken = default);
+    void Create();
+    Task CreateAsync(CancellationToken cancellationToken = default);
+    void Delete();
+    Task DeleteAsync(CancellationToken cancellationToken = default);
 }

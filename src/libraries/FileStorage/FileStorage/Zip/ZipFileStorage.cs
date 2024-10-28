@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -24,18 +25,18 @@ public sealed class ZipFileStorage : IFileStorage, IDisposable
         return new ZipDirectory(this, JoinPaths(paths));
     }
 
-    public string[] SplitFullPath(string fullPath)
-    {
-        return fullPath.Split('/').Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
-    }
-
     public void Dispose()
     {
         Archive.Dispose();
     }
 
-    internal static string JoinPaths(params string[] paths)
+    internal static string JoinPaths(IEnumerable<string> paths)
     {
         return string.Join('/', paths.Where(p => !string.IsNullOrWhiteSpace(p)));
+    }
+
+    internal static IEnumerable<string> SplitFullPath(string fullPath)
+    {
+        return fullPath.Split('/').Where(s => !string.IsNullOrWhiteSpace(s));
     }
 }

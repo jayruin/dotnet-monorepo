@@ -1,14 +1,20 @@
+using System.Collections.Immutable;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FileStorage.Memory;
 
-public sealed class MemoryFile : IFile
+internal sealed class MemoryFile : IFile
 {
     private readonly MemoryFileStorage _fileStorage;
+    private readonly SyncToAsyncFileAdapter _asyncAdapter;
 
     public IFileStorage FileStorage => _fileStorage;
 
     public string FullPath { get; }
+
+    public ImmutableArray<string> PathParts { get; }
 
     public string Name { get; }
 
@@ -16,29 +22,30 @@ public sealed class MemoryFile : IFile
 
     public string Extension { get; }
 
-    public bool Exists => _fileStorage.FileExists(FullPath);
-
     public MemoryFile(MemoryFileStorage fileStorage, string path)
     {
         _fileStorage = fileStorage;
         FullPath = path;
-        Name = _fileStorage.SplitFullPath(FullPath)[^1];
+        PathParts = _fileStorage.SplitFullPath(FullPath).ToImmutableArray();
+        Name = PathParts[^1];
         Stem = Path.GetFileNameWithoutExtension(Name);
         Extension = Path.GetExtension(Name);
+        _asyncAdapter = new(this);
     }
 
-    public Stream OpenRead()
-    {
-        return _fileStorage.OpenRead(FullPath);
-    }
+    public bool Exists() => _fileStorage.FileExists(FullPath);
 
-    public Stream OpenWrite()
-    {
-        return _fileStorage.OpenWrite(FullPath);
-    }
+    public Task<bool> ExistsAsync(CancellationToken cancellationToken = default) => _asyncAdapter.ExistsAsync(cancellationToken);
 
-    public void Delete()
-    {
-        _fileStorage.DeleteFile(FullPath);
-    }
+    public Stream OpenRead() => _fileStorage.OpenRead(FullPath);
+
+    public Task<Stream> OpenReadAsync(CancellationToken cancellationToken = default) => _asyncAdapter.OpenReadAsync(cancellationToken);
+
+    public Stream OpenWrite() => _fileStorage.OpenWrite(FullPath);
+
+    public Task<Stream> OpenWriteAsync(CancellationToken cancellationToken = default) => _asyncAdapter.OpenWriteAsync(cancellationToken);
+
+    public void Delete() => _fileStorage.DeleteFile(FullPath);
+
+    public Task DeleteAsync(CancellationToken cancellationToken = default) => _asyncAdapter.DeleteAsync(cancellationToken);
 }

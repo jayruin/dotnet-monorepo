@@ -1,24 +1,17 @@
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FileStorage;
 
-public interface IFile
+public interface IFile : IPath
 {
-    public IFileStorage FileStorage { get; }
-
-    public string FullPath { get; }
-
-    public string Name { get; }
-
-    public string Stem { get; }
-
-    public string Extension { get; }
-
-    public bool Exists { get; }
-
-    public Stream OpenRead();
-
-    public Stream OpenWrite();
-
-    public void Delete();
+    bool Exists();
+    Task<bool> ExistsAsync(CancellationToken cancellationToken = default);
+    Stream OpenRead();
+    Task<Stream> OpenReadAsync(CancellationToken cancellationToken = default);
+    Stream OpenWrite();
+    Task<Stream> OpenWriteAsync(CancellationToken cancellationToken = default);
+    void Delete();
+    Task DeleteAsync(CancellationToken cancellationToken = default);
 }

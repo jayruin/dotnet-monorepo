@@ -28,7 +28,7 @@ public sealed class PdfBuilder : IPdfBuilder
     {
         if (trash is not null)
         {
-            if (trash.Exists) trash.Delete();
+            if (trash.Exists()) trash.Delete();
             trash.Create();
         }
         await using Stream outputStream = output.OpenWrite();
