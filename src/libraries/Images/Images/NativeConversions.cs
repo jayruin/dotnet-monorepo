@@ -14,6 +14,7 @@ internal static class NativeConversions
         return imageFormat switch
         {
             ImageFormat.Png => SKEncodedImageFormat.Png,
+            ImageFormat.Webp => SKEncodedImageFormat.Webp,
             ImageFormat.Jpeg or _ => SKEncodedImageFormat.Jpeg,
         };
     }

@@ -4,4 +4,5 @@ public enum ImageFormat
 {
     Jpeg,
     Png,
+    Webp,
 }
