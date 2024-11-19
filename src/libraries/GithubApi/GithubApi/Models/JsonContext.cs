@@ -4,6 +4,8 @@ namespace GithubApi.Models;
 
 [JsonSourceGenerationOptions(
     PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower,
+    RespectNullableAnnotations = true,
+    RespectRequiredConstructorParameters = true,
     UseStringEnumConverter = true)]
 [JsonSerializable(typeof(Account))]
 [JsonSerializable(typeof(Release))]

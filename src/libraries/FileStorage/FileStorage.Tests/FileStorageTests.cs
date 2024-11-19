@@ -10,12 +10,6 @@ public abstract class FileStorageTests
 {
     public required IFileStorage FileStorage { get; set; }
 
-    [TestInitialize]
-    public abstract void Initialize();
-
-    [TestCleanup]
-    public abstract void Cleanup();
-
     [TestMethod]
     public void TestEmptyFilePaths()
     {
@@ -65,14 +59,14 @@ public abstract class FileStorageTests
     public void TestDirectoryName()
     {
         IDirectory directory = FileStorage.GetDirectory("dir", "subdir");
-        Assert.AreEqual(directory.Name, "subdir");
+        Assert.AreEqual("subdir", directory.Name);
     }
 
     [TestMethod]
     public void TestDirectoryNameWithDot()
     {
         IDirectory directory = FileStorage.GetDirectory("dir", "subdir.notextension");
-        Assert.AreEqual(directory.Name, "subdir.notextension");
+        Assert.AreEqual("subdir.notextension", directory.Name);
     }
 
     [TestMethod]

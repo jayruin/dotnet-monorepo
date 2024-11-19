@@ -7,13 +7,13 @@ namespace FileStorage.Tests;
 public class MemoryFileStorageTests : FileStorageTests
 {
     [TestInitialize]
-    public override void Initialize()
+    public void Initialize()
     {
         FileStorage = new MemoryFileStorage();
     }
 
     [TestCleanup]
-    public override void Cleanup()
+    public void Cleanup()
     {
     }
 }

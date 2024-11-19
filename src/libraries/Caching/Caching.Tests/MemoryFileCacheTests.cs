@@ -6,7 +6,7 @@ namespace Caching.Tests;
 public class MemoryFileCacheTests : FileCacheTests
 {
     [TestInitialize]
-    public override void Initialize()
+    public void Initialize()
     {
         FileCache = new MemoryFileCache();
     }

@@ -23,12 +23,12 @@ public sealed class MemoryFileStorage : IFileStorage
         _separator = separator;
     }
 
-    public IDirectory GetDirectory(params string[] paths)
+    public IDirectory GetDirectory(params IEnumerable<string> paths)
     {
         return new MemoryDirectory(this, JoinPaths(paths));
     }
 
-    public IFile GetFile(params string[] paths)
+    public IFile GetFile(params IEnumerable<string> paths)
     {
         return new MemoryFile(this, JoinPaths(paths));
     }

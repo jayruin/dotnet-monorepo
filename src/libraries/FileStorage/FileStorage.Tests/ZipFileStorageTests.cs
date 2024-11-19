@@ -11,7 +11,7 @@ public class ZipFileStorageTests : FileStorageTests
     private ZipFileStorage? _zipFileStorage;
 
     [TestInitialize]
-    public override void Initialize()
+    public void Initialize()
     {
         _stream = new MemoryStream();
         _zipFileStorage = new ZipFileStorage(_stream);
@@ -19,7 +19,7 @@ public class ZipFileStorageTests : FileStorageTests
     }
 
     [TestCleanup]
-    public override void Cleanup()
+    public void Cleanup()
     {
         _zipFileStorage?.Dispose();
         _stream?.Dispose();

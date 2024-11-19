@@ -1,7 +1,9 @@
+using System.Collections.Generic;
+
 namespace FileStorage;
 
 public interface IFileStorage
 {
-    IFile GetFile(params string[] paths);
-    IDirectory GetDirectory(params string[] paths);
+    IFile GetFile(params IEnumerable<string> paths);
+    IDirectory GetDirectory(params IEnumerable<string> paths);
 }

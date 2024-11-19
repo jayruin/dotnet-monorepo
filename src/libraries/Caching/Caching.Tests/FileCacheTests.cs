@@ -11,9 +11,6 @@ public abstract class FileCacheTests
 {
     public required IFileCache FileCache { get; set; }
 
-    [TestInitialize]
-    public abstract void Initialize();
-
     [TestCleanup]
     public void Cleanup()
     {

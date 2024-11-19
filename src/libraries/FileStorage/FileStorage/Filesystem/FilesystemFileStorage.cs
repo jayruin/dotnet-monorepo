@@ -8,12 +8,12 @@ public sealed class FilesystemFileStorage : IFileStorage
 {
     public string BasePath { get; set; } = string.Empty;
 
-    public IFile GetFile(params string[] paths)
+    public IFile GetFile(params IEnumerable<string> paths)
     {
         return new FilesystemFile(this, JoinPaths(paths));
     }
 
-    public IDirectory GetDirectory(params string[] paths)
+    public IDirectory GetDirectory(params IEnumerable<string> paths)
     {
         return new FilesystemDirectory(this, JoinPaths(paths));
     }

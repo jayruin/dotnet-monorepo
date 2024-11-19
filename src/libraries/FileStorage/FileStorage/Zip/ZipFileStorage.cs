@@ -15,12 +15,12 @@ public sealed class ZipFileStorage : IFileStorage, IDisposable
         Archive = new ZipArchive(stream, ZipArchiveMode.Update, true);
     }
 
-    public IFile GetFile(params string[] paths)
+    public IFile GetFile(params IEnumerable<string> paths)
     {
         return new ZipFile(this, JoinPaths(paths));
     }
 
-    public IDirectory GetDirectory(params string[] paths)
+    public IDirectory GetDirectory(params IEnumerable<string> paths)
     {
         return new ZipDirectory(this, JoinPaths(paths));
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -47,19 +48,19 @@ public static class Extensions
         }
     }
 
-    public static IFile GetFile(this IDirectory directory, params string[] paths)
+    public static IFile GetFile(this IDirectory directory, params IEnumerable<string> paths)
     {
-        return directory.FileStorage.GetFile(paths.Prepend(directory.FullPath).ToArray());
+        return directory.FileStorage.GetFile(paths.Prepend(directory.FullPath));
     }
 
-    public static IDirectory GetDirectory(this IDirectory directory, params string[] paths)
+    public static IDirectory GetDirectory(this IDirectory directory, params IEnumerable<string> paths)
     {
-        return directory.FileStorage.GetDirectory(paths.Prepend(directory.FullPath).ToArray());
+        return directory.FileStorage.GetDirectory(paths.Prepend(directory.FullPath));
     }
 
     public static IDirectory? GetParentDirectory(this IPath path)
     {
         if (path.PathParts.Length < 2) return null;
-        return path.FileStorage.GetDirectory(path.PathParts[..^1].ToArray());
+        return path.FileStorage.GetDirectory(path.PathParts[..^1]);
     }
 }

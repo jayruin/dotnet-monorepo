@@ -5,5 +5,5 @@ namespace Utils;
 public static partial class RegexProvider
 {
     [GeneratedRegex(@"\d+", RegexOptions.Compiled)]
-    public static partial Regex DigitSequence();
+    public static partial Regex DigitSequence { get; }
 }

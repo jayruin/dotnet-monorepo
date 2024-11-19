@@ -35,7 +35,7 @@ public sealed class PageImporter : IPageImporter
 
     private static async Task<IReadOnlyList<IFile>> GetSourceFilesAsync(IDirectory sourceDirectory, IReadOnlyCollection<string> validPageExtensions)
     {
-        Regex regex = RegexProvider.DigitSequence();
+        Regex regex = RegexProvider.DigitSequence;
         return await sourceDirectory.EnumerateFilesAsync()
             .Where(f => validPageExtensions.Contains(f.Extension))
             .Where(f => regex.Matches(f.Name).Count > 0)

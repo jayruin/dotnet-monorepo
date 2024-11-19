@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
@@ -6,7 +7,7 @@ namespace Subprocesses;
 
 public sealed class SubprocessRunner : ISubprocessRunner
 {
-    public async Task<CompletedSubprocess> RunAsync(string name, string workingDirectory, params string[] arguments)
+    public async Task<CompletedSubprocess> RunAsync(string name, string workingDirectory, params IEnumerable<string> arguments)
     {
         StringBuilder standardOutputStringBuilder = new();
         StringBuilder standardErrorStringBuilder = new();

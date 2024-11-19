@@ -121,11 +121,9 @@ static async Task<string> SetupJavaAsync(string directory)
     await using var jsonMemoryStream = new MemoryStream();
     using (var response = await httpClient.SendAsync(request))
     {
-        await using (var stream = await response.Content.ReadAsStreamAsync())
-        {
-            await stream.CopyToAsync(jsonMemoryStream);
-            jsonMemoryStream.Seek(0, SeekOrigin.Begin);
-        }
+        await using var stream = await response.Content.ReadAsStreamAsync();
+        await stream.CopyToAsync(jsonMemoryStream);
+        jsonMemoryStream.Seek(0, SeekOrigin.Begin);
     }
     using var json = await JsonDocument.ParseAsync(jsonMemoryStream);
     var downloadUrl = json.RootElement.EnumerateArray().First().GetProperty("download_url").GetString() ?? throw new JsonException("Could not find java download url.");

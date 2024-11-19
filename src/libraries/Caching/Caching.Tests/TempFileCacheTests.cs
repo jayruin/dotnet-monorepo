@@ -8,7 +8,7 @@ namespace Caching.Tests;
 public class TempFileCacheTests : FileCacheTests
 {
     [TestInitialize]
-    public override void Initialize()
+    public void Initialize()
     {
         FileCache = new TempFileCache();
     }

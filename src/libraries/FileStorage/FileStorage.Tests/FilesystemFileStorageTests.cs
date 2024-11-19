@@ -10,7 +10,7 @@ public class FilesystemFileStorageTests : FileStorageTests
     private TempDirectory? _tempDirectory;
 
     [TestInitialize]
-    public override void Initialize()
+    public void Initialize()
     {
         _tempDirectory = new();
         FileStorage = new FilesystemFileStorage()
@@ -20,7 +20,7 @@ public class FilesystemFileStorageTests : FileStorageTests
     }
 
     [TestCleanup]
-    public override void Cleanup()
+    public void Cleanup()
     {
         _tempDirectory?.Dispose();
     }

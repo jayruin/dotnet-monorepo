@@ -1,5 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace Epubs.Tests.WriterTests.NavigationTests;
@@ -23,19 +22,18 @@ public class NavigationDocumentTests
         {
             Text = "Chapter 2",
             Reference = "chapter-2.xhtml",
-            Children = new List<EpubNavItem>()
-            {
-                new EpubNavItem()
+            Children = [
+                new()
                 {
                     Text = "Chapter 2.1",
                     Reference = "chapter-2-1.xhtml",
                 },
-                new EpubNavItem()
+                new()
                 {
                     Text = "Chapter 2.2",
                     Reference = "chapter-2-2.xhtml",
-                }
-            },
+                },
+            ],
         };
         handler.AddNavItem(navItem1);
         handler.AddNavItem(navItem2);
