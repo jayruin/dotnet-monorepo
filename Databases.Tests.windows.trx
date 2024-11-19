@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="cfed6108-271e-4218-9f1b-94d98e01836e" name="runneradmin@fv-az1455-248 2024-11-19 23:38:57" runUser="fv-az1455-248\runneradmin" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2024-11-19T23:38:57.2635562+00:00" queuing="2024-11-19T23:38:57.2635564+00:00" start="2024-11-19T23:38:56.5585837+00:00" finish="2024-11-19T23:38:57.2684884+00:00" />
+  <TestSettings name="default" id="ae3ee9da-eb49-4497-b44a-03c82993e509">
+    <Deployment runDeploymentRoot="runneradmin_fv-az1455-248_2024-11-19_23_38_57" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="54b0782a-db1e-4049-9704-ea04ac05aa27" testId="a3e5d47c-7029-9bc2-f5af-40bf0ad91a54" testName="TestReadWriteNull" computerName="fv-az1455-248" duration="00:00:00.0182407" startTime="2024-11-19T23:38:57.1146130+00:00" endTime="2024-11-19T23:38:57.1329507+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="54b0782a-db1e-4049-9704-ea04ac05aa27" />
+    <UnitTestResult executionId="5498a609-2e48-4985-9e15-28341529a5a3" testId="e5b195f2-fca3-ab27-6959-025ab91128f9" testName="TestReadWriteRowsAsync" computerName="fv-az1455-248" duration="00:00:00.0316122" startTime="2024-11-19T23:38:57.0825163+00:00" endTime="2024-11-19T23:38:57.1143411+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5498a609-2e48-4985-9e15-28341529a5a3" />
+    <UnitTestResult executionId="04cc3630-4380-4a1c-99a4-e31da8a434a7" testId="db3773bc-a4f0-9793-530b-e1362c98c7c2" testName="TestReadWriteRows" computerName="fv-az1455-248" duration="00:00:00.0726539" startTime="2024-11-19T23:38:56.9882997+00:00" endTime="2024-11-19T23:38:57.0785901+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="04cc3630-4380-4a1c-99a4-e31da8a434a7" />
+    <UnitTestResult executionId="d110879c-9085-4132-a11f-d6f76429e8a0" testId="49ca3465-d7ea-bd3a-eaaa-ff431814ad0b" testName="TestReadWriteNullAsync" computerName="fv-az1455-248" duration="00:00:00.0191264" startTime="2024-11-19T23:38:57.1329862+00:00" endTime="2024-11-19T23:38:57.1528700+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d110879c-9085-4132-a11f-d6f76429e8a0" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestReadWriteNull" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\databases.tests\release_win-x64\databases.tests.dll" id="a3e5d47c-7029-9bc2-f5af-40bf0ad91a54">
+      <Execution id="54b0782a-db1e-4049-9704-ea04ac05aa27" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Databases.Tests\release_win-x64\Databases.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Databases.Tests.SqliteTests" name="TestReadWriteNull" />
+    </UnitTest>
+    <UnitTest name="TestReadWriteNullAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\databases.tests\release_win-x64\databases.tests.dll" id="49ca3465-d7ea-bd3a-eaaa-ff431814ad0b">
+      <Execution id="d110879c-9085-4132-a11f-d6f76429e8a0" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Databases.Tests\release_win-x64\Databases.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Databases.Tests.SqliteTests" name="TestReadWriteNullAsync" />
+    </UnitTest>
+    <UnitTest name="TestReadWriteRows" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\databases.tests\release_win-x64\databases.tests.dll" id="db3773bc-a4f0-9793-530b-e1362c98c7c2">
+      <Execution id="04cc3630-4380-4a1c-99a4-e31da8a434a7" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Databases.Tests\release_win-x64\Databases.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Databases.Tests.SqliteTests" name="TestReadWriteRows" />
+    </UnitTest>
+    <UnitTest name="TestReadWriteRowsAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\databases.tests\release_win-x64\databases.tests.dll" id="e5b195f2-fca3-ab27-6959-025ab91128f9">
+      <Execution id="5498a609-2e48-4985-9e15-28341529a5a3" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Databases.Tests\release_win-x64\Databases.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Databases.Tests.SqliteTests" name="TestReadWriteRowsAsync" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="a3e5d47c-7029-9bc2-f5af-40bf0ad91a54" executionId="54b0782a-db1e-4049-9704-ea04ac05aa27" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e5b195f2-fca3-ab27-6959-025ab91128f9" executionId="5498a609-2e48-4985-9e15-28341529a5a3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="db3773bc-a4f0-9793-530b-e1362c98c7c2" executionId="04cc3630-4380-4a1c-99a4-e31da8a434a7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="49ca3465-d7ea-bd3a-eaaa-ff431814ad0b" executionId="d110879c-9085-4132-a11f-d6f76429e8a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="4" executed="4" passed="4" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+</TestRun>
