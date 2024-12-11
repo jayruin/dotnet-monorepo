@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="dcd1e0bf-540f-4f87-9690-c979ee07bdcd" name="runneradmin@fv-az653-956 2024-12-11 02:13:44" runUser="fv-az653-956\runneradmin" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2024-12-11T02:13:44.1431794+00:00" queuing="2024-12-11T02:13:44.1431796+00:00" start="2024-12-11T02:13:43.5830396+00:00" finish="2024-12-11T02:13:44.1771151+00:00" />
+  <TestSettings name="default" id="69cbb66f-c31a-4db9-95ca-9af9cee5807a">
+    <Deployment runDeploymentRoot="runneradmin_fv-az653-956_2024-12-11_02_13_44" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="0a6f7fde-654b-45ee-a1df-bc2fe8cd033e" testId="c6f72b31-e018-3e2f-e31f-2280a965e3b7" testName="TestIntToPaddedString (1,100,&quot;001&quot;)" computerName="fv-az653-956" duration="00:00:00.0000045" startTime="2024-12-11T02:13:44.0686259+00:00" endTime="2024-12-11T02:13:44.0687096+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0a6f7fde-654b-45ee-a1df-bc2fe8cd033e" />
+    <UnitTestResult executionId="b3a6b5ae-da6a-4523-877f-7e71c8cdcdf0" testId="59448ffc-e83e-eaf0-ca86-b666b7b086f9" testName="TestIntToPaddedString (1,9,&quot;1&quot;)" computerName="fv-az653-956" duration="00:00:00.0003263" startTime="2024-12-11T02:13:44.0675396+00:00" endTime="2024-12-11T02:13:44.0680467+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b3a6b5ae-da6a-4523-877f-7e71c8cdcdf0" />
+    <UnitTestResult executionId="250420ee-33d0-4b0d-9399-1378e293422d" testId="2e09dfd4-af8f-6090-daa3-9b8e5d3178b8" testName="TestLongestCommonPrefix (&quot;ab&quot;,&quot;ab&quot;,&quot;abc&quot;)" computerName="fv-az653-956" duration="00:00:00.0000077" startTime="2024-12-11T02:13:44.1051916+00:00" endTime="2024-12-11T02:13:44.1055056+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="250420ee-33d0-4b0d-9399-1378e293422d" />
+    <UnitTestResult executionId="65025cc8-55ac-41a6-be4a-320ef6b31700" testId="5ecc4d90-ae9e-85a7-c3c1-545bad2e9646" testName="TestIntToPaddedString (1,101,&quot;001&quot;)" computerName="fv-az653-956" duration="00:00:00.0000044" startTime="2024-12-11T02:13:44.0687288+00:00" endTime="2024-12-11T02:13:44.0688040+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="65025cc8-55ac-41a6-be4a-320ef6b31700" />
+    <UnitTestResult executionId="614c1f6f-a269-4b85-8d56-16f91d5e072b" testId="4ed356bd-cc22-7262-e29f-62031d221a0c" testName="TestLongestCommonPrefix (&quot;&quot;,&quot;abc&quot;,&quot;&quot;)" computerName="fv-az653-956" duration="00:00:00.0000054" startTime="2024-12-11T02:13:44.1067411+00:00" endTime="2024-12-11T02:13:44.1074086+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="614c1f6f-a269-4b85-8d56-16f91d5e072b" />
+    <UnitTestResult executionId="bf4fa288-8eea-40f6-88d5-fec71cfb03db" testId="6ebca444-4638-4da3-7776-8faa88983cbd" testName="TestIntToPaddedString (1,11,&quot;01&quot;)" computerName="fv-az653-956" duration="00:00:00.0000050" startTime="2024-12-11T02:13:44.0684218+00:00" endTime="2024-12-11T02:13:44.0685033+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bf4fa288-8eea-40f6-88d5-fec71cfb03db" />
+    <UnitTestResult executionId="d9bc0bd4-de03-482b-9553-01dbd567a718" testId="f3941f59-5a45-f255-ef3e-3423b48052bc" testName="TestSlugify (&quot;ä ö ü&quot;,&quot;a-o-u&quot;)" computerName="fv-az653-956" duration="00:00:00.0000577" startTime="2024-12-11T02:13:44.1033977+00:00" endTime="2024-12-11T02:13:44.1035597+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d9bc0bd4-de03-482b-9553-01dbd567a718" />
+    <UnitTestResult executionId="60b48463-4985-4ab3-9970-8eb90dac71d3" testId="b7949501-dd00-e42e-08ec-0b01f240879f" testName="TestSlugify (&quot;a - b&quot;,&quot;a-b&quot;)" computerName="fv-az653-956" duration="00:00:00.0000046" startTime="2024-12-11T02:13:44.1015554+00:00" endTime="2024-12-11T02:13:44.1016374+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="60b48463-4985-4ab3-9970-8eb90dac71d3" />
+    <UnitTestResult executionId="0a6dadbb-1d76-4fc0-83be-f36431e725c6" testId="73c200d4-0179-f23f-e874-5529af9cfb10" testName="TestIntToPaddedString (1,99,&quot;01&quot;)" computerName="fv-az653-956" duration="00:00:00.0000072" startTime="2024-12-11T02:13:44.0685240+00:00" endTime="2024-12-11T02:13:44.0686067+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0a6dadbb-1d76-4fc0-83be-f36431e725c6" />
+    <UnitTestResult executionId="90f3ce14-4a9b-494c-83ba-d964556b547e" testId="7c2d3d0c-c860-fb35-079f-8d65ca13e5bd" testName="TestIntToPaddedString (0,100,&quot;000&quot;)" computerName="fv-az653-956" duration="00:00:00.0037301" startTime="2024-12-11T02:13:44.0447078+00:00" endTime="2024-12-11T02:13:44.0637142+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="90f3ce14-4a9b-494c-83ba-d964556b547e" />
+    <UnitTestResult executionId="043bb5bd-fdb0-47f2-a6af-90291e0d231c" testId="73775732-2906-be3f-e115-f3854c907656" testName="TestLongestCommonPrefix (&quot;&quot;,&quot;&quot;,&quot;abc&quot;)" computerName="fv-az653-956" duration="00:00:00.0000055" startTime="2024-12-11T02:13:44.1065966+00:00" endTime="2024-12-11T02:13:44.1067134+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="043bb5bd-fdb0-47f2-a6af-90291e0d231c" />
+    <UnitTestResult executionId="1d7e3cbc-e43d-4692-af22-5979495d60c1" testId="87340580-4ff3-84ca-c6f9-646d0df3b112" testName="TestSlugify (&quot;a- -b&quot;,&quot;a-b&quot;)" computerName="fv-az653-956" duration="00:00:00.0000049" startTime="2024-12-11T02:13:44.1014584+00:00" endTime="2024-12-11T02:13:44.1015357+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1d7e3cbc-e43d-4692-af22-5979495d60c1" />
+    <UnitTestResult executionId="8c91843f-b3a6-42ba-b39b-99db38398213" testId="3111426e-7cf2-fc95-7afe-647cdf87edaf" testName="TestSlugify (&quot;a1 b2 c3&quot;,&quot;a1-b2-c3&quot;)" computerName="fv-az653-956" duration="00:00:00.0000070" startTime="2024-12-11T02:13:44.1036915+00:00" endTime="2024-12-11T02:13:44.1038024+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8c91843f-b3a6-42ba-b39b-99db38398213" />
+    <UnitTestResult executionId="356f1679-a489-4ddd-ac97-32adef280fde" testId="d4883779-b459-c157-8b32-167852cf136a" testName="TestSlugify (&quot;!- -a- -!&quot;,&quot;a&quot;)" computerName="fv-az653-956" duration="00:00:00.0003798" startTime="2024-12-11T02:13:44.1003803+00:00" endTime="2024-12-11T02:13:44.1008840+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="356f1679-a489-4ddd-ac97-32adef280fde" />
+    <UnitTestResult executionId="f198de3c-0fda-4695-8758-a7f873229a16" testId="6aa4a69f-2d57-5665-03d0-c37478fc9d10" testName="TestIntToPaddedString (-1,101,&quot;-001&quot;)" computerName="fv-az653-956" duration="00:00:00.0000046" startTime="2024-12-11T02:13:44.1001663+00:00" endTime="2024-12-11T02:13:44.1003482+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f198de3c-0fda-4695-8758-a7f873229a16" />
+    <UnitTestResult executionId="66dff88d-cb60-4941-aafe-384d7d7982d0" testId="f1e653ce-75d7-fb40-bd08-81ae5b14ef1b" testName="TestIntToPaddedString (-1,100,&quot;-001&quot;)" computerName="fv-az653-956" duration="00:00:00.0000049" startTime="2024-12-11T02:13:44.1000637+00:00" endTime="2024-12-11T02:13:44.1001465+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="66dff88d-cb60-4941-aafe-384d7d7982d0" />
+    <UnitTestResult executionId="0903ea35-3a57-4a13-93e0-b9671771b3db" testId="9f533fdb-624c-49e5-11ee-0c6ebc524a4f" testName="TestIntToPaddedString (1,10,&quot;01&quot;)" computerName="fv-az653-956" duration="00:00:00.0000071" startTime="2024-12-11T02:13:44.0682836+00:00" endTime="2024-12-11T02:13:44.0683959+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0903ea35-3a57-4a13-93e0-b9671771b3db" />
+    <UnitTestResult executionId="7ef4d979-3590-429f-ba40-2757f6d3f7b4" testId="8a775d92-5427-1749-f100-e7ffbe21f38a" testName="TestLongestCommonPrefix (&quot;a&quot;,&quot;a1&quot;,&quot;a2&quot;,&quot;a3&quot;)" computerName="fv-az653-956" duration="00:00:00.0003793" startTime="2024-12-11T02:13:44.1043261+00:00" endTime="2024-12-11T02:13:44.1051657+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7ef4d979-3590-429f-ba40-2757f6d3f7b4" />
+    <UnitTestResult executionId="67e02920-4a39-4f51-9120-ca898e14d246" testId="68347d6d-014e-fb96-80e6-9a59909def33" testName="TestLongestCommonPrefix (&quot;ab&quot;,&quot;abc&quot;,&quot;ab&quot;)" computerName="fv-az653-956" duration="00:00:00.0000092" startTime="2024-12-11T02:13:44.1055307+00:00" endTime="2024-12-11T02:13:44.1056395+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="67e02920-4a39-4f51-9120-ca898e14d246" />
+    <UnitTestResult executionId="30f48831-7554-4144-98cd-f782d0c56c5e" testId="4cbec960-b40c-18f8-d17d-e715be412ea1" testName="TestLongestCommonPrefix (&quot;&quot;)" computerName="fv-az653-956" duration="00:00:00.0003132" startTime="2024-12-11T02:13:44.1038257+00:00" endTime="2024-12-11T02:13:44.1043003+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="30f48831-7554-4144-98cd-f782d0c56c5e" />
+    <UnitTestResult executionId="a125e773-a4bf-492c-97ed-f9b1b2118b2c" testId="13ef7854-9f0e-6c15-ce2b-2db8e99b280e" testName="TestSlugify (&quot;a!=b&quot;,&quot;ab&quot;)" computerName="fv-az653-956" duration="00:00:00.0001972" startTime="2024-12-11T02:13:44.1009145+00:00" endTime="2024-12-11T02:13:44.1012046+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a125e773-a4bf-492c-97ed-f9b1b2118b2c" />
+    <UnitTestResult executionId="2876ad6a-d635-4de9-88ff-db6c0c0c30bc" testId="905fa321-00bc-cf78-6872-ee27f66003f2" testName="TestIntToPaddedString (-1,10,&quot;-01&quot;)" computerName="fv-az653-956" duration="00:00:00.0000045" startTime="2024-12-11T02:13:44.0689348+00:00" endTime="2024-12-11T02:13:44.0690117+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2876ad6a-d635-4de9-88ff-db6c0c0c30bc" />
+    <UnitTestResult executionId="03ab2302-f028-4447-9f23-7fcd83be96ad" testId="7ed87f6c-038b-3088-c7cc-939417006f1f" testName="TestSlugify (&quot;Ä Ö Ü&quot;,&quot;a-o-u&quot;)" computerName="fv-az653-956" duration="00:00:00.0000082" startTime="2024-12-11T02:13:44.1035828+00:00" endTime="2024-12-11T02:13:44.1036684+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="03ab2302-f028-4447-9f23-7fcd83be96ad" />
+    <UnitTestResult executionId="e3c4d09b-d671-4863-acba-85689366a36f" testId="0596324c-2695-0dfd-9ae1-97b939dc7f6a" testName="TestIntToPaddedString (-1,99,&quot;-01&quot;)" computerName="fv-az653-956" duration="00:00:00.0000049" startTime="2024-12-11T02:13:44.0999502+00:00" endTime="2024-12-11T02:13:44.1000390+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e3c4d09b-d671-4863-acba-85689366a36f" />
+    <UnitTestResult executionId="dd324e65-7bef-4e8f-92d0-37a682b6f882" testId="30a7f46c-51eb-0a8e-7b0f-50f68458c4a9" testName="TestSlugify (&quot;a &#x9;&#xA;b&quot;,&quot;a-b&quot;)" computerName="fv-az653-956" duration="00:00:00.0000063" startTime="2024-12-11T02:13:44.1012396+00:00" endTime="2024-12-11T02:13:44.1014288+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dd324e65-7bef-4e8f-92d0-37a682b6f882" />
+    <UnitTestResult executionId="79700472-1c70-47dd-8979-b53fc9e0dfbd" testId="0a0f921a-26f1-2b7b-6cef-7448fafaff47" testName="TestSlugify (&quot;Abc-DEF&quot;,&quot;abc-def&quot;)" computerName="fv-az653-956" duration="00:00:00.0000067" startTime="2024-12-11T02:13:44.1031659+00:00" endTime="2024-12-11T02:13:44.1032630+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="79700472-1c70-47dd-8979-b53fc9e0dfbd" />
+    <UnitTestResult executionId="9fdf9ae6-9998-4af1-a725-63a6cc53bccf" testId="89e9f9e4-a5e1-fcd5-f349-d1d7158fad3c" testName="TestIntToPaddedString (-1,11,&quot;-01&quot;)" computerName="fv-az653-956" duration="00:00:00.0000084" startTime="2024-12-11T02:13:44.0997376+00:00" endTime="2024-12-11T02:13:44.0999198+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9fdf9ae6-9998-4af1-a725-63a6cc53bccf" />
+    <UnitTestResult executionId="a9933860-5d5f-4318-b385-9fcea044eee0" testId="b2e71588-0d10-1546-31ef-7b0118d37b0b" testName="TestSlugify (&quot;a_b&quot;,&quot;a-b&quot;)" computerName="fv-az653-956" duration="00:00:00.0000052" startTime="2024-12-11T02:13:44.1032914+00:00" endTime="2024-12-11T02:13:44.1033775+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a9933860-5d5f-4318-b385-9fcea044eee0" />
+    <UnitTestResult executionId="89e6d37d-cd00-4306-a5a6-9e7c2fc9cc54" testId="05b34ccd-140b-53e1-83ac-3bbcf5f170bb" testName="TestIntToPaddedString (-1,9,&quot;-1&quot;)" computerName="fv-az653-956" duration="00:00:00.0000062" startTime="2024-12-11T02:13:44.0688340+00:00" endTime="2024-12-11T02:13:44.0689156+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="89e6d37d-cd00-4306-a5a6-9e7c2fc9cc54" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestIntToPaddedString (1,11,&quot;01&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="6ebca444-4638-4da3-7776-8faa88983cbd">
+      <Execution id="bf4fa288-8eea-40f6-88d5-fec71cfb03db" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.ConversionTests" name="TestIntToPaddedString" />
+    </UnitTest>
+    <UnitTest name="TestSlugify (&quot;a- -b&quot;,&quot;a-b&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="87340580-4ff3-84ca-c6f9-646d0df3b112">
+      <Execution id="1d7e3cbc-e43d-4692-af22-5979495d60c1" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestSlugify" />
+    </UnitTest>
+    <UnitTest name="TestIntToPaddedString (-1,100,&quot;-001&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="f1e653ce-75d7-fb40-bd08-81ae5b14ef1b">
+      <Execution id="66dff88d-cb60-4941-aafe-384d7d7982d0" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.ConversionTests" name="TestIntToPaddedString" />
+    </UnitTest>
+    <UnitTest name="TestLongestCommonPrefix (&quot;ab&quot;,&quot;abc&quot;,&quot;ab&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="68347d6d-014e-fb96-80e6-9a59909def33">
+      <Execution id="67e02920-4a39-4f51-9120-ca898e14d246" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestLongestCommonPrefix" />
+    </UnitTest>
+    <UnitTest name="TestSlugify (&quot;a_b&quot;,&quot;a-b&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="b2e71588-0d10-1546-31ef-7b0118d37b0b">
+      <Execution id="a9933860-5d5f-4318-b385-9fcea044eee0" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestSlugify" />
+    </UnitTest>
+    <UnitTest name="TestIntToPaddedString (1,10,&quot;01&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="9f533fdb-624c-49e5-11ee-0c6ebc524a4f">
+      <Execution id="0903ea35-3a57-4a13-93e0-b9671771b3db" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.ConversionTests" name="TestIntToPaddedString" />
+    </UnitTest>
+    <UnitTest name="TestIntToPaddedString (-1,99,&quot;-01&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="0596324c-2695-0dfd-9ae1-97b939dc7f6a">
+      <Execution id="e3c4d09b-d671-4863-acba-85689366a36f" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.ConversionTests" name="TestIntToPaddedString" />
+    </UnitTest>
+    <UnitTest name="TestSlugify (&quot;Abc-DEF&quot;,&quot;abc-def&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="0a0f921a-26f1-2b7b-6cef-7448fafaff47">
+      <Execution id="79700472-1c70-47dd-8979-b53fc9e0dfbd" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestSlugify" />
+    </UnitTest>
+    <UnitTest name="TestIntToPaddedString (1,101,&quot;001&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="5ecc4d90-ae9e-85a7-c3c1-545bad2e9646">
+      <Execution id="65025cc8-55ac-41a6-be4a-320ef6b31700" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.ConversionTests" name="TestIntToPaddedString" />
+    </UnitTest>
+    <UnitTest name="TestSlugify (&quot;a - b&quot;,&quot;a-b&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="b7949501-dd00-e42e-08ec-0b01f240879f">
+      <Execution id="60b48463-4985-4ab3-9970-8eb90dac71d3" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestSlugify" />
+    </UnitTest>
+    <UnitTest name="TestSlugify (&quot;a!=b&quot;,&quot;ab&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="13ef7854-9f0e-6c15-ce2b-2db8e99b280e">
+      <Execution id="a125e773-a4bf-492c-97ed-f9b1b2118b2c" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestSlugify" />
+    </UnitTest>
+    <UnitTest name="TestLongestCommonPrefix (&quot;a&quot;,&quot;a1&quot;,&quot;a2&quot;,&quot;a3&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="8a775d92-5427-1749-f100-e7ffbe21f38a">
+      <Execution id="7ef4d979-3590-429f-ba40-2757f6d3f7b4" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestLongestCommonPrefix" />
+    </UnitTest>
+    <UnitTest name="TestIntToPaddedString (0,100,&quot;000&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="7c2d3d0c-c860-fb35-079f-8d65ca13e5bd">
+      <Execution id="90f3ce14-4a9b-494c-83ba-d964556b547e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.ConversionTests" name="TestIntToPaddedString" />
+    </UnitTest>
+    <UnitTest name="TestLongestCommonPrefix (&quot;&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="4cbec960-b40c-18f8-d17d-e715be412ea1">
+      <Execution id="30f48831-7554-4144-98cd-f782d0c56c5e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestLongestCommonPrefix" />
+    </UnitTest>
+    <UnitTest name="TestIntToPaddedString (-1,101,&quot;-001&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="6aa4a69f-2d57-5665-03d0-c37478fc9d10">
+      <Execution id="f198de3c-0fda-4695-8758-a7f873229a16" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.ConversionTests" name="TestIntToPaddedString" />
+    </UnitTest>
+    <UnitTest name="TestIntToPaddedString (1,100,&quot;001&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="c6f72b31-e018-3e2f-e31f-2280a965e3b7">
+      <Execution id="0a6f7fde-654b-45ee-a1df-bc2fe8cd033e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.ConversionTests" name="TestIntToPaddedString" />
+    </UnitTest>
+    <UnitTest name="TestSlugify (&quot;Ä Ö Ü&quot;,&quot;a-o-u&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="7ed87f6c-038b-3088-c7cc-939417006f1f">
+      <Execution id="03ab2302-f028-4447-9f23-7fcd83be96ad" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestSlugify" />
+    </UnitTest>
+    <UnitTest name="TestIntToPaddedString (1,9,&quot;1&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="59448ffc-e83e-eaf0-ca86-b666b7b086f9">
+      <Execution id="b3a6b5ae-da6a-4523-877f-7e71c8cdcdf0" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.ConversionTests" name="TestIntToPaddedString" />
+    </UnitTest>
+    <UnitTest name="TestIntToPaddedString (-1,11,&quot;-01&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="89e9f9e4-a5e1-fcd5-f349-d1d7158fad3c">
+      <Execution id="9fdf9ae6-9998-4af1-a725-63a6cc53bccf" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.ConversionTests" name="TestIntToPaddedString" />
+    </UnitTest>
+    <UnitTest name="TestLongestCommonPrefix (&quot;&quot;,&quot;&quot;,&quot;abc&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="73775732-2906-be3f-e115-f3854c907656">
+      <Execution id="043bb5bd-fdb0-47f2-a6af-90291e0d231c" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestLongestCommonPrefix" />
+    </UnitTest>
+    <UnitTest name="TestLongestCommonPrefix (&quot;ab&quot;,&quot;ab&quot;,&quot;abc&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="2e09dfd4-af8f-6090-daa3-9b8e5d3178b8">
+      <Execution id="250420ee-33d0-4b0d-9399-1378e293422d" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestLongestCommonPrefix" />
+    </UnitTest>
+    <UnitTest name="TestLongestCommonPrefix (&quot;&quot;,&quot;abc&quot;,&quot;&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="4ed356bd-cc22-7262-e29f-62031d221a0c">
+      <Execution id="614c1f6f-a269-4b85-8d56-16f91d5e072b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestLongestCommonPrefix" />
+    </UnitTest>
+    <UnitTest name="TestSlugify (&quot;a1 b2 c3&quot;,&quot;a1-b2-c3&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="3111426e-7cf2-fc95-7afe-647cdf87edaf">
+      <Execution id="8c91843f-b3a6-42ba-b39b-99db38398213" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestSlugify" />
+    </UnitTest>
+    <UnitTest name="TestSlugify (&quot;ä ö ü&quot;,&quot;a-o-u&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="f3941f59-5a45-f255-ef3e-3423b48052bc">
+      <Execution id="d9bc0bd4-de03-482b-9553-01dbd567a718" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestSlugify" />
+    </UnitTest>
+    <UnitTest name="TestSlugify (&quot;!- -a- -!&quot;,&quot;a&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="d4883779-b459-c157-8b32-167852cf136a">
+      <Execution id="356f1679-a489-4ddd-ac97-32adef280fde" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestSlugify" />
+    </UnitTest>
+    <UnitTest name="TestSlugify (&quot;a &#x9;&#xA;b&quot;,&quot;a-b&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="30a7f46c-51eb-0a8e-7b0f-50f68458c4a9">
+      <Execution id="dd324e65-7bef-4e8f-92d0-37a682b6f882" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.StringTests" name="TestSlugify" />
+    </UnitTest>
+    <UnitTest name="TestIntToPaddedString (1,99,&quot;01&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="73c200d4-0179-f23f-e874-5529af9cfb10">
+      <Execution id="0a6dadbb-1d76-4fc0-83be-f36431e725c6" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.ConversionTests" name="TestIntToPaddedString" />
+    </UnitTest>
+    <UnitTest name="TestIntToPaddedString (-1,9,&quot;-1&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="05b34ccd-140b-53e1-83ac-3bbcf5f170bb">
+      <Execution id="89e6d37d-cd00-4306-a5a6-9e7c2fc9cc54" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.ConversionTests" name="TestIntToPaddedString" />
+    </UnitTest>
+    <UnitTest name="TestIntToPaddedString (-1,10,&quot;-01&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\utils.tests\release_win-x64\utils.tests.dll" id="905fa321-00bc-cf78-6872-ee27f66003f2">
+      <Execution id="2876ad6a-d635-4de9-88ff-db6c0c0c30bc" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Utils.Tests\release_win-x64\Utils.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Utils.Tests.ConversionTests" name="TestIntToPaddedString" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="c6f72b31-e018-3e2f-e31f-2280a965e3b7" executionId="0a6f7fde-654b-45ee-a1df-bc2fe8cd033e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="59448ffc-e83e-eaf0-ca86-b666b7b086f9" executionId="b3a6b5ae-da6a-4523-877f-7e71c8cdcdf0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2e09dfd4-af8f-6090-daa3-9b8e5d3178b8" executionId="250420ee-33d0-4b0d-9399-1378e293422d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5ecc4d90-ae9e-85a7-c3c1-545bad2e9646" executionId="65025cc8-55ac-41a6-be4a-320ef6b31700" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4ed356bd-cc22-7262-e29f-62031d221a0c" executionId="614c1f6f-a269-4b85-8d56-16f91d5e072b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6ebca444-4638-4da3-7776-8faa88983cbd" executionId="bf4fa288-8eea-40f6-88d5-fec71cfb03db" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f3941f59-5a45-f255-ef3e-3423b48052bc" executionId="d9bc0bd4-de03-482b-9553-01dbd567a718" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b7949501-dd00-e42e-08ec-0b01f240879f" executionId="60b48463-4985-4ab3-9970-8eb90dac71d3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="73c200d4-0179-f23f-e874-5529af9cfb10" executionId="0a6dadbb-1d76-4fc0-83be-f36431e725c6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7c2d3d0c-c860-fb35-079f-8d65ca13e5bd" executionId="90f3ce14-4a9b-494c-83ba-d964556b547e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="73775732-2906-be3f-e115-f3854c907656" executionId="043bb5bd-fdb0-47f2-a6af-90291e0d231c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="87340580-4ff3-84ca-c6f9-646d0df3b112" executionId="1d7e3cbc-e43d-4692-af22-5979495d60c1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3111426e-7cf2-fc95-7afe-647cdf87edaf" executionId="8c91843f-b3a6-42ba-b39b-99db38398213" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d4883779-b459-c157-8b32-167852cf136a" executionId="356f1679-a489-4ddd-ac97-32adef280fde" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6aa4a69f-2d57-5665-03d0-c37478fc9d10" executionId="f198de3c-0fda-4695-8758-a7f873229a16" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f1e653ce-75d7-fb40-bd08-81ae5b14ef1b" executionId="66dff88d-cb60-4941-aafe-384d7d7982d0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9f533fdb-624c-49e5-11ee-0c6ebc524a4f" executionId="0903ea35-3a57-4a13-93e0-b9671771b3db" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8a775d92-5427-1749-f100-e7ffbe21f38a" executionId="7ef4d979-3590-429f-ba40-2757f6d3f7b4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="68347d6d-014e-fb96-80e6-9a59909def33" executionId="67e02920-4a39-4f51-9120-ca898e14d246" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4cbec960-b40c-18f8-d17d-e715be412ea1" executionId="30f48831-7554-4144-98cd-f782d0c56c5e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="13ef7854-9f0e-6c15-ce2b-2db8e99b280e" executionId="a125e773-a4bf-492c-97ed-f9b1b2118b2c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="905fa321-00bc-cf78-6872-ee27f66003f2" executionId="2876ad6a-d635-4de9-88ff-db6c0c0c30bc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7ed87f6c-038b-3088-c7cc-939417006f1f" executionId="03ab2302-f028-4447-9f23-7fcd83be96ad" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0596324c-2695-0dfd-9ae1-97b939dc7f6a" executionId="e3c4d09b-d671-4863-acba-85689366a36f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="30a7f46c-51eb-0a8e-7b0f-50f68458c4a9" executionId="dd324e65-7bef-4e8f-92d0-37a682b6f882" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0a0f921a-26f1-2b7b-6cef-7448fafaff47" executionId="79700472-1c70-47dd-8979-b53fc9e0dfbd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="89e9f9e4-a5e1-fcd5-f349-d1d7158fad3c" executionId="9fdf9ae6-9998-4af1-a725-63a6cc53bccf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b2e71588-0d10-1546-31ef-7b0118d37b0b" executionId="a9933860-5d5f-4318-b385-9fcea044eee0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="05b34ccd-140b-53e1-83ac-3bbcf5f170bb" executionId="89e6d37d-cd00-4306-a5a6-9e7c2fc9cc54" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="29" executed="29" passed="29" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+</TestRun>
