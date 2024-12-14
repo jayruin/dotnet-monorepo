@@ -1,3 +1,4 @@
+using MediaTypes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,6 +9,8 @@ namespace Epubs;
 internal sealed class PackageDocumentHandler
 {
     private const string _dateTimeFormat = "yyyy-MM-ddTHH:mm:ssK";
+
+    private readonly IMediaTypeFileExtensionsMapping _mediaTypeFileExtensionsMapping;
 
     private readonly XDocument _document;
 
@@ -45,8 +48,9 @@ internal sealed class PackageDocumentHandler
 
     public EpubVersion Version { get; }
 
-    public PackageDocumentHandler(EpubVersion epubVersion)
+    public PackageDocumentHandler(EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping)
     {
+        _mediaTypeFileExtensionsMapping = mediaTypeFileExtensionsMapping;
         Version = epubVersion;
         string version = Version switch
         {
@@ -233,7 +237,7 @@ internal sealed class PackageDocumentHandler
         XElement item = new((XNamespace)EpubXmlNamespaces.Opf + "item",
             new XAttribute("href", href),
             new XAttribute("id", itemId),
-            new XAttribute("media-type", EpubMediaTypeProvider.GuessMediaType(href))
+            new XAttribute("media-type", _mediaTypeFileExtensionsMapping.GetMediaTypeFromPath(href, MediaType.Application.OctetStream))
         );
         if (Version == EpubVersion.Epub3)
         {

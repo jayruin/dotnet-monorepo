@@ -1,3 +1,4 @@
+using MediaTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data;
 using System.Xml.Linq;
@@ -14,7 +15,7 @@ public class SpineTests
     [DataRow(EpubVersion.Epub2, null, "epub2_noproperties.opf")]
     public void TestAddItemToSpine(EpubVersion epubVersion, string? spineProperties, string fileName)
     {
-        PackageDocumentHandler handler = new(epubVersion);
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddItemToSpine(spineProperties, "item-id-1");
         XDocument document = handler.GetDocument();
         string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Spine/{fileName}";
@@ -26,7 +27,7 @@ public class SpineTests
     [DataRow(EpubVersion.Epub2, "epub2_ncx.opf")]
     public void TestAddNcx(EpubVersion epubVersion, string fileName)
     {
-        PackageDocumentHandler handler = new(epubVersion);
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddNcx("ncx-id");
         XDocument document = handler.GetDocument();
         string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Spine/{fileName}";
@@ -38,7 +39,7 @@ public class SpineTests
     [DataRow(EpubVersion.Epub2, "epub2_ltr.opf")]
     public void TestAddLeftToRight(EpubVersion epubVersion, string fileName)
     {
-        PackageDocumentHandler handler = new(epubVersion);
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddLeftToRight();
         XDocument document = handler.GetDocument();
         string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Spine/{fileName}";
@@ -50,7 +51,7 @@ public class SpineTests
     [DataRow(EpubVersion.Epub2, "epub2_rtl.opf")]
     public void TestAddRightToLeft(EpubVersion epubVersion, string fileName)
     {
-        PackageDocumentHandler handler = new(epubVersion);
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddRightToLeft();
         XDocument document = handler.GetDocument();
         string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Spine/{fileName}";

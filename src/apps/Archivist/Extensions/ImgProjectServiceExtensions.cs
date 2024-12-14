@@ -4,6 +4,7 @@ using ImgProj.Covers;
 using ImgProj.Deleting;
 using ImgProj.Exporting;
 using ImgProj.Importing;
+using MediaTypes;
 using Microsoft.Extensions.DependencyInjection;
 using Pdfs;
 
@@ -14,6 +15,7 @@ public static class ImgProjectServiceExtensions
     public static IServiceCollection AddImgProjectServices(this IServiceCollection services)
     {
         return services
+            .AddSingleton<IMediaTypeFileExtensionsMapping>(MediaTypeFileExtensionsMapping.Default)
             .AddTransient<IImageLoader, ImageLoader>()
             .AddTransient<IPdfLoader, PdfLoader>()
             .AddTransient<ICoverGenerator, CoverGenerator>()

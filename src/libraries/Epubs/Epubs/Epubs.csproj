@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="$(Proj_MediaTypes)" />
     <ProjectReference Include="$(Proj_Utils)" />
   </ItemGroup>
 

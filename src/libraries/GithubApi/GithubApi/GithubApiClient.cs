@@ -1,4 +1,5 @@
 using GithubApi.Models;
+using MediaTypes;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,7 +39,7 @@ public sealed class GithubApiClient : IGithubApiClient
         using HttpRequestMessage request = new(HttpMethod.Get, url)
         {
             Headers = {
-                { HttpRequestHeader.Accept.ToString(), Mimetypes.Application.OctetStream },
+                { HttpRequestHeader.Accept.ToString(), MediaType.Application.OctetStream },
             },
         };
         // Only thing response should do is dispose of stream, so it should be ok to not dispose

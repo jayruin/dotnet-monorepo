@@ -1,3 +1,4 @@
+using MediaTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data;
 using System.Xml.Linq;
@@ -13,7 +14,7 @@ public class GuideTests
     public void TestAddReferenceToGuide(EpubVersion epubVersion)
     {
         string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
-        PackageDocumentHandler handler = new(epubVersion);
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddReferenceToGuide("cover", "Cover", "cover.xhtml");
         XDocument document = handler.GetDocument();
         string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Guide/{fileName}";

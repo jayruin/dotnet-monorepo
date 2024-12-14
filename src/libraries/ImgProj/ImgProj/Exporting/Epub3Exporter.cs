@@ -2,6 +2,7 @@ using Epubs;
 using FileStorage;
 using Images;
 using ImgProj.Covers;
+using MediaTypes;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -17,12 +18,15 @@ public sealed class Epub3Exporter : IExporter
 
     private readonly IImageLoader _imageLoader;
 
+    private readonly IMediaTypeFileExtensionsMapping _mediaTypeFileExtensionsMapping;
+
     public ExportFormat ExportFormat { get; } = ExportFormat.Epub3;
 
-    public Epub3Exporter(ICoverGenerator coverGenerator, IImageLoader imageLoader)
+    public Epub3Exporter(ICoverGenerator coverGenerator, IImageLoader imageLoader, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping)
     {
         _coverGenerator = coverGenerator;
         _imageLoader = imageLoader;
+        _mediaTypeFileExtensionsMapping = mediaTypeFileExtensionsMapping;
     }
 
     public async Task ExportAsync(IImgProject project, Stream stream, ImmutableArray<int> coordinates, string? version)
@@ -30,7 +34,7 @@ public sealed class Epub3Exporter : IExporter
         IImgProject subProject = project.GetSubProject(coordinates);
         version ??= subProject.MainVersion;
         IMetadataVersion metadata = subProject.MetadataVersions[version];
-        await using EpubWriter epubWriter = await EpubWriter.CreateAsync(stream, EpubVersion.Epub3);
+        await using EpubWriter epubWriter = await EpubWriter.CreateAsync(stream, EpubVersion.Epub3, _mediaTypeFileExtensionsMapping);
         List<IPage> pages = [];
         IPage? cover = coordinates.Length == 0
             ? await _coverGenerator.CreateCoverGridAsync(subProject, version)

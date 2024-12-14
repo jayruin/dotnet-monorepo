@@ -1,3 +1,4 @@
+using MediaTypes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -83,34 +84,34 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
 
     public bool IncludeLegacyFeatures { get; set; }
 
-    private EpubWriter(ZipArchive zipArchive, EpubVersion epubVersion, string contentDirectory)
+    private EpubWriter(ZipArchive zipArchive, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string contentDirectory)
     {
         _zipArchive = zipArchive;
         Version = epubVersion;
         _contentDirectory = contentDirectory;
         _packageDocumentPath = GetResourcePath($"{_reservedPrefix}package.opf");
         _metaInfHandler = new MetaInfHandler(Version);
-        _packageDocumentHandler = new PackageDocumentHandler(Version);
+        _packageDocumentHandler = new PackageDocumentHandler(Version, mediaTypeFileExtensionsMapping);
         _coverXhtmlHandler = new CoverXhtmlHandler(Version);
         _navigationDocumentHandler = new NavigationDocumentHandler(Version);
         _ncxHandler = new NcxHandler(Version);
     }
 
-    public static async Task<EpubWriter> CreateAsync(Stream stream, EpubVersion epubVersion, string contentDirectory = "OEBPS")
+    public static async Task<EpubWriter> CreateAsync(Stream stream, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string contentDirectory = "OEBPS")
     {
         if (epubVersion == EpubVersion.Unknown) throw new InvalidEpubVersionException();
         ZipArchive zipArchive = new(stream, ZipArchiveMode.Create, true);
-        EpubWriter epubWriter = new(zipArchive, epubVersion, contentDirectory);
+        EpubWriter epubWriter = new(zipArchive, epubVersion, mediaTypeFileExtensionsMapping, contentDirectory);
         await epubWriter.WriteMimetypeAsync();
         await epubWriter.WriteContainerXmlAsync();
         return epubWriter;
     }
 
-    public static EpubWriter Create(Stream stream, EpubVersion epubVersion, string contentDirectory = "OEBPS")
+    public static EpubWriter Create(Stream stream, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string contentDirectory = "OEBPS")
     {
         if (epubVersion == EpubVersion.Unknown) throw new InvalidEpubVersionException();
         ZipArchive zipArchive = new(stream, ZipArchiveMode.Create, true);
-        EpubWriter epubWriter = new(zipArchive, epubVersion, contentDirectory);
+        EpubWriter epubWriter = new(zipArchive, epubVersion, mediaTypeFileExtensionsMapping, contentDirectory);
         epubWriter.WriteMimetype();
         epubWriter.WriteContainerXml();
         return epubWriter;

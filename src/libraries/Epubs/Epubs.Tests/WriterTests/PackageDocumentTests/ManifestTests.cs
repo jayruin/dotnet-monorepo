@@ -1,7 +1,7 @@
+using MediaTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data;
 using System.Xml.Linq;
-
 
 namespace Epubs.Tests.WriterTests.PackageDocumentTests;
 
@@ -15,7 +15,7 @@ public class ManifestTests
     [DataRow(EpubVersion.Epub2, "cover.jpg", null, null, "epub2_noproperties_noid.opf")]
     public void TestAddItemToManifest(EpubVersion epubVersion, string href, string? manifestProperties, string? itemId, string fileName)
     {
-        PackageDocumentHandler handler = new(epubVersion);
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddItemToManifest(href, manifestProperties, itemId);
         XDocument document = handler.GetDocument();
         string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Manifest/{fileName}";

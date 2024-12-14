@@ -1,3 +1,4 @@
+using MediaTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ public class MetadataTests
     public void TestAddIdentifier(EpubVersion epubVersion)
     {
         string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
-        PackageDocumentHandler handler = new(epubVersion);
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddIdentifier("urn:uuid:12345678-1234-1234-1234-123456789012");
         XDocument document = handler.GetDocument();
         string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Metadata/Identifier/{fileName}";
@@ -27,7 +28,7 @@ public class MetadataTests
     public void TestAddTitle(EpubVersion epubVersion)
     {
         string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
-        PackageDocumentHandler handler = new(epubVersion);
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddTitle("Title");
         XDocument document = handler.GetDocument();
         string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Metadata/Title/{fileName}";
@@ -40,7 +41,7 @@ public class MetadataTests
     public void TestAddLanguage(EpubVersion epubVersion)
     {
         string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
-        PackageDocumentHandler handler = new(epubVersion);
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddLanguage("en");
         XDocument document = handler.GetDocument();
         string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Metadata/Language/{fileName}";
@@ -56,7 +57,7 @@ public class MetadataTests
     [DataRow(EpubVersion.Epub2, new string[] { "aut", "ill", }, "epub2_two_roles.opf")]
     public void TestAddCreator(EpubVersion epubVersion, IEnumerable<string> roles, string fileName)
     {
-        PackageDocumentHandler handler = new(epubVersion);
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddCreator("Creator", roles);
         XDocument document = handler.GetDocument();
         string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Metadata/Creator/{fileName}";
@@ -69,7 +70,7 @@ public class MetadataTests
     public void TestAddDate(EpubVersion epubVersion)
     {
         string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
-        PackageDocumentHandler handler = new(epubVersion);
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddDate(new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero));
         XDocument document = handler.GetDocument();
         string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Metadata/Date/{fileName}";
@@ -82,7 +83,7 @@ public class MetadataTests
     public void TestAddPrePaginated(EpubVersion epubVersion)
     {
         string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
-        PackageDocumentHandler handler = new(epubVersion);
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddPrePaginated();
         XDocument document = handler.GetDocument();
         string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Metadata/PrePaginated/{fileName}";
@@ -95,7 +96,7 @@ public class MetadataTests
     public void TestAddModified(EpubVersion epubVersion)
     {
         string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
-        PackageDocumentHandler handler = new(epubVersion);
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddModified(new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero));
         XDocument document = handler.GetDocument();
         string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Metadata/Modified/{fileName}";
