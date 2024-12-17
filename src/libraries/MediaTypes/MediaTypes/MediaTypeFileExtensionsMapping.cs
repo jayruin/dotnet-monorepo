@@ -77,7 +77,10 @@ public sealed class MediaTypeFileExtensionsMapping : IMediaTypeFileExtensionsMap
             (MediaType.Image.Webp, [".webp"]),
 
             (MediaType.Text.Css, [".css"]),
-            (MediaType.Text.Javascript, [".js"]),
+            (MediaType.Text.Html, [".html"]),
+            (MediaType.Text.Javascript, [".js", ".mjs"]),
+            (MediaType.Text.Markdown, [".md"]),
+            (MediaType.Text.Plain, [".txt"]),
 
             (MediaType.Application.OctetStream, [string.Empty])
         );

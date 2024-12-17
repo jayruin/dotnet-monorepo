@@ -231,6 +231,50 @@ internal sealed class PackageDocumentHandler
         }
     }
 
+    public void AddSeries(EpubSeries series)
+    {
+        if (Version == EpubVersion.Epub3)
+        {
+            MetadataElement.Add(
+                new XElement((XNamespace)EpubXmlNamespaces.Opf + "meta",
+                    new XAttribute("id", "series-id"),
+                    new XAttribute("property", "belongs-to-collection"),
+                    series.Name
+                )
+            );
+            MetadataElement.Add(
+                new XElement((XNamespace)EpubXmlNamespaces.Opf + "meta",
+                    new XAttribute("refines", "#series-id"),
+                    new XAttribute("property", "group-position"),
+                    series.Index
+                )
+            );
+            MetadataElement.Add(
+                new XElement((XNamespace)EpubXmlNamespaces.Opf + "meta",
+                    new XAttribute("refines", "#series-id"),
+                    new XAttribute("property", "collection-type"),
+                    "series"
+                )
+            );
+        }
+        else if (Version == EpubVersion.Epub2)
+        {
+            // Not in epub2 specs, but has become the de facto way to add epub2 series
+            MetadataElement.Add(
+                new XElement((XNamespace)EpubXmlNamespaces.Opf + "meta",
+                    new XAttribute("name", "calibre:series"),
+                    new XAttribute("content", series.Name)
+                )
+            );
+            MetadataElement.Add(
+                new XElement((XNamespace)EpubXmlNamespaces.Opf + "meta",
+                    new XAttribute("name", "calibre:series_index"),
+                    new XAttribute("content", series.Index)
+                )
+            );
+        }
+    }
+
     public void AddItemToManifest(string href, string? manifestProperties, string? itemId)
     {
         itemId ??= NextItemId;

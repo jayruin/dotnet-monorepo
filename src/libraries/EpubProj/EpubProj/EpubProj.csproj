@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="$(Proj_Epubs)" />
+    <ProjectReference Include="$(Proj_FileStorage)" />
+    <ProjectReference Include="$(Proj_MediaTypes)" />
+    <ProjectReference Include="$(Proj_Utils)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AngleSharp" />
+    <PackageReference Include="Markdig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="EpubProj.Tests" />
+  </ItemGroup>
+
+</Project>

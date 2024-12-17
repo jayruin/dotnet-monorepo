@@ -37,6 +37,9 @@ public static class MediaType
     public static class Text
     {
         public const string Css = "text/css";
+        public const string Html = "text/html";
         public const string Javascript = "text/javascript";
+        public const string Markdown = "text/markdown";
+        public const string Plain = "text/plain";
     }
 }

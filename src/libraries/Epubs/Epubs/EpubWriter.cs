@@ -12,11 +12,11 @@ namespace Epubs;
 
 public sealed class EpubWriter : IDisposable, IAsyncDisposable
 {
-    private readonly string _reservedPrefix = ".";
-
     private readonly ZipArchive _zipArchive;
 
     private readonly string _packageDocumentPath;
+
+    private readonly string _reservedPrefix;
 
     private readonly string _contentDirectory;
 
@@ -80,14 +80,17 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
 
     public EpubDirection Direction { get; set; }
 
+    public EpubSeries? Series { get; set; }
+
     public bool IncludeStructuralComponents { get; set; }
 
     public bool IncludeLegacyFeatures { get; set; }
 
-    private EpubWriter(ZipArchive zipArchive, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string contentDirectory)
+    private EpubWriter(ZipArchive zipArchive, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string reservedPrefix, string contentDirectory)
     {
         _zipArchive = zipArchive;
         Version = epubVersion;
+        _reservedPrefix = reservedPrefix;
         _contentDirectory = contentDirectory;
         _packageDocumentPath = GetResourcePath($"{_reservedPrefix}package.opf");
         _metaInfHandler = new MetaInfHandler(Version);
@@ -97,21 +100,21 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         _ncxHandler = new NcxHandler(Version);
     }
 
-    public static async Task<EpubWriter> CreateAsync(Stream stream, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string contentDirectory = "OEBPS")
+    public static async Task<EpubWriter> CreateAsync(Stream stream, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string reservedPrefix = ".", string contentDirectory = "OEBPS")
     {
         if (epubVersion == EpubVersion.Unknown) throw new InvalidEpubVersionException();
         ZipArchive zipArchive = new(stream, ZipArchiveMode.Create, true);
-        EpubWriter epubWriter = new(zipArchive, epubVersion, mediaTypeFileExtensionsMapping, contentDirectory);
+        EpubWriter epubWriter = new(zipArchive, epubVersion, mediaTypeFileExtensionsMapping, reservedPrefix, contentDirectory);
         await epubWriter.WriteMimetypeAsync();
         await epubWriter.WriteContainerXmlAsync();
         return epubWriter;
     }
 
-    public static EpubWriter Create(Stream stream, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string contentDirectory = "OEBPS")
+    public static EpubWriter Create(Stream stream, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string reservedPrefix = ".", string contentDirectory = "OEBPS")
     {
         if (epubVersion == EpubVersion.Unknown) throw new InvalidEpubVersionException();
         ZipArchive zipArchive = new(stream, ZipArchiveMode.Create, true);
-        EpubWriter epubWriter = new(zipArchive, epubVersion, mediaTypeFileExtensionsMapping, contentDirectory);
+        EpubWriter epubWriter = new(zipArchive, epubVersion, mediaTypeFileExtensionsMapping, reservedPrefix, contentDirectory);
         epubWriter.WriteMimetype();
         epubWriter.WriteContainerXml();
         return epubWriter;
@@ -297,6 +300,7 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         if (Date is not null) _packageDocumentHandler.AddDate((DateTimeOffset)Date);
         if (PrePaginated) _packageDocumentHandler.AddPrePaginated();
         _packageDocumentHandler.AddModified(Modified);
+        if (Series is not null) _packageDocumentHandler.AddSeries(Series);
     }
 
     private void SaveCover()
