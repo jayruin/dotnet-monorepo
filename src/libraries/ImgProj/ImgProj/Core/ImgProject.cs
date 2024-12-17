@@ -22,7 +22,7 @@ internal sealed class ImgProject : IImgProject
 
     public IImmutableSet<string> ValidPageExtensions => _validPageExtensions;
 
-    internal ImgProject(IDirectory projectDirectory, IImmutableList<IMetadataVersion> metadataVersions, IImmutableList<IImgProject> childProjects)
+    public ImgProject(IDirectory projectDirectory, IImmutableList<IMetadataVersion> metadataVersions, IImmutableList<IImgProject> childProjects)
     {
         if (metadataVersions.Count == 0)
         {
@@ -39,7 +39,7 @@ internal sealed class ImgProject : IImgProject
         ChildProjects = childProjects;
     }
 
-    internal ImgProject(IDirectory projectDirectory, IImmutableList<IMetadataVersion> metadataVersions)
+    public ImgProject(IDirectory projectDirectory, IImmutableList<IMetadataVersion> metadataVersions)
         : this(projectDirectory, metadataVersions, ImmutableArray<IImgProject>.Empty)
     {
     }
@@ -93,7 +93,7 @@ internal sealed class ImgProject : IImgProject
     {
         try
         {
-            Dictionary<int, IDirectory> pageDirectories = new();
+            Dictionary<int, IDirectory> pageDirectories = [];
             await foreach (IDirectory directory in ProjectDirectory.EnumerateDirectoriesAsync())
             {
                 if (int.TryParse(directory.Name, NumberStyles.None, CultureInfo.InvariantCulture, out int pageNumber))

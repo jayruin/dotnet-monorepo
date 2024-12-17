@@ -7,7 +7,7 @@ namespace ImgProj;
 
 public interface IImgProject
 {
-    IDirectory ProjectDirectory { get; set; }
+    IDirectory ProjectDirectory { get; }
     string MainVersion { get; }
     IImmutableDictionary<string, IMetadataVersion> MetadataVersions { get; }
     IImmutableList<IImgProject> ChildProjects { get; }

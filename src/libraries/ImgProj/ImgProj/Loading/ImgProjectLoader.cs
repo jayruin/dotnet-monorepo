@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ImgProj.Loading;
@@ -15,23 +14,15 @@ public static class ImgProjectLoader
     public static async Task<IImgProject> LoadFromDirectoryAsync(IDirectory projectDirectory)
     {
         IFile metadataFile = projectDirectory.GetFile(".metadata.json");
-        JsonSerializerOptions jsonSerializerOptions = new()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            Converters =
-            {
-                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
-            },
-        };
         await using Stream stream = await metadataFile.OpenReadAsync();
-        MetadataJsonContext metadataContext = new(jsonSerializerOptions);
+        MetadataJsonContext metadataContext = MetadataJsonContext.Default;
         MetadataJson metadataJson = await JsonSerializer.DeserializeAsync(stream, metadataContext.MetadataJson) ?? throw new JsonException();
         return LoadProject(projectDirectory, metadataJson);
     }
 
     internal static ImgProject LoadProject(IDirectory projectDirectory, MetadataJson metadataJson)
     {
-        ImmutableArray<string> versions = metadataJson.Versions.ToImmutableArray();
+        ImmutableArray<string> versions = [.. metadataJson.Versions];
         if (metadataJson.Root is null)
         {
             var metadataVersionsBuilder = ImmutableArray.CreateBuilder<IMetadataVersion>();
@@ -49,14 +40,14 @@ public static class ImgProjectLoader
             {
                 IPageSpread pageSpread = new PageSpread
                 {
-                    Left = spreadJson.Left.ToImmutableArray(),
-                    Right = spreadJson.Right.ToImmutableArray(),
+                    Left = [.. spreadJson.Left],
+                    Right = [.. spreadJson.Right],
                 };
                 pageSpreadsBuilder.Add(pageSpread);
             }
             IImmutableList<IPageSpread> pageSpreads = pageSpreadsBuilder.ToImmutable();
 
-            Dictionary<string, IMetadataVersion> rootMetadataVersions = new();
+            Dictionary<string, IMetadataVersion> rootMetadataVersions = [];
             foreach (string version in versions)
             {
                 IMetadataVersion rootMetadataVersion = new MetadataVersion
@@ -77,7 +68,7 @@ public static class ImgProjectLoader
     {
         string mainVersion = versions[0];
 
-        Dictionary<string, MutableMetadataVersion> mutableMetadataVersions = new();
+        Dictionary<string, MutableMetadataVersion> mutableMetadataVersions = [];
 
         foreach (string version in versions)
         {
@@ -92,7 +83,7 @@ public static class ImgProjectLoader
             MergeWithParentMetadataAndJson(mutableMetadataVersions[version], parentMetadataVersions[version], entryJson, mainVersion, coordinate);
         }
 
-        Dictionary<string, IMetadataVersion> metadataVersions = new();
+        Dictionary<string, IMetadataVersion> metadataVersions = [];
         foreach (string version in versions)
         {
             metadataVersions[version] = mutableMetadataVersions[version].ToImmutable();
@@ -144,13 +135,13 @@ public static class ImgProjectLoader
         string version = metadata.Version;
 
         string currentTitle;
-        if (entryJson.Title.ContainsKey(version))
+        if (entryJson.Title.TryGetValue(version, out string? versionTitle))
         {
-            currentTitle = entryJson.Title[version];
+            currentTitle = versionTitle;
         }
-        else if (entryJson.Title.ContainsKey(mainVersion))
+        else if (entryJson.Title.TryGetValue(mainVersion, out string? mainVersionTitle))
         {
-            currentTitle = entryJson.Title[mainVersion];
+            currentTitle = mainVersionTitle;
         }
         else if (coordinate > 0)
         {
@@ -188,7 +179,7 @@ public static class ImgProjectLoader
         {
             foreach (int[] cover in entryJson.Cover)
             {
-                metadata.Cover.Add(cover.ToImmutableArray());
+                metadata.Cover.Add([.. cover]);
             }
         }
         else
@@ -202,7 +193,7 @@ public static class ImgProjectLoader
             }
         }
 
-        ImmutableArray<int> relativeCoordinates = ImmutableArray.Create(coordinate);
+        ImmutableArray<int> relativeCoordinates = [coordinate];
         foreach (IPageSpread pageSpread in parentMetadata.PageSpreads)
         {
             if (coordinate == 0)
