@@ -15,11 +15,18 @@ using System.Threading.Tasks;
 
 namespace EpubProj;
 
-public static class EpubProjectLoader
+public sealed class EpubProjectLoader : IEpubProjectLoader
 {
     private static readonly FrozenSet<string> _coverFileMediaTypes = FrozenSet.Create(MediaType.Image.Jpeg, MediaType.Image.Png, MediaType.Image.Webp);
 
-    public static async Task<IEpubProject> LoadFromDirectoryAsync(IDirectory projectDirectory, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping)
+    private readonly IMediaTypeFileExtensionsMapping _mediaTypeFileExtensionsMapping;
+
+    public EpubProjectLoader(IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping)
+    {
+        _mediaTypeFileExtensionsMapping = mediaTypeFileExtensionsMapping;
+    }
+
+    public async Task<IEpubProject> LoadFromDirectoryAsync(IDirectory projectDirectory)
     {
         JsonContext jsonContext = JsonContext.Default;
 
@@ -33,7 +40,7 @@ public static class EpubProjectLoader
         List<MutableNavItem> mutableNavItems = await JsonSerializer.DeserializeAsync(navStream, jsonContext.ListMutableNavItem) ?? throw new JsonException();
         ImmutableArray<IEpubProjectNavItem> navItems = mutableNavItems.Select(ni => ni.ToImmutable()).ToImmutableArray();
 
-        IFile? coverFile = await FindCoverFileAsync(projectDirectory, mediaTypeFileExtensionsMapping);
+        IFile? coverFile = await FindCoverFileAsync(projectDirectory, _mediaTypeFileExtensionsMapping);
 
         IConfiguration configuration = Configuration.Default;
         IBrowsingContext browsingContext = BrowsingContext.New(configuration);
@@ -44,8 +51,22 @@ public static class EpubProjectLoader
         IMarkupFormatter markupFormatter = XhtmlMarkupFormatter.Instance;
 
         return new EpubProject(projectDirectory, metadata, navItems, coverFile,
-            mediaTypeFileExtensionsMapping,
+            _mediaTypeFileExtensionsMapping,
             htmlParser, domImplementation, markupFormatter);
+    }
+
+    public async Task<IReadOnlyCollection<IFile>> GetImplicitGlobalFilesAsync(IDirectory projectDirectory)
+    {
+        List<IFile> globalFiles = [];
+        IDirectory? implicitGlobalDirectory = projectDirectory.GetParentDirectory()?.GetDirectory("_global");
+        if (implicitGlobalDirectory is not null)
+        {
+            await foreach (IFile file in implicitGlobalDirectory.EnumerateFilesAsync())
+            {
+                globalFiles.Add(file);
+            }
+        }
+        return globalFiles;
     }
 
     private static async Task<IFile?> FindCoverFileAsync(IDirectory directory, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping)

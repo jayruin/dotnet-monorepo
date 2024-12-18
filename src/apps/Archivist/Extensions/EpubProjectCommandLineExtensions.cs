@@ -1,6 +1,5 @@
 using EpubProj;
 using FileStorage;
-using MediaTypes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -49,18 +48,10 @@ public static class EpubProjectCommandLineExtensions
         public async Task HandleExportCommand(string projectDirectory, string exportFile, int version)
         {
             IFileStorage fileStorage = _serviceProvider.GetRequiredService<IFileStorage>();
-            IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping = _serviceProvider.GetRequiredService<IMediaTypeFileExtensionsMapping>();
             IDirectory projectDirectoryToUse = fileStorage.GetDirectory(projectDirectory);
-            List<IFile> globalFiles = [];
-            IDirectory? implicitGlobalDirectory = projectDirectoryToUse.GetParentDirectory()?.GetDirectory("_global");
-            if (implicitGlobalDirectory is not null)
-            {
-                await foreach (IFile file in implicitGlobalDirectory.EnumerateFilesAsync())
-                {
-                    globalFiles.Add(file);
-                }
-            }
-            IEpubProject project = await EpubProjectLoader.LoadFromDirectoryAsync(projectDirectoryToUse, mediaTypeFileExtensionsMapping);
+            IEpubProjectLoader projectLoader = _serviceProvider.GetRequiredService<IEpubProjectLoader>();
+            IReadOnlyCollection<IFile> globalFiles = await projectLoader.GetImplicitGlobalFilesAsync(projectDirectoryToUse);
+            IEpubProject project = await projectLoader.LoadFromDirectoryAsync(projectDirectoryToUse);
             await using Stream stream = await fileStorage.GetFile(exportFile).OpenWriteAsync();
             switch (version)
             {

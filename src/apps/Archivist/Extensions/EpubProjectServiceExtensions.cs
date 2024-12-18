@@ -1,3 +1,4 @@
+using EpubProj;
 using MediaTypes;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,6 +9,7 @@ public static class EpubProjectServiceExtensions
     public static IServiceCollection AddEpubProjectServices(this IServiceCollection services)
     {
         return services
-            .AddSingleton<IMediaTypeFileExtensionsMapping>(MediaTypeFileExtensionsMapping.Default);
+            .AddSingleton<IMediaTypeFileExtensionsMapping>(MediaTypeFileExtensionsMapping.Default)
+            .AddTransient<IEpubProjectLoader, EpubProjectLoader>();
     }
 }
