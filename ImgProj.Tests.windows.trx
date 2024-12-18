@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="7efa9188-fe0e-4969-b77a-ebacd736166c" name="runneradmin@fv-az663-923 2024-12-18 23:46:51" runUser="fv-az663-923\runneradmin" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2024-12-18T23:46:51.3006814+00:00" queuing="2024-12-18T23:46:51.3006816+00:00" start="2024-12-18T23:46:50.6985980+00:00" finish="2024-12-18T23:46:51.3059084+00:00" />
+  <TestSettings name="default" id="ebaf7820-9962-420f-aba3-029a5cef0349">
+    <Deployment runDeploymentRoot="runneradmin_fv-az663-923_2024-12-18_23_46_51" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="f652396e-db61-47a9-b7da-2108309aed6e" testId="4768eb62-46f6-445d-40db-c827365ceab0" testName="TestLoadPageSpreads" computerName="fv-az663-923" duration="00:00:00.0204681" startTime="2024-12-18T23:46:51.1474186+00:00" endTime="2024-12-18T23:46:51.1801933+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f652396e-db61-47a9-b7da-2108309aed6e" />
+    <UnitTestResult executionId="1c84bb80-ac64-4c0d-8712-5505f0ee264f" testId="3f55f553-92b2-3b0e-49f6-c92f9af720d3" testName="TestLoadReadingDirection (RTL)" computerName="fv-az663-923" duration="00:00:00.0002253" startTime="2024-12-18T23:46:51.1897517+00:00" endTime="2024-12-18T23:46:51.1907429+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1c84bb80-ac64-4c0d-8712-5505f0ee264f" />
+    <UnitTestResult executionId="b96c9660-faed-4638-8dd2-80211050bdc5" testId="5b50d00f-c86a-9234-a4d7-09098321d126" testName="TestLoadReadingDirection (LTR)" computerName="fv-az663-923" duration="00:00:00.0009392" startTime="2024-12-18T23:46:51.1840544+00:00" endTime="2024-12-18T23:46:51.1895233+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b96c9660-faed-4638-8dd2-80211050bdc5" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestLoadPageSpreads" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\imgproj.tests\release_win-x64\imgproj.tests.dll" id="4768eb62-46f6-445d-40db-c827365ceab0">
+      <Execution id="f652396e-db61-47a9-b7da-2108309aed6e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ImgProj.Tests\release_win-x64\ImgProj.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="ImgProj.Tests.LoadingTests" name="TestLoadPageSpreads" />
+    </UnitTest>
+    <UnitTest name="TestLoadReadingDirection (LTR)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\imgproj.tests\release_win-x64\imgproj.tests.dll" id="5b50d00f-c86a-9234-a4d7-09098321d126">
+      <Execution id="b96c9660-faed-4638-8dd2-80211050bdc5" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ImgProj.Tests\release_win-x64\ImgProj.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="ImgProj.Tests.LoadingTests" name="TestLoadReadingDirection" />
+    </UnitTest>
+    <UnitTest name="TestLoadReadingDirection (RTL)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\imgproj.tests\release_win-x64\imgproj.tests.dll" id="3f55f553-92b2-3b0e-49f6-c92f9af720d3">
+      <Execution id="1c84bb80-ac64-4c0d-8712-5505f0ee264f" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ImgProj.Tests\release_win-x64\ImgProj.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="ImgProj.Tests.LoadingTests" name="TestLoadReadingDirection" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="4768eb62-46f6-445d-40db-c827365ceab0" executionId="f652396e-db61-47a9-b7da-2108309aed6e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f55f553-92b2-3b0e-49f6-c92f9af720d3" executionId="1c84bb80-ac64-4c0d-8712-5505f0ee264f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5b50d00f-c86a-9234-a4d7-09098321d126" executionId="b96c9660-faed-4638-8dd2-80211050bdc5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="3" executed="3" passed="3" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+</TestRun>
