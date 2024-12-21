@@ -129,11 +129,29 @@ internal sealed class EpubProject : IEpubProject
         await sourceStream.CopyToAsync(destinationStream);
     }
 
-    private void WriteToc(EpubWriter epubWriter)
+    private string ConvertRelativeAnchorHref(string href)
     {
         string xhtmlExtension = _mediaTypeFileExtensionsMapping.GetFileExtension(MediaType.Application.Xhtml_Xml)
             ?? throw new InvalidOperationException("No xhtml extension.");
-        string trimmedXhtmlExtension = xhtmlExtension.Trim();
+        string trimmedXhtmlExtension = xhtmlExtension.Trim('.');
+        string[] hrefParts = href.Split('#');
+        string hrefPath = hrefParts[0];
+        List<string> hrefPathParts = [.. hrefPath.Split('.')];
+        string? mediaType = _mediaTypeFileExtensionsMapping.GetMediaType($".{hrefPathParts[^1]}");
+        if (mediaType != null && _convertibleMediaTypes.Contains(mediaType))
+        {
+            hrefPathParts[^1] = trimmedXhtmlExtension;
+        }
+        else if (hrefPathParts[^1] != trimmedXhtmlExtension)
+        {
+            hrefPathParts.Add(trimmedXhtmlExtension);
+        }
+        hrefParts[0] = string.Join('.', hrefPathParts);
+        return string.Join('#', hrefParts);
+    }
+
+    private void WriteToc(EpubWriter epubWriter)
+    {
         epubWriter.AddToc(_navItems.Select(ConvertNavItem).ToList(), true);
 
         EpubNavItem ConvertNavItem(IEpubProjectNavItem navItem)
@@ -141,27 +159,9 @@ internal sealed class EpubProject : IEpubProject
             return new()
             {
                 Text = navItem.Text,
-                Reference = ConvertNavItemHref(navItem.Href),
+                Reference = ConvertRelativeAnchorHref(navItem.Href),
                 Children = navItem.Children.Select(ConvertNavItem).ToList(),
             };
-        }
-
-        string ConvertNavItemHref(string href)
-        {
-            string[] hrefParts = href.Split('#');
-            string hrefPath = hrefParts[0];
-            List<string> hrefPathParts = [.. hrefPath.Split('.')];
-            string? mediaType = _mediaTypeFileExtensionsMapping.GetMediaType($".{hrefPathParts[^1]}");
-            if (mediaType != null && _convertibleMediaTypes.Contains(mediaType))
-            {
-                hrefPathParts[^1] = trimmedXhtmlExtension;
-            }
-            else if (hrefPathParts[^1] != trimmedXhtmlExtension)
-            {
-                hrefPathParts.Add(trimmedXhtmlExtension);
-            }
-            hrefPathParts[0] = string.Join('.', hrefPathParts);
-            return string.Join('#', hrefParts);
         }
     }
 
@@ -367,7 +367,20 @@ internal sealed class EpubProject : IEpubProject
             xhtmlDocument.Body?.Append(htmlDocument.Body.Children.Select(n => n.Clone(true)).ToArray());
         }
 
+        ConvertRelativeAnchorHrefs(xhtmlDocument);
+
         return xhtmlDocument;
+
+        void ConvertRelativeAnchorHrefs(IDocument xhtmlDocument)
+        {
+            foreach (IHtmlAnchorElement a in xhtmlDocument.QuerySelectorAll<IHtmlAnchorElement>("a"))
+            {
+                string? href = a.GetAttribute("href");
+                if (string.IsNullOrWhiteSpace(href)) continue;
+                if (Uri.IsWellFormedUriString(href, UriKind.Absolute)) continue;
+                a.SetAttribute("href", ConvertRelativeAnchorHref(href));
+            }
+        }
     }
 
     private async Task<IDocument> CreateXhtmlFromHtmlAsync(IFile htmlFile, ImmutableArray<string> relativePathParts,
