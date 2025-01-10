@@ -10,6 +10,10 @@ public static class MediaType
         public const string Pdf = "application/pdf";
         public const string XDtbncx_Xml = "application/x-dtbncx+xml";
         public const string Xhtml_Xml = "application/xhtml+xml";
+        public static class Vnd
+        {
+            public const string Comicbook_Zip = "application/vnd.comicbook+zip";
+        }
     }
 
     public static class Audio
