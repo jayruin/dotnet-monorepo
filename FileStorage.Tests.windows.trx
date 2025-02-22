@@ -1,0 +1,482 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="b58ef2d8-3a89-4d33-84b4-48250e6ba882" name="runneradmin@fv-az521-965 2025-02-22 13:59:03" runUser="fv-az521-965\runneradmin" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-02-22T13:59:03.9659907+00:00" queuing="2025-02-22T13:59:03.9659909+00:00" start="2025-02-22T13:59:03.4173185+00:00" finish="2025-02-22T13:59:04.1022527+00:00" />
+  <TestSettings name="default" id="ab884c8a-16da-4eac-8707-a681b61dd6bb">
+    <Deployment runDeploymentRoot="runneradmin_fv-az521-965_2025-02-22_13_59_03" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="db98689c-9503-4203-8bc3-a0340e7f382b" testId="d4d986da-d4bd-08f4-57b5-191f12483e46" testName="TestEmptyDirectoryPaths" computerName="fv-az521-965" duration="00:00:00.0004564" startTime="2025-02-22T13:59:03.9515504+00:00" endTime="2025-02-22T13:59:03.9520816+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="db98689c-9503-4203-8bc3-a0340e7f382b" />
+    <UnitTestResult executionId="e650d0ad-94d4-456f-a6b8-09e8a973505c" testId="bda2bfb3-e5c0-2200-50a6-0294fcf407ea" testName="TestEnumerateFilesAsync" computerName="fv-az521-965" duration="00:00:00.0094713" startTime="2025-02-22T13:59:04.0277639+00:00" endTime="2025-02-22T13:59:04.0373192+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e650d0ad-94d4-456f-a6b8-09e8a973505c" />
+    <UnitTestResult executionId="a2ce48c1-e0ac-4c7a-8bfe-462cec1df694" testId="0f1da9e6-1cbf-8583-2f6b-0061293bebf8" testName="TestEnumerateDirectoriesAsync" computerName="fv-az521-965" duration="00:00:00.0017046" startTime="2025-02-22T13:59:04.0373468+00:00" endTime="2025-02-22T13:59:04.0391297+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a2ce48c1-e0ac-4c7a-8bfe-462cec1df694" />
+    <UnitTestResult executionId="96f7be1b-5d46-4f56-8dfd-d8cecb9cb781" testId="9011c160-8b72-47ef-0b19-f1ac4fafc464" testName="TestFileDelete" computerName="fv-az521-965" duration="00:00:00.0000968" startTime="2025-02-22T13:59:03.9587952+00:00" endTime="2025-02-22T13:59:03.9589476+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="96f7be1b-5d46-4f56-8dfd-d8cecb9cb781" />
+    <UnitTestResult executionId="0aa949a7-a93c-4b4c-9037-cdbd0482c6ed" testId="109778f8-1a3f-c921-f480-5b33ec9e404c" testName="TestDirectoryDeleteExistingDirectory" computerName="fv-az521-965" duration="00:00:00.0009924" startTime="2025-02-22T13:59:03.9270207+00:00" endTime="2025-02-22T13:59:03.9280927+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0aa949a7-a93c-4b4c-9037-cdbd0482c6ed" />
+    <UnitTestResult executionId="3f7b29bf-ae03-4ffc-bac3-2b9f836799d4" testId="a29289ea-bc1d-0083-5118-54a12526b8af" testName="TestDirectoryCreateExisting" computerName="fv-az521-965" duration="00:00:00.0018820" startTime="2025-02-22T13:59:03.9242599+00:00" endTime="2025-02-22T13:59:03.9262200+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3f7b29bf-ae03-4ffc-bac3-2b9f836799d4" />
+    <UnitTestResult executionId="ab29fc54-6385-404c-9830-f501fbb1d6e0" testId="f64eab59-d366-aa12-22f3-ad8e634f95d1" testName="TestFileDelete" computerName="fv-az521-965" duration="00:00:00.0010777" startTime="2025-02-22T13:59:03.9477369+00:00" endTime="2025-02-22T13:59:03.9488902+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ab29fc54-6385-404c-9830-f501fbb1d6e0" />
+    <UnitTestResult executionId="26a12612-5696-4094-9348-53d884b1e74e" testId="51e79817-9cb4-c803-a9cd-be62c5643252" testName="TestDirectoryNameWithDot" computerName="fv-az521-965" duration="00:00:00.0000211" startTime="2025-02-22T13:59:04.0502425+00:00" endTime="2025-02-22T13:59:04.0503247+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="26a12612-5696-4094-9348-53d884b1e74e" />
+    <UnitTestResult executionId="28de9f30-680a-4a09-a952-63ad3df07688" testId="cef74505-0de5-871e-983a-ff75ebac7980" testName="TestFileExtension" computerName="fv-az521-965" duration="00:00:00.0000471" startTime="2025-02-22T13:59:04.0499913+00:00" endTime="2025-02-22T13:59:04.0500994+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="28de9f30-680a-4a09-a952-63ad3df07688" />
+    <UnitTestResult executionId="27b97639-30b3-4b13-87e4-6302170976cd" testId="4f6773f6-14de-a05b-1a5d-745be43beb3f" testName="TestFileFullPathIsConsistent" computerName="fv-az521-965" duration="00:00:00.0000139" startTime="2025-02-22T13:59:03.9538931+00:00" endTime="2025-02-22T13:59:03.9539579+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="27b97639-30b3-4b13-87e4-6302170976cd" />
+    <UnitTestResult executionId="c69698bc-9df3-4f54-851a-bfe1b3c5b6f9" testId="f8e7277d-d9f8-29f5-60e4-5fbb63d964ed" testName="TestFileName" computerName="fv-az521-965" duration="00:00:00.0000206" startTime="2025-02-22T13:59:03.9525589+00:00" endTime="2025-02-22T13:59:03.9526375+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c69698bc-9df3-4f54-851a-bfe1b3c5b6f9" />
+    <UnitTestResult executionId="ed72b0dd-bcd2-4166-a30a-213cfc81be2e" testId="8b81bd82-dc36-2cda-229b-b5072167dddf" testName="TestFileFullPathIsConsistent" computerName="fv-az521-965" duration="00:00:00.0000271" startTime="2025-02-22T13:59:04.0511126+00:00" endTime="2025-02-22T13:59:04.0512068+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ed72b0dd-bcd2-4166-a30a-213cfc81be2e" />
+    <UnitTestResult executionId="b9890e87-1e4d-4f0a-89ee-7b550cee6f11" testId="24b7a9df-0abd-14f1-06c9-9d72cbf192b3" testName="TestFileName" computerName="fv-az521-965" duration="00:00:00.0005722" startTime="2025-02-22T13:59:03.8914314+00:00" endTime="2025-02-22T13:59:03.8920838+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b9890e87-1e4d-4f0a-89ee-7b550cee6f11" />
+    <UnitTestResult executionId="6fbe43eb-5e44-4f95-904d-09abb0d828e6" testId="2e325afd-71c3-c013-f9e9-d25d63271309" testName="TestDirectoryFullPathIsConsistent" computerName="fv-az521-965" duration="00:00:00.0000122" startTime="2025-02-22T13:59:03.9539772+00:00" endTime="2025-02-22T13:59:03.9540339+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6fbe43eb-5e44-4f95-904d-09abb0d828e6" />
+    <UnitTestResult executionId="542ecc0d-ae34-46a2-8814-57f53c326268" testId="c7897527-4e0e-ad49-b035-f1933297433a" testName="TestFileOpenReadWriteExistingFile" computerName="fv-az521-965" duration="00:00:00.0000398" startTime="2025-02-22T13:59:03.9586336+00:00" endTime="2025-02-22T13:59:03.9587733+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="542ecc0d-ae34-46a2-8814-57f53c326268" />
+    <UnitTestResult executionId="97769fec-f6a3-4b1e-8d09-f3a06828af73" testId="7eb76f2c-21a5-f549-3581-458e2d90bb4e" testName="TestDirectoryEnumerateFilesDirectoriesNested" computerName="fv-az521-965" duration="00:00:00.0054967" startTime="2025-02-22T13:59:03.9373598+00:00" endTime="2025-02-22T13:59:03.9429333+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="97769fec-f6a3-4b1e-8d09-f3a06828af73" />
+    <UnitTestResult executionId="4986e07e-5c28-4166-acda-9379d56d05ca" testId="eff7da53-f6a7-63b0-cc4f-2e2f7ff54c59" testName="TestDirectoryCreateExisting" computerName="fv-az521-965" duration="00:00:00.0001331" startTime="2025-02-22T13:59:04.0521107+00:00" endTime="2025-02-22T13:59:04.0523094+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4986e07e-5c28-4166-acda-9379d56d05ca" />
+    <UnitTestResult executionId="5aa07684-06c9-43bd-9872-9d2da9ed428c" testId="de3b2480-d479-605b-e08b-e52b3f60032b" testName="TestDirectoryName" computerName="fv-az521-965" duration="00:00:00.0000453" startTime="2025-02-22T13:59:04.0501204+00:00" endTime="2025-02-22T13:59:04.0502224+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5aa07684-06c9-43bd-9872-9d2da9ed428c" />
+    <UnitTestResult executionId="c481647f-dece-4d65-a46a-76dd0ba3369a" testId="4215e5b5-fc3c-3e4d-30ae-01a50b08f468" testName="TestEmptyDirectoryPaths" computerName="fv-az521-965" duration="00:00:00.0011372" startTime="2025-02-22T13:59:03.8886560+00:00" endTime="2025-02-22T13:59:03.8900658+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c481647f-dece-4d65-a46a-76dd0ba3369a" />
+    <UnitTestResult executionId="ace4f113-051c-4009-b990-6c365752e98f" testId="87471bd0-b3d5-4af4-a468-43e113ade7fe" testName="TestFileDelete" computerName="fv-az521-965" duration="00:00:00.0000285" startTime="2025-02-22T13:59:04.0568665+00:00" endTime="2025-02-22T13:59:04.0569530+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ace4f113-051c-4009-b990-6c365752e98f" />
+    <UnitTestResult executionId="b3404f6e-b9a6-4d97-a08f-26a93e7f009f" testId="49fe5267-fc48-c49a-f934-3af546ee163f" testName="TestCreateAsync" computerName="fv-az521-965" duration="00:00:00.0022170" startTime="2025-02-22T13:59:04.0391584+00:00" endTime="2025-02-22T13:59:04.0414422+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b3404f6e-b9a6-4d97-a08f-26a93e7f009f" />
+    <UnitTestResult executionId="fe1799fe-77a3-4ef4-b093-4754922ee96b" testId="80da2137-b6cc-609b-971f-7e7a4fdb564d" testName="TestFileOpenReadWriteExistingFile" computerName="fv-az521-965" duration="00:00:00.0014555" startTime="2025-02-22T13:59:03.9461723+00:00" endTime="2025-02-22T13:59:03.9477108+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fe1799fe-77a3-4ef4-b093-4754922ee96b" />
+    <UnitTestResult executionId="86d6cb76-38d2-4eae-89c8-4486b213f751" testId="c901782e-ef1c-b42b-60f1-435a0351d1c3" testName="TestParentDirectory" computerName="fv-az521-965" duration="00:00:00.0001009" startTime="2025-02-22T13:59:04.0569747+00:00" endTime="2025-02-22T13:59:04.0577432+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86d6cb76-38d2-4eae-89c8-4486b213f751" />
+    <UnitTestResult executionId="3033ff28-e6b2-42d0-a194-26a1edaba8a7" testId="1e8ef867-c861-69f4-badf-30af80491de8" testName="TestParentDirectory" computerName="fv-az521-965" duration="00:00:00.0013050" startTime="2025-02-22T13:59:03.9489157+00:00" endTime="2025-02-22T13:59:03.9503987+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3033ff28-e6b2-42d0-a194-26a1edaba8a7" />
+    <UnitTestResult executionId="faf56ea3-b4a3-4119-9b64-cd9d14821a69" testId="64552f8d-56bd-dece-2bde-38ac338fdf57" testName="TestDirectoryEnumerateFilesDirectories (&quot;dir&quot;)" computerName="fv-az521-965" duration="00:00:00.0021918" startTime="2025-02-22T13:59:04.0526503+00:00" endTime="2025-02-22T13:59:04.0549330+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="faf56ea3-b4a3-4119-9b64-cd9d14821a69" />
+    <UnitTestResult executionId="5450ee59-3817-47d4-9f66-713e66407074" testId="7da6318e-98b7-39f0-4161-e0aaa63e4356" testName="TestFileFullPathIsConsistent" computerName="fv-az521-965" duration="00:00:00.0005909" startTime="2025-02-22T13:59:03.8947295+00:00" endTime="2025-02-22T13:59:03.8953937+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5450ee59-3817-47d4-9f66-713e66407074" />
+    <UnitTestResult executionId="3af9127e-b4e3-411a-8e56-760420ce08fb" testId="1c9877c6-ebfa-9f2c-ee53-ef4e577d1078" testName="TestDeleteAsync" computerName="fv-az521-965" duration="00:00:00.0005143" startTime="2025-02-22T13:59:04.0461372+00:00" endTime="2025-02-22T13:59:04.0467293+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3af9127e-b4e3-411a-8e56-760420ce08fb" />
+    <UnitTestResult executionId="8f2344be-54d3-4d8a-9ee5-302636729e5a" testId="df1b3604-ffd3-14ba-042b-94c14c177176" testName="TestDirectoryCreate" computerName="fv-az521-965" duration="00:00:00.0007045" startTime="2025-02-22T13:59:04.0513184+00:00" endTime="2025-02-22T13:59:04.0520859+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8f2344be-54d3-4d8a-9ee5-302636729e5a" />
+    <UnitTestResult executionId="067d792e-eeb4-45e5-9021-f5138ec9512b" testId="6e5b91a2-6a19-9c04-8737-fad3d45dfaa1" testName="TestFileExtension" computerName="fv-az521-965" duration="00:00:00.0000508" startTime="2025-02-22T13:59:03.9535740+00:00" endTime="2025-02-22T13:59:03.9536946+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="067d792e-eeb4-45e5-9021-f5138ec9512b" />
+    <UnitTestResult executionId="6cf86892-2228-418e-91e8-e5a0a0560458" testId="009a2387-0a42-469f-a4ba-4b5d7815ce64" testName="TestDeleteNonExistent" computerName="fv-az521-965" duration="00:00:00.0006693" startTime="2025-02-22T13:59:03.9262461+00:00" endTime="2025-02-22T13:59:03.9269957+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6cf86892-2228-418e-91e8-e5a0a0560458" />
+    <UnitTestResult executionId="76881ce1-65c2-4fbd-b98e-f93ce15d76c5" testId="910e1179-c618-ac81-88d3-77979d52ca2e" testName="TestExistsAsync (True)" computerName="fv-az521-965" duration="00:00:00.0655412" startTime="2025-02-22T13:59:03.9591936+00:00" endTime="2025-02-22T13:59:04.0251499+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="76881ce1-65c2-4fbd-b98e-f93ce15d76c5" />
+    <UnitTestResult executionId="7be6ae6d-8a3d-48fa-9df8-e5f170d85864" testId="fe70811c-eba8-dd1f-7c22-0fa4e60d4aa2" testName="TestDirectoryDeleteExistingDirectory" computerName="fv-az521-965" duration="00:00:00.0000311" startTime="2025-02-22T13:59:03.9548577+00:00" endTime="2025-02-22T13:59:03.9549403+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7be6ae6d-8a3d-48fa-9df8-e5f170d85864" />
+    <UnitTestResult executionId="c8aaa115-e069-4831-8b77-b538e62e38e3" testId="cd0078b3-4b7f-1e54-2b47-dac01f923d15" testName="TestDirectoryNameWithDot" computerName="fv-az521-965" duration="00:00:00.0005506" startTime="2025-02-22T13:59:03.8940803+00:00" endTime="2025-02-22T13:59:03.8947002+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c8aaa115-e069-4831-8b77-b538e62e38e3" />
+    <UnitTestResult executionId="40220149-49e4-4d3b-8711-299de8017db1" testId="f8c037a4-86a1-940c-dee2-3812680c280a" testName="TestDirectoryEnumerateFilesDirectories (&quot;&quot;)" computerName="fv-az521-965" duration="00:00:00.0018588" startTime="2025-02-22T13:59:03.9353121+00:00" endTime="2025-02-22T13:59:03.9373337+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="40220149-49e4-4d3b-8711-299de8017db1" />
+    <UnitTestResult executionId="76e3ee2a-45dd-45f0-8aad-fa86935a5e38" testId="08e0f610-476a-cb6d-5d83-04cfa0bb5513" testName="TestDirectoryEnumerateFilesDirectories (&quot;&quot;)" computerName="fv-az521-965" duration="00:00:00.0002117" startTime="2025-02-22T13:59:04.0549597+00:00" endTime="2025-02-22T13:59:04.0552752+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="76e3ee2a-45dd-45f0-8aad-fa86935a5e38" />
+    <UnitTestResult executionId="fec70374-f16b-4248-be90-98447cc35280" testId="125bc9fc-30db-ee48-7efe-8896541b5651" testName="TestFileName" computerName="fv-az521-965" duration="00:00:00.0000532" startTime="2025-02-22T13:59:04.0497043+00:00" endTime="2025-02-22T13:59:04.0498209+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fec70374-f16b-4248-be90-98447cc35280" />
+    <UnitTestResult executionId="c8bfe451-715b-42e2-a6c5-a484b920de9e" testId="3fbe1aef-c231-36db-e42e-599bf3f74565" testName="TestDeleteEmptyPathDirectory" computerName="fv-az521-965" duration="00:00:00.0005972" startTime="2025-02-22T13:59:04.0490058+00:00" endTime="2025-02-22T13:59:04.0496738+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c8bfe451-715b-42e2-a6c5-a484b920de9e" />
+    <UnitTestResult executionId="164e9251-cf77-4f44-b1bd-be6a9fec9350" testId="30b186da-9a79-931d-4ee5-ecdfe5db3c76" testName="TestEmptyFilePaths" computerName="fv-az521-965" duration="00:00:00.0009659" startTime="2025-02-22T13:59:03.9504245+00:00" endTime="2025-02-22T13:59:03.9515143+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="164e9251-cf77-4f44-b1bd-be6a9fec9350" />
+    <UnitTestResult executionId="5573dc69-e982-4887-bd90-2b6bb37864f3" testId="607da53e-34ec-12fb-53d4-7b9a98141219" testName="TestDeleteAsync" computerName="fv-az521-965" duration="00:00:00.0005159" startTime="2025-02-22T13:59:04.0414715+00:00" endTime="2025-02-22T13:59:04.0420583+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5573dc69-e982-4887-bd90-2b6bb37864f3" />
+    <UnitTestResult executionId="1bc54772-9062-478f-900c-1c23391a870d" testId="0e088d27-c7d7-0291-d4f0-8f7b1d9da554" testName="TestDirectoryCreate" computerName="fv-az521-965" duration="00:00:00.0015742" startTime="2025-02-22T13:59:03.9225773+00:00" endTime="2025-02-22T13:59:03.9242337+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1bc54772-9062-478f-900c-1c23391a870d" />
+    <UnitTestResult executionId="e38da619-71d6-4a3c-bb74-2b29476143a7" testId="6cfcf509-16b7-8279-725f-a4ce45ea80aa" testName="TestExistsAsync (False)" computerName="fv-az521-965" duration="00:00:00.0002406" startTime="2025-02-22T13:59:04.0429359+00:00" endTime="2025-02-22T13:59:04.0433415+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e38da619-71d6-4a3c-bb74-2b29476143a7" />
+    <UnitTestResult executionId="cf92d07f-6d79-4835-bd1f-4571c7752429" testId="0da9f8a8-e657-b210-b5f3-ec83c8497b26" testName="TestFileStem" computerName="fv-az521-965" duration="00:00:00.0005691" startTime="2025-02-22T13:59:03.8921082+00:00" endTime="2025-02-22T13:59:03.8927441+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cf92d07f-6d79-4835-bd1f-4571c7752429" />
+    <UnitTestResult executionId="8c43048f-e670-4f30-a253-203e4a96c71b" testId="c37f7643-1974-730c-ff6e-4fb586696ec1" testName="TestOpenWriteAsync" computerName="fv-az521-965" duration="00:00:00.0006968" startTime="2025-02-22T13:59:04.0445581+00:00" endTime="2025-02-22T13:59:04.0453364+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8c43048f-e670-4f30-a253-203e4a96c71b" />
+    <UnitTestResult executionId="eb07a453-6bef-4639-8dfb-6f69f83b5a3d" testId="fca03aaa-9bd0-d573-60dc-d9376c9ea610" testName="TestFileOpenReadWrite" computerName="fv-az521-965" duration="00:00:00.0004236" startTime="2025-02-22T13:59:03.9580975+00:00" endTime="2025-02-22T13:59:03.9586038+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eb07a453-6bef-4639-8dfb-6f69f83b5a3d" />
+    <UnitTestResult executionId="f0e4cb8f-bd1d-4eb9-9792-c89f3a303714" testId="966fde8d-32df-314c-6115-6a9b32ec93b9" testName="TestRootDirectoryExists" computerName="fv-az521-965" duration="00:00:00.0000148" startTime="2025-02-22T13:59:04.0525632+00:00" endTime="2025-02-22T13:59:04.0526322+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f0e4cb8f-bd1d-4eb9-9792-c89f3a303714" />
+    <UnitTestResult executionId="b9b7e689-ae2e-4341-8314-8b9185137721" testId="ee7e4fee-92ed-61e3-75da-bff49e330275" testName="TestDirectoryFullPathIsConsistent" computerName="fv-az521-965" duration="00:00:00.0006379" startTime="2025-02-22T13:59:03.9218175+00:00" endTime="2025-02-22T13:59:03.9225504+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b9b7e689-ae2e-4341-8314-8b9185137721" />
+    <UnitTestResult executionId="e26a7691-96f6-4886-ab8a-f71afaa8b7b0" testId="9fab18c8-de42-5edf-89cb-38fe842efdcb" testName="TestDirectoryEnumerateFilesDirectoriesNested" computerName="fv-az521-965" duration="00:00:00.0001456" startTime="2025-02-22T13:59:03.9578029+00:00" endTime="2025-02-22T13:59:03.9580704+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e26a7691-96f6-4886-ab8a-f71afaa8b7b0" />
+    <UnitTestResult executionId="b932190b-2577-4256-b079-1cdc5b0ff069" testId="79c4ff89-0797-e74c-0eb1-6195164e4436" testName="TestParentDirectory" computerName="fv-az521-965" duration="00:00:00.0001282" startTime="2025-02-22T13:59:03.9589696+00:00" endTime="2025-02-22T13:59:03.9591656+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b932190b-2577-4256-b079-1cdc5b0ff069" />
+    <UnitTestResult executionId="de2beffe-ad6e-48a2-8c11-7167fa777452" testId="1e71ad58-a0ad-4cd0-0218-6a992bf4f71a" testName="TestDirectoryNameWithDot" computerName="fv-az521-965" duration="00:00:00.0000195" startTime="2025-02-22T13:59:03.9538102+00:00" endTime="2025-02-22T13:59:03.9538767+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="de2beffe-ad6e-48a2-8c11-7167fa777452" />
+    <UnitTestResult executionId="966a188e-798c-4b85-887a-58ead3fdf484" testId="02f617f7-c2f8-ea60-5be7-c053e0a3cf57" testName="TestDeleteEmptyPathDirectory" computerName="fv-az521-965" duration="00:00:00.0003513" startTime="2025-02-22T13:59:03.9521061+00:00" endTime="2025-02-22T13:59:03.9525296+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="966a188e-798c-4b85-887a-58ead3fdf484" />
+    <UnitTestResult executionId="182f1394-2e95-4661-971a-82a8cf9eb4cf" testId="f7b478bc-0212-d153-656f-f41f57754de4" testName="TestDirectoryEnumerateFilesDirectoriesNested" computerName="fv-az521-965" duration="00:00:00.0001637" startTime="2025-02-22T13:59:04.0561073+00:00" endTime="2025-02-22T13:59:04.0563486+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="182f1394-2e95-4661-971a-82a8cf9eb4cf" />
+    <UnitTestResult executionId="bbc069d1-e04b-4e5c-981a-8ab842d88b87" testId="797b8a01-8186-1169-ecab-9b51ad970e5d" testName="TestDirectoryName" computerName="fv-az521-965" duration="00:00:00.0000180" startTime="2025-02-22T13:59:03.9537211+00:00" endTime="2025-02-22T13:59:03.9537928+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bbc069d1-e04b-4e5c-981a-8ab842d88b87" />
+    <UnitTestResult executionId="251c56b6-acb2-46be-85d6-14259ba6738d" testId="6de70bcc-1fd5-fee6-1433-0f0245c25247" testName="TestFileExtension" computerName="fv-az521-965" duration="00:00:00.0005631" startTime="2025-02-22T13:59:03.8927734+00:00" endTime="2025-02-22T13:59:03.8934030+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="251c56b6-acb2-46be-85d6-14259ba6738d" />
+    <UnitTestResult executionId="d6cedfc9-b399-445b-9e7e-ab27d69301d4" testId="a3803826-329d-dc6f-fc7d-0e02805b706c" testName="TestFileStem" computerName="fv-az521-965" duration="00:00:00.0000446" startTime="2025-02-22T13:59:03.9526612+00:00" endTime="2025-02-22T13:59:03.9527626+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d6cedfc9-b399-445b-9e7e-ab27d69301d4" />
+    <UnitTestResult executionId="a2c01c16-bf2e-4012-9a5c-0b238a6923ee" testId="5b8af763-c9e7-a7dc-38c5-6c93729daebf" testName="TestDirectoryCreateExisting" computerName="fv-az521-965" duration="00:00:00.0001210" startTime="2025-02-22T13:59:03.9545374+00:00" endTime="2025-02-22T13:59:03.9547302+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a2c01c16-bf2e-4012-9a5c-0b238a6923ee" />
+    <UnitTestResult executionId="bdff782e-ddba-40a9-bb06-2875f956a9e8" testId="1f720387-7182-1f7e-79cf-5e42f1b3a177" testName="TestOpenReadAsync" computerName="fv-az521-965" duration="00:00:00.0010957" startTime="2025-02-22T13:59:04.0433654+00:00" endTime="2025-02-22T13:59:04.0445328+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bdff782e-ddba-40a9-bb06-2875f956a9e8" />
+    <UnitTestResult executionId="3c5286b0-ecd3-4f7d-b1e8-1e3b871d9720" testId="2b565eab-d7f1-591c-d1b8-d74976982623" testName="TestDirectoryEnumerateFilesDirectories (&quot;&quot;)" computerName="fv-az521-965" duration="00:00:00.0001708" startTime="2025-02-22T13:59:03.9575141+00:00" endTime="2025-02-22T13:59:03.9577788+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3c5286b0-ecd3-4f7d-b1e8-1e3b871d9720" />
+    <UnitTestResult executionId="2032456d-9dce-4926-ac89-72cb1cb6105c" testId="bacbbd13-aba6-615b-798e-fa63927d70ae" testName="TestDirectoryEnumerateFilesDirectories (&quot;dir&quot;)" computerName="fv-az521-965" duration="00:00:00.0015600" startTime="2025-02-22T13:59:03.9558324+00:00" endTime="2025-02-22T13:59:03.9574887+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2032456d-9dce-4926-ac89-72cb1cb6105c" />
+    <UnitTestResult executionId="209d2e84-179d-4d77-b14e-f38df57031fb" testId="824069aa-83cd-e2df-af5a-d971bcf9e8ee" testName="TestDeleteNonExistent" computerName="fv-az521-965" duration="00:00:00.0000297" startTime="2025-02-22T13:59:04.0523316+00:00" endTime="2025-02-22T13:59:04.0524339+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="209d2e84-179d-4d77-b14e-f38df57031fb" />
+    <UnitTestResult executionId="e7ccc5ed-f3a8-485a-8b05-b75331f5cda0" testId="9a8424cd-4f80-220e-7900-daa37175ddae" testName="TestDirectoryCreate" computerName="fv-az521-965" duration="00:00:00.0004051" startTime="2025-02-22T13:59:03.9540495+00:00" endTime="2025-02-22T13:59:03.9545097+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e7ccc5ed-f3a8-485a-8b05-b75331f5cda0" />
+    <UnitTestResult executionId="983410f1-c448-4c3b-8274-9b6627feab6e" testId="ff3ef572-f71c-5031-deee-22a40c319a7b" testName="TestRootDirectoryExists" computerName="fv-az521-965" duration="00:00:00.0005340" startTime="2025-02-22T13:59:03.9281193+00:00" endTime="2025-02-22T13:59:03.9287216+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="983410f1-c448-4c3b-8274-9b6627feab6e" />
+    <UnitTestResult executionId="ba8c8db1-591b-4709-b6e1-f6a2cbad5617" testId="a0d6016a-1d15-01ec-b35a-338af9cc5112" testName="TestDeleteNonExistent" computerName="fv-az521-965" duration="00:00:00.0000266" startTime="2025-02-22T13:59:03.9547528+00:00" endTime="2025-02-22T13:59:03.9548357+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ba8c8db1-591b-4709-b6e1-f6a2cbad5617" />
+    <UnitTestResult executionId="cefd6ce8-bca1-4da1-82d6-6bdb84b6ad21" testId="a89f0bbf-e5bb-9494-34d2-174c60a99834" testName="TestExistsAsync (True)" computerName="fv-az521-965" duration="00:00:00.0006951" startTime="2025-02-22T13:59:04.0420843+00:00" endTime="2025-02-22T13:59:04.0429106+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cefd6ce8-bca1-4da1-82d6-6bdb84b6ad21" />
+    <UnitTestResult executionId="62681b0a-e7b1-40a4-b47f-d7b0b9f67528" testId="7d7edaab-f11c-42a8-dc0e-01ee01112f84" testName="TestFileOpenReadWriteExistingFile" computerName="fv-az521-965" duration="00:00:00.0001442" startTime="2025-02-22T13:59:04.0566284+00:00" endTime="2025-02-22T13:59:04.0568433+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="62681b0a-e7b1-40a4-b47f-d7b0b9f67528" />
+    <UnitTestResult executionId="80e49545-36ff-4c7e-9c4b-985f14e6ab74" testId="43f0a9d2-6fe6-601a-864c-33da0d2f9754" testName="TestDirectoryEnumerateFilesDirectories (&quot;dir&quot;)" computerName="fv-az521-965" duration="00:00:00.0040295" startTime="2025-02-22T13:59:03.9287520+00:00" endTime="2025-02-22T13:59:03.9352849+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="80e49545-36ff-4c7e-9c4b-985f14e6ab74" />
+    <UnitTestResult executionId="0cbd3b74-6706-44cb-ad65-5a327f5e536b" testId="45544f1a-d7a2-d9e7-5fa3-60036434748b" testName="TestDirectoryFullPathIsConsistent" computerName="fv-az521-965" duration="00:00:00.0000169" startTime="2025-02-22T13:59:04.0512324+00:00" endTime="2025-02-22T13:59:04.0513013+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0cbd3b74-6706-44cb-ad65-5a327f5e536b" />
+    <UnitTestResult executionId="f967b179-9a21-4361-b93f-f5e93908143f" testId="1534deb5-67ec-434a-e4c4-2a3259f0bb39" testName="TestFileOpenReadWrite" computerName="fv-az521-965" duration="00:00:00.0001678" startTime="2025-02-22T13:59:04.0563720+00:00" endTime="2025-02-22T13:59:04.0566039+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f967b179-9a21-4361-b93f-f5e93908143f" />
+    <UnitTestResult executionId="1162f401-2d90-4331-8d88-59159fee05b7" testId="a1ac245f-162d-b3d5-902a-73d42908be8b" testName="TestDeleteEmptyPathDirectory" computerName="fv-az521-965" duration="00:00:00.0010298" startTime="2025-02-22T13:59:03.8902892+00:00" endTime="2025-02-22T13:59:03.8914064+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1162f401-2d90-4331-8d88-59159fee05b7" />
+    <UnitTestResult executionId="ec63f90f-cbeb-48c9-ab02-e560651a21b1" testId="b414c790-0451-ffab-cace-9828ee75369b" testName="TestEmptyDirectoryPaths" computerName="fv-az521-965" duration="00:00:00.0004334" startTime="2025-02-22T13:59:04.0484701+00:00" endTime="2025-02-22T13:59:04.0489812+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ec63f90f-cbeb-48c9-ab02-e560651a21b1" />
+    <UnitTestResult executionId="a6c308e7-7f1e-4f63-a8f5-a18c9ea05c6f" testId="0ecc2e03-b166-5e66-a255-0a8ecc71ea81" testName="TestEmptyFilePaths" computerName="fv-az521-965" duration="00:00:00.0015745" startTime="2025-02-22T13:59:04.0467538+00:00" endTime="2025-02-22T13:59:04.0484446+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a6c308e7-7f1e-4f63-a8f5-a18c9ea05c6f" />
+    <UnitTestResult executionId="524dff82-bb9d-4f7a-8ea2-ade2fdc4f0fb" testId="40b81683-78f2-804b-e88e-f90513574e2a" testName="TestDirectoryDeleteExistingDirectory" computerName="fv-az521-965" duration="00:00:00.0000375" startTime="2025-02-22T13:59:04.0524529+00:00" endTime="2025-02-22T13:59:04.0525399+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="524dff82-bb9d-4f7a-8ea2-ade2fdc4f0fb" />
+    <UnitTestResult executionId="8f2a89a0-cf92-45e4-9d69-1fbb891669e2" testId="8e708a48-e948-fee1-2a70-df94ce5b6a29" testName="TestFileOpenReadWrite" computerName="fv-az521-965" duration="00:00:00.0015672" startTime="2025-02-22T13:59:03.9444930+00:00" endTime="2025-02-22T13:59:03.9461461+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8f2a89a0-cf92-45e4-9d69-1fbb891669e2" />
+    <UnitTestResult executionId="ff901346-d3f5-488d-995b-aa3764ed617b" testId="dafc721a-fc0a-0484-9bd5-7a2ec5a3197f" testName="TestFileStem" computerName="fv-az521-965" duration="00:00:00.0000468" startTime="2025-02-22T13:59:04.0498428+00:00" endTime="2025-02-22T13:59:04.0499519+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ff901346-d3f5-488d-995b-aa3764ed617b" />
+    <UnitTestResult executionId="bad5a7d9-c1c3-4fa2-b800-3aaafdc0674d" testId="9ee8bdb3-752d-d7fa-92e7-baaf5a6a275d" testName="TestExistsAsync (False)" computerName="fv-az521-965" duration="00:00:00.0015170" startTime="2025-02-22T13:59:04.0260908+00:00" endTime="2025-02-22T13:59:04.0277353+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bad5a7d9-c1c3-4fa2-b800-3aaafdc0674d" />
+    <UnitTestResult executionId="9ec2d074-5887-4802-8161-044b57f20d7e" testId="18605d5f-4c35-09c6-72ca-211e48b57479" testName="TestEmptyFilePaths" computerName="fv-az521-965" duration="00:00:00.0072551" startTime="2025-02-22T13:59:03.8640039+00:00" endTime="2025-02-22T13:59:03.8849292+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9ec2d074-5887-4802-8161-044b57f20d7e" />
+    <UnitTestResult executionId="fe17a698-c21e-4465-baca-cb3de0aab595" testId="aa3761b1-576e-01f7-d173-14568b628a0e" testName="TestRootDirectoryExists" computerName="fv-az521-965" duration="00:00:00.0000152" startTime="2025-02-22T13:59:03.9557314+00:00" endTime="2025-02-22T13:59:03.9558085+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fe17a698-c21e-4465-baca-cb3de0aab595" />
+    <UnitTestResult executionId="7a8cc1b7-029f-4eb1-84ea-4dc1599bf1c9" testId="618d4b2b-2ac7-22a8-ee48-265a6ddb8150" testName="TestDirectoryName" computerName="fv-az521-965" duration="00:00:00.0005489" startTime="2025-02-22T13:59:03.8934272+00:00" endTime="2025-02-22T13:59:03.8940565+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7a8cc1b7-029f-4eb1-84ea-4dc1599bf1c9" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestFileOpenReadWriteExistingFile" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="c7897527-4e0e-ad49-b035-f1933297433a">
+      <Execution id="542ecc0d-ae34-46a2-8814-57f53c326268" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestFileOpenReadWriteExistingFile" />
+    </UnitTest>
+    <UnitTest name="TestFileFullPathIsConsistent" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="7da6318e-98b7-39f0-4161-e0aaa63e4356">
+      <Execution id="5450ee59-3817-47d4-9f66-713e66407074" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestFileFullPathIsConsistent" />
+    </UnitTest>
+    <UnitTest name="TestDeleteEmptyPathDirectory" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="3fbe1aef-c231-36db-e42e-599bf3f74565">
+      <Execution id="c8bfe451-715b-42e2-a6c5-a484b920de9e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestDeleteEmptyPathDirectory" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryName" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="618d4b2b-2ac7-22a8-ee48-265a6ddb8150">
+      <Execution id="7a8cc1b7-029f-4eb1-84ea-4dc1599bf1c9" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestDirectoryName" />
+    </UnitTest>
+    <UnitTest name="TestEmptyFilePaths" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="18605d5f-4c35-09c6-72ca-211e48b57479">
+      <Execution id="9ec2d074-5887-4802-8161-044b57f20d7e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestEmptyFilePaths" />
+    </UnitTest>
+    <UnitTest name="TestFileOpenReadWrite" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="1534deb5-67ec-434a-e4c4-2a3259f0bb39">
+      <Execution id="f967b179-9a21-4361-b93f-f5e93908143f" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestFileOpenReadWrite" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryNameWithDot" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="1e71ad58-a0ad-4cd0-0218-6a992bf4f71a">
+      <Execution id="de2beffe-ad6e-48a2-8c11-7167fa777452" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestDirectoryNameWithDot" />
+    </UnitTest>
+    <UnitTest name="TestFileOpenReadWrite" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="8e708a48-e948-fee1-2a70-df94ce5b6a29">
+      <Execution id="8f2a89a0-cf92-45e4-9d69-1fbb891669e2" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestFileOpenReadWrite" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryCreateExisting" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="a29289ea-bc1d-0083-5118-54a12526b8af">
+      <Execution id="3f7b29bf-ae03-4ffc-bac3-2b9f836799d4" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestDirectoryCreateExisting" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryEnumerateFilesDirectoriesNested" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="7eb76f2c-21a5-f549-3581-458e2d90bb4e">
+      <Execution id="97769fec-f6a3-4b1e-8d09-f3a06828af73" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestDirectoryEnumerateFilesDirectoriesNested" />
+    </UnitTest>
+    <UnitTest name="TestEmptyDirectoryPaths" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="d4d986da-d4bd-08f4-57b5-191f12483e46">
+      <Execution id="db98689c-9503-4203-8bc3-a0340e7f382b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestEmptyDirectoryPaths" />
+    </UnitTest>
+    <UnitTest name="TestExistsAsync (True)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="910e1179-c618-ac81-88d3-77979d52ca2e">
+      <Execution id="76881ce1-65c2-4fbd-b98e-f93ce15d76c5" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.SyncToAsyncDirectoryAdapterTests" name="TestExistsAsync" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryEnumerateFilesDirectories (&quot;dir&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="bacbbd13-aba6-615b-798e-fa63927d70ae">
+      <Execution id="2032456d-9dce-4926-ac89-72cb1cb6105c" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestDirectoryEnumerateFilesDirectories" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryName" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="797b8a01-8186-1169-ecab-9b51ad970e5d">
+      <Execution id="bbc069d1-e04b-4e5c-981a-8ab842d88b87" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestDirectoryName" />
+    </UnitTest>
+    <UnitTest name="TestRootDirectoryExists" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="966fde8d-32df-314c-6115-6a9b32ec93b9">
+      <Execution id="f0e4cb8f-bd1d-4eb9-9792-c89f3a303714" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestRootDirectoryExists" />
+    </UnitTest>
+    <UnitTest name="TestFileName" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="125bc9fc-30db-ee48-7efe-8896541b5651">
+      <Execution id="fec70374-f16b-4248-be90-98447cc35280" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestFileName" />
+    </UnitTest>
+    <UnitTest name="TestEmptyFilePaths" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="0ecc2e03-b166-5e66-a255-0a8ecc71ea81">
+      <Execution id="a6c308e7-7f1e-4f63-a8f5-a18c9ea05c6f" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestEmptyFilePaths" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryNameWithDot" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="cd0078b3-4b7f-1e54-2b47-dac01f923d15">
+      <Execution id="c8aaa115-e069-4831-8b77-b538e62e38e3" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestDirectoryNameWithDot" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryCreate" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="9a8424cd-4f80-220e-7900-daa37175ddae">
+      <Execution id="e7ccc5ed-f3a8-485a-8b05-b75331f5cda0" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestDirectoryCreate" />
+    </UnitTest>
+    <UnitTest name="TestFileOpenReadWrite" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="fca03aaa-9bd0-d573-60dc-d9376c9ea610">
+      <Execution id="eb07a453-6bef-4639-8dfb-6f69f83b5a3d" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestFileOpenReadWrite" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryEnumerateFilesDirectoriesNested" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="f7b478bc-0212-d153-656f-f41f57754de4">
+      <Execution id="182f1394-2e95-4661-971a-82a8cf9eb4cf" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestDirectoryEnumerateFilesDirectoriesNested" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryCreateExisting" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="eff7da53-f6a7-63b0-cc4f-2e2f7ff54c59">
+      <Execution id="4986e07e-5c28-4166-acda-9379d56d05ca" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestDirectoryCreateExisting" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryName" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="de3b2480-d479-605b-e08b-e52b3f60032b">
+      <Execution id="5aa07684-06c9-43bd-9872-9d2da9ed428c" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestDirectoryName" />
+    </UnitTest>
+    <UnitTest name="TestEnumerateFilesAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="bda2bfb3-e5c0-2200-50a6-0294fcf407ea">
+      <Execution id="e650d0ad-94d4-456f-a6b8-09e8a973505c" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.SyncToAsyncDirectoryAdapterTests" name="TestEnumerateFilesAsync" />
+    </UnitTest>
+    <UnitTest name="TestEmptyDirectoryPaths" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="4215e5b5-fc3c-3e4d-30ae-01a50b08f468">
+      <Execution id="c481647f-dece-4d65-a46a-76dd0ba3369a" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestEmptyDirectoryPaths" />
+    </UnitTest>
+    <UnitTest name="TestFileStem" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="a3803826-329d-dc6f-fc7d-0e02805b706c">
+      <Execution id="d6cedfc9-b399-445b-9e7e-ab27d69301d4" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestFileStem" />
+    </UnitTest>
+    <UnitTest name="TestFileDelete" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="9011c160-8b72-47ef-0b19-f1ac4fafc464">
+      <Execution id="96f7be1b-5d46-4f56-8dfd-d8cecb9cb781" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestFileDelete" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryDeleteExistingDirectory" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="40b81683-78f2-804b-e88e-f90513574e2a">
+      <Execution id="524dff82-bb9d-4f7a-8ea2-ade2fdc4f0fb" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestDirectoryDeleteExistingDirectory" />
+    </UnitTest>
+    <UnitTest name="TestFileStem" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="0da9f8a8-e657-b210-b5f3-ec83c8497b26">
+      <Execution id="cf92d07f-6d79-4835-bd1f-4571c7752429" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestFileStem" />
+    </UnitTest>
+    <UnitTest name="TestRootDirectoryExists" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="ff3ef572-f71c-5031-deee-22a40c319a7b">
+      <Execution id="983410f1-c448-4c3b-8274-9b6627feab6e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestRootDirectoryExists" />
+    </UnitTest>
+    <UnitTest name="TestDeleteEmptyPathDirectory" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="a1ac245f-162d-b3d5-902a-73d42908be8b">
+      <Execution id="1162f401-2d90-4331-8d88-59159fee05b7" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestDeleteEmptyPathDirectory" />
+    </UnitTest>
+    <UnitTest name="TestFileExtension" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="6e5b91a2-6a19-9c04-8737-fad3d45dfaa1">
+      <Execution id="067d792e-eeb4-45e5-9021-f5138ec9512b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestFileExtension" />
+    </UnitTest>
+    <UnitTest name="TestFileName" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="f8e7277d-d9f8-29f5-60e4-5fbb63d964ed">
+      <Execution id="c69698bc-9df3-4f54-851a-bfe1b3c5b6f9" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestFileName" />
+    </UnitTest>
+    <UnitTest name="TestCreateAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="49fe5267-fc48-c49a-f934-3af546ee163f">
+      <Execution id="b3404f6e-b9a6-4d97-a08f-26a93e7f009f" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.SyncToAsyncDirectoryAdapterTests" name="TestCreateAsync" />
+    </UnitTest>
+    <UnitTest name="TestParentDirectory" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="79c4ff89-0797-e74c-0eb1-6195164e4436">
+      <Execution id="b932190b-2577-4256-b079-1cdc5b0ff069" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestParentDirectory" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryCreate" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="0e088d27-c7d7-0291-d4f0-8f7b1d9da554">
+      <Execution id="1bc54772-9062-478f-900c-1c23391a870d" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestDirectoryCreate" />
+    </UnitTest>
+    <UnitTest name="TestFileOpenReadWriteExistingFile" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="7d7edaab-f11c-42a8-dc0e-01ee01112f84">
+      <Execution id="62681b0a-e7b1-40a4-b47f-d7b0b9f67528" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestFileOpenReadWriteExistingFile" />
+    </UnitTest>
+    <UnitTest name="TestEnumerateDirectoriesAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="0f1da9e6-1cbf-8583-2f6b-0061293bebf8">
+      <Execution id="a2ce48c1-e0ac-4c7a-8bfe-462cec1df694" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.SyncToAsyncDirectoryAdapterTests" name="TestEnumerateDirectoriesAsync" />
+    </UnitTest>
+    <UnitTest name="TestExistsAsync (False)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="9ee8bdb3-752d-d7fa-92e7-baaf5a6a275d">
+      <Execution id="bad5a7d9-c1c3-4fa2-b800-3aaafdc0674d" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.SyncToAsyncDirectoryAdapterTests" name="TestExistsAsync" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryEnumerateFilesDirectories (&quot;&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="f8c037a4-86a1-940c-dee2-3812680c280a">
+      <Execution id="40220149-49e4-4d3b-8711-299de8017db1" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestDirectoryEnumerateFilesDirectories" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryNameWithDot" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="51e79817-9cb4-c803-a9cd-be62c5643252">
+      <Execution id="26a12612-5696-4094-9348-53d884b1e74e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestDirectoryNameWithDot" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryCreateExisting" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="5b8af763-c9e7-a7dc-38c5-6c93729daebf">
+      <Execution id="a2c01c16-bf2e-4012-9a5c-0b238a6923ee" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestDirectoryCreateExisting" />
+    </UnitTest>
+    <UnitTest name="TestEmptyFilePaths" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="30b186da-9a79-931d-4ee5-ecdfe5db3c76">
+      <Execution id="164e9251-cf77-4f44-b1bd-be6a9fec9350" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestEmptyFilePaths" />
+    </UnitTest>
+    <UnitTest name="TestDeleteEmptyPathDirectory" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="02f617f7-c2f8-ea60-5be7-c053e0a3cf57">
+      <Execution id="966a188e-798c-4b85-887a-58ead3fdf484" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestDeleteEmptyPathDirectory" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryFullPathIsConsistent" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="2e325afd-71c3-c013-f9e9-d25d63271309">
+      <Execution id="6fbe43eb-5e44-4f95-904d-09abb0d828e6" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestDirectoryFullPathIsConsistent" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryEnumerateFilesDirectories (&quot;&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="08e0f610-476a-cb6d-5d83-04cfa0bb5513">
+      <Execution id="76e3ee2a-45dd-45f0-8aad-fa86935a5e38" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestDirectoryEnumerateFilesDirectories" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryFullPathIsConsistent" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="ee7e4fee-92ed-61e3-75da-bff49e330275">
+      <Execution id="b9b7e689-ae2e-4341-8314-8b9185137721" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestDirectoryFullPathIsConsistent" />
+    </UnitTest>
+    <UnitTest name="TestFileExtension" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="6de70bcc-1fd5-fee6-1433-0f0245c25247">
+      <Execution id="251c56b6-acb2-46be-85d6-14259ba6738d" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestFileExtension" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryDeleteExistingDirectory" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="109778f8-1a3f-c921-f480-5b33ec9e404c">
+      <Execution id="0aa949a7-a93c-4b4c-9037-cdbd0482c6ed" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestDirectoryDeleteExistingDirectory" />
+    </UnitTest>
+    <UnitTest name="TestEmptyDirectoryPaths" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="b414c790-0451-ffab-cace-9828ee75369b">
+      <Execution id="ec63f90f-cbeb-48c9-ab02-e560651a21b1" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestEmptyDirectoryPaths" />
+    </UnitTest>
+    <UnitTest name="TestFileName" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="24b7a9df-0abd-14f1-06c9-9d72cbf192b3">
+      <Execution id="b9890e87-1e4d-4f0a-89ee-7b550cee6f11" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestFileName" />
+    </UnitTest>
+    <UnitTest name="TestFileFullPathIsConsistent" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="4f6773f6-14de-a05b-1a5d-745be43beb3f">
+      <Execution id="27b97639-30b3-4b13-87e4-6302170976cd" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestFileFullPathIsConsistent" />
+    </UnitTest>
+    <UnitTest name="TestParentDirectory" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="c901782e-ef1c-b42b-60f1-435a0351d1c3">
+      <Execution id="86d6cb76-38d2-4eae-89c8-4486b213f751" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestParentDirectory" />
+    </UnitTest>
+    <UnitTest name="TestDeleteAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="1c9877c6-ebfa-9f2c-ee53-ef4e577d1078">
+      <Execution id="3af9127e-b4e3-411a-8e56-760420ce08fb" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.SyncToAsyncFileAdapterTests" name="TestDeleteAsync" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryFullPathIsConsistent" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="45544f1a-d7a2-d9e7-5fa3-60036434748b">
+      <Execution id="0cbd3b74-6706-44cb-ad65-5a327f5e536b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestDirectoryFullPathIsConsistent" />
+    </UnitTest>
+    <UnitTest name="TestDeleteNonExistent" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="009a2387-0a42-469f-a4ba-4b5d7815ce64">
+      <Execution id="6cf86892-2228-418e-91e8-e5a0a0560458" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestDeleteNonExistent" />
+    </UnitTest>
+    <UnitTest name="TestExistsAsync (True)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="a89f0bbf-e5bb-9494-34d2-174c60a99834">
+      <Execution id="cefd6ce8-bca1-4da1-82d6-6bdb84b6ad21" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.SyncToAsyncFileAdapterTests" name="TestExistsAsync" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryDeleteExistingDirectory" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="fe70811c-eba8-dd1f-7c22-0fa4e60d4aa2">
+      <Execution id="7be6ae6d-8a3d-48fa-9df8-e5f170d85864" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestDirectoryDeleteExistingDirectory" />
+    </UnitTest>
+    <UnitTest name="TestFileFullPathIsConsistent" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="8b81bd82-dc36-2cda-229b-b5072167dddf">
+      <Execution id="ed72b0dd-bcd2-4166-a30a-213cfc81be2e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestFileFullPathIsConsistent" />
+    </UnitTest>
+    <UnitTest name="TestFileExtension" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="cef74505-0de5-871e-983a-ff75ebac7980">
+      <Execution id="28de9f30-680a-4a09-a952-63ad3df07688" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestFileExtension" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryEnumerateFilesDirectoriesNested" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="9fab18c8-de42-5edf-89cb-38fe842efdcb">
+      <Execution id="e26a7691-96f6-4886-ab8a-f71afaa8b7b0" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestDirectoryEnumerateFilesDirectoriesNested" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryCreate" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="df1b3604-ffd3-14ba-042b-94c14c177176">
+      <Execution id="8f2344be-54d3-4d8a-9ee5-302636729e5a" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestDirectoryCreate" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryEnumerateFilesDirectories (&quot;dir&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="43f0a9d2-6fe6-601a-864c-33da0d2f9754">
+      <Execution id="80e49545-36ff-4c7e-9c4b-985f14e6ab74" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestDirectoryEnumerateFilesDirectories" />
+    </UnitTest>
+    <UnitTest name="TestRootDirectoryExists" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="aa3761b1-576e-01f7-d173-14568b628a0e">
+      <Execution id="fe17a698-c21e-4465-baca-cb3de0aab595" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestRootDirectoryExists" />
+    </UnitTest>
+    <UnitTest name="TestExistsAsync (False)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="6cfcf509-16b7-8279-725f-a4ce45ea80aa">
+      <Execution id="e38da619-71d6-4a3c-bb74-2b29476143a7" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.SyncToAsyncFileAdapterTests" name="TestExistsAsync" />
+    </UnitTest>
+    <UnitTest name="TestFileDelete" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="87471bd0-b3d5-4af4-a468-43e113ade7fe">
+      <Execution id="ace4f113-051c-4009-b990-6c365752e98f" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestFileDelete" />
+    </UnitTest>
+    <UnitTest name="TestParentDirectory" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="1e8ef867-c861-69f4-badf-30af80491de8">
+      <Execution id="3033ff28-e6b2-42d0-a194-26a1edaba8a7" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestParentDirectory" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryEnumerateFilesDirectories (&quot;dir&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="64552f8d-56bd-dece-2bde-38ac338fdf57">
+      <Execution id="faf56ea3-b4a3-4119-9b64-cd9d14821a69" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestDirectoryEnumerateFilesDirectories" />
+    </UnitTest>
+    <UnitTest name="TestDeleteNonExistent" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="a0d6016a-1d15-01ec-b35a-338af9cc5112">
+      <Execution id="ba8c8db1-591b-4709-b6e1-f6a2cbad5617" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestDeleteNonExistent" />
+    </UnitTest>
+    <UnitTest name="TestFileDelete" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="f64eab59-d366-aa12-22f3-ad8e634f95d1">
+      <Execution id="ab29fc54-6385-404c-9830-f501fbb1d6e0" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestFileDelete" />
+    </UnitTest>
+    <UnitTest name="TestDeleteNonExistent" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="824069aa-83cd-e2df-af5a-d971bcf9e8ee">
+      <Execution id="209d2e84-179d-4d77-b14e-f38df57031fb" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestDeleteNonExistent" />
+    </UnitTest>
+    <UnitTest name="TestOpenWriteAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="c37f7643-1974-730c-ff6e-4fb586696ec1">
+      <Execution id="8c43048f-e670-4f30-a253-203e4a96c71b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.SyncToAsyncFileAdapterTests" name="TestOpenWriteAsync" />
+    </UnitTest>
+    <UnitTest name="TestFileStem" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="dafc721a-fc0a-0484-9bd5-7a2ec5a3197f">
+      <Execution id="ff901346-d3f5-488d-995b-aa3764ed617b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.ZipFileStorageTests" name="TestFileStem" />
+    </UnitTest>
+    <UnitTest name="TestOpenReadAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="1f720387-7182-1f7e-79cf-5e42f1b3a177">
+      <Execution id="bdff782e-ddba-40a9-bb06-2875f956a9e8" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.SyncToAsyncFileAdapterTests" name="TestOpenReadAsync" />
+    </UnitTest>
+    <UnitTest name="TestDeleteAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="607da53e-34ec-12fb-53d4-7b9a98141219">
+      <Execution id="5573dc69-e982-4887-bd90-2b6bb37864f3" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.SyncToAsyncDirectoryAdapterTests" name="TestDeleteAsync" />
+    </UnitTest>
+    <UnitTest name="TestFileOpenReadWriteExistingFile" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="80da2137-b6cc-609b-971f-7e7a4fdb564d">
+      <Execution id="fe1799fe-77a3-4ef4-b093-4754922ee96b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.FilesystemFileStorageTests" name="TestFileOpenReadWriteExistingFile" />
+    </UnitTest>
+    <UnitTest name="TestDirectoryEnumerateFilesDirectories (&quot;&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\filestorage.tests\release_win-x64\filestorage.tests.dll" id="2b565eab-d7f1-591c-d1b8-d74976982623">
+      <Execution id="3c5286b0-ecd3-4f7d-b1e8-1e3b871d9720" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\FileStorage.Tests\release_win-x64\FileStorage.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="FileStorage.Tests.MemoryFileStorageTests" name="TestDirectoryEnumerateFilesDirectories" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="d4d986da-d4bd-08f4-57b5-191f12483e46" executionId="db98689c-9503-4203-8bc3-a0340e7f382b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bda2bfb3-e5c0-2200-50a6-0294fcf407ea" executionId="e650d0ad-94d4-456f-a6b8-09e8a973505c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0f1da9e6-1cbf-8583-2f6b-0061293bebf8" executionId="a2ce48c1-e0ac-4c7a-8bfe-462cec1df694" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9011c160-8b72-47ef-0b19-f1ac4fafc464" executionId="96f7be1b-5d46-4f56-8dfd-d8cecb9cb781" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="109778f8-1a3f-c921-f480-5b33ec9e404c" executionId="0aa949a7-a93c-4b4c-9037-cdbd0482c6ed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a29289ea-bc1d-0083-5118-54a12526b8af" executionId="3f7b29bf-ae03-4ffc-bac3-2b9f836799d4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f64eab59-d366-aa12-22f3-ad8e634f95d1" executionId="ab29fc54-6385-404c-9830-f501fbb1d6e0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="51e79817-9cb4-c803-a9cd-be62c5643252" executionId="26a12612-5696-4094-9348-53d884b1e74e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cef74505-0de5-871e-983a-ff75ebac7980" executionId="28de9f30-680a-4a09-a952-63ad3df07688" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4f6773f6-14de-a05b-1a5d-745be43beb3f" executionId="27b97639-30b3-4b13-87e4-6302170976cd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f8e7277d-d9f8-29f5-60e4-5fbb63d964ed" executionId="c69698bc-9df3-4f54-851a-bfe1b3c5b6f9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8b81bd82-dc36-2cda-229b-b5072167dddf" executionId="ed72b0dd-bcd2-4166-a30a-213cfc81be2e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="24b7a9df-0abd-14f1-06c9-9d72cbf192b3" executionId="b9890e87-1e4d-4f0a-89ee-7b550cee6f11" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2e325afd-71c3-c013-f9e9-d25d63271309" executionId="6fbe43eb-5e44-4f95-904d-09abb0d828e6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c7897527-4e0e-ad49-b035-f1933297433a" executionId="542ecc0d-ae34-46a2-8814-57f53c326268" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7eb76f2c-21a5-f549-3581-458e2d90bb4e" executionId="97769fec-f6a3-4b1e-8d09-f3a06828af73" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eff7da53-f6a7-63b0-cc4f-2e2f7ff54c59" executionId="4986e07e-5c28-4166-acda-9379d56d05ca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="de3b2480-d479-605b-e08b-e52b3f60032b" executionId="5aa07684-06c9-43bd-9872-9d2da9ed428c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4215e5b5-fc3c-3e4d-30ae-01a50b08f468" executionId="c481647f-dece-4d65-a46a-76dd0ba3369a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="87471bd0-b3d5-4af4-a468-43e113ade7fe" executionId="ace4f113-051c-4009-b990-6c365752e98f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="49fe5267-fc48-c49a-f934-3af546ee163f" executionId="b3404f6e-b9a6-4d97-a08f-26a93e7f009f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="80da2137-b6cc-609b-971f-7e7a4fdb564d" executionId="fe1799fe-77a3-4ef4-b093-4754922ee96b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c901782e-ef1c-b42b-60f1-435a0351d1c3" executionId="86d6cb76-38d2-4eae-89c8-4486b213f751" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1e8ef867-c861-69f4-badf-30af80491de8" executionId="3033ff28-e6b2-42d0-a194-26a1edaba8a7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="64552f8d-56bd-dece-2bde-38ac338fdf57" executionId="faf56ea3-b4a3-4119-9b64-cd9d14821a69" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7da6318e-98b7-39f0-4161-e0aaa63e4356" executionId="5450ee59-3817-47d4-9f66-713e66407074" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1c9877c6-ebfa-9f2c-ee53-ef4e577d1078" executionId="3af9127e-b4e3-411a-8e56-760420ce08fb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="df1b3604-ffd3-14ba-042b-94c14c177176" executionId="8f2344be-54d3-4d8a-9ee5-302636729e5a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e5b91a2-6a19-9c04-8737-fad3d45dfaa1" executionId="067d792e-eeb4-45e5-9021-f5138ec9512b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="009a2387-0a42-469f-a4ba-4b5d7815ce64" executionId="6cf86892-2228-418e-91e8-e5a0a0560458" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="910e1179-c618-ac81-88d3-77979d52ca2e" executionId="76881ce1-65c2-4fbd-b98e-f93ce15d76c5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fe70811c-eba8-dd1f-7c22-0fa4e60d4aa2" executionId="7be6ae6d-8a3d-48fa-9df8-e5f170d85864" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cd0078b3-4b7f-1e54-2b47-dac01f923d15" executionId="c8aaa115-e069-4831-8b77-b538e62e38e3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f8c037a4-86a1-940c-dee2-3812680c280a" executionId="40220149-49e4-4d3b-8711-299de8017db1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="08e0f610-476a-cb6d-5d83-04cfa0bb5513" executionId="76e3ee2a-45dd-45f0-8aad-fa86935a5e38" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="125bc9fc-30db-ee48-7efe-8896541b5651" executionId="fec70374-f16b-4248-be90-98447cc35280" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3fbe1aef-c231-36db-e42e-599bf3f74565" executionId="c8bfe451-715b-42e2-a6c5-a484b920de9e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="30b186da-9a79-931d-4ee5-ecdfe5db3c76" executionId="164e9251-cf77-4f44-b1bd-be6a9fec9350" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="607da53e-34ec-12fb-53d4-7b9a98141219" executionId="5573dc69-e982-4887-bd90-2b6bb37864f3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0e088d27-c7d7-0291-d4f0-8f7b1d9da554" executionId="1bc54772-9062-478f-900c-1c23391a870d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6cfcf509-16b7-8279-725f-a4ce45ea80aa" executionId="e38da619-71d6-4a3c-bb74-2b29476143a7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0da9f8a8-e657-b210-b5f3-ec83c8497b26" executionId="cf92d07f-6d79-4835-bd1f-4571c7752429" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c37f7643-1974-730c-ff6e-4fb586696ec1" executionId="8c43048f-e670-4f30-a253-203e4a96c71b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fca03aaa-9bd0-d573-60dc-d9376c9ea610" executionId="eb07a453-6bef-4639-8dfb-6f69f83b5a3d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="966fde8d-32df-314c-6115-6a9b32ec93b9" executionId="f0e4cb8f-bd1d-4eb9-9792-c89f3a303714" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ee7e4fee-92ed-61e3-75da-bff49e330275" executionId="b9b7e689-ae2e-4341-8314-8b9185137721" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9fab18c8-de42-5edf-89cb-38fe842efdcb" executionId="e26a7691-96f6-4886-ab8a-f71afaa8b7b0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="79c4ff89-0797-e74c-0eb1-6195164e4436" executionId="b932190b-2577-4256-b079-1cdc5b0ff069" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1e71ad58-a0ad-4cd0-0218-6a992bf4f71a" executionId="de2beffe-ad6e-48a2-8c11-7167fa777452" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="02f617f7-c2f8-ea60-5be7-c053e0a3cf57" executionId="966a188e-798c-4b85-887a-58ead3fdf484" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f7b478bc-0212-d153-656f-f41f57754de4" executionId="182f1394-2e95-4661-971a-82a8cf9eb4cf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="797b8a01-8186-1169-ecab-9b51ad970e5d" executionId="bbc069d1-e04b-4e5c-981a-8ab842d88b87" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6de70bcc-1fd5-fee6-1433-0f0245c25247" executionId="251c56b6-acb2-46be-85d6-14259ba6738d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a3803826-329d-dc6f-fc7d-0e02805b706c" executionId="d6cedfc9-b399-445b-9e7e-ab27d69301d4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5b8af763-c9e7-a7dc-38c5-6c93729daebf" executionId="a2c01c16-bf2e-4012-9a5c-0b238a6923ee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f720387-7182-1f7e-79cf-5e42f1b3a177" executionId="bdff782e-ddba-40a9-bb06-2875f956a9e8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2b565eab-d7f1-591c-d1b8-d74976982623" executionId="3c5286b0-ecd3-4f7d-b1e8-1e3b871d9720" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bacbbd13-aba6-615b-798e-fa63927d70ae" executionId="2032456d-9dce-4926-ac89-72cb1cb6105c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="824069aa-83cd-e2df-af5a-d971bcf9e8ee" executionId="209d2e84-179d-4d77-b14e-f38df57031fb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9a8424cd-4f80-220e-7900-daa37175ddae" executionId="e7ccc5ed-f3a8-485a-8b05-b75331f5cda0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ff3ef572-f71c-5031-deee-22a40c319a7b" executionId="983410f1-c448-4c3b-8274-9b6627feab6e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a0d6016a-1d15-01ec-b35a-338af9cc5112" executionId="ba8c8db1-591b-4709-b6e1-f6a2cbad5617" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a89f0bbf-e5bb-9494-34d2-174c60a99834" executionId="cefd6ce8-bca1-4da1-82d6-6bdb84b6ad21" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7d7edaab-f11c-42a8-dc0e-01ee01112f84" executionId="62681b0a-e7b1-40a4-b47f-d7b0b9f67528" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="43f0a9d2-6fe6-601a-864c-33da0d2f9754" executionId="80e49545-36ff-4c7e-9c4b-985f14e6ab74" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="45544f1a-d7a2-d9e7-5fa3-60036434748b" executionId="0cbd3b74-6706-44cb-ad65-5a327f5e536b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1534deb5-67ec-434a-e4c4-2a3259f0bb39" executionId="f967b179-9a21-4361-b93f-f5e93908143f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a1ac245f-162d-b3d5-902a-73d42908be8b" executionId="1162f401-2d90-4331-8d88-59159fee05b7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b414c790-0451-ffab-cace-9828ee75369b" executionId="ec63f90f-cbeb-48c9-ab02-e560651a21b1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0ecc2e03-b166-5e66-a255-0a8ecc71ea81" executionId="a6c308e7-7f1e-4f63-a8f5-a18c9ea05c6f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="40b81683-78f2-804b-e88e-f90513574e2a" executionId="524dff82-bb9d-4f7a-8ea2-ade2fdc4f0fb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8e708a48-e948-fee1-2a70-df94ce5b6a29" executionId="8f2a89a0-cf92-45e4-9d69-1fbb891669e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dafc721a-fc0a-0484-9bd5-7a2ec5a3197f" executionId="ff901346-d3f5-488d-995b-aa3764ed617b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9ee8bdb3-752d-d7fa-92e7-baaf5a6a275d" executionId="bad5a7d9-c1c3-4fa2-b800-3aaafdc0674d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18605d5f-4c35-09c6-72ca-211e48b57479" executionId="9ec2d074-5887-4802-8161-044b57f20d7e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="aa3761b1-576e-01f7-d173-14568b628a0e" executionId="fe17a698-c21e-4465-baca-cb3de0aab595" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="618d4b2b-2ac7-22a8-ee48-265a6ddb8150" executionId="7a8cc1b7-029f-4eb1-84ea-4dc1599bf1c9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="77" executed="77" passed="77" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+</TestRun>
