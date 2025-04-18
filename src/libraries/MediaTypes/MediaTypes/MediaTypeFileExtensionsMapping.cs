@@ -58,6 +58,7 @@ public sealed class MediaTypeFileExtensionsMapping : IMediaTypeFileExtensionsMap
     {
         return new(
             (MediaType.Application.Epub_Zip, [".epub"]),
+            (MediaType.Application.Json, [".json"]),
             (MediaType.Application.OebpsPackage_Xml, [".opf"]),
             (MediaType.Application.Pdf, [".pdf"]),
             (MediaType.Application.XDtbncx_Xml, [".ncx"]),

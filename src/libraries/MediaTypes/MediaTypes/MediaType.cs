@@ -5,6 +5,7 @@ public static class MediaType
     public static class Application
     {
         public const string Epub_Zip = "application/epub+zip";
+        public const string Json = "application/json";
         public const string OctetStream = "application/octet-stream";
         public const string OebpsPackage_Xml = "application/oebps-package+xml";
         public const string Pdf = "application/pdf";
