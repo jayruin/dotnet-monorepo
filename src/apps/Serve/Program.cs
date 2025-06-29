@@ -14,13 +14,23 @@ class Program
 {
     static Task<int> Main(string[] args)
     {
-        var rootCommand = new RootCommand();
         var pathArgument = new Argument<string>("path");
-        var tempModeOption = new Option<TempMode>(new[] { "--tempMode", "-t", }, getDefaultValue: () => TempMode.Memory);
-        rootCommand.AddArgument(pathArgument);
-        rootCommand.AddOption(tempModeOption);
-        rootCommand.SetHandler(HandleRootAsync, pathArgument, tempModeOption);
-        return rootCommand.InvokeAsync(args);
+        var tempModeOption = new Option<TempMode>("--tempMode", "-t")
+        {
+            DefaultValueFactory = _ => TempMode.Memory,
+        };
+        var rootCommand = new RootCommand()
+        {
+            pathArgument,
+            tempModeOption,
+        };
+        rootCommand.SetAction((parseResult) =>
+        {
+            string path = parseResult.GetRequiredValue(pathArgument);
+            TempMode tempMode = parseResult.GetRequiredValue(tempModeOption);
+            return HandleRootAsync(path, tempMode);
+        });
+        return rootCommand.Parse(args).InvokeAsync();
     }
 
     private static Task HandleRootAsync(string path, TempMode tempMode)

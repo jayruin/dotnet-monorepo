@@ -141,10 +141,17 @@ static void Pack(string directory, string? output)
     }
 }
 
-var rootCommand = new RootCommand();
 var directoryArgument = new Argument<string>("directory");
-var outputOption = new Option<string>(["--output", "-o"]);
-rootCommand.AddArgument(directoryArgument);
-rootCommand.AddOption(outputOption);
-rootCommand.SetHandler(Pack, directoryArgument, outputOption);
-rootCommand.Invoke(args);
+var outputOption = new Option<string>("--output", "-o");
+var rootCommand = new RootCommand()
+{
+    directoryArgument,
+    outputOption,
+};
+rootCommand.SetAction((parseResult) =>
+{
+    string directory = parseResult.GetRequiredValue(directoryArgument);
+    string? output = parseResult.GetValue(outputOption);
+    Pack(directory, output);
+});
+rootCommand.Parse(args).Invoke();
