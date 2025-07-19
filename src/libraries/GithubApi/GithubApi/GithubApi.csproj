@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="$(Proj_MediaTypes)" />
-    <ProjectReference Include="$(Proj_Utils)" />
+    <InternalsVisibleTo Include="GithubApi.Tests" />
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="GithubApi.Tests" />
+    <ProjectReference Include="$(Proj_MediaTypes)" />
+    <ProjectReference Include="$(Proj_Utils)" />
   </ItemGroup>
 
 </Project>

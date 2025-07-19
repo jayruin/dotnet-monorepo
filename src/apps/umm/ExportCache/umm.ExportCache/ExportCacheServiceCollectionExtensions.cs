@@ -1,0 +1,48 @@
+using FileStorage.Filesystem;
+using MediaTypes;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+
+namespace umm.ExportCache;
+
+public static class ExportCacheServiceCollectionExtensions
+{
+    public static IServiceCollection AddExportCacheServices(this IServiceCollection serviceCollection, IConfiguration configuration)
+    {
+        string exportCachePrefix = "exportcache";
+        IConfiguration exportCacheConfiguration = configuration.GetSection(exportCachePrefix);
+        string? exportCacheType = exportCacheConfiguration["type"];
+        if (string.IsNullOrWhiteSpace(exportCacheType)) return serviceCollection;
+        if (exportCacheType.Equals("filesystem", StringComparison.OrdinalIgnoreCase))
+        {
+            var options = exportCacheConfiguration.Get<FilesystemExportCacheOptions>();
+            string? path = options?.Path;
+            bool handlesFiles = options?.Files ?? false;
+            bool handlesDirectories = options?.Directories ?? false;
+            List<string>? mediaTypes = options?.MediaTypes;
+            if (!string.IsNullOrWhiteSpace(path) && mediaTypes is not null && (handlesFiles || handlesDirectories))
+            {
+                serviceCollection.AddTransient<IExportCache, FilestorageExportCache>(sp => new(
+                    sp.GetRequiredService<IMediaTypeFileExtensionsMapping>(),
+                    new()
+                    {
+                        RootDirectory = new FilesystemFileStorage().GetDirectory(path),
+                        HandleFiles = handlesFiles,
+                        HandleDirectories = handlesDirectories,
+                        MediaTypes = [.. mediaTypes],
+                    }));
+            }
+        }
+        return serviceCollection;
+    }
+
+    internal sealed class FilesystemExportCacheOptions
+    {
+        public string? Path { get; set; }
+        public bool Files { get; set; }
+        public bool Directories { get; set; }
+        public List<string>? MediaTypes { get; set; }
+    }
+}

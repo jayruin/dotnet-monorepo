@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace FileStorage.Zip;
 
+// TODO Async Zip
 public sealed class ZipFileStorage : IFileStorage, IDisposable
 {
     internal ZipArchive Archive { get; set; }

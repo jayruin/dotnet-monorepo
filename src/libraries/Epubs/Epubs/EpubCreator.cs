@@ -1,11 +1,13 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Epubs;
 
 public sealed class EpubCreator
 {
-    public string Name { get; set; } = string.Empty;
+    public required string Name { get; init; }
+    public required IReadOnlyCollection<string> Roles { get; init; }
 
-    public IEnumerable<string> Roles { get; set; } = Enumerable.Empty<string>();
+    public override string ToString() => Roles.Count > 0
+        ? $"{Name} ({string.Join(", ", Roles)})"
+        : Name;
 }

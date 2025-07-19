@@ -50,18 +50,23 @@ public static class DbExtensions
 
     public static async Task ExecuteCommandAsync(this DbDataSource dataSource, FormattableString commandText, CancellationToken cancellationToken = default)
     {
-        await using DbConnection connection = await dataSource.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
-        await using DbCommand command = connection.CreateCommand();
+        DbConnection connection = await dataSource.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+        await using ConfiguredAsyncDisposable configuredConnection = connection.ConfigureAwait(false);
+        DbCommand command = connection.CreateCommand();
+        await using ConfiguredAsyncDisposable configuredCommand = command.ConfigureAwait(false);
         command.Initialize(commandText);
         await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
     }
 
     public static async IAsyncEnumerable<T> ExecuteCommandAsync<T>(this DbDataSource dataSource, FormattableString commandText, Func<IAsyncDatabaseRow, Task<T>> mapper, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        await using DbConnection connection = await dataSource.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
-        await using DbCommand command = connection.CreateCommand();
+        DbConnection connection = await dataSource.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+        await using ConfiguredAsyncDisposable configuredConnection = connection.ConfigureAwait(false);
+        DbCommand command = connection.CreateCommand();
+        await using ConfiguredAsyncDisposable configuredCommand = command.ConfigureAwait(false);
         command.Initialize(commandText);
-        await using DbDataReader dataReader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        DbDataReader dataReader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+        await using ConfiguredAsyncDisposable configuredDataReader = dataReader.ConfigureAwait(false);
         IAsyncDatabaseRow row = new AsyncDatabaseRow(dataReader, cancellationToken);
         while (await dataReader.ReadAsync(cancellationToken).ConfigureAwait(false))
         {

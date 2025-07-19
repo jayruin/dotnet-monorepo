@@ -1,12 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Images.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="SixLabors.ImageSharp" />
     <PackageReference Include="SkiaSharp" />
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="Images.Tests" />
+    <ProjectReference Include="$(Proj_MediaTypes)" />
   </ItemGroup>
 
 </Project>

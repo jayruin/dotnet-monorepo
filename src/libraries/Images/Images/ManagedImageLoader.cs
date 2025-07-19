@@ -4,6 +4,7 @@ using SixLabors.ImageSharp.Processing;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Images;
@@ -14,9 +15,9 @@ internal sealed class ManagedImageLoader : IImageLoader
 
     public ManagedImage LoadImage(Stream stream) => new(Image.Load(stream));
 
-    async Task<IImage> IImageLoader.LoadImageAsync(Stream stream) => await LoadImageAsync(stream);
+    async Task<IImage> IImageLoader.LoadImageAsync(Stream stream, CancellationToken cancellationToken) => await LoadImageAsync(stream, cancellationToken);
 
-    public async Task<ManagedImage> LoadImageAsync(Stream stream) => new(await Image.LoadAsync(stream));
+    public async Task<ManagedImage> LoadImageAsync(Stream stream, CancellationToken cancellationToken = default) => new(await Image.LoadAsync(stream, cancellationToken).ConfigureAwait(false));
 
     IImage IImageLoader.LoadImagesToGrid(IEnumerable<Stream?> streams, ImageGridOptions? options) => LoadImagesToGrid(streams, options);
 
@@ -27,16 +28,16 @@ internal sealed class ManagedImageLoader : IImageLoader
         return CreateImageGrid(images, options);
     }
 
-    async Task<IImage> IImageLoader.LoadImagesToGridAsync(IEnumerable<Stream?> streams, ImageGridOptions? options)
-        => await LoadImagesToGridAsync(streams, options);
+    async Task<IImage> IImageLoader.LoadImagesToGridAsync(IEnumerable<Stream?> streams, ImageGridOptions? options, CancellationToken cancellationToken)
+        => await LoadImagesToGridAsync(streams, options, cancellationToken);
 
-    public async Task<ManagedImage> LoadImagesToGridAsync(IEnumerable<Stream?> streams, ImageGridOptions? options = null)
+    public async Task<ManagedImage> LoadImagesToGridAsync(IEnumerable<Stream?> streams, ImageGridOptions? options = null, CancellationToken cancellationToken = default)
     {
         options ??= new();
         List<ManagedImage?> images = [];
         foreach (Stream? stream in streams)
         {
-            ManagedImage? image = stream is null ? null : await LoadImageAsync(stream);
+            ManagedImage? image = stream is null ? null : await LoadImageAsync(stream, cancellationToken).ConfigureAwait(false);
             images.Add(image);
         }
         return CreateImageGrid(images, options);

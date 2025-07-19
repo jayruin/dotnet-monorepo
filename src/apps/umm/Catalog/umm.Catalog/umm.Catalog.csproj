@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="umm.Catalog.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(Proj_umm_ExportCache)" />
+    <ProjectReference Include="$(Proj_umm_Library)" />
+    <ProjectReference Include="$(Proj_umm_SearchIndex)" />
+    <ProjectReference Include="$(Proj_umm_Vendors_Abstractions)" />
+  </ItemGroup>
+
+</Project>

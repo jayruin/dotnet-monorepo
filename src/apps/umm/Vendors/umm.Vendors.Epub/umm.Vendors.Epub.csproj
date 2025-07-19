@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="umm.Vendors.Epub.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(Proj_umm_Vendors_Abstractions)" />
+    <ProjectReference Include="$(Proj_umm_Vendors_Common)" />
+  </ItemGroup>
+
+</Project>

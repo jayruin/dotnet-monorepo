@@ -1,6 +1,7 @@
 using SkiaSharp;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Images;
@@ -56,8 +57,9 @@ internal sealed class NativeImage : IImage
         data.SaveTo(stream);
     }
 
-    public Task SaveToAsync(Stream stream, ImageFormat imageFormat)
+    public Task SaveToAsync(Stream stream, ImageFormat imageFormat, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         SaveTo(stream, imageFormat);
         return Task.CompletedTask;
     }

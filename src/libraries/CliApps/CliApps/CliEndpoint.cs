@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace CliApps;
@@ -18,9 +19,11 @@ public static class CliEndpoint
         services.AddSingleton<IConfiguration>(_ => configuration);
         setupServices(services, configuration);
         ServiceProviderOptions serviceProviderOptions = CreateServiceProviderOptions();
-        await using ServiceProvider serviceProvider = services.BuildServiceProvider(serviceProviderOptions);
-        await using AsyncServiceScope serviceScope = serviceProvider.CreateAsyncScope();
-        await run(serviceScope.ServiceProvider);
+        ServiceProvider serviceProvider = services.BuildServiceProvider(serviceProviderOptions);
+        await using ConfiguredAsyncDisposable configuredServiceProvider = serviceProvider.ConfigureAwait(false);
+        AsyncServiceScope serviceScope = serviceProvider.CreateAsyncScope();
+        await using ConfiguredAsyncDisposable configuredServiceScope = serviceScope.ConfigureAwait(false);
+        await run(serviceScope.ServiceProvider).ConfigureAwait(false);
     }
 
     public static async Task ExecuteAsync(Action<IServiceCollection> setupServices, Func<IServiceProvider, Task> run)
@@ -28,9 +31,11 @@ public static class CliEndpoint
         ServiceCollection services = new();
         setupServices(services);
         ServiceProviderOptions serviceProviderOptions = CreateServiceProviderOptions();
-        await using ServiceProvider serviceProvider = services.BuildServiceProvider(serviceProviderOptions);
-        await using AsyncServiceScope serviceScope = serviceProvider.CreateAsyncScope();
-        await run(serviceScope.ServiceProvider);
+        ServiceProvider serviceProvider = services.BuildServiceProvider(serviceProviderOptions);
+        await using ConfiguredAsyncDisposable configuredServiceProvider = serviceProvider.ConfigureAwait(false);
+        AsyncServiceScope serviceScope = serviceProvider.CreateAsyncScope();
+        await using ConfiguredAsyncDisposable configuredServiceScope = serviceScope.ConfigureAwait(false);
+        await run(serviceScope.ServiceProvider).ConfigureAwait(false);
     }
 
     public static ConfigurationManager SetupConfiguration(ConfigurationManager configuration)

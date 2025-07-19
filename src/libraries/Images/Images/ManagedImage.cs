@@ -1,6 +1,7 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Images;
@@ -40,9 +41,9 @@ internal sealed class ManagedImage : IImage
         InternalImage.Save(stream, imageFormat.ToManagedInternal());
     }
 
-    public Task SaveToAsync(Stream stream, ImageFormat imageFormat)
+    public Task SaveToAsync(Stream stream, ImageFormat imageFormat, CancellationToken cancellationToken = default)
     {
-        return InternalImage.SaveAsync(stream, imageFormat.ToManagedInternal());
+        return InternalImage.SaveAsync(stream, imageFormat.ToManagedInternal(), cancellationToken);
     }
 
     public void Dispose()

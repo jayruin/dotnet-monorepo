@@ -2,6 +2,7 @@ using SkiaSharp;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Images;
@@ -12,7 +13,11 @@ internal sealed class NativeImageLoader : IImageLoader
 
     public NativeImage LoadImage(Stream stream) => new(SKImage.FromEncodedData(stream));
 
-    Task<IImage> IImageLoader.LoadImageAsync(Stream stream) => Task.FromResult<IImage>(LoadImage(stream));
+    Task<IImage> IImageLoader.LoadImageAsync(Stream stream, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return Task.FromResult<IImage>(LoadImage(stream));
+    }
 
     IImage IImageLoader.LoadImagesToGrid(IEnumerable<Stream?> streams, ImageGridOptions? options) => LoadImagesToGrid(streams, options);
 
@@ -55,6 +60,9 @@ internal sealed class NativeImageLoader : IImageLoader
         return new NativeImage(imageGrid.Snapshot());
     }
 
-    Task<IImage> IImageLoader.LoadImagesToGridAsync(IEnumerable<Stream?> streams, ImageGridOptions? options)
-        => Task.FromResult<IImage>(LoadImagesToGrid(streams, options));
+    Task<IImage> IImageLoader.LoadImagesToGridAsync(IEnumerable<Stream?> streams, ImageGridOptions? options, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return Task.FromResult<IImage>(LoadImagesToGrid(streams, options));
+    }
 }

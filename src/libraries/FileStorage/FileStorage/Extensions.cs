@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,8 +31,10 @@ public static class Extensions
 
     public static async Task CopyToAsync(this IFile source, IFile destination, CancellationToken cancellationToken = default)
     {
-        await using Stream sourceStream = await source.OpenReadAsync(cancellationToken).ConfigureAwait(false);
-        await using Stream destinationStream = await destination.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
+        Stream sourceStream = await source.OpenReadAsync(cancellationToken).ConfigureAwait(false);
+        await using ConfiguredAsyncDisposable configuredSourceStream = sourceStream.ConfigureAwait(false);
+        Stream destinationStream = await destination.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
+        await using ConfiguredAsyncDisposable configuredDestinationStream = destinationStream.ConfigureAwait(false);
         await sourceStream.CopyToAsync(destinationStream, cancellationToken).ConfigureAwait(false);
     }
 

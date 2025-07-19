@@ -1,4 +1,5 @@
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,11 +10,12 @@ namespace Epubs;
 
 public static class EpubXml
 {
-    public static async Task SaveAsync(XDocument document, Stream stream)
+    public static async Task SaveAsync(XDocument document, Stream stream, CancellationToken cancellationToken = default)
     {
         XmlWriterSettings settings = CreateXmlWriterSettings();
-        await using XmlWriter writer = XmlWriter.Create(stream, settings);
-        await document.SaveAsync(writer, CancellationToken.None);
+        XmlWriter writer = XmlWriter.Create(stream, settings);
+        await using ConfiguredAsyncDisposable configuredWriter = writer.ConfigureAwait(false);
+        await document.SaveAsync(writer, cancellationToken).ConfigureAwait(false);
     }
 
     public static void Save(XDocument document, Stream stream)

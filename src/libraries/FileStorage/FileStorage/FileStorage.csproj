@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="System.Linq.Async" />
+    <InternalsVisibleTo Include="FileStorage.Tests" />
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="FileStorage.Tests" />
+    <PackageReference Include="System.Linq.Async" />
   </ItemGroup>
 
 </Project>
