@@ -60,7 +60,7 @@ class Project:
                 self.framework = target_framework_element.text
 
         self.referenced_project_names = [
-            element.attrib["Include"][2:-1].split("_")[1]
+            ".".join(element.attrib["Include"][2:-1].split("_")[1:])
             for element in csproj.findall(".//ProjectReference")
         ]
 
