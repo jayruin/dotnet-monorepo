@@ -60,7 +60,7 @@ public sealed class EpubPackager
         // TODO Async Zip
         using ZipArchive outputZip = new(outputStream, ZipArchiveMode.Create, true);
 
-        await WriteMimetypeFileAsync(contents, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
+        await WriteMimetypeFileAsync(contents, outputZip, timestamp, cancellationToken).ConfigureAwait(false);
         await CopyRegularItemsAsync(contents, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
         string? newCoverName = await WriteCoverAsync(contents, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
         await WriteOpfFileAsync(contents, outputZip, compressionLevel, timestamp, newCoverName, cancellationToken).ConfigureAwait(false);
@@ -111,9 +111,9 @@ public sealed class EpubPackager
         return sourceFile.CopyToAsync(destinationFile, cancellationToken);
     }
 
-    private Task WriteMimetypeFileAsync(EpubContents contents, ZipArchive outputZip, CompressionLevel compressionLevel, DateTimeOffset timestamp, CancellationToken cancellationToken)
+    private Task WriteMimetypeFileAsync(EpubContents contents, ZipArchive outputZip, DateTimeOffset timestamp, CancellationToken cancellationToken)
     {
-        return CopyFileAsync(contents.MimetypeFilePath, outputZip, compressionLevel, timestamp, cancellationToken);
+        return CopyFileAsync(contents.MimetypeFilePath, outputZip, CompressionLevel.NoCompression, timestamp, cancellationToken);
     }
 
     private Task WriteMimetypeFileAsync(EpubContents contents, IDirectory outputDirectory, CancellationToken cancellationToken)
