@@ -11,6 +11,7 @@ public interface IEpubHandlerStrategy
     string VendorId { get; }
     bool AllowEpubMetadataOverrides { get; }
     bool AllowCoverOverride { get; }
+    bool CanModifyMetadata { get; }
     Task<IReadOnlyCollection<MetadataPropertyChange>> ModifyMetadataAsync(IDirectory epubDirectory, string contentId, IEpubMetadata epubMetadata, CancellationToken cancellationToken);
     Task<bool?> ContainsEpubAsync(string contentId, CancellationToken cancellationToken);
 }
