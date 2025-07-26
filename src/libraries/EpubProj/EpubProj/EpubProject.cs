@@ -12,7 +12,9 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Utils;
 
@@ -54,11 +56,11 @@ internal sealed class EpubProject : IEpubProject
         _markupFormatter = markupFormatter;
     }
 
-    public Task ExportEpub3Async(Stream stream, IReadOnlyCollection<IFile> globalFiles)
-        => ExportEpubAsync(stream, globalFiles, EpubVersion.Epub3);
+    public Task ExportEpub3Async(Stream stream, IReadOnlyCollection<IFile> globalFiles, CancellationToken cancellationToken = default)
+        => ExportEpubAsync(stream, globalFiles, EpubVersion.Epub3, cancellationToken);
 
-    public Task ExportEpub2Async(Stream stream, IReadOnlyCollection<IFile> globalFiles)
-        => ExportEpubAsync(stream, globalFiles, EpubVersion.Epub2);
+    public Task ExportEpub2Async(Stream stream, IReadOnlyCollection<IFile> globalFiles, CancellationToken cancellationToken = default)
+        => ExportEpubAsync(stream, globalFiles, EpubVersion.Epub2, cancellationToken);
 
     private static IHtmlHeadingElement? GetHighestHeadingElement(IDocument document)
         => Enumerable.Range(1, 6)
@@ -69,13 +71,14 @@ internal sealed class EpubProject : IEpubProject
     private static bool IsScriptedXhtml(IDocument document)
         => document.QuerySelector<IHtmlScriptElement>("script") is not null;
 
-    private async Task ExportEpubAsync(Stream stream, IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion)
+    private async Task ExportEpubAsync(Stream stream, IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion, CancellationToken cancellationToken)
     {
-        await using EpubWriter epubWriter = await EpubWriter.CreateAsync(stream, epubVersion, _mediaTypeFileExtensionsMapping);
+        EpubWriter epubWriter = await EpubWriter.CreateAsync(stream, epubVersion, _mediaTypeFileExtensionsMapping, cancellationToken: cancellationToken).ConfigureAwait(false);
+        await using ConfiguredAsyncDisposable configuredEpubWriter = epubWriter.ConfigureAwait(false);
         WriteMetadata(epubWriter);
-        await WriteCoverAsync(epubWriter);
+        await WriteCoverAsync(epubWriter, cancellationToken).ConfigureAwait(false);
         WriteToc(epubWriter);
-        await WriteResourcesAsync(epubWriter, globalFiles, epubVersion);
+        await WriteResourcesAsync(epubWriter, globalFiles, epubVersion, cancellationToken).ConfigureAwait(false);
     }
 
     private void WriteMetadata(EpubWriter epubWriter)
@@ -121,12 +124,14 @@ internal sealed class EpubProject : IEpubProject
         }
     }
 
-    private async Task WriteCoverAsync(EpubWriter epubWriter)
+    private async Task WriteCoverAsync(EpubWriter epubWriter, CancellationToken cancellationToken)
     {
         if (CoverFile is null) return;
-        await using Stream destinationStream = epubWriter.CreateRasterCover(CoverFile.Extension, true);
-        await using Stream sourceStream = await CoverFile.OpenReadAsync();
-        await sourceStream.CopyToAsync(destinationStream);
+        Stream destinationStream = await epubWriter.CreateRasterCoverAsync(CoverFile.Extension, true, cancellationToken).ConfigureAwait(false);
+        await using ConfiguredAsyncDisposable configuredDestinationStream = destinationStream.ConfigureAwait(false);
+        Stream sourceStream = await CoverFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
+        await using ConfiguredAsyncDisposable configuredSourceStream = sourceStream.ConfigureAwait(false);
+        await sourceStream.CopyToAsync(destinationStream, cancellationToken).ConfigureAwait(false);
     }
 
     private string ConvertRelativeAnchorHref(string href)
@@ -165,27 +170,30 @@ internal sealed class EpubProject : IEpubProject
         }
     }
 
-    private async Task WriteResourcesAsync(EpubWriter epubWriter, IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion)
+    private async Task WriteResourcesAsync(EpubWriter epubWriter, IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion, CancellationToken cancellationToken)
     {
-        Dictionary<string, Dictionary<string, ProjectResource>> resources = await TraverseAsync();
+        Dictionary<string, Dictionary<string, ProjectResource>> resources = await TraverseAsync(cancellationToken).ConfigureAwait(false);
         string xhtmlExtension = _mediaTypeFileExtensionsMapping.GetFileExtension(MediaType.Application.Xhtml_Xml)
             ?? throw new InvalidOperationException("No xhtml extension.");
         foreach (string relativePathWithoutExtension in GetNavItemHrefsDepthFirst(_navItems).Select(GetRelativePathWithoutExtension))
         {
             if (!resources.TryGetValue(relativePathWithoutExtension, out Dictionary<string, ProjectResource>? resourceExtensions)) continue;
-            await HandleXhtmlAsync(resourceExtensions);
+            await HandleXhtmlAsync(resourceExtensions, cancellationToken).ConfigureAwait(false);
         }
         foreach ((string relativePathWithoutExtension, Dictionary<string, ProjectResource> resourceExtensions) in resources.OrderBy(kvp => kvp.Key))
         {
-            await HandleXhtmlAsync(resourceExtensions);
+            await HandleXhtmlAsync(resourceExtensions, cancellationToken).ConfigureAwait(false);
             foreach (ProjectResource resource in resourceExtensions.Values.Order())
             {
                 EpubResource epubResource = new()
                 {
                     Href = resource.RelativePath,
                 };
-                await using Stream resourceStream = await resource.File.OpenReadAsync();
-                await epubWriter.AddResourceAsync(resourceStream, epubResource);
+                Stream resourceStream = await resource.File.OpenReadAsync(cancellationToken).ConfigureAwait(false);
+                await using (resourceStream.ConfigureAwait(false))
+                {
+                    await epubWriter.AddResourceAsync(resourceStream, epubResource, cancellationToken).ConfigureAwait(false);
+                }
             }
         }
         foreach (IFile globalFile in globalFiles)
@@ -194,8 +202,11 @@ internal sealed class EpubProject : IEpubProject
             {
                 Href = string.Join('/', GlobalDirectoryName, globalFile.Name),
             };
-            await using Stream resourceStream = await globalFile.OpenReadAsync();
-            await epubWriter.AddResourceAsync(resourceStream, epubResource);
+            Stream resourceStream = await globalFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
+            await using (resourceStream.ConfigureAwait(false))
+            {
+                await epubWriter.AddResourceAsync(resourceStream, epubResource, cancellationToken).ConfigureAwait(false);
+            }
         }
 
         static IEnumerable<string> GetNavItemHrefsDepthFirst(IEnumerable<IEpubProjectNavItem> navItems)
@@ -220,7 +231,7 @@ internal sealed class EpubProject : IEpubProject
             return relativePathWithoutExtension;
         }
 
-        async Task HandleXhtmlAsync(Dictionary<string, ProjectResource> resourceExtensions)
+        async Task HandleXhtmlAsync(Dictionary<string, ProjectResource> resourceExtensions, CancellationToken cancellationToken)
         {
             ProjectResource? contentDocumentResource = null;
             for (int i = _contentDocumentMediaTypes.Length - 1; i >= 0; i--)
@@ -241,7 +252,8 @@ internal sealed class EpubProject : IEpubProject
             if (mediaType == MediaType.Application.Xhtml_Xml)
             {
                 IDocument xhtmlDocument;
-                await using (Stream xhtmlStream = await contentDocumentResource.File.OpenReadAsync())
+                Stream xhtmlStream = await contentDocumentResource.File.OpenReadAsync(cancellationToken).ConfigureAwait(false);
+                await using (xhtmlStream.ConfigureAwait(false))
                 {
                     xhtmlDocument = await _htmlParser.ParseDocumentAsync(xhtmlStream);
                 }
@@ -255,18 +267,19 @@ internal sealed class EpubProject : IEpubProject
                     Href = contentDocumentResource.RelativePath,
                     ManifestProperties = manifestProperties,
                 };
-                await using (Stream xhtmlStream = await contentDocumentResource.File.OpenReadAsync())
+                xhtmlStream = await contentDocumentResource.File.OpenReadAsync(cancellationToken).ConfigureAwait(false);
+                await using (xhtmlStream.ConfigureAwait(false))
                 {
-                    await epubWriter.AddResourceAsync(xhtmlStream, epubResource);
+                    await epubWriter.AddResourceAsync(xhtmlStream, epubResource, cancellationToken).ConfigureAwait(false);
                 }
             }
             else
             {
                 IDocument? xhtmlDocument = mediaType switch
                 {
-                    MediaType.Text.Html => await CreateXhtmlFromHtmlAsync(contentDocumentResource.File, contentDocumentResource.RelativePathParts, globalFiles, epubVersion),
-                    MediaType.Text.Markdown => await CreateXhtmlFromMarkdownAsync(contentDocumentResource.File, contentDocumentResource.RelativePathParts, globalFiles, epubVersion),
-                    MediaType.Text.Plain => await CreateXhtmlFromPlainTextAsync(contentDocumentResource.File, contentDocumentResource.RelativePathParts, globalFiles, epubVersion),
+                    MediaType.Text.Html => await CreateXhtmlFromHtmlAsync(contentDocumentResource.File, contentDocumentResource.RelativePathParts, globalFiles, epubVersion, cancellationToken).ConfigureAwait(false),
+                    MediaType.Text.Markdown => await CreateXhtmlFromMarkdownAsync(contentDocumentResource.File, contentDocumentResource.RelativePathParts, globalFiles, epubVersion, cancellationToken).ConfigureAwait(false),
+                    MediaType.Text.Plain => await CreateXhtmlFromPlainTextAsync(contentDocumentResource.File, contentDocumentResource.RelativePathParts, globalFiles, epubVersion, cancellationToken).ConfigureAwait(false),
                     _ => null,
                 };
                 if (xhtmlDocument is null) return;
@@ -280,7 +293,8 @@ internal sealed class EpubProject : IEpubProject
                     Href = string.Join('/', [.. contentDocumentResource.RelativePathParts[..^1], $"{contentDocumentResource.File.Stem}{xhtmlExtension}"]),
                     ManifestProperties = manifestProperties,
                 };
-                await using Stream resourceStream = epubWriter.CreateResource(epubResource);
+                Stream resourceStream = await epubWriter.CreateResourceAsync(epubResource, cancellationToken).ConfigureAwait(false);
+                await using ConfiguredAsyncDisposable configuredResourceStream = resourceStream.ConfigureAwait(false);
                 await using StreamWriter streamWriter = new(resourceStream, _encoding);
                 xhtmlDocument.ToHtml(streamWriter, _markupFormatter);
             }
@@ -384,42 +398,48 @@ internal sealed class EpubProject : IEpubProject
     }
 
     private async Task<IDocument> CreateXhtmlFromHtmlAsync(IFile htmlFile, ImmutableArray<string> relativePathParts,
-        IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion)
+        IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion,
+        CancellationToken cancellationToken)
     {
         IDocument htmlDocument;
-        await using (Stream htmlStream = await htmlFile.OpenReadAsync())
+        Stream htmlStream = await htmlFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
+        await using (htmlStream.ConfigureAwait(false))
         {
-            htmlDocument = await _htmlParser.ParseDocumentAsync(htmlStream);
+            htmlDocument = await _htmlParser.ParseDocumentAsync(htmlStream, cancellationToken).ConfigureAwait(false);
         }
 
         return CreateXhtmlDocumentFromHtmlDocument(htmlDocument, relativePathParts, globalFiles, epubVersion);
     }
 
     private async Task<IDocument> CreateXhtmlFromMarkdownAsync(IFile markdownFile, ImmutableArray<string> relativePathParts,
-        IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion)
+        IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion,
+        CancellationToken cancellationToken)
     {
         byte[] markdownBytes;
-        await using (Stream markdownStream = await markdownFile.OpenReadAsync())
+        Stream markdownStream = await markdownFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
+        await using (markdownStream.ConfigureAwait(false))
         {
-            markdownBytes = await markdownStream.ToByteArrayAsync();
+            markdownBytes = await markdownStream.ToByteArrayAsync(cancellationToken).ConfigureAwait(false);
         }
         string markdownString = _encoding.GetString(markdownBytes);
         string htmlString = Markdown.ToHtml(markdownString);
 
-        IDocument htmlDocument = await _htmlParser.ParseDocumentAsync(htmlString);
+        IDocument htmlDocument = await _htmlParser.ParseDocumentAsync(htmlString, cancellationToken).ConfigureAwait(false);
 
         return CreateXhtmlDocumentFromHtmlDocument(htmlDocument, relativePathParts, globalFiles, epubVersion);
     }
 
     private async Task<IDocument> CreateXhtmlFromPlainTextAsync(IFile textFile, ImmutableArray<string> relativePathParts,
-        IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion)
+        IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion,
+        CancellationToken cancellationToken)
     {
         IDocument? htmlDocument = null;
-        await using (Stream textStream = await textFile.OpenReadAsync())
+        Stream textStream = await textFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
+        await using (textStream.ConfigureAwait(false))
         {
             using StreamReader streamReader = new(textStream, _encoding);
             string? line;
-            while ((line = await streamReader.ReadLineAsync()) is not null)
+            while ((line = await streamReader.ReadLineAsync(cancellationToken).ConfigureAwait(false)) is not null)
             {
                 if (string.IsNullOrWhiteSpace(line)) continue;
                 string text = line.Trim();
@@ -449,16 +469,17 @@ internal sealed class EpubProject : IEpubProject
         return CreateXhtmlDocumentFromHtmlDocument(htmlDocument, relativePathParts, globalFiles, epubVersion);
     }
 
-    private async Task<Dictionary<string, Dictionary<string, ProjectResource>>> TraverseAsync()
+    private async Task<Dictionary<string, Dictionary<string, ProjectResource>>> TraverseAsync(CancellationToken cancellationToken)
     {
         Dictionary<string, Dictionary<string, ProjectResource>> resources = [];
-        await TraverseAsync(resources, _projectDirectory.GetDirectory(ContentsDirectoryName), []);
+        await TraverseAsync(resources, _projectDirectory.GetDirectory(ContentsDirectoryName), [], cancellationToken).ConfigureAwait(false);
         return resources;
 
         static async Task TraverseAsync(Dictionary<string, Dictionary<string, ProjectResource>> resources,
-            IDirectory directory, ImmutableArray<string> relativeDirectoryPath)
+            IDirectory directory, ImmutableArray<string> relativeDirectoryPath,
+            CancellationToken cancellationToken)
         {
-            await foreach (IFile file in directory.EnumerateFilesAsync())
+            await foreach (IFile file in directory.EnumerateFilesAsync(cancellationToken).ConfigureAwait(false))
             {
                 if (file.Name.StartsWith('.') || file.Name.StartsWith('_')) continue;
                 ImmutableArray<string> relativePathParts = relativeDirectoryPath.Add(file.Name);
@@ -478,10 +499,10 @@ internal sealed class EpubProject : IEpubProject
                 }
                 resourceExtensions.Add(extension, resource);
             }
-            await foreach (IDirectory subdirectory in directory.EnumerateDirectoriesAsync())
+            await foreach (IDirectory subdirectory in directory.EnumerateDirectoriesAsync(cancellationToken).ConfigureAwait(false))
             {
                 if (subdirectory.Name.StartsWith('.') || subdirectory.Name.StartsWith('_')) continue;
-                await TraverseAsync(resources, subdirectory, relativeDirectoryPath.Add(subdirectory.Name));
+                await TraverseAsync(resources, subdirectory, relativeDirectoryPath.Add(subdirectory.Name), cancellationToken).ConfigureAwait(false);
             }
         }
     }

@@ -41,7 +41,7 @@ public sealed class Epub3Exporter : IExporter
             : await subProject.EnumeratePagesAsync(version, true).FirstOrDefaultAsync();
         if (cover is not null)
         {
-            await using Stream destinationCoverStream = epubWriter.CreateRasterCover(cover.Extension, true);
+            await using Stream destinationCoverStream = await epubWriter.CreateRasterCoverAsync(cover.Extension, true);
             await using Stream sourceCoverStream = await cover.OpenReadAsync();
             await sourceCoverStream.CopyToAsync(destinationCoverStream);
         }
@@ -145,7 +145,7 @@ public sealed class Epub3Exporter : IExporter
             xhtmlResource.SpineProperties = spineProperties;
         }
 
-        await using Stream xhtmlStream = epubWriter.CreateResource(xhtmlResource);
+        await using Stream xhtmlStream = await epubWriter.CreateResourceAsync(xhtmlResource);
         await using Stream pageStream = await page.OpenReadAsync();
         XDocument pageXhtml = await CreatePageXhtmlAsync(pageStream, $"{pageNumber}{page.Extension}");
         await EpubXml.SaveAsync(pageXhtml, xhtmlStream);

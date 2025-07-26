@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -100,13 +102,14 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         _ncxHandler = new NcxHandler(Version);
     }
 
-    public static async Task<EpubWriter> CreateAsync(Stream stream, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string reservedPrefix = ".", string contentDirectory = "OEBPS")
+    public static async Task<EpubWriter> CreateAsync(Stream stream, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string reservedPrefix = ".", string contentDirectory = "OEBPS", CancellationToken cancellationToken = default)
     {
         if (epubVersion == EpubVersion.Unknown) throw new InvalidEpubVersionException();
+        // TODO Async Zip
         ZipArchive zipArchive = new(stream, ZipArchiveMode.Create, true);
         EpubWriter epubWriter = new(zipArchive, epubVersion, mediaTypeFileExtensionsMapping, reservedPrefix, contentDirectory);
-        await epubWriter.WriteMimetypeAsync();
-        await epubWriter.WriteContainerXmlAsync();
+        await epubWriter.WriteMimetypeAsync(cancellationToken).ConfigureAwait(false);
+        await epubWriter.WriteContainerXmlAsync(cancellationToken).ConfigureAwait(false);
         return epubWriter;
     }
 
@@ -120,16 +123,33 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         return epubWriter;
     }
 
-    public async Task AddResourceAsync(Stream stream, EpubResource resource)
+    public async Task AddResourceAsync(Stream stream, EpubResource resource, CancellationToken cancellationToken = default)
     {
-        await using Stream resourceStream = CreateResource(resource);
-        await stream.CopyToAsync(resourceStream);
+        Stream resourceStream = await CreateResourceAsync(resource, cancellationToken).ConfigureAwait(false);
+        await using ConfiguredAsyncDisposable configuredResourceStream = resourceStream.ConfigureAwait(false);
+        await stream.CopyToAsync(resourceStream, cancellationToken).ConfigureAwait(false);
     }
 
     public void AddResource(Stream stream, EpubResource resource)
     {
         using Stream resourceStream = CreateResource(resource);
         stream.CopyTo(resourceStream);
+    }
+
+    public Task<Stream> CreateResourceAsync(EpubResource resource, CancellationToken cancellationToken = default)
+    {
+        if (Path.GetFileNameWithoutExtension(resource.Href).StartsWith(_reservedPrefix))
+        {
+            throw new InvalidOperationException($"File name must not start with {_reservedPrefix}");
+        }
+        string resourcePath = GetResourcePath(resource.Href);
+        if (!_resourcePaths.Add(resourcePath))
+        {
+            throw new InvalidOperationException("Resource already exists!");
+        }
+        _resources.Add(resource);
+        // TODO Async Zip
+        return Task.FromResult(_zipArchive.CreateEntry(resourcePath).Open());
     }
 
     public Stream CreateResource(EpubResource resource)
@@ -139,16 +159,21 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
             throw new InvalidOperationException($"File name must not start with {_reservedPrefix}");
         }
         string resourcePath = GetResourcePath(resource.Href);
-        if (_resourcePaths.Contains(resourcePath))
+        if (!_resourcePaths.Add(resourcePath))
         {
             throw new InvalidOperationException("Resource already exists!");
         }
-        else
-        {
-            _resourcePaths.Add(resourcePath);
-            _resources.Add(resource);
-        }
+        _resources.Add(resource);
         return _zipArchive.CreateEntry(resourcePath).Open();
+    }
+
+    public Task<Stream> CreateRasterCoverAsync(string extension, bool inSequence, CancellationToken cancellationToken = default)
+    {
+        if (_coverHref is not null) throw new InvalidOperationException("Cover already added!");
+        _coverHref = $"{_reservedPrefix}cover{extension}";
+        _coverInSequence = inSequence;
+        // TODO Async Zip
+        return Task.FromResult(_zipArchive.CreateEntry(GetResourcePath(_coverHref)).Open());
     }
 
     public Stream CreateRasterCover(string extension, bool inSequence)
@@ -176,7 +201,8 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         SaveChanges();
-        await WriteSpecialDocumentsAsync();
+        await WriteSpecialDocumentsAsync(default).ConfigureAwait(false);
+        // TODO Async Zip
         _zipArchive.Dispose();
     }
 
@@ -185,12 +211,15 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         return string.Join('/', _contentDirectory.Trim('/'), href.Trim('/')).Trim('/');
     }
 
-    private async Task WriteMimetypeAsync()
+    private async Task WriteMimetypeAsync(CancellationToken cancellationToken)
     {
         ZipArchiveEntry mimetype = _zipArchive.CreateEntry("mimetype", CompressionLevel.NoCompression);
-        await using Stream mimetypeStream = mimetype.Open();
-        await using StreamWriter mimetypeStreamWriter = new(mimetypeStream, Encoding.ASCII);
-        await mimetypeStreamWriter.WriteAsync("application/epub+zip");
+        // TODO Async Zip
+        Stream mimetypeStream = mimetype.Open();
+        await using ConfiguredAsyncDisposable configuredMimetypeStream = mimetypeStream.ConfigureAwait(false);
+        StreamWriter mimetypeStreamWriter = new(mimetypeStream, Encoding.ASCII);
+        await using ConfiguredAsyncDisposable configuredMimetypeStreamWriter = mimetypeStreamWriter.ConfigureAwait(false);
+        await mimetypeStreamWriter.WriteAsync("application/epub+zip".AsMemory(), cancellationToken).ConfigureAwait(false);
     }
 
     private void WriteMimetype()
@@ -201,11 +230,13 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         mimetypeStreamWriter.Write("application/epub+zip");
     }
 
-    private async Task WriteContainerXmlAsync()
+    private async Task WriteContainerXmlAsync(CancellationToken cancellationToken)
     {
         XDocument document = _metaInfHandler.GetContainerXmlDocument(_packageDocumentPath);
-        await using Stream stream = _zipArchive.CreateEntry("META-INF/container.xml").Open();
-        await EpubXml.SaveAsync(document, stream);
+        // TODO Async Zip
+        Stream stream = _zipArchive.CreateEntry("META-INF/container.xml").Open();
+        await using ConfiguredAsyncDisposable configuredStream = stream.ConfigureAwait(false);
+        await EpubXml.SaveAsync(document, stream, cancellationToken).ConfigureAwait(false);
     }
 
     private void WriteContainerXml()
@@ -215,28 +246,35 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         EpubXml.Save(document, stream);
     }
 
-    private async Task WriteSpecialDocumentsAsync()
+    private async Task WriteSpecialDocumentsAsync(CancellationToken cancellationToken)
     {
         if (_coverHref is not null && _coverInSequence)
         {
-            await using Stream stream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}cover.xhtml")).Open();
-            await EpubXml.SaveAsync(_coverXhtmlHandler.GetRasterDocument(_coverHref), stream);
+            // TODO Async Zip
+            Stream stream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}cover.xhtml")).Open();
+            await using ConfiguredAsyncDisposable configuredStream = stream.ConfigureAwait(false);
+            await EpubXml.SaveAsync(_coverXhtmlHandler.GetRasterDocument(_coverHref), stream, cancellationToken).ConfigureAwait(false);
         }
         if (_toc is not null)
         {
             if (IncludeNavigationDocument)
             {
-                await using Stream stream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}nav.xhtml")).Open();
-                await EpubXml.SaveAsync(_navigationDocumentHandler.GetDocument(), stream);
+                // TODO Async Zip
+                Stream stream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}nav.xhtml")).Open();
+                await using ConfiguredAsyncDisposable configuredStream = stream.ConfigureAwait(false);
+                await EpubXml.SaveAsync(_navigationDocumentHandler.GetDocument(), stream, cancellationToken).ConfigureAwait(false);
             }
             if (IncludeNcx)
             {
-                await using Stream stream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}toc.ncx")).Open();
-                await EpubXml.SaveAsync(_ncxHandler.GetDocument(), stream);
+                // TODO Async Zip
+                Stream stream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}toc.ncx")).Open();
+                await using ConfiguredAsyncDisposable configuredStream = stream.ConfigureAwait(false);
+                await EpubXml.SaveAsync(_ncxHandler.GetDocument(), stream, cancellationToken).ConfigureAwait(false);
             }
         }
-        await using Stream packageStream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}package.opf")).Open();
-        await EpubXml.SaveAsync(_packageDocumentHandler.GetDocument(), packageStream);
+        Stream packageStream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}package.opf")).Open();
+        await using ConfiguredAsyncDisposable configuredPackageStream = packageStream.ConfigureAwait(false);
+        await EpubXml.SaveAsync(_packageDocumentHandler.GetDocument(), packageStream, cancellationToken).ConfigureAwait(false);
     }
 
     private void WriteSpecialDocuments()
