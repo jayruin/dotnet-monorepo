@@ -25,6 +25,7 @@ public sealed class EpubPackager
     internal string? NewCoverMediaType { get; set; }
     internal Func<EpubCover?, Stream, CancellationToken, Task>? HandleCoverAsync { get; set; }
     internal Func<IEpubMetadata, CancellationToken, Task>? HandleMetadataAsync { get; set; }
+    internal Action<XDocument>? HandleXhtml { get; set; }
 
     public EpubPackager WithCoverHandler(string newCoverMediaType, Func<EpubCover?, Stream, CancellationToken, Task> handleCoverAsync)
     {
@@ -51,6 +52,12 @@ public sealed class EpubPackager
         return this;
     }
 
+    public EpubPackager WithXhtmlHandler(Action<XDocument> handleXhtml)
+    {
+        HandleXhtml = handleXhtml;
+        return this;
+    }
+
     public async Task PackageAsync(Stream outputStream, CompressionLevel compressionLevel = CompressionLevel.NoCompression, CancellationToken cancellationToken = default)
     {
         DateTimeOffset timestamp = await GetTimestampAsync(cancellationToken).ConfigureAwait(false);
@@ -63,6 +70,7 @@ public sealed class EpubPackager
         await WriteMimetypeFileAsync(contents, outputZip, timestamp, cancellationToken).ConfigureAwait(false);
         await CopyRegularItemsAsync(contents, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
         string? newCoverName = await WriteCoverAsync(contents, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
+        await WriteXhtmlFilesAsync(contents, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
         await WriteOpfFileAsync(contents, outputZip, compressionLevel, timestamp, newCoverName, cancellationToken).ConfigureAwait(false);
     }
 
@@ -73,6 +81,7 @@ public sealed class EpubPackager
         await WriteMimetypeFileAsync(contents, outputDirectory, cancellationToken).ConfigureAwait(false);
         await CopyRegularItemsAsync(contents, outputDirectory, cancellationToken).ConfigureAwait(false);
         string? newCoverName = await WriteCoverAsync(contents, outputDirectory, cancellationToken).ConfigureAwait(false);
+        await WriteXhtmlFilesAsync(contents, outputDirectory, cancellationToken).ConfigureAwait(false);
         await WriteOpfFileAsync(contents, outputDirectory, newCoverName, cancellationToken).ConfigureAwait(false);
     }
 
@@ -237,16 +246,67 @@ public sealed class EpubPackager
         return newCoverName;
     }
 
-    private async Task<XDocument> GetOpfDocumentAsync(EpubContents contents, CancellationToken cancellationToken)
+    private async Task<XDocument> GetDocumentAsync(ImmutableArray<string> path, CancellationToken cancellationToken)
     {
-        IFile sourceOpfFile = _container.RootDirectory.GetFile(contents.OpfFilePath);
-        Stream sourceOpfStream = await sourceOpfFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
-        XDocument opfDocument;
-        await using (sourceOpfStream.ConfigureAwait(false))
+        IFile sourceFile = _container.RootDirectory.GetFile(path);
+        Stream sourceStream = await sourceFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
+        XDocument document;
+        await using (sourceStream.ConfigureAwait(false))
         {
-            opfDocument = await XDocument.LoadAsync(sourceOpfStream, default, cancellationToken).ConfigureAwait(false);
+            document = await XDocument.LoadAsync(sourceStream, default, cancellationToken).ConfigureAwait(false);
         }
-        return opfDocument;
+        return document;
+    }
+
+    private async Task WriteXhtmlFilesAsync(EpubContents contents, ZipArchive outputZip, CompressionLevel compressionLevel, DateTimeOffset timestamp, CancellationToken cancellationToken)
+    {
+        foreach (ImmutableArray<string> path in contents.XhtmlPaths)
+        {
+            if (HandleXhtml is null)
+            {
+                await CopyFileAsync(path, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                XDocument xhtmlDocument = await GetDocumentAsync(path, cancellationToken).ConfigureAwait(false);
+                HandleXhtml(xhtmlDocument);
+                ZipArchiveEntry zipEntry = outputZip.CreateEntry(string.Join('/', path), compressionLevel);
+                zipEntry.LastWriteTime = timestamp;
+                // TODO Async Zip
+                Stream destinationStream = zipEntry.Open();
+                await using (destinationStream.ConfigureAwait(false))
+                {
+                    await EpubXml.SaveAsync(xhtmlDocument, destinationStream, cancellationToken).ConfigureAwait(false);
+                }
+            }
+        }
+    }
+
+    private async Task WriteXhtmlFilesAsync(EpubContents contents, IDirectory outputDirectory, CancellationToken cancellationToken)
+    {
+        foreach (ImmutableArray<string> path in contents.XhtmlPaths)
+        {
+            if (HandleXhtml is null)
+            {
+                await CopyFileAsync(path, outputDirectory, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                XDocument xhtmlDocument = await GetDocumentAsync(path, cancellationToken).ConfigureAwait(false);
+                HandleXhtml(xhtmlDocument);
+                IFile destinationFile = outputDirectory.GetFile(path);
+                Stream destinationStream = await destinationFile.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
+                await using (destinationStream.ConfigureAwait(false))
+                {
+                    await EpubXml.SaveAsync(xhtmlDocument, destinationStream, cancellationToken).ConfigureAwait(false);
+                }
+            }
+        }
+    }
+
+    private Task<XDocument> GetOpfDocumentAsync(EpubContents contents, CancellationToken cancellationToken)
+    {
+        return GetDocumentAsync(contents.OpfFilePath, cancellationToken);
     }
 
     private async Task WriteOpfMetadataAsync(EpubContents contents, string? newCoverName, XDocument opfDocument, CancellationToken cancellationToken)

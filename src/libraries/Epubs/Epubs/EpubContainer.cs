@@ -162,14 +162,26 @@ public sealed class EpubContainer
         ImmutableArray<string> opfFilePath = filePaths.First(p => p.SequenceEqual(expectedOpfPath));
         filePaths.Remove(opfFilePath);
 
+        ImmutableArray<string> opfDirectoryPath = opfFilePath.RemoveAt(opfFilePath.Length - 1);
+
         EpubCover? cover = await GetCoverAsync(cancellationToken).ConfigureAwait(false);
         ImmutableArray<string> expectedCoverFilePath = cover is not null
-            ? opfFilePath.RemoveAt(opfFilePath.Length - 1).AddRange(cover.RelativePath.Split('/'))
+            ? ResolveEpubPath(opfDirectoryPath, cover.RelativePath)
             : [];
         ImmutableArray<string> coverFilePath = expectedCoverFilePath.Length > 0
             ? filePaths.First(p => p.SequenceEqual(expectedCoverFilePath))
             : [];
         filePaths.Remove(coverFilePath);
+
+        XDocument opfDocument = await GetOpfDocumentAsync(cancellationToken).ConfigureAwait(false);
+        ImmutableArray<ImmutableArray<string>> expectedXhtmlPaths = GetXhtmlPaths(opfDocument, opfDirectoryPath);
+        ImmutableArray<ImmutableArray<string>>.Builder xhtmlPaths = ImmutableArray.CreateBuilder<ImmutableArray<string>>();
+        foreach (ImmutableArray<string> expectedXhtmlPath in expectedXhtmlPaths)
+        {
+            ImmutableArray<string> xhtmlPath = filePaths.First(p => p.SequenceEqual(expectedXhtmlPath));
+            filePaths.Remove(xhtmlPath);
+            xhtmlPaths.Add(xhtmlPath);
+        }
 
         return new()
         {
@@ -177,6 +189,7 @@ public sealed class EpubContainer
             MimetypeFilePath = mimetypeFilePath,
             OpfFilePath = opfFilePath,
             CoverFilePath = coverFilePath,
+            XhtmlPaths = xhtmlPaths.ToImmutable(),
             DirectoryPaths = directoryPaths.ToImmutable(),
             FilePaths = filePaths.ToImmutable(),
         };
@@ -196,6 +209,34 @@ public sealed class EpubContainer
                 directoryPaths.Add(currentPath);
                 await TraverseAsync(currentDirectory, currentPath, directoryPaths, filePaths, cancellationToken).ConfigureAwait(false);
             }
+        }
+
+        static ImmutableArray<ImmutableArray<string>> GetXhtmlPaths(XDocument opfDocument, ImmutableArray<string> opfDirectoryPath)
+        {
+            XElement package = opfDocument.Element((XNamespace)EpubXmlNamespaces.Opf + "package")
+            ?? throw new InvalidOperationException("No package element found.");
+            XElement manifest = package.Element((XNamespace)EpubXmlNamespaces.Opf + "manifest")
+                ?? throw new InvalidOperationException("No manifest element found.");
+            XElement spine = package.Element((XNamespace)EpubXmlNamespaces.Opf + "spine")
+                ?? throw new InvalidOperationException("No spine element found.");
+
+            ImmutableArray<ImmutableArray<string>>.Builder xhtmlPaths = ImmutableArray.CreateBuilder<ImmutableArray<string>>();
+            foreach (XElement itemrefElement in spine.Elements((XNamespace)EpubXmlNamespaces.Opf + "itemref"))
+            {
+                string? idref = itemrefElement.Attribute("idref")?.Value;
+                if (string.IsNullOrWhiteSpace(idref)) continue;
+                XElement? manifestItemElement = manifest
+                    .Elements((XNamespace)EpubXmlNamespaces.Opf + "item")
+                    .SingleOrDefault(e => e.Attribute("id")?.Value == idref);
+                if (manifestItemElement is null) continue;
+                string? manifestItemMediaType = manifestItemElement.Attribute("media-type")?.Value;
+                if (manifestItemMediaType != MediaType.Application.Xhtml_Xml) continue;
+                string? manifestHref = manifestItemElement.Attribute("href")?.Value;
+                if (string.IsNullOrWhiteSpace(manifestHref)) continue;
+                ImmutableArray<string> xhtmlPath = ResolveEpubPath(opfDirectoryPath, manifestHref);
+                xhtmlPaths.Add(xhtmlPath);
+            }
+            return xhtmlPaths.ToImmutable();
         }
     }
 
@@ -295,6 +336,19 @@ public sealed class EpubContainer
         IFile opfFile = await GetOpfFileAsync(cancellationToken).ConfigureAwait(false);
         XDocument opfDocument = await LoadDocumentAsync(opfFile, cancellationToken).ConfigureAwait(false);
         return opfDocument;
+    }
+
+    private static ImmutableArray<string> ResolveEpubPath(ImmutableArray<string> currentDirectoryPath, string epubPath)
+    {
+        ImmutableArray<string> currentPath = currentDirectoryPath;
+        string[] epubPathParts = epubPath.Split('/');
+        foreach (string epubPathPart in epubPathParts)
+        {
+            currentPath = epubPath == ".."
+                ? currentPath.RemoveAt(currentPath.Length - 1)
+                : currentPath.Add(epubPathPart);
+        }
+        return currentPath;
     }
 
     private static IFile ResolveEpubPathToFile(IDirectory directory, params IReadOnlyList<string> epubPathParts)

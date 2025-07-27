@@ -281,6 +281,11 @@ public sealed class EpubHandler
                 => ModifyMetadataAsync(contentId, version, epubMetadata, metadataCancellationToken));
         }
 
+        if (_strategy.CanModifyXhtml)
+        {
+            packager.WithXhtmlHandler(_strategy.ModifyXhtml);
+        }
+
         return packager;
     }
 
