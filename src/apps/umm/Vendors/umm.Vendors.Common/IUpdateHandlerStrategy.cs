@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +10,8 @@ public interface IUpdateHandlerStrategy<TMetadata>
     where TMetadata : ISerializableMetadata<TMetadata>, ISearchableMetadata, IUpdatableMetadata<TMetadata>
 {
     string VendorId { get; }
+    IMetadataStorage MetadataStorage { get; }
+    ILogger Logger { get; }
     string MetadataKey { get; }
     IAsyncEnumerable<TMetadata> EnumerateRemoteAsync(CancellationToken cancellationToken);
     Task PerformUpdateAsync(TMetadata remoteMetadata, CancellationToken cancellationToken);

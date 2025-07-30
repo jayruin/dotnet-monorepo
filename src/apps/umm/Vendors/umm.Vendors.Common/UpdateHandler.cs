@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -12,15 +11,10 @@ namespace umm.Vendors.Common;
 public sealed class UpdateHandler<TMetadata>
     where TMetadata : ISerializableMetadata<TMetadata>, ISearchableMetadata, IUpdatableMetadata<TMetadata>
 {
-    private readonly IMetadataStorage _metadataStorage;
-    private readonly ILogger _logger;
     private readonly IUpdateHandlerStrategy<TMetadata> _strategy;
 
-    public UpdateHandler(IMetadataStorage metadataStorage, ILogger logger,
-        IUpdateHandlerStrategy<TMetadata> strategy)
+    public UpdateHandler(IUpdateHandlerStrategy<TMetadata> strategy)
     {
-        _metadataStorage = metadataStorage;
-        _logger = logger;
         _strategy = strategy;
     }
 
@@ -34,12 +28,12 @@ public sealed class UpdateHandler<TMetadata>
             bool matches = SearchQuery.Matches(searchQuery, remoteMetadata.GetSearchFields());
             if (!matches)
             {
-                _logger.LogDoesNotMatchSearchQuery(_strategy.VendorId, remoteMetadata.ContentId);
+                _strategy.Logger.LogDoesNotMatchSearchQuery(_strategy.VendorId, remoteMetadata.ContentId);
                 continue;
             }
             bool updated = false;
             bool metadataChanged = false;
-            if (force || !await _metadataStorage.ContainsAsync(_strategy.VendorId, remoteMetadata.ContentId, _strategy.MetadataKey, cancellationToken).ConfigureAwait(false))
+            if (force || !await _strategy.MetadataStorage.ContainsAsync(_strategy.VendorId, remoteMetadata.ContentId, _strategy.MetadataKey, cancellationToken).ConfigureAwait(false))
             {
                 await _strategy.PerformUpdateAsync(remoteMetadata, cancellationToken).ConfigureAwait(false);
                 updated = true;
@@ -47,30 +41,30 @@ public sealed class UpdateHandler<TMetadata>
             }
             else
             {
-                TMetadata localMetadata = await _metadataStorage.GetAsync<TMetadata>(_strategy.VendorId, remoteMetadata.ContentId, _strategy.MetadataKey, cancellationToken).ConfigureAwait(false);
+                TMetadata localMetadata = await _strategy.MetadataStorage.GetAsync<TMetadata>(_strategy.VendorId, remoteMetadata.ContentId, _strategy.MetadataKey, cancellationToken).ConfigureAwait(false);
                 updated = await _strategy.AttemptPerformUpdateAsync(remoteMetadata, localMetadata, cancellationToken).ConfigureAwait(false);
                 IReadOnlyCollection<MetadataPropertyChange> metadataPropertyChanges = remoteMetadata.GetChanges(localMetadata);
                 metadataChanged = metadataPropertyChanges.Count > 0;
                 foreach (MetadataPropertyChange metadataPropertyChange in metadataPropertyChanges)
                 {
-                    _logger.LogMetadataChanged(_strategy.VendorId, remoteMetadata.ContentId, metadataPropertyChange);
+                    _strategy.Logger.LogMetadataChanged(_strategy.VendorId, remoteMetadata.ContentId, metadataPropertyChange);
                 }
             }
             if (updated)
             {
-                _logger.LogUpdated(_strategy.VendorId, remoteMetadata.ContentId, remoteMetadata.LastUpdated ?? string.Empty);
+                _strategy.Logger.LogUpdated(_strategy.VendorId, remoteMetadata.ContentId, remoteMetadata.LastUpdated ?? string.Empty);
                 updates += 1;
             }
             else
             {
-                _logger.LogSkippedUpdate(_strategy.VendorId, remoteMetadata.ContentId);
+                _strategy.Logger.LogSkippedUpdate(_strategy.VendorId, remoteMetadata.ContentId);
             }
             if (metadataChanged)
             {
-                await _metadataStorage.SaveAsync(_strategy.VendorId, remoteMetadata.ContentId, _strategy.MetadataKey, remoteMetadata, cancellationToken).ConfigureAwait(false);
+                await _strategy.MetadataStorage.SaveAsync(_strategy.VendorId, remoteMetadata.ContentId, _strategy.MetadataKey, remoteMetadata, cancellationToken).ConfigureAwait(false);
             }
             yield return remoteMetadata.ContentId;
         }
-        _logger.LogUpdateSummary(_strategy.VendorId, updates, total);
+        _strategy.Logger.LogUpdateSummary(_strategy.VendorId, updates, total);
     }
 }

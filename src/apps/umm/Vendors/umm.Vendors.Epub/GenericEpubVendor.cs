@@ -26,7 +26,7 @@ public sealed class GenericEpubVendor : IMediaVendor
         IImageLoader imageLoader, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping,
         ILogger<GenericEpubVendor> logger)
     {
-        EpubHandler epubHandler = new(metadataStorage, blobStorage, imageLoader, mediaTypeFileExtensionsMapping, logger, new EpubHandlerStrategy());
+        EpubHandler epubHandler = new(new EpubHandlerStrategy(metadataStorage, blobStorage, imageLoader, mediaTypeFileExtensionsMapping, logger));
         _enumerationHandler = new(new EnumerationStrategy(metadataStorage, tagsStorage, epubHandler));
         _epubHandler = epubHandler;
     }
