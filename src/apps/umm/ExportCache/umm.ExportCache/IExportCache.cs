@@ -13,5 +13,6 @@ public interface IExportCache
     Task<IDirectory> GetDirectoryForCachingAsync(string vendorId, string contentId, string partId, string mediaType, CancellationToken cancellationToken = default);
     Task ExportAsync(string vendorId, string contentId, string partId, string mediaType, Stream stream, CancellationToken cancellationToken = default);
     Task ExportAsync(string vendorId, string contentId, string partId, string mediaType, IDirectory directory, CancellationToken cancellationToken = default);
+    Task ClearAsync(string vendorId, CancellationToken cancellationToken = default);
     Task ResetAsync(CancellationToken cancellationToken = default);
 }

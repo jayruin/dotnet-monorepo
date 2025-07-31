@@ -3,6 +3,7 @@ using MediaTypes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 
 namespace umm.ExportCache;
@@ -22,6 +23,7 @@ public static class ExportCacheServiceCollectionExtensions
             bool handlesFiles = options?.Files ?? false;
             bool handlesDirectories = options?.Directories ?? false;
             List<string>? mediaTypes = options?.MediaTypes;
+            Dictionary<string, FilesystemExportCacheVendorOverrideOptions>? vendorOverrides = options?.VendorOverrides;
             if (!string.IsNullOrWhiteSpace(path) && mediaTypes is not null && (handlesFiles || handlesDirectories))
             {
                 serviceCollection.AddTransient<IExportCache, FilestorageExportCache>(sp => new(
@@ -32,6 +34,13 @@ public static class ExportCacheServiceCollectionExtensions
                         HandleFiles = handlesFiles,
                         HandleDirectories = handlesDirectories,
                         MediaTypes = [.. mediaTypes],
+                        VendorOverrides = (vendorOverrides ?? [])
+                            .ToFrozenDictionary(
+                                kvp => kvp.Key,
+                                kvp => new FilestorageExportCacheVendorOverrideOptions()
+                                {
+                                    MediaTypes = (kvp.Value.MediaTypes ?? []).ToFrozenSet(),
+                                }),
                     }));
             }
         }
@@ -43,6 +52,12 @@ public static class ExportCacheServiceCollectionExtensions
         public string? Path { get; set; }
         public bool Files { get; set; }
         public bool Directories { get; set; }
+        public List<string>? MediaTypes { get; set; }
+        public Dictionary<string, FilesystemExportCacheVendorOverrideOptions>? VendorOverrides { get; set; }
+    }
+
+    internal sealed class FilesystemExportCacheVendorOverrideOptions
+    {
         public List<string>? MediaTypes { get; set; }
     }
 }
