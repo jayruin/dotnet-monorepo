@@ -6,7 +6,7 @@ using umm.Vendors.Common;
 
 namespace umm.Vendors.EpubProj;
 
-public sealed class EpubProjMetadataAdapter : ISearchableMetadata, IUniversalizableMediaMetadata
+internal sealed class EpubProjMetadataAdapter : ISearchableMetadata, IUniversalizableMediaMetadata
 {
     private readonly IEpubProjectMetadata _epubProjectMetadata;
 

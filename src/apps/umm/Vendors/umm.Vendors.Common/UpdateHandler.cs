@@ -63,7 +63,10 @@ public sealed class UpdateHandler<TMetadata>
             {
                 await _strategy.MetadataStorage.SaveAsync(_strategy.VendorId, remoteMetadata.ContentId, _strategy.MetadataKey, remoteMetadata, cancellationToken).ConfigureAwait(false);
             }
-            yield return remoteMetadata.ContentId;
+            if (updated || metadataChanged)
+            {
+                yield return remoteMetadata.ContentId;
+            }
         }
         _strategy.Logger.LogUpdateSummary(_strategy.VendorId, updates, total);
     }

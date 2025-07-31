@@ -1,5 +1,8 @@
 <Project>
   <PropertyGroup>
+    <Proj_Browsers>$(MSBuildThisFileDirectory)**\Browsers.csproj</Proj_Browsers>
+    <Proj_Browsers_Tests>$(MSBuildThisFileDirectory)**\Browsers.Tests.csproj</Proj_Browsers_Tests>
+
     <Proj_Caching>$(MSBuildThisFileDirectory)**\Caching.csproj</Proj_Caching>
     <Proj_Caching_Tests>$(MSBuildThisFileDirectory)**\Caching.Tests.csproj</Proj_Caching_Tests>
 
