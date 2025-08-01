@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace umm.ExportCache;
 
-public class FilestorageExportCache : IExportCache
+public sealed class FilestorageExportCache : IExportCache
 {
     private readonly IMediaTypeFileExtensionsMapping _mediaTypeFileExtensionsMapping;
     private readonly FilestorageExportCacheOptions _options;
