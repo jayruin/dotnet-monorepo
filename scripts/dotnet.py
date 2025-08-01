@@ -312,7 +312,9 @@ class Dotnet:
             self.bin_directory.mkdir(exist_ok=True)
             executable_file = Path(self.bin_directory, project.name)
             if self.current_system == "windows":
-                executable_file = executable_file.with_suffix(".exe")
+                executable_file = executable_file.with_name(
+                    f"{executable_file.name}.exe"
+                )
             original_executable_file = Path(
                 self.projects_directory,
                 "artifacts",
