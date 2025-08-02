@@ -9,7 +9,7 @@ namespace umm.Vendors.Common;
 public interface ISinglePartSearchEntryEnumerationStrategy<TMetadata>
     where TMetadata : ISearchableMetadata, IUniversalizableMediaMetadata
 {
-    string VendorId { get; }
+    MediaVendorContext VendorContext { get; }
     IAsyncEnumerable<string> EnumerateContentIdsAsync(CancellationToken cancellationToken);
     Task<bool> ContainsMetadataAsync(string contentId, CancellationToken cancellationToken);
     Task<TMetadata> GetMetadataAsync(string contentId, CancellationToken cancellationToken);

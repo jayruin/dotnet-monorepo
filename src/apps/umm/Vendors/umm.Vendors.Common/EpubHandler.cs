@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using umm.Library;
+using umm.Storages.Metadata;
 
 namespace umm.Vendors.Common;
 
@@ -50,7 +51,7 @@ public sealed class EpubHandler
 
     public async Task ExportAsync(string contentId, string partId, string mediaType, Stream stream, CancellationToken cancellationToken)
     {
-        if (partId.Length != 0) throw new InvalidOperationException($"{_strategy.VendorId} - Unsupported PartId {partId}.");
+        if (partId.Length != 0) throw new InvalidOperationException($"{_strategy.VendorContext.VendorId} - Unsupported PartId {partId}.");
         if (mediaType == MediaType.Application.Epub_Zip)
         {
             await ExportEpubAsync(contentId, stream, cancellationToken).ConfigureAwait(false);
@@ -69,12 +70,12 @@ public sealed class EpubHandler
                 return;
             }
         }
-        throw new InvalidOperationException($"{_strategy.VendorId} - Unsupported MediaType {mediaType} for file export.");
+        throw new InvalidOperationException($"{_strategy.VendorContext.VendorId} - Unsupported MediaType {mediaType} for file export.");
     }
 
     public async Task ExportAsync(string contentId, string partId, string mediaType, IDirectory directory, CancellationToken cancellationToken)
     {
-        if (partId.Length != 0) throw new InvalidOperationException($"{_strategy.VendorId} - Unsupported PartId {partId}.");
+        if (partId.Length != 0) throw new InvalidOperationException($"{_strategy.VendorContext.VendorId} - Unsupported PartId {partId}.");
         if (await directory.ExistsAsync(cancellationToken).ConfigureAwait(false))
         {
             await directory.DeleteAsync(cancellationToken).ConfigureAwait(false);
@@ -90,12 +91,12 @@ public sealed class EpubHandler
             await ExportCbzAsync(contentId, directory, cancellationToken).ConfigureAwait(false);
             return;
         }
-        throw new InvalidOperationException($"{_strategy.VendorId} - Unsupported MediaType {mediaType} for directory export.");
+        throw new InvalidOperationException($"{_strategy.VendorContext.VendorId} - Unsupported MediaType {mediaType} for directory export.");
     }
 
     public async Task<IDirectory> GetEpubDirectoryAsync(string contentId, CancellationToken cancellationToken)
     {
-        IDirectory contentDirectory = await _strategy.BlobStorage.GetStorageContainerAsync(_strategy.VendorId, contentId, cancellationToken).ConfigureAwait(false);
+        IDirectory contentDirectory = await _strategy.VendorContext.BlobStorage.GetStorageContainerAsync(_strategy.VendorContext.VendorId, contentId, cancellationToken).ConfigureAwait(false);
         return contentDirectory.GetDirectory(EpubDirectoryName);
     }
 
@@ -103,29 +104,40 @@ public sealed class EpubHandler
     {
         EpubContainer container = await GetContainerAsync(contentId, cancellationToken).ConfigureAwait(false);
         int version = await container.GetVersionAsync(cancellationToken).ConfigureAwait(false);
-        _strategy.Logger.LogRegeneratingEpubMetadata(_strategy.VendorId, contentId, version);
+        _strategy.VendorContext.Logger.LogRegeneratingEpubMetadata(_strategy.VendorContext.VendorId, contentId, version);
         IEpubMetadata epubMetadata = await container.GetMetadataAsync(cancellationToken).ConfigureAwait(false);
         await ModifyMetadataAsync(contentId, version, epubMetadata, cancellationToken).ConfigureAwait(false);
         return epubMetadata;
     }
 
+    public ISinglePartSearchEntryEnumerationStrategy<EpubMetadataAdapter> GetEnumerationStrategy()
+    {
+        return new EpubHandlerBasicEnumerationStrategy(_strategy.VendorContext, this);
+    }
+
+    public ISinglePartSearchEntryEnumerationStrategy<TMetadata> GetEnumerationStrategy<TMetadata>(string metadataKey)
+        where TMetadata : ISearchableMetadata, IUniversalizableMediaMetadata, ISerializableMetadata<TMetadata>
+    {
+        return new EpubHandlerEnumerationStrategy<TMetadata>(_strategy.VendorContext, this, metadataKey);
+    }
+
     private async Task ModifyMetadataAsync(string contentId, int version, IEpubMetadata epubMetadata, CancellationToken cancellationToken)
     {
-        _strategy.Logger.LogModifyingEpubMetadata(_strategy.VendorId, contentId, version);
+        _strategy.VendorContext.Logger.LogModifyingEpubMetadata(_strategy.VendorContext.VendorId, contentId, version);
         if (_strategy.CanModifyMetadata)
         {
             IDirectory epubDirectory = await GetEpubDirectoryAsync(contentId, cancellationToken).ConfigureAwait(false);
             foreach (MetadataPropertyChange metadataPropertyChange in await _strategy.ModifyMetadataAsync(epubDirectory, contentId, epubMetadata, cancellationToken).ConfigureAwait(false))
             {
-                _strategy.Logger.LogMetadataChanged(_strategy.VendorId, contentId, metadataPropertyChange);
+                _strategy.VendorContext.Logger.LogMetadataChanged(_strategy.VendorContext.VendorId, contentId, metadataPropertyChange);
             }
         }
-        if (_strategy.AllowEpubMetadataOverrides && await _strategy.MetadataStorage.ContainsAsync(_strategy.VendorId, contentId, EpubMetadataOverrideKey, cancellationToken).ConfigureAwait(false))
+        if (_strategy.AllowEpubMetadataOverrides && await _strategy.VendorContext.MetadataStorage.ContainsAsync(_strategy.VendorContext.VendorId, contentId, EpubMetadataOverrideKey, cancellationToken).ConfigureAwait(false))
         {
-            BasicEpubMetadataOverride epubMetadataOverride = await _strategy.MetadataStorage.GetAsync<BasicEpubMetadataOverride>(_strategy.VendorId, contentId, EpubMetadataOverrideKey, cancellationToken).ConfigureAwait(false);
+            BasicEpubMetadataOverride epubMetadataOverride = await _strategy.VendorContext.MetadataStorage.GetAsync<BasicEpubMetadataOverride>(_strategy.VendorContext.VendorId, contentId, EpubMetadataOverrideKey, cancellationToken).ConfigureAwait(false);
             foreach (MetadataPropertyChange metadataPropertyChange in epubMetadataOverride.WriteTo(epubMetadata))
             {
-                _strategy.Logger.LogMetadataChanged(_strategy.VendorId, contentId, metadataPropertyChange);
+                _strategy.VendorContext.Logger.LogMetadataChanged(_strategy.VendorContext.VendorId, contentId, metadataPropertyChange);
             }
         }
     }
@@ -144,7 +156,7 @@ public sealed class EpubHandler
             ?? await (await GetEpubDirectoryAsync(contentId, cancellationToken).ConfigureAwait(false)).ExistsAsync(cancellationToken).ConfigureAwait(false);
         if (!containsEpub)
         {
-            _strategy.Logger.LogNoEpub(_strategy.VendorId, contentId);
+            _strategy.VendorContext.Logger.LogNoEpub(_strategy.VendorContext.VendorId, contentId);
         }
         return containsEpub;
     }
@@ -172,35 +184,35 @@ public sealed class EpubHandler
 
     private async Task ExportEpubAsync(string contentId, Stream stream, CancellationToken cancellationToken)
     {
-        _strategy.Logger.LogExportingFile(_strategy.VendorId, contentId, string.Empty, MediaType.Application.Epub_Zip);
+        _strategy.VendorContext.Logger.LogExportingFile(_strategy.VendorContext.VendorId, contentId, string.Empty, MediaType.Application.Epub_Zip);
         EpubPackager packager = await GetPackagerAsync(contentId, cancellationToken);
         await packager.PackageAsync(stream, Compression, cancellationToken).ConfigureAwait(false);
     }
 
     private async Task ExportEpubAsync(string contentId, IDirectory directory, CancellationToken cancellationToken)
     {
-        _strategy.Logger.LogExportingDirectory(_strategy.VendorId, contentId, string.Empty, MediaType.Application.Epub_Zip);
+        _strategy.VendorContext.Logger.LogExportingDirectory(_strategy.VendorContext.VendorId, contentId, string.Empty, MediaType.Application.Epub_Zip);
         EpubPackager packager = await GetPackagerAsync(contentId, cancellationToken);
         await packager.PackageAsync(directory, cancellationToken).ConfigureAwait(false);
     }
 
     private async Task ExportCbzAsync(string contentId, Stream stream, CancellationToken cancellationToken)
     {
-        _strategy.Logger.LogExportingFile(_strategy.VendorId, contentId, string.Empty, MediaType.Application.Vnd.Comicbook_Zip);
+        _strategy.VendorContext.Logger.LogExportingFile(_strategy.VendorContext.VendorId, contentId, string.Empty, MediaType.Application.Vnd.Comicbook_Zip);
         EpubToCbzConverter cbzConverter = await GetCbzConverterAsync(contentId, cancellationToken).ConfigureAwait(false);
         await cbzConverter.WriteAsync(stream, Compression, cancellationToken).ConfigureAwait(false);
     }
 
     private async Task ExportCbzAsync(string contentId, IDirectory directory, CancellationToken cancellationToken)
     {
-        _strategy.Logger.LogExportingDirectory(_strategy.VendorId, contentId, string.Empty, MediaType.Application.Vnd.Comicbook_Zip);
+        _strategy.VendorContext.Logger.LogExportingDirectory(_strategy.VendorContext.VendorId, contentId, string.Empty, MediaType.Application.Vnd.Comicbook_Zip);
         EpubToCbzConverter cbzConverter = await GetCbzConverterAsync(contentId, cancellationToken).ConfigureAwait(false);
         await cbzConverter.WriteAsync(directory, cancellationToken).ConfigureAwait(false);
     }
 
     private async Task ExportCoverAsync(string contentId, string mediaType, Stream stream, CancellationToken cancellationToken)
     {
-        _strategy.Logger.LogExportingFile(_strategy.VendorId, contentId, string.Empty, mediaType);
+        _strategy.VendorContext.Logger.LogExportingFile(_strategy.VendorContext.VendorId, contentId, string.Empty, mediaType);
         IFile? coverOverrideFile = await GetCoverOverrideAsync(contentId, cancellationToken).ConfigureAwait(false);
         if (coverOverrideFile is not null)
         {
@@ -210,7 +222,7 @@ public sealed class EpubHandler
         {
             EpubContainer container = await GetContainerAsync(contentId, cancellationToken).ConfigureAwait(false);
             EpubCover cover = await container.GetCoverAsync(cancellationToken).ConfigureAwait(false)
-                ?? throw new InvalidOperationException($"No cover for {_strategy.VendorId}.{contentId}.");
+                ?? throw new InvalidOperationException($"No cover for {_strategy.VendorContext.VendorId}.{contentId}.");
             Stream coverStream = await cover.OpenReadAsync(cancellationToken).ConfigureAwait(false);
             await using (coverStream.ConfigureAwait(false))
             {
@@ -284,7 +296,7 @@ public sealed class EpubHandler
     private async Task<IFile?> GetCoverOverrideAsync(string contentId, CancellationToken cancellationToken)
     {
         if (!_strategy.AllowCoverOverride) return null;
-        IDirectory contentDirectory = await _strategy.BlobStorage.GetStorageContainerAsync(_strategy.VendorId, contentId, cancellationToken).ConfigureAwait(false);
+        IDirectory contentDirectory = await _strategy.VendorContext.BlobStorage.GetStorageContainerAsync(_strategy.VendorContext.VendorId, contentId, cancellationToken).ConfigureAwait(false);
         // TODO LINQ
         IFile? coverOverrideFile = await contentDirectory
                 .EnumerateFilesAsync(cancellationToken)

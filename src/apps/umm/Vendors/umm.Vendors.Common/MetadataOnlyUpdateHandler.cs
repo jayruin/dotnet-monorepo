@@ -26,13 +26,13 @@ public sealed class MetadataOnlyUpdateHandler<TMetadata>
             total += 1;
             bool metadataChanged = false;
             TMetadata remoteMetadata = await _strategy.GetLatestMetadataAsync(contentId, cancellationToken).ConfigureAwait(false);
-            TMetadata? localMetadata = await _strategy.MetadataStorage.ContainsAsync(_strategy.VendorId, contentId, _strategy.MetadataKey, cancellationToken).ConfigureAwait(false)
-                ? await _strategy.MetadataStorage.GetAsync<TMetadata>(_strategy.VendorId, contentId, _strategy.MetadataKey, cancellationToken).ConfigureAwait(false)
+            TMetadata? localMetadata = await _strategy.VendorContext.MetadataStorage.ContainsAsync(_strategy.VendorContext.VendorId, contentId, _strategy.MetadataKey, cancellationToken).ConfigureAwait(false)
+                ? await _strategy.VendorContext.MetadataStorage.GetAsync<TMetadata>(_strategy.VendorContext.VendorId, contentId, _strategy.MetadataKey, cancellationToken).ConfigureAwait(false)
                 : default;
             bool shouldUpdate = force || localMetadata is null || _strategy.ShouldUpdate(remoteMetadata, localMetadata);
             if (shouldUpdate)
             {
-                _strategy.Logger.LogUpdated(_strategy.VendorId, remoteMetadata.ContentId, remoteMetadata.LastUpdated ?? string.Empty);
+                _strategy.VendorContext.Logger.LogUpdated(_strategy.VendorContext.VendorId, remoteMetadata.ContentId, remoteMetadata.LastUpdated ?? string.Empty);
                 updates += 1;
                 if (localMetadata is not null)
                 {
@@ -40,7 +40,7 @@ public sealed class MetadataOnlyUpdateHandler<TMetadata>
                     metadataChanged = metadataPropertyChanges.Count > 0;
                     foreach (MetadataPropertyChange metadataPropertyChange in metadataPropertyChanges)
                     {
-                        _strategy.Logger.LogMetadataChanged(_strategy.VendorId, remoteMetadata.ContentId, metadataPropertyChange);
+                        _strategy.VendorContext.Logger.LogMetadataChanged(_strategy.VendorContext.VendorId, remoteMetadata.ContentId, metadataPropertyChange);
                     }
                 }
                 else
@@ -50,14 +50,14 @@ public sealed class MetadataOnlyUpdateHandler<TMetadata>
             }
             else
             {
-                _strategy.Logger.LogSkippedUpdate(_strategy.VendorId, remoteMetadata.ContentId);
+                _strategy.VendorContext.Logger.LogSkippedUpdate(_strategy.VendorContext.VendorId, remoteMetadata.ContentId);
             }
             if (metadataChanged)
             {
-                await _strategy.MetadataStorage.SaveAsync(_strategy.VendorId, remoteMetadata.ContentId, _strategy.MetadataKey, remoteMetadata, cancellationToken).ConfigureAwait(false);
+                await _strategy.VendorContext.MetadataStorage.SaveAsync(_strategy.VendorContext.VendorId, remoteMetadata.ContentId, _strategy.MetadataKey, remoteMetadata, cancellationToken).ConfigureAwait(false);
                 yield return remoteMetadata.ContentId;
             }
         }
-        _strategy.Logger.LogUpdateSummary(_strategy.VendorId, updates, total);
+        _strategy.VendorContext.Logger.LogUpdateSummary(_strategy.VendorContext.VendorId, updates, total);
     }
 }

@@ -2,24 +2,18 @@ using Epubs;
 using FileStorage;
 using Images;
 using MediaTypes;
-using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using umm.Storages.Blob;
-using umm.Storages.Metadata;
 
 namespace umm.Vendors.Common;
 
 public interface IEpubHandlerStrategy
 {
-    string VendorId { get; }
-    IMetadataStorage MetadataStorage { get; }
-    IBlobStorage BlobStorage { get; }
+    MediaVendorContext VendorContext { get; }
     IImageLoader ImageLoader { get; }
     IMediaTypeFileExtensionsMapping MediaTypeFileExtensionsMapping { get; }
-    ILogger Logger { get; }
     bool AllowEpubMetadataOverrides { get; }
     bool AllowCoverOverride { get; }
     bool CanModifyMetadata { get; }

@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,9 +9,7 @@ namespace umm.Vendors.Common;
 public interface IMetadataOnlyUpdateHandlerStrategy<TMetadata>
     where TMetadata : ISerializableMetadata<TMetadata>, ISearchableMetadata, IUpdatableMetadata<TMetadata>
 {
-    string VendorId { get; }
-    IMetadataStorage MetadataStorage { get; }
-    ILogger Logger { get; }
+    MediaVendorContext VendorContext { get; }
     string MetadataKey { get; }
     IAsyncEnumerable<string> EnumerateLocalContentIdsAsync(IReadOnlyDictionary<string, StringValues> searchQuery, CancellationToken cancellationToken);
     bool ShouldUpdate(TMetadata remoteMetadata, TMetadata localMetadata);

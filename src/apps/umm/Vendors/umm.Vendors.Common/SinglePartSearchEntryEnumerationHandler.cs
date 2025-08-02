@@ -57,7 +57,7 @@ public sealed class SinglePartSearchEntryEnumerationHandler<TMetadata>
                 new()
                 {
                     Aliases = ["vendorid"],
-                    Values = [_strategy.VendorId],
+                    Values = [_strategy.VendorContext.VendorId],
                     ExactMatch = true,
                 },
                 new()
@@ -77,7 +77,7 @@ public sealed class SinglePartSearchEntryEnumerationHandler<TMetadata>
         {
             MediaEntry = new()
             {
-                VendorId = _strategy.VendorId,
+                VendorId = _strategy.VendorContext.VendorId,
                 ContentId = contentId,
                 PartId = string.Empty,
                 Metadata = universalMetadata,
