@@ -14,7 +14,7 @@ namespace umm.Storages;
 
 public static class MediaStorageServiceCollectionExtensions
 {
-    public static IServiceCollection AddMediaStorageServices(this IServiceCollection serviceCollection, IConfiguration configuration)
+    public static IServiceCollection AddMediaStorage(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         string storagesPrefix = "storages";
         serviceCollection.AddTransient<IMediaStorageCluster, MediaStorageCluster>(_ =>

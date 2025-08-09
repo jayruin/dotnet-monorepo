@@ -7,7 +7,7 @@ namespace umm.Vendors.EpubProj;
 
 public static class EpubProjServiceCollectionExtensions
 {
-    public static IServiceCollection AddEpubProjServices(this IServiceCollection serviceCollection, IConfiguration configuration)
+    public static IServiceCollection AddEpubProj(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         return serviceCollection
             .AddTransient<IEpubProjectLoader, EpubProjectLoader>()

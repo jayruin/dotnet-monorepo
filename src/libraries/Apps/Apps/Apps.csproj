@@ -1,13 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
-    <InternalsVisibleTo Include="CliApps.Tests" />
+    <InternalsVisibleTo Include="Apps.Tests" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- <PackageReference Include="Microsoft.Extensions.Configuration.Ini" /> -->
     <!-- <PackageReference Include="Microsoft.Extensions.Configuration.Xml" /> -->
-    <PackageReference Include="Microsoft.Extensions.Hosting" />
   </ItemGroup>
 
 </Project>

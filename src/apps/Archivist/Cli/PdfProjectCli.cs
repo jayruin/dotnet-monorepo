@@ -1,4 +1,4 @@
-using CliApps;
+using Apps;
 using FileStorage;
 using Microsoft.Extensions.DependencyInjection;
 using PdfProj;
@@ -40,11 +40,11 @@ public static class PdfProjectCli
             trashOption,
         };
         command.SetAction(parseResult => CliEndpoint.ExecuteAsync(
-            services => services.RegisterServices(),
             sp => HandleBuildCommandAsync(sp,
                 parseResult.GetRequiredValue(targetJsonArgument),
                 parseResult.GetRequiredValue(outputArgument),
-                parseResult.GetRequiredValue(trashOption))));
+                parseResult.GetRequiredValue(trashOption)),
+            initializeServices: services => services.RegisterServices()));
         return command;
     }
 

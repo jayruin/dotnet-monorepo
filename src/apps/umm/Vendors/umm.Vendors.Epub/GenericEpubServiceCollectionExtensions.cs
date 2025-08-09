@@ -6,7 +6,7 @@ namespace umm.Vendors.Epub;
 
 public static class GenericEpubServiceCollectionExtensions
 {
-    public static IServiceCollection AddGenericEpubServices(this IServiceCollection serviceCollection, IConfiguration configuration)
+    public static IServiceCollection AddGenericEpub(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         return serviceCollection
             .AddTransient<IMediaVendor, GenericEpubVendor>();

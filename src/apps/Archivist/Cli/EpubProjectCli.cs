@@ -1,4 +1,4 @@
-using CliApps;
+using Apps;
 using EpubProj;
 using FileStorage;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,11 +44,11 @@ public static class EpubProjectCli
             versionOption,
         };
         command.SetAction(parseResult => CliEndpoint.ExecuteAsync(
-            services => services.RegisterServices(),
             sp => HandleExportCommandAsync(sp,
                 parseResult.GetRequiredValue(projectDirectoryArgument),
                 parseResult.GetRequiredValue(exportFileArgument),
-                parseResult.GetRequiredValue(versionOption))));
+                parseResult.GetRequiredValue(versionOption)),
+            initializeServices: services => services.RegisterServices()));
 
         return command;
     }

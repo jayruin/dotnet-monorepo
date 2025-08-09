@@ -20,19 +20,19 @@ public static class Registrations
     {
         return serviceCollection
             .AddTransient<IFileStorage, FilesystemFileStorage>()
-            .AddEpubProjectServices()
-            .AddImgProjectServices()
-            .AddPdfProjectServices();
+            .AddEpubProject()
+            .AddImgProject()
+            .AddPdfProject();
     }
 
-    private static IServiceCollection AddEpubProjectServices(this IServiceCollection services)
+    private static IServiceCollection AddEpubProject(this IServiceCollection services)
     {
         return services
             .AddSingleton<IMediaTypeFileExtensionsMapping>(MediaTypeFileExtensionsMapping.Default)
             .AddTransient<IEpubProjectLoader, EpubProjectLoader>();
     }
 
-    private static IServiceCollection AddImgProjectServices(this IServiceCollection services)
+    private static IServiceCollection AddImgProject(this IServiceCollection services)
     {
         return services
             .AddSingleton<IMediaTypeFileExtensionsMapping>(MediaTypeFileExtensionsMapping.Default)
@@ -47,7 +47,7 @@ public static class Registrations
             .AddTransient<IExporter, PdfExporter>();
     }
 
-    private static IServiceCollection AddPdfProjectServices(this IServiceCollection services)
+    private static IServiceCollection AddPdfProject(this IServiceCollection services)
     {
         return services
             .AddTransient<IImageLoader, ImageLoader>()

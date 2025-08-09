@@ -1,4 +1,4 @@
-using CliApps;
+using Apps;
 using FileStorage;
 using ImgProj;
 using ImgProj.Comparing;
@@ -52,13 +52,13 @@ public static class ImgProjectCli
             versionOption,
         };
         command.SetAction(parseResult => CliEndpoint.ExecuteAsync(
-            services => services.RegisterServices(),
             sp => HandleExportCommandAsync(sp,
                 parseResult.GetRequiredValue(projectDirectoryArgument),
                 parseResult.GetRequiredValue(exportFileArgument),
                 parseResult.GetRequiredValue(exportFormatArgument),
                 parseResult.GetRequiredValue(coordinatesOption),
-                parseResult.GetRequiredValue(versionOption))));
+                parseResult.GetRequiredValue(versionOption)),
+            initializeServices: services => services.RegisterServices()));
         return command;
     }
 
@@ -89,11 +89,11 @@ public static class ImgProjectCli
             coordinatesOption,
         };
         command.SetAction(parseResult => CliEndpoint.ExecuteAsync(
-            services => services.RegisterServices(),
             sp => HandleCompareCommandAsync(sp,
                 parseResult.GetRequiredValue(projectDirectoryArgument),
                 parseResult.GetRequiredValue(outputDirectoryArgument),
-                parseResult.GetRequiredValue(coordinatesOption))));
+                parseResult.GetRequiredValue(coordinatesOption)),
+            initializeServices: services => services.RegisterServices()));
         return command;
     }
 
@@ -118,11 +118,11 @@ public static class ImgProjectCli
             versionOption,
         };
         command.SetAction(parseResult => CliEndpoint.ExecuteAsync(
-            services => services.RegisterServices(),
             sp => HandleDeleteCommandAsync(sp,
                 parseResult.GetRequiredValue(projectDirectoryArgument),
                 parseResult.GetRequiredValue(coordinatesOption),
-                parseResult.GetRequiredValue(versionOption))));
+                parseResult.GetRequiredValue(versionOption)),
+            initializeServices: services => services.RegisterServices()));
         return command;
     }
 
@@ -159,13 +159,13 @@ public static class ImgProjectCli
             pageRangesOption,
         };
         command.SetAction(parseResult => CliEndpoint.ExecuteAsync(
-            services => services.RegisterServices(),
             sp => HandleImportCommandAsync(sp,
                 parseResult.GetRequiredValue(projectDirectoryArgument),
                 parseResult.GetRequiredValue(sourceDirectoryArgument),
                 parseResult.GetRequiredValue(coordinatesOption),
                 parseResult.GetRequiredValue(versionOption),
-                parseResult.GetRequiredValue(pageRangesOption))));
+                parseResult.GetRequiredValue(pageRangesOption)),
+            initializeServices: services => services.RegisterServices()));
         return command;
     }
 

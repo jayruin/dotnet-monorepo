@@ -7,7 +7,7 @@ namespace umm.SearchIndex;
 
 public static class SearchIndexServiceCollectionExtensions
 {
-    public static IServiceCollection AddSearchIndexServices(this IServiceCollection serviceCollection, IConfiguration configuration)
+    public static IServiceCollection AddSearchIndex(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         string searchIndexPrefix = "searchindex";
         IConfiguration searchIndexConfiguration = configuration.GetSection(searchIndexPrefix);

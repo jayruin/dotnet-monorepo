@@ -10,7 +10,7 @@ namespace umm.ExportCache;
 
 public static class ExportCacheServiceCollectionExtensions
 {
-    public static IServiceCollection AddExportCacheServices(this IServiceCollection serviceCollection, IConfiguration configuration)
+    public static IServiceCollection AddExportCache(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         string exportCachePrefix = "exportcache";
         IConfiguration exportCacheConfiguration = configuration.GetSection(exportCachePrefix);
