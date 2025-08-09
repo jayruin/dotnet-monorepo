@@ -32,8 +32,8 @@ public static class CliEndpoint
         Func<IServiceProvider, Task> run,
         Action<IServiceCollection>? initializeServices = null)
     {
-        initializeServices ??= (_) => { };
-        ServiceOnlyInitialization initialization = new(initializeServices);
+        IServiceOnlyInitialization initialization = Initialization.Create(
+            initializeServices);
         return ExecuteAsync(initialization, run);
     }
 
@@ -60,9 +60,7 @@ public static class CliEndpoint
         Action<IConfigurationBuilder, IConfiguration>? initializeConfigurationSources = null,
         Action<IServiceCollection, IConfiguration>? initializeServices = null)
     {
-        initializeConfigurationSources ??= (_, _) => { };
-        initializeServices ??= (_, _) => { };
-        AppInitialization initialization = new(
+        IAppInitialization initialization = Initialization.Create(
             initializeConfigurationSources,
             initializeServices);
         return ExecuteAsync(initialization, run);
@@ -104,12 +102,7 @@ public static class CliEndpoint
         Action<IEndpointRouteBuilder>? initializeEndpoints = null,
         IEnumerable<string>? urls = null)
     {
-        initializeConfigurationSources ??= (_, _) => { };
-        initializeServices ??= (_, _) => { };
-        initializeWebHost ??= (_) => { };
-        initializeMiddlewares ??= (_) => { };
-        initializeEndpoints ??= (_) => { };
-        WebAppInitialization initialization = new(
+        IWebAppInitialization initialization = Initialization.Create(
             initializeConfigurationSources,
             initializeServices,
             initializeWebHost,

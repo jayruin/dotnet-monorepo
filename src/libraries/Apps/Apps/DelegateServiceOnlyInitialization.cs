@@ -3,13 +3,14 @@ using System;
 
 namespace Apps;
 
-internal sealed class ServiceOnlyInitialization : IServiceOnlyInitialization
+internal sealed class DelegateServiceOnlyInitialization : IServiceOnlyInitialization
 {
     private readonly Action<IServiceCollection> _initializeServices;
 
-    public ServiceOnlyInitialization(
-        Action<IServiceCollection> initializeServices)
+    public DelegateServiceOnlyInitialization(
+        Action<IServiceCollection>? initializeServices)
     {
+        initializeServices ??= (_) => { };
         _initializeServices = initializeServices;
     }
 

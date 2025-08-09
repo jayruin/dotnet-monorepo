@@ -4,15 +4,17 @@ using System;
 
 namespace Apps;
 
-internal sealed class AppInitialization : IAppInitialization
+internal sealed class DelegateAppInitialization : IAppInitialization
 {
     private readonly Action<IConfigurationBuilder, IConfiguration> _initializeConfigurationSources;
     private readonly Action<IServiceCollection, IConfiguration> _initializeServices;
 
-    public AppInitialization(
-        Action<IConfigurationBuilder, IConfiguration> initializeConfigurationSources,
-        Action<IServiceCollection, IConfiguration> initializeServices)
+    public DelegateAppInitialization(
+        Action<IConfigurationBuilder, IConfiguration>? initializeConfigurationSources,
+        Action<IServiceCollection, IConfiguration>? initializeServices)
     {
+        initializeConfigurationSources ??= (_, _) => { };
+        initializeServices ??= (_, _) => { };
         _initializeConfigurationSources = initializeConfigurationSources;
         _initializeServices = initializeServices;
     }

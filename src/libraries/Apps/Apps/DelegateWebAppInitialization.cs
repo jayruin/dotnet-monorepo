@@ -7,7 +7,7 @@ using System;
 
 namespace Apps;
 
-internal sealed class WebAppInitialization : IWebAppInitialization
+internal sealed class DelegateWebAppInitialization : IWebAppInitialization
 {
     private readonly Action<IConfigurationBuilder, IConfiguration> _initializeConfigurationSources;
     private readonly Action<IServiceCollection, IConfiguration> _initializeServices;
@@ -15,13 +15,18 @@ internal sealed class WebAppInitialization : IWebAppInitialization
     private readonly Action<IApplicationBuilder> _initializeMiddlewares;
     private readonly Action<IEndpointRouteBuilder> _initializeEndpoints;
 
-    public WebAppInitialization(
-        Action<IConfigurationBuilder, IConfiguration> initializeConfigurationSources,
-        Action<IServiceCollection, IConfiguration> initializeServices,
-        Action<IWebHostBuilder> initializeWebHost,
-        Action<IApplicationBuilder> initializeMiddlewares,
-        Action<IEndpointRouteBuilder> initializeEndpoints)
+    public DelegateWebAppInitialization(
+        Action<IConfigurationBuilder, IConfiguration>? initializeConfigurationSources,
+        Action<IServiceCollection, IConfiguration>? initializeServices,
+        Action<IWebHostBuilder>? initializeWebHost,
+        Action<IApplicationBuilder>? initializeMiddlewares,
+        Action<IEndpointRouteBuilder>? initializeEndpoints)
     {
+        initializeConfigurationSources ??= (_, _) => { };
+        initializeServices ??= (_, _) => { };
+        initializeWebHost ??= (_) => { };
+        initializeMiddlewares ??= (_) => { };
+        initializeEndpoints ??= (_) => { };
         _initializeConfigurationSources = initializeConfigurationSources;
         _initializeServices = initializeServices;
         _initializeWebHost = initializeWebHost;
