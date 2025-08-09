@@ -23,13 +23,13 @@ public static partial class UpdateLoggerExtensions
     public static partial void LogMetadataUpdateSummary(this ILogger logger, string vendorId, int updates, int total);
 
     [LoggerMessage(LogLevel.Debug, "[{VendorId}].[{ContentId}] Updated metadata with {PropertyName} : ({PropertyOldValue}) -> ({PropertyNewValue}).")]
-    public static partial void LogMetadataUpdated(this ILogger logger,
+    public static partial void LogMetadataPropertyUpdated(this ILogger logger,
         string vendorId, string contentId,
         string propertyName, string propertyOldValue, string propertyNewValue);
 
-    public static void LogMetadataUpdated(this ILogger logger,
+    public static void LogMetadataPropertyUpdated(this ILogger logger,
         string vendorId, string contentId,
-        MetadataPropertyChange metadataPropertyChange) => logger.LogMetadataUpdated(
+        MetadataPropertyChange metadataPropertyChange) => logger.LogMetadataPropertyUpdated(
             vendorId, contentId,
             metadataPropertyChange.Name, metadataPropertyChange.OldValue ?? string.Empty, metadataPropertyChange.NewValue ?? string.Empty);
 }

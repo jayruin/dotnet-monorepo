@@ -48,7 +48,7 @@ public sealed class UpdateHandler<TMetadata>
                 metadataUpdated = metadataPropertyChanges.Count > 0;
                 foreach (MetadataPropertyChange metadataPropertyChange in metadataPropertyChanges)
                 {
-                    _strategy.VendorContext.Logger.LogMetadataUpdated(_strategy.VendorContext.VendorId, remoteMetadata.ContentId, metadataPropertyChange);
+                    _strategy.VendorContext.Logger.LogMetadataPropertyUpdated(_strategy.VendorContext.VendorId, remoteMetadata.ContentId, metadataPropertyChange);
                 }
             }
             if (updated)
