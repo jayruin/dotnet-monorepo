@@ -28,8 +28,7 @@ public sealed class PdfBuilder : IPdfBuilder
     {
         if (trash is not null)
         {
-            if (await trash.ExistsAsync()) await trash.DeleteAsync();
-            await trash.CreateAsync();
+            await trash.EnsureIsEmptyAsync();
         }
         await using Stream outputStream = await output.OpenWriteAsync();
         using IPdfWritableDocument outputPdf = _pdfLoader.OpenWrite(outputStream);

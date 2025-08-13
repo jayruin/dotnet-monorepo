@@ -99,6 +99,9 @@ internal sealed class FilesystemDirectory : IDirectory
         {
             Directory.Delete(FullPath, true);
         }
+        catch (DirectoryNotFoundException)
+        {
+        }
         catch (Exception exception)
         {
             throw new FileStorageException(exception);

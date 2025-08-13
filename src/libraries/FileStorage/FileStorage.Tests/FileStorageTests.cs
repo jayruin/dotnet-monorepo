@@ -104,9 +104,6 @@ public abstract class FileStorageTests
         Assert.IsTrue(directory.Exists());
         directory.Create();
         Assert.IsTrue(directory.Exists());
-        directory.Delete();
-        Assert.IsFalse(directory.Exists());
-        Assert.ThrowsException<FileStorageException>(() => directory.Delete());
     }
 
     [TestMethod]
@@ -114,7 +111,8 @@ public abstract class FileStorageTests
     {
         IDirectory directory = FileStorage.GetDirectory("dir");
         Assert.IsFalse(directory.Exists());
-        Assert.ThrowsException<FileStorageException>(() => directory.Delete());
+        directory.Delete();
+        Assert.IsFalse(directory.Exists());
     }
 
     [TestMethod]
@@ -126,7 +124,6 @@ public abstract class FileStorageTests
         Assert.IsTrue(directory.Exists());
         directory.Delete();
         Assert.IsFalse(directory.Exists());
-        Assert.ThrowsException<FileStorageException>(() => directory.Delete());
     }
 
     [TestMethod]

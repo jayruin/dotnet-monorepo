@@ -63,18 +63,12 @@ public sealed class FilestorageExportCache : IExportCache
     public async Task ClearAsync(string vendorId, CancellationToken cancellationToken = default)
     {
         IDirectory vendorDirectory = GetVendorDirectory(vendorId);
-        if (await vendorDirectory.ExistsAsync(cancellationToken).ConfigureAwait(false))
-        {
-            await vendorDirectory.DeleteAsync(cancellationToken).ConfigureAwait(false);
-        }
+        await vendorDirectory.DeleteAsync(cancellationToken).ConfigureAwait(false);
     }
 
     public async Task ResetAsync(CancellationToken cancellationToken = default)
     {
-        if (await _options.RootDirectory.ExistsAsync(cancellationToken).ConfigureAwait(false))
-        {
-            await _options.RootDirectory.DeleteAsync(cancellationToken).ConfigureAwait(false);
-        }
+        await _options.RootDirectory.DeleteAsync(cancellationToken).ConfigureAwait(false);
     }
 
     private void ThrowIfCannotHandleFiles()

@@ -51,6 +51,9 @@ public sealed class EpubToCbzConverter
         // TODO LINQ
         List<IFile> imageFiles = await _container.GetPrePaginatedImageFilesAsync(cancellationToken)
             .ToListAsync(cancellationToken).ConfigureAwait(false);
+
+        await outputDirectory.EnsureIsEmptyAsync(cancellationToken).ConfigureAwait(false);
+
         for (int i = 0; i < imageFiles.Count; i++)
         {
             IFile imageFile = imageFiles[i];

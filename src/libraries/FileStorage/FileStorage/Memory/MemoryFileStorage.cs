@@ -61,7 +61,6 @@ public sealed class MemoryFileStorage : IFileStorage
 
     internal void DeleteDirectory(string path)
     {
-        EnsureDirectoryExists(path);
         _files.Keys
             .Where(p => p.StartsWith(path))
             .ToList()

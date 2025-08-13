@@ -76,11 +76,7 @@ public sealed class EpubHandler
     public async Task ExportAsync(string contentId, string partId, string mediaType, IDirectory directory, CancellationToken cancellationToken)
     {
         if (partId.Length != 0) throw new InvalidOperationException($"{_strategy.VendorContext.VendorId} - Unsupported PartId {partId}.");
-        if (await directory.ExistsAsync(cancellationToken).ConfigureAwait(false))
-        {
-            await directory.DeleteAsync(cancellationToken).ConfigureAwait(false);
-        }
-        await directory.CreateAsync(cancellationToken).ConfigureAwait(false);
+        await directory.EnsureIsEmptyAsync(cancellationToken).ConfigureAwait(false);
         if (mediaType == MediaType.Application.Epub_Zip)
         {
             await ExportEpubAsync(contentId, directory, cancellationToken).ConfigureAwait(false);

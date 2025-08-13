@@ -80,10 +80,6 @@ internal sealed class ZipDirectory : IDirectory
 
     public void Delete()
     {
-        if (!Exists())
-        {
-            throw new FileStorageException();
-        }
         _fileStorage.Archive.GetEntry(_archivePath)?.Delete();
         foreach (string entryPath in EnumerateEntryPaths(true).ToList())
         {

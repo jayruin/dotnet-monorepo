@@ -78,6 +78,8 @@ public sealed class EpubPackager
     {
         EpubContents contents = await _container.TraverseAsync(cancellationToken).ConfigureAwait(false);
 
+        await outputDirectory.EnsureIsEmptyAsync(cancellationToken).ConfigureAwait(false);
+
         await WriteMimetypeFileAsync(contents, outputDirectory, cancellationToken).ConfigureAwait(false);
         await CopyRegularItemsAsync(contents, outputDirectory, cancellationToken).ConfigureAwait(false);
         string? newCoverName = await WriteCoverAsync(contents, outputDirectory, cancellationToken).ConfigureAwait(false);
