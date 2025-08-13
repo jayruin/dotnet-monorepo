@@ -20,12 +20,12 @@ public class SizeTests
     [TestMethod]
     public void TestInvalidWidth()
     {
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => new Size(0, 1));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new Size(0, 1));
     }
 
     [TestMethod]
     public void TestInvalidHeight()
     {
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => new Size(1, 0));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new Size(1, 0));
     }
 }

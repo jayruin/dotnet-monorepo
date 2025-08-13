@@ -47,22 +47,22 @@ public class LoadingTests
         };
         IImgProject imgProject = ImgProjectLoader.LoadProject(projectDirectory, metadataJson);
         IImmutableList<IPageSpread> pageSpreads = imgProject.MetadataVersions[version].PageSpreads;
-        Assert.AreEqual(1, pageSpreads.Count);
+        Assert.HasCount(1, pageSpreads);
         IPageSpread pageSpread = pageSpreads[0];
         CollectionAssert.AreEqual(pageSpread.Left, (int[])[1, 2, 1]);
         CollectionAssert.AreEqual(pageSpread.Right, (int[])[1, 2, 2]);
 
         pageSpreads = imgProject.GetSubProject([1]).MetadataVersions[version].PageSpreads;
-        Assert.AreEqual(1, pageSpreads.Count);
+        Assert.HasCount(1, pageSpreads);
         pageSpread = pageSpreads[0];
         CollectionAssert.AreEqual(pageSpread.Left, (int[])[2, 1]);
         CollectionAssert.AreEqual(pageSpread.Right, (int[])[2, 2]);
 
         pageSpreads = imgProject.GetSubProject([1, 1]).MetadataVersions[version].PageSpreads;
-        Assert.AreEqual(0, pageSpreads.Count);
+        Assert.IsEmpty(pageSpreads);
 
         pageSpreads = imgProject.GetSubProject([1, 2]).MetadataVersions[version].PageSpreads;
-        Assert.AreEqual(1, pageSpreads.Count);
+        Assert.HasCount(1, pageSpreads);
         pageSpread = pageSpreads[0];
         CollectionAssert.AreEqual(pageSpread.Left, (int[])[1]);
         CollectionAssert.AreEqual(pageSpread.Right, (int[])[2]);

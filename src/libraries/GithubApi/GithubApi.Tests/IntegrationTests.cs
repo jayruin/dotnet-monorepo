@@ -4,7 +4,6 @@ using System.Net.Http;
 
 namespace GithubApi.Tests;
 
-[TestClass]
 public abstract class IntegrationTests
 {
     public required HttpClient HttpClient { get; set; }

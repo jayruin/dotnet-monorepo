@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Immutable;
 using System.IO;
+using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -55,11 +56,17 @@ internal sealed class ZipFile : IFile
         {
             Delete();
         }
-        _fileStorage.Archive.CreateEntry(FullPath);
+        ZipArchiveEntry entry = _fileStorage.Archive.CreateEntry(FullPath, _fileStorage.Options.Compression);
+        if (_fileStorage.Options.FixedTimestamp is DateTimeOffset fixedTimestamp)
+        {
+            entry.LastWriteTime = fixedTimestamp;
+        }
         return Open();
     }
 
-    public Task<Stream> OpenWriteAsync(CancellationToken cancellationToken = default) => _asyncAdapter.OpenWriteAsync(cancellationToken);
+    // TODO Async Zip
+    public Task<Stream> OpenWriteAsync(CancellationToken cancellationToken = default)
+        => _asyncAdapter.OpenWriteAsync(cancellationToken);
 
     public void Delete()
     {
@@ -75,6 +82,7 @@ internal sealed class ZipFile : IFile
 
     public Task DeleteAsync(CancellationToken cancellationToken = default) => _asyncAdapter.DeleteAsync(cancellationToken);
 
+    // TODO Async Zip
     private Stream Open()
     {
         Stream? stream;

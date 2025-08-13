@@ -10,8 +10,8 @@ public sealed class MediaTypeFileExtensionsMappingTests
     public void TestNoEmptyArrays()
     {
         MediaTypeFileExtensionsMapping mapping = new(("", []));
-        Assert.AreEqual(0, mapping.MediaTypeToFileExtensions.Count);
-        Assert.AreEqual(0, mapping.FileExtensionToMediaTypes.Count);
+        Assert.IsEmpty(mapping.MediaTypeToFileExtensions);
+        Assert.IsEmpty(mapping.FileExtensionToMediaTypes);
     }
 
     [TestMethod]
@@ -20,8 +20,8 @@ public sealed class MediaTypeFileExtensionsMappingTests
         ImmutableArray<string> expectedMediaTypes = ["media-type"];
         ImmutableArray<string> expectedFileExtensions = [".1", ".2"];
         MediaTypeFileExtensionsMapping mapping = new((expectedMediaTypes[0], expectedFileExtensions));
-        Assert.AreEqual(1, mapping.MediaTypeToFileExtensions.Count);
-        Assert.AreEqual(2, mapping.FileExtensionToMediaTypes.Count);
+        Assert.HasCount(1, mapping.MediaTypeToFileExtensions);
+        Assert.HasCount(2, mapping.FileExtensionToMediaTypes);
         Assert.IsTrue(mapping.TryGetFileExtensions(expectedMediaTypes[0], out ImmutableArray<string> actualFileExtensions));
         CollectionAssert.AreEqual(expectedFileExtensions, actualFileExtensions);
         foreach (string expectedFileExtension in expectedFileExtensions)

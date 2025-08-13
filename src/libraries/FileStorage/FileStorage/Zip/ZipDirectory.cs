@@ -72,11 +72,17 @@ internal sealed class ZipDirectory : IDirectory
     {
         if (!Exists())
         {
-            _fileStorage.Archive.CreateEntry(_archivePath);
+            ZipArchiveEntry entry = _fileStorage.Archive.CreateEntry(_archivePath, _fileStorage.Options.Compression);
+            if (_fileStorage.Options.FixedTimestamp is DateTimeOffset fixedTimestamp)
+            {
+                entry.LastWriteTime = fixedTimestamp;
+            }
         }
     }
 
-    public Task CreateAsync(CancellationToken cancellationToken = default) => _asyncAdapter.CreateAsync(cancellationToken);
+    // TODO Async Zip
+    public Task CreateAsync(CancellationToken cancellationToken = default)
+        => _asyncAdapter.CreateAsync(cancellationToken);
 
     public void Delete()
     {

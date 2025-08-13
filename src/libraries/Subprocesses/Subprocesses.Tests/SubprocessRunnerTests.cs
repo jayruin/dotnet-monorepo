@@ -19,7 +19,7 @@ public class SubprocessRunnerTests
     {
         SubprocessRunner runner = new();
         CompletedSubprocess completedSubprocess = await runner.RunAsync("dotnet", "", "add", "package");
-        SubprocessException subprocessException = Assert.ThrowsException<SubprocessException>(completedSubprocess.EnsureZeroExitCode);
+        SubprocessException subprocessException = Assert.ThrowsExactly<SubprocessException>(completedSubprocess.EnsureZeroExitCode);
         Assert.AreNotEqual(0, subprocessException.CompletedSubprocess.ExitCode);
     }
 }

@@ -9,11 +9,20 @@ namespace FileStorage.Zip;
 // TODO Async Zip
 public sealed class ZipFileStorage : IFileStorage, IDisposable
 {
+    internal ZipFileStorageOptions Options { get; init; }
     internal ZipArchive Archive { get; set; }
 
-    public ZipFileStorage(Stream stream)
+    public ZipFileStorage(Stream stream, ZipFileStorageOptions? options = null)
     {
-        Archive = new ZipArchive(stream, ZipArchiveMode.Update, true);
+        Options = options ?? new();
+        Archive = new ZipArchive(stream, Options.Mode);
+        if (Options.Mode == ZipArchiveMode.Update && Options.FixedTimestamp is DateTimeOffset fixedTimestamp)
+        {
+            foreach (ZipArchiveEntry entry in Archive.Entries)
+            {
+                entry.LastWriteTime = fixedTimestamp;
+            }
+        }
     }
 
     public IFile GetFile(params IEnumerable<string> paths)

@@ -11,34 +11,36 @@ namespace GithubApi.Tests;
 [TestClass]
 public sealed class ReleasesIntegrationTests : IntegrationTests
 {
+    public TestContext TestContext { get; set; }
+
     [TestMethod]
     public async Task TestGetReleasesAsync()
     {
-        List<Release> releases = new();
-        await foreach (Release release in ApiClient.GetReleasesAsync("actions", "setup-dotnet", new PaginationOptions { PerPage = 10, Page = 1 }))
+        List<Release> releases = [];
+        await foreach (Release release in ApiClient.GetReleasesAsync("actions", "setup-dotnet", new PaginationOptions { PerPage = 10, Page = 1 }, TestContext.CancellationTokenSource.Token))
         {
             releases.Add(release);
         }
-        Assert.IsTrue(releases.Count > 10);
+        Assert.IsGreaterThan(10, releases.Count);
     }
 
     [TestMethod]
     public async Task TestGetReleaseAssetsAsync()
     {
-        List<ReleaseAsset> releaseAssets = new();
-        await foreach (ReleaseAsset releaseAsset in ApiClient.GetReleaseAssetsAsync("cli", "cli", 22808788, new PaginationOptions { PerPage = 5, Page = 1 }))
+        List<ReleaseAsset> releaseAssets = [];
+        await foreach (ReleaseAsset releaseAsset in ApiClient.GetReleaseAssetsAsync("cli", "cli", 22808788, new PaginationOptions { PerPage = 5, Page = 1 }, TestContext.CancellationTokenSource.Token))
         {
             releaseAssets.Add(releaseAsset);
         }
-        Assert.IsTrue(releaseAssets.Count == 7);
+        Assert.HasCount(7, releaseAssets);
     }
 
     [TestMethod]
     public async Task TestDownloadReleaseAsync()
     {
         string url = "https://api.github.com/repos/cli/cli/releases/assets/17320341";
-        await using Stream stream = await ApiClient.DownloadAsync(url);
-        string actual = Encoding.UTF8.GetString(await stream.ToByteArrayAsync());
+        await using Stream stream = await ApiClient.DownloadAsync(url, TestContext.CancellationTokenSource.Token);
+        string actual = Encoding.UTF8.GetString(await stream.ToByteArrayAsync(TestContext.CancellationTokenSource.Token));
         string expected = string.Join('\n',
             "85f9b895aab95c9882dfdb55193f9330514ab6e80777a972da04483c7a117010  gh_0.4.0_macOS_amd64.tar.gz",
             "e050d6f6a760a6093d3ea62a3d0aea26f45489a6c6954aa105ed951593a537fe  gh_0.4.0_linux_amd64.rpm",

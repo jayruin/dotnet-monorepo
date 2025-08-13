@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +8,8 @@ namespace Caching.Tests;
 [TestClass]
 public abstract class FileCacheTests
 {
+    public TestContext TestContext { get; set; }
+
     public required IFileCache FileCache { get; set; }
 
     [TestCleanup]
@@ -25,8 +26,8 @@ public abstract class FileCacheTests
         ICachedFile cachedFile = await FileCache.CacheAsync(originalStream, ".txt");
         await using Stream stream = cachedFile.OpenRead();
         await using MemoryStream memoryStream = new();
-        await stream.CopyToAsync(memoryStream);
-        Assert.IsTrue(memoryStream.ToArray().SequenceEqual(data));
+        await stream.CopyToAsync(memoryStream, TestContext.CancellationTokenSource.Token);
+        CollectionAssert.AreEqual(data, memoryStream.ToArray());
     }
 
     [TestMethod]
