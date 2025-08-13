@@ -48,7 +48,7 @@ internal sealed class ZipDirectory : IDirectory
     }
 
     public bool Exists() => _archivePath == "/"
-        || _fileStorage.Archive.Entries
+        || _fileStorage.Entries
             .FirstOrDefault(e => e.FullName.StartsWith(_archivePath)) is not null;
 
     public Task<bool> ExistsAsync(CancellationToken cancellationToken = default) => _asyncAdapter.ExistsAsync(cancellationToken);
@@ -72,7 +72,7 @@ internal sealed class ZipDirectory : IDirectory
     {
         if (!Exists())
         {
-            ZipArchiveEntry entry = _fileStorage.Archive.CreateEntry(_archivePath, _fileStorage.Options.Compression);
+            ZipArchiveEntry entry = _fileStorage.CreateEntry(_archivePath);
             if (_fileStorage.Options.FixedTimestamp is DateTimeOffset fixedTimestamp)
             {
                 entry.LastWriteTime = fixedTimestamp;
@@ -86,10 +86,11 @@ internal sealed class ZipDirectory : IDirectory
 
     public void Delete()
     {
-        _fileStorage.Archive.GetEntry(_archivePath)?.Delete();
+        if (_archivePath == "/") return;
+        _fileStorage.GetEntry(_archivePath)?.Delete();
         foreach (string entryPath in EnumerateEntryPaths(true).ToList())
         {
-            _fileStorage.Archive.GetEntry(entryPath)?.Delete();
+            _fileStorage.GetEntry(entryPath)?.Delete();
         }
     }
 
@@ -98,7 +99,7 @@ internal sealed class ZipDirectory : IDirectory
     private IEnumerable<string> EnumerateEntryPaths(bool recurse)
     {
         HashSet<string> result = [];
-        foreach (ZipArchiveEntry entry in _fileStorage.Archive.Entries)
+        foreach (ZipArchiveEntry entry in _fileStorage.Entries)
         {
             if (_archivePath != "/" && !entry.FullName.StartsWith(_archivePath) || entry.FullName == _archivePath) continue;
             if (recurse)

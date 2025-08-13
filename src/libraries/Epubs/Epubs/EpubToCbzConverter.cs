@@ -1,4 +1,5 @@
 using FileStorage;
+using FileStorage.Zip;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,32 +23,21 @@ public sealed class EpubToCbzConverter
     public async Task WriteAsync(Stream outputStream, CompressionLevel compressionLevel = CompressionLevel.NoCompression, CancellationToken cancellationToken = default)
     {
         DateTimeOffset timestamp = await GetTimestampAsync(cancellationToken).ConfigureAwait(false);
-        // TODO LINQ
-        List<IFile> imageFiles = await _container.GetPrePaginatedImageFilesAsync(cancellationToken)
-            .ToListAsync(cancellationToken).ConfigureAwait(false);
-        // TODO Async Zip
-        using ZipArchive zip = new(outputStream, ZipArchiveMode.Create, true);
-        for (int i = 0; i < imageFiles.Count; i++)
+
+        ZipFileStorageOptions options = new()
         {
-            IFile imageFile = imageFiles[i];
-            ZipArchiveEntry imageEntry = zip.CreateEntry($"{i.ToPaddedString(imageFiles.Count)}{imageFile.Extension}", compressionLevel);
-            imageEntry.LastWriteTime = timestamp;
-            Stream imageFileStream = await imageFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
-            await using (imageFileStream.ConfigureAwait(false))
-            {
-                // TODO Async Zip
-                Stream imageEntryStream = imageEntry.Open();
-                await using (imageEntryStream.ConfigureAwait(false))
-                {
-                    await imageFileStream.CopyToAsync(imageEntryStream, cancellationToken).ConfigureAwait(false);
-                }
-            }
-        }
+            Mode = ZipArchiveMode.Create,
+            FixedTimestamp = timestamp,
+            Compression = compressionLevel,
+        };
+        // TODO Async Zip
+        using ZipFileStorage fileStorage = new(outputStream, options);
+        IDirectory directory = fileStorage.GetDirectory();
+        await WriteAsync(directory, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task WriteAsync(IDirectory outputDirectory, CancellationToken cancellationToken = default)
     {
-        DateTimeOffset timestamp = await GetTimestampAsync(cancellationToken).ConfigureAwait(false);
         // TODO LINQ
         List<IFile> imageFiles = await _container.GetPrePaginatedImageFilesAsync(cancellationToken)
             .ToListAsync(cancellationToken).ConfigureAwait(false);

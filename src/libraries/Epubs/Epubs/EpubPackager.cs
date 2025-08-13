@@ -1,4 +1,5 @@
 using FileStorage;
+using FileStorage.Zip;
 using MediaTypes;
 using System;
 using System.Collections.Immutable;
@@ -62,16 +63,17 @@ public sealed class EpubPackager
     {
         DateTimeOffset timestamp = await GetTimestampAsync(cancellationToken).ConfigureAwait(false);
 
-        EpubContents contents = await _container.TraverseAsync(cancellationToken).ConfigureAwait(false);
-
+        ZipFileStorageOptions options = new()
+        {
+            Mode = ZipArchiveMode.Create,
+            FixedTimestamp = timestamp,
+            Compression = compressionLevel,
+            CompressionOverrides = [("mimetype", CompressionLevel.NoCompression)],
+        };
         // TODO Async Zip
-        using ZipArchive outputZip = new(outputStream, ZipArchiveMode.Create, true);
-
-        await WriteMimetypeFileAsync(contents, outputZip, timestamp, cancellationToken).ConfigureAwait(false);
-        await CopyRegularItemsAsync(contents, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
-        string? newCoverName = await WriteCoverAsync(contents, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
-        await WriteXhtmlFilesAsync(contents, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
-        await WriteOpfFileAsync(contents, outputZip, compressionLevel, timestamp, newCoverName, cancellationToken).ConfigureAwait(false);
+        using ZipFileStorage fileStorage = new(outputStream, options);
+        IDirectory directory = fileStorage.GetDirectory();
+        await PackageAsync(directory, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task PackageAsync(IDirectory outputDirectory, CancellationToken cancellationToken = default)
@@ -98,23 +100,6 @@ public sealed class EpubPackager
         return timestamp.Clamp(ZipConstants.MinLastWriteTime, ZipConstants.MaxLastWriteTime);
     }
 
-    private async Task CopyFileAsync(ImmutableArray<string> path, ZipArchive outputZip, CompressionLevel compressionLevel, DateTimeOffset timestamp, CancellationToken cancellationToken)
-    {
-        IFile sourceFile = _container.RootDirectory.GetFile(path);
-        ZipArchiveEntry zipEntry = outputZip.CreateEntry(string.Join('/', path), compressionLevel);
-        zipEntry.LastWriteTime = timestamp;
-        Stream sourceStream = await sourceFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
-        await using (sourceStream.ConfigureAwait(false))
-        {
-            // TODO Async Zip
-            Stream destinationStream = zipEntry.Open();
-            await using (destinationStream.ConfigureAwait(false))
-            {
-                await sourceStream.CopyToAsync(destinationStream, cancellationToken).ConfigureAwait(false);
-            }
-        }
-    }
-
     private Task CopyFileAsync(ImmutableArray<string> path, IDirectory outputDirectory, CancellationToken cancellationToken)
     {
         IFile sourceFile = _container.RootDirectory.GetFile(path);
@@ -122,27 +107,9 @@ public sealed class EpubPackager
         return sourceFile.CopyToAsync(destinationFile, cancellationToken);
     }
 
-    private Task WriteMimetypeFileAsync(EpubContents contents, ZipArchive outputZip, DateTimeOffset timestamp, CancellationToken cancellationToken)
-    {
-        return CopyFileAsync(contents.MimetypeFilePath, outputZip, CompressionLevel.NoCompression, timestamp, cancellationToken);
-    }
-
     private Task WriteMimetypeFileAsync(EpubContents contents, IDirectory outputDirectory, CancellationToken cancellationToken)
     {
         return CopyFileAsync(contents.MimetypeFilePath, outputDirectory, cancellationToken);
-    }
-
-    private async Task CopyRegularItemsAsync(EpubContents contents, ZipArchive outputZip, CompressionLevel compressionLevel, DateTimeOffset timestamp, CancellationToken cancellationToken)
-    {
-        foreach (ImmutableArray<string> path in contents.DirectoryPaths)
-        {
-            ZipArchiveEntry entry = outputZip.CreateEntry($"{string.Join('/', path)}/", compressionLevel);
-            entry.LastWriteTime = timestamp;
-        }
-        foreach (ImmutableArray<string> path in contents.FilePaths)
-        {
-            await CopyFileAsync(path, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
-        }
     }
 
     private async Task CopyRegularItemsAsync(EpubContents contents, IDirectory outputDirectory, CancellationToken cancellationToken)
@@ -176,44 +143,6 @@ public sealed class EpubPackager
             coverCounter += 1;
         }
         return (newCoverName, newCoverPath);
-    }
-
-    private async Task<string?> WriteCoverAsync(EpubContents contents, ZipArchive outputZip, CompressionLevel compressionLevel, DateTimeOffset timestamp, CancellationToken cancellationToken)
-    {
-        string? newCoverName = null;
-        if (HandleCoverAsync is not null)
-        {
-            if (contents.CoverFilePath.IsDefaultOrEmpty)
-            {
-                (newCoverName, ImmutableArray<string> newCoverPath) = await GetNewCoverNameAndPathAsync(contents, cancellationToken).ConfigureAwait(false);
-                ZipArchiveEntry coverEntry = outputZip.CreateEntry(string.Join('/', newCoverPath), compressionLevel);
-                coverEntry.LastWriteTime = timestamp;
-                // TODO Async Zip
-                Stream destinationCoverStream = coverEntry.Open();
-                await using (destinationCoverStream.ConfigureAwait(false))
-                {
-                    await HandleCoverAsync(null, destinationCoverStream, cancellationToken).ConfigureAwait(false);
-                }
-            }
-            else
-            {
-                EpubCover sourceCover = await _container.GetCoverAsync(cancellationToken).ConfigureAwait(false)
-                    ?? throw new InvalidOperationException("Could not get cover.");
-                ZipArchiveEntry coverEntry = outputZip.CreateEntry(string.Join('/', contents.CoverFilePath), compressionLevel);
-                coverEntry.LastWriteTime = timestamp;
-                // TODO Async Zip
-                Stream destinationCoverStream = coverEntry.Open();
-                await using (destinationCoverStream.ConfigureAwait(false))
-                {
-                    await HandleCoverAsync(sourceCover, destinationCoverStream, cancellationToken).ConfigureAwait(false);
-                }
-            }
-        }
-        else if (!contents.CoverFilePath.IsDefaultOrEmpty)
-        {
-            await CopyFileAsync(contents.CoverFilePath, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
-        }
-        return newCoverName;
     }
 
     private async Task<string?> WriteCoverAsync(EpubContents contents, IDirectory outputDirectory, CancellationToken cancellationToken)
@@ -260,30 +189,6 @@ public sealed class EpubPackager
         return document;
     }
 
-    private async Task WriteXhtmlFilesAsync(EpubContents contents, ZipArchive outputZip, CompressionLevel compressionLevel, DateTimeOffset timestamp, CancellationToken cancellationToken)
-    {
-        foreach (ImmutableArray<string> path in contents.XhtmlPaths)
-        {
-            if (HandleXhtml is null)
-            {
-                await CopyFileAsync(path, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
-            }
-            else
-            {
-                XDocument xhtmlDocument = await GetDocumentAsync(path, cancellationToken).ConfigureAwait(false);
-                HandleXhtml(xhtmlDocument);
-                ZipArchiveEntry zipEntry = outputZip.CreateEntry(string.Join('/', path), compressionLevel);
-                zipEntry.LastWriteTime = timestamp;
-                // TODO Async Zip
-                Stream destinationStream = zipEntry.Open();
-                await using (destinationStream.ConfigureAwait(false))
-                {
-                    await EpubXml.SaveAsync(xhtmlDocument, destinationStream, cancellationToken).ConfigureAwait(false);
-                }
-            }
-        }
-    }
-
     private async Task WriteXhtmlFilesAsync(EpubContents contents, IDirectory outputDirectory, CancellationToken cancellationToken)
     {
         foreach (ImmutableArray<string> path in contents.XhtmlPaths)
@@ -319,27 +224,6 @@ public sealed class EpubPackager
             await HandleMetadataAsync(metadata, cancellationToken).ConfigureAwait(false);
         }
         metadata.WriteToOpf(opfDocument, newCoverName, _mediaTypeFileExtensionsMapping);
-    }
-
-    private async Task WriteOpfFileAsync(EpubContents contents, ZipArchive outputZip, CompressionLevel compressionLevel, DateTimeOffset timestamp, string? newCoverName, CancellationToken cancellationToken)
-    {
-        if (string.IsNullOrWhiteSpace(newCoverName) && HandleMetadataAsync is null)
-        {
-            await CopyFileAsync(contents.OpfFilePath, outputZip, compressionLevel, timestamp, cancellationToken).ConfigureAwait(false);
-        }
-        else
-        {
-            XDocument opfDocument = await GetOpfDocumentAsync(contents, cancellationToken).ConfigureAwait(false);
-            await WriteOpfMetadataAsync(contents, newCoverName, opfDocument, cancellationToken).ConfigureAwait(false);
-            ZipArchiveEntry opfEntry = outputZip.CreateEntry(string.Join('/', contents.OpfFilePath), compressionLevel);
-            opfEntry.LastWriteTime = timestamp;
-            // TODO Async Zip
-            Stream destinationOpfStream = opfEntry.Open();
-            await using (destinationOpfStream.ConfigureAwait(false))
-            {
-                await EpubXml.SaveAsync(opfDocument, destinationOpfStream, cancellationToken).ConfigureAwait(false);
-            }
-        }
     }
 
     private async Task WriteOpfFileAsync(EpubContents contents, IDirectory outputDirectory, string? newCoverName, CancellationToken cancellationToken)

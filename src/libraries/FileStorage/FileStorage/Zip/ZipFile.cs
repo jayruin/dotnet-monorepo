@@ -42,7 +42,7 @@ internal sealed class ZipFile : IFile
         _asyncAdapter = new(this);
     }
 
-    public bool Exists() => _fileStorage.Archive.GetEntry(FullPath) is not null;
+    public bool Exists() => _fileStorage.GetEntry(FullPath) is not null;
 
     public Task<bool> ExistsAsync(CancellationToken cancellationToken = default) => _asyncAdapter.ExistsAsync(cancellationToken);
 
@@ -56,7 +56,7 @@ internal sealed class ZipFile : IFile
         {
             Delete();
         }
-        ZipArchiveEntry entry = _fileStorage.Archive.CreateEntry(FullPath, _fileStorage.Options.Compression);
+        ZipArchiveEntry entry = _fileStorage.CreateEntry(FullPath);
         if (_fileStorage.Options.FixedTimestamp is DateTimeOffset fixedTimestamp)
         {
             entry.LastWriteTime = fixedTimestamp;
@@ -72,7 +72,7 @@ internal sealed class ZipFile : IFile
     {
         try
         {
-            _fileStorage.Archive.GetEntry(FullPath)?.Delete();
+            _fileStorage.GetEntry(FullPath)?.Delete();
         }
         catch (Exception exception)
         {
@@ -88,7 +88,7 @@ internal sealed class ZipFile : IFile
         Stream? stream;
         try
         {
-            stream = _fileStorage.Archive.GetEntry(FullPath)?.Open();
+            stream = _fileStorage.GetEntry(FullPath)?.Open();
         }
         catch (Exception exception)
         {

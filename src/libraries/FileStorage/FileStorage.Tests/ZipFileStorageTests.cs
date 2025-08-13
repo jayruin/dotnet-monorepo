@@ -65,12 +65,20 @@ public class ZipFileStorageTests : FileStorageTests
         ZipFileStorageOptions options2 = new()
         {
             Compression = CompressionLevel.SmallestSize,
+            CompressionOverrides = [("test2.txt", CompressionLevel.NoCompression)],
+        };
+        ZipFileStorageOptions options3 = new()
+        {
+            Compression = CompressionLevel.SmallestSize,
         };
         byte[] data1 = GetData(options1);
         byte[] data2 = GetData(options2);
+        byte[] data3 = GetData(options3);
         Assert.IsNotEmpty(data1);
         Assert.IsNotEmpty(data2);
+        Assert.IsNotEmpty(data3);
         Assert.IsGreaterThan(data1.Length, data2.Length);
+        Assert.IsGreaterThan(data2.Length, data3.Length);
     }
 
     private static byte[] GetData(ZipFileStorageOptions options)
@@ -78,7 +86,8 @@ public class ZipFileStorageTests : FileStorageTests
         using MemoryStream memoryStream = new();
         using (ZipFileStorage fileStorage = new(memoryStream, options))
         {
-            fileStorage.GetFile("test.txt").WriteText("text", Encoding.ASCII);
+            fileStorage.GetFile("test1.txt").WriteText("text1", Encoding.ASCII);
+            fileStorage.GetFile("test2.txt").WriteText("text2", Encoding.ASCII);
         }
         return memoryStream.ToArray();
     }
