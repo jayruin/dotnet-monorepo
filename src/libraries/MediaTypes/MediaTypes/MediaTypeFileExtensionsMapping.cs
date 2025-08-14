@@ -63,6 +63,7 @@ public sealed class MediaTypeFileExtensionsMapping : IMediaTypeFileExtensionsMap
             (MediaType.Application.Pdf, [".pdf"]),
             (MediaType.Application.XDtbncx_Xml, [".ncx"]),
             (MediaType.Application.Xhtml_Xml, [".xhtml"]),
+            (MediaType.Application.Zip, [".zip"]),
             (MediaType.Application.Vnd.Comicbook_Zip, [".cbz"]),
 
             (MediaType.Audio.Mpeg, [".mp3"]),
