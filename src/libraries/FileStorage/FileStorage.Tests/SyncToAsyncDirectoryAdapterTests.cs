@@ -1,7 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FileStorage.Tests;
@@ -9,6 +11,8 @@ namespace FileStorage.Tests;
 [TestClass]
 public class SyncToAsyncDirectoryAdapterTests
 {
+    public TestContext TestContext { get; set; }
+
     [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
@@ -17,7 +21,7 @@ public class SyncToAsyncDirectoryAdapterTests
         IDirectory syncDirectory = Substitute.For<IDirectory>();
         syncDirectory.Exists().Returns(expected);
         SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
-        bool actual = await asyncAdapter.ExistsAsync();
+        bool actual = await asyncAdapter.ExistsAsync(TestContext.CancellationTokenSource.Token);
         Assert.AreEqual(expected, actual);
     }
 
@@ -28,7 +32,8 @@ public class SyncToAsyncDirectoryAdapterTests
         IDirectory syncDirectory = Substitute.For<IDirectory>();
         syncDirectory.EnumerateFiles().Returns(expectedFiles);
         SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
-        List<IFile> actualFiles = await asyncAdapter.EnumerateFilesAsync().ToListAsync();
+        List<IFile> actualFiles = await asyncAdapter.EnumerateFilesAsync(TestContext.CancellationTokenSource.Token)
+            .ToListAsync(TestContext.CancellationTokenSource.Token);
         CollectionAssert.AreEqual(expectedFiles, actualFiles);
     }
 
@@ -39,7 +44,8 @@ public class SyncToAsyncDirectoryAdapterTests
         IDirectory syncDirectory = Substitute.For<IDirectory>();
         syncDirectory.EnumerateDirectories().Returns(expectedDirectories);
         SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
-        List<IDirectory> actualDirectories = await asyncAdapter.EnumerateDirectoriesAsync().ToListAsync();
+        List<IDirectory> actualDirectories = await asyncAdapter.EnumerateDirectoriesAsync(TestContext.CancellationTokenSource.Token)
+            .ToListAsync(TestContext.CancellationTokenSource.Token);
         CollectionAssert.AreEqual(expectedDirectories, actualDirectories);
     }
 
@@ -48,7 +54,7 @@ public class SyncToAsyncDirectoryAdapterTests
     {
         IDirectory syncDirectory = Substitute.For<IDirectory>();
         SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
-        await asyncAdapter.CreateAsync();
+        await asyncAdapter.CreateAsync(TestContext.CancellationTokenSource.Token);
         syncDirectory.Received().Create();
     }
 
@@ -57,7 +63,57 @@ public class SyncToAsyncDirectoryAdapterTests
     {
         IDirectory syncDirectory = Substitute.For<IDirectory>();
         SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
-        await asyncAdapter.DeleteAsync();
+        await asyncAdapter.DeleteAsync(TestContext.CancellationTokenSource.Token);
         syncDirectory.Received().Delete();
+    }
+
+    [TestMethod]
+    public async Task TestExistsAsyncThrowsIfCancelled()
+    {
+        using CancellationTokenSource cancellationTokenSource = new();
+        cancellationTokenSource.Cancel();
+        IDirectory syncDirectory = Substitute.For<IDirectory>();
+        SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
+        await Assert.ThrowsAsync<OperationCanceledException>(() => asyncAdapter.ExistsAsync(cancellationTokenSource.Token));
+    }
+
+    [TestMethod]
+    public async Task TestEnumerateFilesAsyncThrowsIfCancelled()
+    {
+        using CancellationTokenSource cancellationTokenSource = new();
+        cancellationTokenSource.Cancel();
+        IDirectory syncDirectory = Substitute.For<IDirectory>();
+        SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await asyncAdapter.EnumerateFilesAsync(cancellationTokenSource.Token).FirstOrDefaultAsync(CancellationToken.None));
+    }
+
+    [TestMethod]
+    public async Task TestEnumerateDirectoriesAsyncThrowsIfCancelled()
+    {
+        using CancellationTokenSource cancellationTokenSource = new();
+        cancellationTokenSource.Cancel();
+        IDirectory syncDirectory = Substitute.For<IDirectory>();
+        SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await asyncAdapter.EnumerateDirectoriesAsync(cancellationTokenSource.Token).FirstOrDefaultAsync(CancellationToken.None));
+    }
+
+    [TestMethod]
+    public async Task TestCreateAsyncThrowsIfCancelled()
+    {
+        using CancellationTokenSource cancellationTokenSource = new();
+        cancellationTokenSource.Cancel();
+        IDirectory syncDirectory = Substitute.For<IDirectory>();
+        SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
+        await Assert.ThrowsAsync<OperationCanceledException>(() => asyncAdapter.CreateAsync(cancellationTokenSource.Token));
+    }
+
+    [TestMethod]
+    public async Task TestDeleteAsyncThrowsIfCancelled()
+    {
+        using CancellationTokenSource cancellationTokenSource = new();
+        cancellationTokenSource.Cancel();
+        IDirectory syncDirectory = Substitute.For<IDirectory>();
+        SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
+        await Assert.ThrowsAsync<OperationCanceledException>(() => asyncAdapter.DeleteAsync(cancellationTokenSource.Token));
     }
 }
