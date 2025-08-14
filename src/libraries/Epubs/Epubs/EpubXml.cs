@@ -1,3 +1,4 @@
+using FileStorage;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -18,11 +19,24 @@ public static class EpubXml
         await document.SaveAsync(writer, cancellationToken).ConfigureAwait(false);
     }
 
+    public static async Task SaveAsync(XDocument document, IFile file, CancellationToken cancellationToken = default)
+    {
+        Stream packageStream = await file.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
+        await using ConfiguredAsyncDisposable configuredPackageStream = packageStream.ConfigureAwait(false);
+        await SaveAsync(document, packageStream, cancellationToken).ConfigureAwait(false);
+    }
+
     public static void Save(XDocument document, Stream stream)
     {
         XmlWriterSettings settings = CreateXmlWriterSettings();
         using XmlWriter writer = XmlWriter.Create(stream, settings);
         document.Save(writer);
+    }
+
+    public static void Save(XDocument document, IFile file)
+    {
+        using Stream stream = file.OpenWrite();
+        Save(document, stream);
     }
 
     private static XmlWriterSettings CreateXmlWriterSettings()

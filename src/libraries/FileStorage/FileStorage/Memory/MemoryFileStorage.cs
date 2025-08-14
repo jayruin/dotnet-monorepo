@@ -46,7 +46,7 @@ public sealed class MemoryFileStorage : IFileStorage
     internal void CreateDirectory(string path)
     {
         if (IsRootPath(path)) return;
-        ImmutableArray<string> pathParts = SplitFullPath(path).ToImmutableArray();
+        ImmutableArray<string> pathParts = [.. SplitFullPath(path)];
         for (int i = 0; i < pathParts.Length; i++)
         {
             string subPath = JoinPaths(pathParts[..^i]);
@@ -105,10 +105,10 @@ public sealed class MemoryFileStorage : IFileStorage
 
     internal Stream OpenWrite(string path)
     {
-        ImmutableArray<string> pathParts = SplitFullPath(path).ToImmutableArray();
+        ImmutableArray<string> pathParts = [.. SplitFullPath(path)];
         if (pathParts.Length > 1)
         {
-            EnsureDirectoryExists(JoinPaths(pathParts[..^1]));
+            CreateDirectory(JoinPaths(pathParts[..^1]));
         }
         return new MockWritableFileStream(path, _files);
     }
@@ -158,8 +158,8 @@ public sealed class MemoryFileStorage : IFileStorage
             }
             return count == 0;
         }
-        ImmutableArray<string> pathParts = SplitFullPath(path).ToImmutableArray();
-        ImmutableArray<string> parentPathParts = SplitFullPath(parentPath).ToImmutableArray();
+        ImmutableArray<string> pathParts = [.. SplitFullPath(path)];
+        ImmutableArray<string> parentPathParts = [.. SplitFullPath(parentPath)];
         return path.StartsWith(parentPath) && pathParts[parentPathParts.Length..].Length == 1;
     }
 

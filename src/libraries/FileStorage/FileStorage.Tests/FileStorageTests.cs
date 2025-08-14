@@ -295,4 +295,15 @@ public abstract class FileStorageTests
         IFile file = directory.GetFile("file.txt");
         Assert.AreEqual(directory.FullPath, file.GetParentDirectory()?.FullPath);
     }
+
+    [TestMethod]
+    public void TestCreateFileWhenParentDirectoryDoesNotExist()
+    {
+        IFile file = FileStorage.GetFile("dir", "file.txt");
+        file.OpenWrite().Dispose();
+        Assert.IsTrue(file.Exists());
+        IDirectory? parentDirectory = file.GetParentDirectory();
+        Assert.IsNotNull(parentDirectory);
+        Assert.IsTrue(parentDirectory.Exists());
+    }
 }

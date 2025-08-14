@@ -109,9 +109,32 @@ public sealed class EpubProjVendor : IMediaVendor
         throw new InvalidOperationException($"{VendorId} - Unsupported MediaType {mediaType} for file export.");
     }
 
-    // TODO Implement and update entries
-    public Task ExportAsync(string contentId, string partId, string mediaType, IDirectory directory, CancellationToken cancellationToken = default)
-        => throw new InvalidOperationException($"{VendorId} - Unsupported MediaType {mediaType} for directory export.");
+    public async Task ExportAsync(string contentId, string partId, string mediaType, IDirectory directory, CancellationToken cancellationToken = default)
+    {
+        if (partId.Length == 0 || partId == Epub2Id)
+        {
+            IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(VendorId, contentId, cancellationToken).ConfigureAwait(false);
+            IEpubProject project = await _projectLoader.LoadFromDirectoryAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
+            if (mediaType == MediaType.Application.Epub_Zip)
+            {
+                if (partId.Length == 0)
+                {
+                    _logger.LogExportingDirectory(VendorId, contentId, partId, mediaType);
+                    IReadOnlyCollection<IFile> globalFiles = await _projectLoader.GetImplicitGlobalFilesAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
+                    await project.ExportEpub3Async(directory, globalFiles, cancellationToken).ConfigureAwait(false);
+                    return;
+                }
+                if (partId == Epub2Id)
+                {
+                    _logger.LogExportingDirectory(VendorId, contentId, partId, mediaType);
+                    IReadOnlyCollection<IFile> globalFiles = await _projectLoader.GetImplicitGlobalFilesAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
+                    await project.ExportEpub2Async(directory, globalFiles, cancellationToken).ConfigureAwait(false);
+                    return;
+                }
+            }
+        }
+        throw new InvalidOperationException($"{VendorId} - Unsupported MediaType {mediaType} for directory export.");
+    }
 
     // TODO LINQ
     public IAsyncEnumerable<string> UpdateContentAsync(IReadOnlyDictionary<string, StringValues> searchQuery, bool force, CancellationToken cancellationToken = default)
@@ -225,7 +248,7 @@ public sealed class EpubProjVendor : IMediaVendor
     {
         IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(VendorId, contentId, cancellationToken).ConfigureAwait(false);
         if (!await projectDirectory.ExistsAsync(cancellationToken).ConfigureAwait(false)) yield break;
-        yield return new(MediaType.Application.Epub_Zip, true, false);
+        yield return new(MediaType.Application.Epub_Zip, true, true);
         IEpubProject project = await _projectLoader.LoadFromDirectoryAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
         if (project.CoverFile is not null)
         {

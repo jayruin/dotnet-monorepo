@@ -49,7 +49,11 @@ internal sealed class FilesystemFile : IFile
 
     public Task<Stream> OpenReadAsync(CancellationToken cancellationToken = default) => _asyncAdapter.OpenReadAsync(cancellationToken);
 
-    public Stream OpenWrite() => Open(FileMode.Create, FileAccess.Write, FileShare.None);
+    public Stream OpenWrite()
+    {
+        Directory.GetParent(FullPath)?.Create();
+        return Open(FileMode.Create, FileAccess.Write, FileShare.None);
+    }
 
     public Task<Stream> OpenWriteAsync(CancellationToken cancellationToken = default) => _asyncAdapter.OpenWriteAsync(cancellationToken);
 

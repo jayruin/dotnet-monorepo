@@ -1,3 +1,5 @@
+using FileStorage;
+using FileStorage.Zip;
 using MediaTypes;
 using System;
 using System.Collections.Generic;
@@ -14,57 +16,44 @@ namespace Epubs;
 
 public sealed class EpubWriter : IDisposable, IAsyncDisposable
 {
-    private readonly ZipArchive _zipArchive;
-
+    private readonly IDirectory _rootDirectory;
+    private readonly EpubWriterOptions _options;
+    private readonly ZipFileStorage? _zipFileStorage;
+    private readonly string _coverXhtmlFileName;
+    private readonly string _navXhtmlFileName;
+    private readonly string _tocNcxFileName;
     private readonly string _packageDocumentPath;
-
-    private readonly string _reservedPrefix;
-
-    private readonly string _contentDirectory;
-
     private readonly MetaInfHandler _metaInfHandler;
-
     private readonly PackageDocumentHandler _packageDocumentHandler;
-
     private readonly CoverXhtmlHandler _coverXhtmlHandler;
-
     private readonly NavigationDocumentHandler _navigationDocumentHandler;
-
     private readonly NcxHandler _ncxHandler;
-
-    private readonly ISet<string> _resourcePaths = new HashSet<string>();
-
-    private readonly IList<EpubResource> _resources = new List<EpubResource>();
-
+    private readonly HashSet<string> _resourcePaths = [];
+    private readonly List<EpubResource> _resources = [];
     private string? _coverHref;
-
     private bool _coverInSequence;
-
     private IReadOnlyCollection<EpubNavItem>? _toc;
-
     private bool _tocInSequence;
 
     private bool IncludeNavigationDocument
     {
-        get => Version == EpubVersion.Epub3 || (Version == EpubVersion.Epub2 && _tocInSequence);
+        get => _options.Version == EpubVersion.Epub3 || (_options.Version == EpubVersion.Epub2 && _tocInSequence);
     }
 
     private bool IncludeNcx
     {
-        get => Version == EpubVersion.Epub2 || (Version == EpubVersion.Epub3 && IncludeLegacyFeatures);
+        get => _options.Version == EpubVersion.Epub2 || (_options.Version == EpubVersion.Epub3 && IncludeLegacyFeatures);
     }
 
     private bool IncludeLandmarks
     {
-        get => IncludeStructuralComponents && Version == EpubVersion.Epub3;
+        get => IncludeStructuralComponents && _options.Version == EpubVersion.Epub3;
     }
 
     private bool IncludeGuide
     {
-        get => IncludeStructuralComponents && (Version == EpubVersion.Epub2 || (Version == EpubVersion.Epub3 && IncludeLegacyFeatures));
+        get => IncludeStructuralComponents && (_options.Version == EpubVersion.Epub2 || (_options.Version == EpubVersion.Epub3 && IncludeLegacyFeatures));
     }
-
-    public EpubVersion Version { get; }
 
     public string Identifier { get; set; } = $"urn:uuid:{Guid.NewGuid()}";
 
@@ -78,8 +67,6 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
 
     public bool PrePaginated { get; set; }
 
-    public DateTimeOffset Modified { get; set; } = DateTimeOffset.Now;
-
     public EpubDirection Direction { get; set; }
 
     public EpubSeries? Series { get; set; }
@@ -88,36 +75,69 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
 
     public bool IncludeLegacyFeatures { get; set; }
 
-    private EpubWriter(ZipArchive zipArchive, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string reservedPrefix, string contentDirectory)
+    private EpubWriter(IDirectory rootDirectory, EpubWriterOptions options, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, ZipFileStorage? zipFileStorage)
     {
-        _zipArchive = zipArchive;
-        Version = epubVersion;
-        _reservedPrefix = reservedPrefix;
-        _contentDirectory = contentDirectory;
-        _packageDocumentPath = GetResourcePath($"{_reservedPrefix}package.opf");
-        _metaInfHandler = new MetaInfHandler(Version);
-        _packageDocumentHandler = new PackageDocumentHandler(Version, mediaTypeFileExtensionsMapping);
-        _coverXhtmlHandler = new CoverXhtmlHandler(Version);
-        _navigationDocumentHandler = new NavigationDocumentHandler(Version);
-        _ncxHandler = new NcxHandler(Version);
+        _rootDirectory = rootDirectory;
+        _options = options;
+        _zipFileStorage = zipFileStorage;
+        _coverXhtmlFileName = $"{_options.ReservedPrefix}cover.xhtml";
+        _navXhtmlFileName = $"{_options.ReservedPrefix}nav.xhtml";
+        _tocNcxFileName = $"{_options.ReservedPrefix}toc.ncx";
+        _packageDocumentPath = GetResourcePath($"{_options.ReservedPrefix}package.opf");
+        _metaInfHandler = new MetaInfHandler(_options.Version);
+        _packageDocumentHandler = new PackageDocumentHandler(_options.Version, mediaTypeFileExtensionsMapping);
+        _coverXhtmlHandler = new CoverXhtmlHandler(_options.Version);
+        _navigationDocumentHandler = new NavigationDocumentHandler(_options.Version);
+        _ncxHandler = new NcxHandler(_options.Version);
     }
 
-    public static async Task<EpubWriter> CreateAsync(Stream stream, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string reservedPrefix = ".", string contentDirectory = "OEBPS", CancellationToken cancellationToken = default)
+    public static async Task<EpubWriter> CreateAsync(Stream stream, EpubWriterOptions options, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, CancellationToken cancellationToken = default)
     {
-        if (epubVersion == EpubVersion.Unknown) throw new InvalidEpubVersionException();
-        // TODO Async Zip
-        ZipArchive zipArchive = new(stream, ZipArchiveMode.Create, true);
-        EpubWriter epubWriter = new(zipArchive, epubVersion, mediaTypeFileExtensionsMapping, reservedPrefix, contentDirectory);
+        if (options.Version == EpubVersion.Unknown) throw new InvalidEpubVersionException();
+        ZipFileStorageOptions zipFileStorageOptions = new()
+        {
+            Mode = ZipArchiveMode.Create,
+            FixedTimestamp = options.Modified,
+            Compression = options.Compression,
+            CompressionOverrides = [("mimetype", CompressionLevel.NoCompression)],
+        };
+        ZipFileStorage zipFileStorage = new(stream, zipFileStorageOptions);
+        EpubWriter epubWriter = new(zipFileStorage.GetDirectory(), options, mediaTypeFileExtensionsMapping, zipFileStorage);
         await epubWriter.WriteMimetypeAsync(cancellationToken).ConfigureAwait(false);
         await epubWriter.WriteContainerXmlAsync(cancellationToken).ConfigureAwait(false);
         return epubWriter;
     }
 
-    public static EpubWriter Create(Stream stream, EpubVersion epubVersion, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, string reservedPrefix = ".", string contentDirectory = "OEBPS")
+    public static async Task<EpubWriter> CreateAsync(IDirectory directory, EpubWriterOptions options, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, CancellationToken cancellationToken = default)
     {
-        if (epubVersion == EpubVersion.Unknown) throw new InvalidEpubVersionException();
-        ZipArchive zipArchive = new(stream, ZipArchiveMode.Create, true);
-        EpubWriter epubWriter = new(zipArchive, epubVersion, mediaTypeFileExtensionsMapping, reservedPrefix, contentDirectory);
+        if (options.Version == EpubVersion.Unknown) throw new InvalidEpubVersionException();
+        EpubWriter epubWriter = new(directory, options, mediaTypeFileExtensionsMapping, null);
+        await epubWriter.WriteMimetypeAsync(cancellationToken).ConfigureAwait(false);
+        await epubWriter.WriteContainerXmlAsync(cancellationToken).ConfigureAwait(false);
+        return epubWriter;
+    }
+
+    public static EpubWriter Create(Stream stream, EpubWriterOptions options, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping)
+    {
+        if (options.Version == EpubVersion.Unknown) throw new InvalidEpubVersionException();
+        ZipFileStorageOptions zipFileStorageOptions = new()
+        {
+            Mode = ZipArchiveMode.Create,
+            FixedTimestamp = options.Modified,
+            Compression = options.Compression,
+            CompressionOverrides = [("mimetype", CompressionLevel.NoCompression)],
+        };
+        ZipFileStorage zipFileStorage = new(stream, zipFileStorageOptions);
+        EpubWriter epubWriter = new(zipFileStorage.GetDirectory(), options, mediaTypeFileExtensionsMapping, zipFileStorage);
+        epubWriter.WriteMimetype();
+        epubWriter.WriteContainerXml();
+        return epubWriter;
+    }
+
+    public static EpubWriter Create(IDirectory directory, EpubWriterOptions options, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping)
+    {
+        if (options.Version == EpubVersion.Unknown) throw new InvalidEpubVersionException();
+        EpubWriter epubWriter = new(directory, options, mediaTypeFileExtensionsMapping, null);
         epubWriter.WriteMimetype();
         epubWriter.WriteContainerXml();
         return epubWriter;
@@ -136,11 +156,11 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         stream.CopyTo(resourceStream);
     }
 
-    public Task<Stream> CreateResourceAsync(EpubResource resource, CancellationToken cancellationToken = default)
+    public async Task<Stream> CreateResourceAsync(EpubResource resource, CancellationToken cancellationToken = default)
     {
-        if (Path.GetFileNameWithoutExtension(resource.Href).StartsWith(_reservedPrefix))
+        if (Path.GetFileNameWithoutExtension(resource.Href).StartsWith(_options.ReservedPrefix))
         {
-            throw new InvalidOperationException($"File name must not start with {_reservedPrefix}");
+            throw new InvalidOperationException($"File name must not start with {_options.ReservedPrefix}");
         }
         string resourcePath = GetResourcePath(resource.Href);
         if (!_resourcePaths.Add(resourcePath))
@@ -148,15 +168,15 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
             throw new InvalidOperationException("Resource already exists!");
         }
         _resources.Add(resource);
-        // TODO Async Zip
-        return Task.FromResult(_zipArchive.CreateEntry(resourcePath).Open());
+        IFile file = _rootDirectory.GetFile(resourcePath.Split('/'));
+        return await file.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
     }
 
     public Stream CreateResource(EpubResource resource)
     {
-        if (Path.GetFileNameWithoutExtension(resource.Href).StartsWith(_reservedPrefix))
+        if (Path.GetFileNameWithoutExtension(resource.Href).StartsWith(_options.ReservedPrefix))
         {
-            throw new InvalidOperationException($"File name must not start with {_reservedPrefix}");
+            throw new InvalidOperationException($"File name must not start with {_options.ReservedPrefix}");
         }
         string resourcePath = GetResourcePath(resource.Href);
         if (!_resourcePaths.Add(resourcePath))
@@ -164,24 +184,26 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
             throw new InvalidOperationException("Resource already exists!");
         }
         _resources.Add(resource);
-        return _zipArchive.CreateEntry(resourcePath).Open();
+        IFile file = _rootDirectory.GetFile(resourcePath.Split('/'));
+        return file.OpenWrite();
     }
 
-    public Task<Stream> CreateRasterCoverAsync(string extension, bool inSequence, CancellationToken cancellationToken = default)
+    public async Task<Stream> CreateRasterCoverAsync(string extension, bool inSequence, CancellationToken cancellationToken = default)
     {
         if (_coverHref is not null) throw new InvalidOperationException("Cover already added!");
-        _coverHref = $"{_reservedPrefix}cover{extension}";
+        _coverHref = $"{_options.ReservedPrefix}cover{extension}";
         _coverInSequence = inSequence;
-        // TODO Async Zip
-        return Task.FromResult(_zipArchive.CreateEntry(GetResourcePath(_coverHref)).Open());
+        IFile file = _rootDirectory.GetFile(GetResourcePath(_coverHref).Split('/'));
+        return await file.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
     }
 
     public Stream CreateRasterCover(string extension, bool inSequence)
     {
         if (_coverHref is not null) throw new InvalidOperationException("Cover already added!");
-        _coverHref = $"{_reservedPrefix}cover{extension}";
+        _coverHref = $"{_options.ReservedPrefix}cover{extension}";
         _coverInSequence = inSequence;
-        return _zipArchive.CreateEntry(GetResourcePath(_coverHref)).Open();
+        IFile file = _rootDirectory.GetFile(GetResourcePath(_coverHref).Split('/'));
+        return file.OpenWrite();
     }
 
     public void AddToc(IReadOnlyCollection<EpubNavItem> navItems, bool inSequence)
@@ -195,7 +217,7 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
     {
         SaveChanges();
         WriteSpecialDocuments();
-        _zipArchive.Dispose();
+        _zipFileStorage?.Dispose();
     }
 
     public async ValueTask DisposeAsync()
@@ -203,102 +225,78 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         SaveChanges();
         await WriteSpecialDocumentsAsync(default).ConfigureAwait(false);
         // TODO Async Zip
-        _zipArchive.Dispose();
+        _zipFileStorage?.Dispose();
     }
 
     private string GetResourcePath(string href)
     {
-        return string.Join('/', _contentDirectory.Trim('/'), href.Trim('/')).Trim('/');
+        return string.Join('/', _options.ContentDirectory.Trim('/'), href.Trim('/')).Trim('/');
     }
 
-    private async Task WriteMimetypeAsync(CancellationToken cancellationToken)
+    private Task WriteMimetypeAsync(CancellationToken cancellationToken)
     {
-        ZipArchiveEntry mimetype = _zipArchive.CreateEntry("mimetype", CompressionLevel.NoCompression);
-        // TODO Async Zip
-        Stream mimetypeStream = mimetype.Open();
-        await using ConfiguredAsyncDisposable configuredMimetypeStream = mimetypeStream.ConfigureAwait(false);
-        StreamWriter mimetypeStreamWriter = new(mimetypeStream, Encoding.ASCII);
-        await using ConfiguredAsyncDisposable configuredMimetypeStreamWriter = mimetypeStreamWriter.ConfigureAwait(false);
-        await mimetypeStreamWriter.WriteAsync("application/epub+zip".AsMemory(), cancellationToken).ConfigureAwait(false);
+        return _rootDirectory.GetFile("mimetype")
+            .WriteTextAsync("application/epub+zip", Encoding.ASCII, cancellationToken);
     }
 
     private void WriteMimetype()
     {
-        ZipArchiveEntry mimetype = _zipArchive.CreateEntry("mimetype", CompressionLevel.NoCompression);
-        using Stream mimetypeStream = mimetype.Open();
-        using StreamWriter mimetypeStreamWriter = new(mimetypeStream, Encoding.ASCII);
-        mimetypeStreamWriter.Write("application/epub+zip");
+        _rootDirectory.GetFile("mimetype")
+            .WriteText("application/epub+zip", Encoding.ASCII);
     }
 
     private async Task WriteContainerXmlAsync(CancellationToken cancellationToken)
     {
         XDocument document = _metaInfHandler.GetContainerXmlDocument(_packageDocumentPath);
-        // TODO Async Zip
-        Stream stream = _zipArchive.CreateEntry("META-INF/container.xml").Open();
-        await using ConfiguredAsyncDisposable configuredStream = stream.ConfigureAwait(false);
-        await EpubXml.SaveAsync(document, stream, cancellationToken).ConfigureAwait(false);
+        IFile file = _rootDirectory.GetFile("META-INF", "container.xml");
+        await EpubXml.SaveAsync(document, file, cancellationToken).ConfigureAwait(false);
     }
 
     private void WriteContainerXml()
     {
         XDocument document = _metaInfHandler.GetContainerXmlDocument(_packageDocumentPath);
-        using Stream stream = _zipArchive.CreateEntry("META-INF/container.xml").Open();
-        EpubXml.Save(document, stream);
+        IFile file = _rootDirectory.GetFile("META-INF", "container.xml");
+        EpubXml.Save(document, file);
     }
 
     private async Task WriteSpecialDocumentsAsync(CancellationToken cancellationToken)
     {
         if (_coverHref is not null && _coverInSequence)
         {
-            // TODO Async Zip
-            Stream stream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}cover.xhtml")).Open();
-            await using ConfiguredAsyncDisposable configuredStream = stream.ConfigureAwait(false);
-            await EpubXml.SaveAsync(_coverXhtmlHandler.GetRasterDocument(_coverHref), stream, cancellationToken).ConfigureAwait(false);
+            await EpubXml.SaveAsync(_coverXhtmlHandler.GetRasterDocument(_coverHref), GetCoverXhtmlFile(), cancellationToken).ConfigureAwait(false);
         }
         if (_toc is not null)
         {
             if (IncludeNavigationDocument)
             {
-                // TODO Async Zip
-                Stream stream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}nav.xhtml")).Open();
-                await using ConfiguredAsyncDisposable configuredStream = stream.ConfigureAwait(false);
-                await EpubXml.SaveAsync(_navigationDocumentHandler.GetDocument(), stream, cancellationToken).ConfigureAwait(false);
+                await EpubXml.SaveAsync(_navigationDocumentHandler.GetDocument(), GetNavXhtmlFile(), cancellationToken).ConfigureAwait(false);
             }
             if (IncludeNcx)
             {
-                // TODO Async Zip
-                Stream stream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}toc.ncx")).Open();
-                await using ConfiguredAsyncDisposable configuredStream = stream.ConfigureAwait(false);
-                await EpubXml.SaveAsync(_ncxHandler.GetDocument(), stream, cancellationToken).ConfigureAwait(false);
+                await EpubXml.SaveAsync(_ncxHandler.GetDocument(), GetTocNcxFile(), cancellationToken).ConfigureAwait(false);
             }
         }
-        Stream packageStream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}package.opf")).Open();
-        await using ConfiguredAsyncDisposable configuredPackageStream = packageStream.ConfigureAwait(false);
-        await EpubXml.SaveAsync(_packageDocumentHandler.GetDocument(), packageStream, cancellationToken).ConfigureAwait(false);
+        await EpubXml.SaveAsync(_packageDocumentHandler.GetDocument(), GetPackageFile(), cancellationToken).ConfigureAwait(false);
     }
 
     private void WriteSpecialDocuments()
     {
         if (_coverHref is not null && _coverInSequence)
         {
-            using Stream stream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}cover.xhtml")).Open();
-            EpubXml.Save(_coverXhtmlHandler.GetRasterDocument(_coverHref), stream);
+            EpubXml.Save(_coverXhtmlHandler.GetRasterDocument(_coverHref), GetCoverXhtmlFile());
         }
         if (_toc is not null)
         {
             if (IncludeNavigationDocument)
             {
-                using Stream stream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}nav.xhtml")).Open();
-                EpubXml.Save(_navigationDocumentHandler.GetDocument(), stream);
+                EpubXml.Save(_navigationDocumentHandler.GetDocument(), GetNavXhtmlFile());
             }
             if (IncludeNcx)
             {
-                using Stream stream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}toc.ncx")).Open();
-                EpubXml.Save(_ncxHandler.GetDocument(), stream);
+                EpubXml.Save(_ncxHandler.GetDocument(), GetTocNcxFile());
             }
         }
-        using Stream packageStream = _zipArchive.CreateEntry(GetResourcePath($"{_reservedPrefix}package.opf")).Open();
-        EpubXml.Save(_packageDocumentHandler.GetDocument(), packageStream);
+        EpubXml.Save(_packageDocumentHandler.GetDocument(), GetPackageFile());
     }
 
     private void SaveChanges()
@@ -337,7 +335,7 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         }
         if (Date is not null) _packageDocumentHandler.AddDate((DateTimeOffset)Date);
         if (PrePaginated) _packageDocumentHandler.AddPrePaginated();
-        _packageDocumentHandler.AddModified(Modified);
+        _packageDocumentHandler.AddModified(_options.Modified);
         if (Series is not null) _packageDocumentHandler.AddSeries(Series);
     }
 
@@ -345,7 +343,7 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
     {
         if (_coverHref is null) return;
         _packageDocumentHandler.AddItemToManifest(_coverHref, "cover-image", "cover-id");
-        if (Version == EpubVersion.Epub2)
+        if (_options.Version == EpubVersion.Epub2)
         {
             // Not in epub2 specs, but has become the de facto way to add epub2 cover
             _packageDocumentHandler.MetadataElement.Add(
@@ -357,7 +355,7 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         }
         if (_coverInSequence)
         {
-            _packageDocumentHandler.AddItemToManifestAndSpine($"{_reservedPrefix}cover.xhtml", null, null, "cover-xhtml-id");
+            _packageDocumentHandler.AddItemToManifestAndSpine(_coverXhtmlFileName, null, null, "cover-xhtml-id");
         }
     }
 
@@ -367,18 +365,18 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         {
             if (_tocInSequence)
             {
-                _packageDocumentHandler.AddItemToManifestAndSpine($"{_reservedPrefix}nav.xhtml", "nav", null, null);
+                _packageDocumentHandler.AddItemToManifestAndSpine(_navXhtmlFileName, "nav", null, null);
             }
             else
             {
-                _packageDocumentHandler.AddItemToManifest($"{_reservedPrefix}nav.xhtml", "nav", null);
+                _packageDocumentHandler.AddItemToManifest(_navXhtmlFileName, "nav", null);
             }
         }
         if (IncludeNcx)
         {
             _ncxHandler.AddIdentifier(Identifier);
             _ncxHandler.AddTitle(Title);
-            _packageDocumentHandler.AddItemToManifest($"{_reservedPrefix}toc.ncx", null, "ncx-id");
+            _packageDocumentHandler.AddItemToManifest(_tocNcxFileName, null, "ncx-id");
             _packageDocumentHandler.AddNcx("ncx-id");
         }
         if (_coverInSequence)
@@ -386,7 +384,7 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
             EpubNavItem coverNavItem = new()
             {
                 Text = "Cover",
-                Reference = $"{_reservedPrefix}cover.xhtml",
+                Reference = _coverXhtmlFileName,
             };
             SaveNavItem(coverNavItem);
         }
@@ -395,7 +393,7 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
             EpubNavItem tocNavItem = new()
             {
                 Text = "Table Of Contents",
-                Reference = $"{_reservedPrefix}nav.xhtml",
+                Reference = _navXhtmlFileName,
             };
             SaveNavItem(tocNavItem);
         }
@@ -434,11 +432,11 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         {
             if (_coverInSequence)
             {
-                _navigationDocumentHandler.AddItemToLandmarks("cover", "Cover", $"{_reservedPrefix}cover.xhtml");
+                _navigationDocumentHandler.AddItemToLandmarks("cover", "Cover", _coverXhtmlFileName);
             }
             if (_tocInSequence)
             {
-                _navigationDocumentHandler.AddItemToLandmarks("toc", "Table Of Contents", $"{_reservedPrefix}nav.xhtml");
+                _navigationDocumentHandler.AddItemToLandmarks("toc", "Table Of Contents", _navXhtmlFileName);
             }
             if (startOfContent is not null)
             {
@@ -449,11 +447,11 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         {
             if (_coverInSequence)
             {
-                _packageDocumentHandler.AddReferenceToGuide("cover", "Cover", $"{_reservedPrefix}cover.xhtml");
+                _packageDocumentHandler.AddReferenceToGuide("cover", "Cover", _coverXhtmlFileName);
             }
             if (_tocInSequence)
             {
-                _packageDocumentHandler.AddReferenceToGuide("toc", "Table Of Contents", $"{_reservedPrefix}nav.xhtml");
+                _packageDocumentHandler.AddReferenceToGuide("toc", "Table Of Contents", _navXhtmlFileName);
             }
             if (startOfContent is not null)
             {
@@ -473,4 +471,16 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
             _ncxHandler.AddNavItem(navItem);
         }
     }
+
+    private IFile GetCoverXhtmlFile()
+        => _rootDirectory.GetFile(GetResourcePath(_coverXhtmlFileName).Split('/'));
+
+    private IFile GetNavXhtmlFile()
+        => _rootDirectory.GetFile(GetResourcePath(_navXhtmlFileName).Split('/'));
+
+    private IFile GetTocNcxFile()
+        => _rootDirectory.GetFile(GetResourcePath(_tocNcxFileName).Split('/'));
+
+    private IFile GetPackageFile()
+        => _rootDirectory.GetFile(_packageDocumentPath.Split('/'));
 }
