@@ -32,7 +32,7 @@ public static class CliEndpoint
         Func<IServiceProvider, Task> run,
         Action<IServiceCollection>? initializeServices = null)
     {
-        IServiceOnlyInitialization initialization = Initialization.Create(
+        IServiceOnlyInitialization initialization = Initialization.CreateServiceOnlyInitialization(
             initializeServices);
         return ExecuteAsync(initialization, run);
     }
@@ -60,7 +60,7 @@ public static class CliEndpoint
         Action<IConfigurationBuilder, IConfiguration>? initializeConfigurationSources = null,
         Action<IServiceCollection, IConfiguration>? initializeServices = null)
     {
-        IAppInitialization initialization = Initialization.Create(
+        IAppInitialization initialization = Initialization.CreateAppInitialization(
             initializeConfigurationSources,
             initializeServices);
         return ExecuteAsync(initialization, run);
@@ -102,7 +102,7 @@ public static class CliEndpoint
         Action<IEndpointRouteBuilder>? initializeEndpoints = null,
         IEnumerable<string>? urls = null)
     {
-        IWebAppInitialization initialization = Initialization.Create(
+        IWebAppInitialization initialization = Initialization.CreateWebAppInitialization(
             initializeConfigurationSources,
             initializeServices,
             initializeWebHost,

@@ -10,19 +10,19 @@ namespace Apps;
 
 public static class Initialization
 {
-    public static IServiceOnlyInitialization Create(
+    public static IServiceOnlyInitialization CreateServiceOnlyInitialization(
         Action<IServiceCollection>? initializeServices = null)
             => new DelegateServiceOnlyInitialization(
                 initializeServices);
 
-    public static IAppInitialization Create(
+    public static IAppInitialization CreateAppInitialization(
         Action<IConfigurationBuilder, IConfiguration>? initializeConfigurationSources = null,
         Action<IServiceCollection, IConfiguration>? initializeServices = null)
             => new DelegateAppInitialization(
                 initializeConfigurationSources,
                 initializeServices);
 
-    public static IWebAppInitialization Create(
+    public static IWebAppInitialization CreateWebAppInitialization(
         Action<IConfigurationBuilder, IConfiguration>? initializeConfigurationSources = null,
         Action<IServiceCollection, IConfiguration>? initializeServices = null,
         Action<IWebHostBuilder>? initializeWebHost = null,
