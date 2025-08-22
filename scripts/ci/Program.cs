@@ -276,12 +276,13 @@ internal sealed class SvgClient
 
     public async Task GenerateBadgeAsync(string trxFile, string badgeFile)
     {
+        XNamespace ns = "http://microsoft.com/schemas/VisualStudio/TeamTest/2010";
         _base64SystemLogoData ??= await GetBase64SystemLogoDataAsync();
         XDocument document = Xml.LoadDocument(trxFile);
         XElement? countersElement = document
-            .Element("TestRun")
-            ?.Element("ResultSummary")
-            ?.Element("Counters")
+            .Element(ns + "TestRun")
+            ?.Element(ns + "ResultSummary")
+            ?.Element(ns + "Counters")
             ?? throw new InvalidOperationException($"Could not get counters from {trxFile}.");
         int total = int.Parse(countersElement.Attribute("total")?.Value ?? "");
         int passed = int.Parse(countersElement.Attribute("passed")?.Value ?? "");
