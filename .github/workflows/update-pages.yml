@@ -9,6 +9,6 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v4
         - name: Update gh-pages
-          run: python scripts/github.py update-pages
+          run: dotner run --project scripts/ci -- update-pages
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

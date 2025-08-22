@@ -4,25 +4,20 @@ on:
     branches:
       - main
     paths:
+      - scripts/**
       - src/**
   workflow_dispatch:
-env:
-  PYTHON_VERSION: "3.13"
 jobs:
   reset-tags:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
       - name: Reset Tags
         run: |
-          python scripts/github.py delete-tags
+          dotnet run --project scripts/ci -- delete-tags
           sleep 10
-          python scripts/github.py create-tags
+          dotnet run --project scripts/ci -- create-tags
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   test-and-publish:
@@ -38,22 +33,18 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           global-json-file: src/global.json
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
       - name: Restore
-        run: python scripts/dotnet.py -r
+        run: dotnet run --project scripts/repo -- -r
       - name: Build
-        run: python scripts/dotnet.py -b
+        run: dotnet run --project scripts/repo -- -b
       - name: Test
-        run: python scripts/dotnet.py -t
+        run: dotnet run --project scripts/repo -- -t
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish
-        run: python scripts/dotnet.py -p
+        run: dotnet run --project scripts/repo -- -p
       - name: Create Releases
-        run: python scripts/github.py create-releases
+        run: dotnet run --project scripts/ci -- create-releases
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   update-pages:
