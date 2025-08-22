@@ -1,4 +1,3 @@
-// See https://aka.ms/new-console-template for more information
 using System.Collections.Immutable;
 using System.CommandLine;
 using System.Diagnostics;
@@ -282,7 +281,7 @@ internal sealed class SvgClient
         XElement? countersElement = document
             .Element("TestRun")
             ?.Element("ResultSummary")
-            ?.Element("Counter")
+            ?.Element("Counters")
             ?? throw new InvalidOperationException($"Could not get counters from {trxFile}.");
         int total = int.Parse(countersElement.Attribute("total")?.Value ?? "");
         int passed = int.Parse(countersElement.Attribute("passed")?.Value ?? "");

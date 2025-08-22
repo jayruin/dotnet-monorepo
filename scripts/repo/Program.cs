@@ -1,4 +1,3 @@
-// See https://aka.ms/new-console-template for more information
 using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 using Microsoft.Extensions.Primitives;
