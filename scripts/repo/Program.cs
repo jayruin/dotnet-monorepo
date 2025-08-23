@@ -5,6 +5,7 @@ using System.Collections.Immutable;
 using System.CommandLine;
 using System.Diagnostics;
 using System.IO.Compression;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Xml;
@@ -138,7 +139,6 @@ internal sealed class Repo
     public string BinDirectory { get; }
     public ImmutableArray<Project> AllProjects { get; }
     public string Configuration { get; }
-    public string CurrentSystem { get; }
     public string Runtime { get; }
 
     public Repo(string rootDirectory, string configuration)
@@ -150,25 +150,27 @@ internal sealed class Repo
         BinDirectory = Path.Join(RootDirectory, "bin");
         AllProjects = ProjectLoader.LoadAll(SrcDirectory);
         Configuration = configuration;
+        Runtime = GetRuntime();
+    }
+
+    private static string GetRuntime()
+    {
+        if (OperatingSystem.IsLinux())
+        {
+            if (RuntimeInformation.OSArchitecture == Architecture.X64) return "linux-x64";
+            if (RuntimeInformation.OSArchitecture == Architecture.Arm64) return "linux-arm64";
+        }
         if (OperatingSystem.IsWindows())
         {
-            CurrentSystem = "windows";
-            Runtime = "win-x64";
+            if (RuntimeInformation.OSArchitecture == Architecture.X64) return "win-x64";
+            if (RuntimeInformation.OSArchitecture == Architecture.Arm64) return "win-arm64";
         }
-        else if (OperatingSystem.IsMacOS())
+        if (OperatingSystem.IsMacOS())
         {
-            CurrentSystem = "macos";
-            Runtime = "osx-x64";
+            if (RuntimeInformation.OSArchitecture == Architecture.X64) return "osx-x64";
+            if (RuntimeInformation.OSArchitecture == Architecture.Arm64) return "osx-arm64";
         }
-        else if (OperatingSystem.IsLinux())
-        {
-            CurrentSystem = "linux";
-            Runtime = "linux-x64";
-        }
-        else
-        {
-            throw new InvalidOperationException("Unsupported system.");
-        }
+        throw new InvalidOperationException("Unsupported runtime.");
     }
 
     public void Sln()
@@ -176,7 +178,7 @@ internal sealed class Repo
         string slnxFileStem = "Monorepo";
         string slnxFile = Path.Join(SrcDirectory, $"{slnxFileStem}.slnx");
         File.Delete(slnxFile);
-        Subprocess.Run(SrcDirectory,
+        Subprocess.RunAndCheck(SrcDirectory,
             "dotnet",
             "new", "sln",
             "--name", slnxFileStem,
@@ -184,7 +186,7 @@ internal sealed class Repo
         ImmutableArray<Project> projects = GetProjectsAndDependencies();
         foreach (Project project in projects)
         {
-            Subprocess.Run(SrcDirectory,
+            Subprocess.RunAndCheck(SrcDirectory,
                 "dotnet",
                 "sln", slnxFile,
                 "add", project.PathToCsproj);
@@ -249,7 +251,7 @@ internal sealed class Repo
         ImmutableArray<Project> projects = GetProjectsAndDependencies(projectNames);
         foreach (Project project in projects)
         {
-            Subprocess.Run(project.ProjectDirectory,
+            Subprocess.RunAndCheck(project.ProjectDirectory,
                 "dotnet",
                 "restore", Path.GetFileName(project.PathToCsproj));
         }
@@ -260,7 +262,7 @@ internal sealed class Repo
         ImmutableArray<Project> projects = GetProjectsAndDependencies(projectNames);
         foreach (Project project in projects)
         {
-            Subprocess.Run(project.ProjectDirectory,
+            Subprocess.RunAndCheck(project.ProjectDirectory,
                 "dotnet",
                 "clean", Path.GetFileName(project.PathToCsproj),
                 "--configuration", Configuration);
@@ -271,7 +273,7 @@ internal sealed class Repo
         ImmutableArray<Project> projects = GetProjectsAndDependencies(projectNames);
         foreach (Project project in projects)
         {
-            Subprocess.Run(project.ProjectDirectory,
+            Subprocess.RunAndCheck(project.ProjectDirectory,
                 "dotnet",
                 "build", Path.GetFileName(project.PathToCsproj),
                 "--configuration", Configuration,
@@ -286,7 +288,7 @@ internal sealed class Repo
         foreach (Project project in projects)
         {
             if (!project.IsTest) continue;
-            Subprocess.Run(project.ProjectDirectory,
+            Subprocess.RunAndCheck(project.ProjectDirectory,
                 "dotnet",
                 "test", Path.GetFileName(project.PathToCsproj),
                 "--configuration", Configuration,
@@ -296,7 +298,7 @@ internal sealed class Repo
             string projectTestResultsDirectory = Path.Join(project.ProjectDirectory, "TestResults");
             foreach (string testResultsFile in Directory.EnumerateFiles(projectTestResultsDirectory))
             {
-                string newFilePath = Path.Join(TestResultsDirectory, $"{project.Name}.{CurrentSystem}{Path.GetExtension(testResultsFile)}");
+                string newFilePath = Path.Join(TestResultsDirectory, $"{project.Name}.{Runtime}{Path.GetExtension(testResultsFile)}");
                 File.Move(testResultsFile, newFilePath);
             }
         }
@@ -309,7 +311,7 @@ internal sealed class Repo
         foreach (Project project in projects)
         {
             if (!project.IsExecutable) continue;
-            Subprocess.Run(project.ProjectDirectory,
+            Subprocess.RunAndCheck(project.ProjectDirectory,
                 "dotnet",
                 "publish", Path.GetFileName(project.PathToCsproj),
                 "--configuration", Configuration,
@@ -600,7 +602,7 @@ internal static class Xml
 
 internal static class Subprocess
 {
-    public static void Run(string workingDirectory, params ImmutableArray<string> parameters)
+    public static int Run(string workingDirectory, params ImmutableArray<string> parameters)
     {
         using Process process = new();
         process.StartInfo = new ProcessStartInfo()
@@ -614,9 +616,15 @@ internal static class Subprocess
         }
         process.Start();
         process.WaitForExit();
-        if (process.ExitCode != 0)
+        return process.ExitCode;
+    }
+
+    public static void RunAndCheck(string workingDirectory, params ImmutableArray<string> parameters)
+    {
+        int exitCode = Run(workingDirectory, parameters);
+        if (exitCode != 0)
         {
-            throw new InvalidOperationException($"Process exited with non-zero exit code {process.ExitCode}.");
+            throw new InvalidOperationException($"Process exited with non-zero exit code {exitCode}.");
         }
     }
 }

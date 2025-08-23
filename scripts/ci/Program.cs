@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.CommandLine;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml.Linq;
 
@@ -59,12 +60,15 @@ internal sealed class GithubCi
     public string SrcDirectory { get; }
     public string TestResultsDirectory { get; }
     public string BinDirectory { get; }
-    public string CurrentSystem { get; }
+    public string Runtime { get; }
     public string TestResultsTag { get; } = "test-results";
     public ImmutableArray<string> SystemTags { get; } = [
-        "linux",
-        "windows",
-        "macos",
+        "linux-x64",
+        "linux-arm64",
+        "win-x64",
+        "win-arm64",
+        "osx-x64",
+        "osx-arm64",
     ];
     public string GhPagesBranchName { get; } = "gh-pages";
     public ImmutableArray<string> AllTags => [TestResultsTag, .. SystemTags];
@@ -75,22 +79,27 @@ internal sealed class GithubCi
         SrcDirectory = Path.Join(RootDirectory, "src");
         TestResultsDirectory = Path.Join(RootDirectory, "TestResults");
         BinDirectory = Path.Join(RootDirectory, "bin");
+        Runtime = GetRuntime();
+    }
+
+    private static string GetRuntime()
+    {
+        if (OperatingSystem.IsLinux())
+        {
+            if (RuntimeInformation.OSArchitecture == Architecture.X64) return "linux-x64";
+            if (RuntimeInformation.OSArchitecture == Architecture.Arm64) return "linux-arm64";
+        }
         if (OperatingSystem.IsWindows())
         {
-            CurrentSystem = "windows";
+            if (RuntimeInformation.OSArchitecture == Architecture.X64) return "win-x64";
+            if (RuntimeInformation.OSArchitecture == Architecture.Arm64) return "win-arm64";
         }
-        else if (OperatingSystem.IsMacOS())
+        if (OperatingSystem.IsMacOS())
         {
-            CurrentSystem = "macos";
+            if (RuntimeInformation.OSArchitecture == Architecture.X64) return "osx-x64";
+            if (RuntimeInformation.OSArchitecture == Architecture.Arm64) return "osx-arm64";
         }
-        else if (OperatingSystem.IsLinux())
-        {
-            CurrentSystem = "linux";
-        }
-        else
-        {
-            throw new InvalidOperationException("Unsupported system.");
-        }
+        throw new InvalidOperationException("Unsupported runtime.");
     }
 
     public void DeleteTags()
@@ -107,7 +116,7 @@ internal sealed class GithubCi
     {
         foreach (string tag in AllTags)
         {
-            Subprocess.Run(
+            Subprocess.RunAndCheck(
                 RootDirectory,
                 "gh", "release", "create", tag, "--title", tag, "--notes", tag);
         }
@@ -119,9 +128,9 @@ internal sealed class GithubCi
         SvgClient svgClient = new(httpClient);
         foreach (string file in Directory.EnumerateFiles(BinDirectory))
         {
-            Subprocess.Run(
+            Subprocess.RunAndCheck(
                 BinDirectory,
-                "gh", "release", "upload", CurrentSystem, file);
+                "gh", "release", "upload", Runtime, file);
         }
         List<string> trxFiles = [
             .. Directory.EnumerateFiles(TestResultsDirectory)
@@ -134,7 +143,7 @@ internal sealed class GithubCi
         }
         foreach (string file in Directory.EnumerateFiles(TestResultsDirectory))
         {
-            Subprocess.Run(
+            Subprocess.RunAndCheck(
                 TestResultsDirectory,
                 "gh", "release", "upload", TestResultsTag, file);
         }
@@ -167,18 +176,24 @@ internal sealed class GithubCi
         ];
         foreach (ImmutableArray<string> command in setupCommands)
         {
-            Subprocess.Run(tempDirectory, command);
+            Subprocess.RunAndCheck(tempDirectory, command);
         }
-        Subprocess.Run(tempDirectory,
+        Subprocess.RunAndCheck(tempDirectory,
             "gh", "release", "download", TestResultsTag);
         string indexHtmlFile = Path.Join(tempDirectory, "index.html");
-        List<string> projectNames = [
+        ImmutableArray<string> projectNames = [
             ..Directory.EnumerateFiles(tempDirectory)
                 .Select(f => string.Join('.', Path.GetFileNameWithoutExtension(f).Split('.')[..^1]))
                 .Distinct()
                 .Order()
         ];
-        WriteIndexHtml(indexHtmlFile, projectNames);
+        ImmutableArray<string> runtimes = [
+            ..Directory.EnumerateFiles(tempDirectory)
+                .Select(f => Path.GetFileNameWithoutExtension(f).Split('.')[^1])
+                .Distinct()
+                .Order()
+        ];
+        WriteIndexHtml(indexHtmlFile, projectNames, runtimes);
         string indexCssFile = Path.Join(tempDirectory, "index.css");
         WriteIndexCss(indexCssFile);
         ImmutableArray<ImmutableArray<string>> uploadCommands = [
@@ -188,12 +203,12 @@ internal sealed class GithubCi
         ];
         foreach (ImmutableArray<string> command in uploadCommands)
         {
-            Subprocess.Run(tempDirectory, command);
+            Subprocess.RunAndCheck(tempDirectory, command);
         }
         Directory.Delete(tempDirectory, true);
     }
 
-    private static void WriteIndexHtml(string file, IEnumerable<string> projectNames)
+    private static void WriteIndexHtml(string file, ImmutableArray<string> projectNames, ImmutableArray<string> runtimes)
     {
         string title = "dotnet-monorepo";
         StringBuilder stringBuilder = new();
@@ -215,30 +230,27 @@ internal sealed class GithubCi
 """);
         foreach (string projectName in projectNames)
         {
-            stringBuilder.AppendLine($"""
+            for (int i = 0; i < runtimes.Length; i++)
+            {
+                string runtime = runtimes[i];
+                stringBuilder.AppendLine("""
             <tr>
-	            <td rowspan="3">{projectName}</td>
+""");
+                if (i == 0)
+                {
+                    stringBuilder.AppendLine($"""
+                <td rowspan="{runtimes.Length}">{projectName}</td>
+""");
+                }
+                stringBuilder.AppendLine($"""
 	            <td>
-		            <a href="{projectName}.linux.html">
-			            <img src="{projectName}.linux.svg" alt="{projectName} linux badge"/>
-		            </a>
-	            </td>
-            </tr>
-            <tr>
-	            <td>
-		            <a href="{projectName}.windows.html">
-			            <img src="{projectName}.windows.svg" alt="{projectName} windows badge"/>
-		            </a>
-	            </td>
-            </tr>
-            <tr>
-	            <td>
-		            <a href="{projectName}.macos.html">
-			            <img src="{projectName}.macos.svg" alt="{projectName} macos badge"/>
+		            <a href="{projectName}.{runtime}.html">
+			            <img src="{projectName}.{runtime}.svg" alt="{projectName} {runtime} badge"/>
 		            </a>
 	            </td>
             </tr>
 """);
+            }
         }
         stringBuilder.AppendLine("""
         </table>
@@ -266,7 +278,6 @@ h1 {
 internal sealed class SvgClient
 {
     private readonly HttpClient _httpClient;
-    private string? _base64SystemLogoData;
 
     public SvgClient(HttpClient httpClient)
     {
@@ -277,7 +288,6 @@ internal sealed class SvgClient
     public async Task GenerateBadgeAsync(string trxFile, string badgeFile)
     {
         XNamespace ns = "http://microsoft.com/schemas/VisualStudio/TeamTest/2010";
-        _base64SystemLogoData ??= await GetBase64SystemLogoDataAsync();
         XDocument document = Xml.LoadDocument(trxFile);
         XElement? countersElement = document
             .Element(ns + "TestRun")
@@ -291,34 +301,13 @@ internal sealed class SvgClient
             ? 100
             : Math.Floor(100 * (passed / (double)total));
         string statusColor = passing ? "success" : "critical";
-        string projectName = string.Join('.', Path.GetFileNameWithoutExtension(trxFile).Split('.')[..^1]);
-        string parameters = $"{projectName}-{passingPercentage}%25-{statusColor}?logo=data:image/svg%2bxml;base64,{_base64SystemLogoData}";
+        string[] filenameParts = Path.GetFileNameWithoutExtension(trxFile).Split('.');
+        string projectName = string.Join('.', filenameParts[..^1]);
+        string runtime = filenameParts[^1];
+        string parameters = $"{projectName}|{runtime}-{passingPercentage}%25-{statusColor}";
         await using Stream stream = await _httpClient.GetStreamAsync($"https://img.shields.io/badge/{parameters}");
         await using FileStream fileStream = new(badgeFile, FileMode.Create, FileAccess.Write, FileShare.None);
         await stream.CopyToAsync(fileStream);
-    }
-
-    private async Task<string> GetBase64SystemLogoDataAsync()
-    {
-        string logoName = GetLogoName();
-        await using Stream stream = await _httpClient.GetStreamAsync($"https://site-assets.fontawesome.com/releases/v7.0.0/svgs-full/brands/{logoName}.svg");
-        return await ToBase64Async(stream);
-    }
-
-    private static string GetLogoName()
-    {
-        if (OperatingSystem.IsWindows()) return "windows";
-        if (OperatingSystem.IsMacOS()) return "apple";
-        if (OperatingSystem.IsLinux()) return "linux";
-        throw new InvalidOperationException("Unsupported system.");
-    }
-
-    private static async Task<string> ToBase64Async(Stream stream)
-    {
-        await using MemoryStream memoryStream = new();
-        await stream.CopyToAsync(memoryStream);
-        byte[] bytes = memoryStream.ToArray();
-        return Convert.ToBase64String(bytes);
     }
 }
 
@@ -337,7 +326,7 @@ internal static class Xml
 
 internal static class Subprocess
 {
-    public static void Run(string workingDirectory, params ImmutableArray<string> parameters)
+    public static int Run(string workingDirectory, params ImmutableArray<string> parameters)
     {
         using Process process = new();
         process.StartInfo = new ProcessStartInfo()
@@ -351,9 +340,15 @@ internal static class Subprocess
         }
         process.Start();
         process.WaitForExit();
-        if (process.ExitCode != 0)
+        return process.ExitCode;
+    }
+
+    public static void RunAndCheck(string workingDirectory, params ImmutableArray<string> parameters)
+    {
+        int exitCode = Run(workingDirectory, parameters);
+        if (exitCode != 0)
         {
-            throw new InvalidOperationException($"Process exited with non-zero exit code {process.ExitCode}.");
+            throw new InvalidOperationException($"Process exited with non-zero exit code {exitCode}.");
         }
     }
 }
