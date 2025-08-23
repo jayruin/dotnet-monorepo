@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="umm.App.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(Proj_Logging)" />
+
+    <ProjectReference Include="$(Proj_umm_Plugins_Abstractions)" />
+    <ProjectReference Include="$(Proj_umm_Storages)" />
+
+    <ProjectReference Include="$(Proj_umm_Vendors_All)" />
+    <ProjectReference Include="$(Proj_umm_Auto_Vendors)" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+</Project>

@@ -89,8 +89,10 @@ public static class CliEndpoint
         WebApplication webApplication = webApplicationBuilder.Build();
         await using ConfiguredAsyncDisposable configuredWebApplication = webApplication.ConfigureAwait(false);
         webApplication.UseCors();
+        webApplication.UseMiddleware<CancellationTokenMiddleware>();
         initialization.InitializeMiddlewares(webApplication);
         initialization.InitializeEndpoints(webApplication);
+        // TODO cancellation token
         await webApplication.RunAsync().ConfigureAwait(false);
     }
 
@@ -111,7 +113,7 @@ public static class CliEndpoint
         return RunWebApplicationAsync(initialization, urls ?? []);
     }
 
-    public static void InitializeDefaultConfigurationSources(IConfigurationBuilder configurationBuilder)
+    private static void InitializeDefaultConfigurationSources(IConfigurationBuilder configurationBuilder)
     {
         string appName = Path.GetFileNameWithoutExtension(Environment.ProcessPath)
             ?? Process.GetCurrentProcess().ProcessName;

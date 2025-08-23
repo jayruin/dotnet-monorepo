@@ -48,6 +48,17 @@
     <Proj_Temp>$(MSBuildThisFileDirectory)**\Temp.csproj</Proj_Temp>
     <Proj_Temp_Tests>$(MSBuildThisFileDirectory)**\Temp.Tests.csproj</Proj_Temp_Tests>
 
+    <Proj_Utils>$(MSBuildThisFileDirectory)**\Utils.csproj</Proj_Utils>
+    <Proj_Utils_Tests>$(MSBuildThisFileDirectory)**\Utils.Tests.csproj</Proj_Utils_Tests>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Proj_umm_App>$(MSBuildThisFileDirectory)**\umm.App.csproj</Proj_umm_App>
+    <Proj_umm_App_Tests>$(MSBuildThisFileDirectory)**\umm.App.Tests.csproj</Proj_umm_App_Tests>
+
+    <Proj_umm_Auto_Vendors>$(MSBuildThisFileDirectory)**\umm.Auto.Vendors.csproj</Proj_umm_Auto_Vendors>
+    <Proj_umm_Auto_Vendors_Tests>$(MSBuildThisFileDirectory)**\umm.Auto.Vendors.Tests.csproj</Proj_umm_Auto_Vendors_Tests>
+
     <Proj_umm_Catalog>$(MSBuildThisFileDirectory)**\umm.Catalog.csproj</Proj_umm_Catalog>
     <Proj_umm_Catalog_Tests>$(MSBuildThisFileDirectory)**\umm.Catalog.Tests.csproj</Proj_umm_Catalog_Tests>
 
@@ -57,11 +68,17 @@
     <Proj_umm_Library>$(MSBuildThisFileDirectory)**\umm.Library.csproj</Proj_umm_Library>
     <Proj_umm_Library_Tests>$(MSBuildThisFileDirectory)**\umm.Library.Tests.csproj</Proj_umm_Library_Tests>
 
+    <Proj_umm_Plugins_Abstractions>$(MSBuildThisFileDirectory)**\umm.Plugins.Abstractions.csproj</Proj_umm_Plugins_Abstractions>
+    <Proj_umm_Plugins_Abstractions_Tests>$(MSBuildThisFileDirectory)**\umm.Plugins.Abstractions.Tests.csproj</Proj_umm_Plugins_Abstractions_Tests>
+
     <Proj_umm_SearchIndex>$(MSBuildThisFileDirectory)**\umm.SearchIndex.csproj</Proj_umm_SearchIndex>
     <Proj_umm_SearchIndex_Tests>$(MSBuildThisFileDirectory)**\umm.SearchIndex.Tests.csproj</Proj_umm_SearchIndex_Tests>
 
     <Proj_umm_Storages>$(MSBuildThisFileDirectory)**\umm.Storages.csproj</Proj_umm_Storages>
     <Proj_umm_Storages_Tests>$(MSBuildThisFileDirectory)**\umm.Storages.Tests.csproj</Proj_umm_Storages_Tests>
+
+    <Proj_umm_Vendors_All>$(MSBuildThisFileDirectory)**\umm.Vendors.*.csproj</Proj_umm_Vendors_All>
+    <Proj_umm_Vendors_All_Tests>$(MSBuildThisFileDirectory)**\umm.Vendors.*.Tests.csproj</Proj_umm_Vendors_All_Tests>
 
     <Proj_umm_Vendors_Abstractions>$(MSBuildThisFileDirectory)**\umm.Vendors.Abstractions.csproj</Proj_umm_Vendors_Abstractions>
     <Proj_umm_Vendors_Abstractions_Tests>$(MSBuildThisFileDirectory)**\umm.Vendors.Abstractions.Tests.csproj</Proj_umm_Vendors_Abstractions_Tests>
@@ -74,8 +91,5 @@
 
     <Proj_umm_Vendors_EpubProj>$(MSBuildThisFileDirectory)**\umm.Vendors.EpubProj.csproj</Proj_umm_Vendors_EpubProj>
     <Proj_umm_Vendors_EpubProj_Tests>$(MSBuildThisFileDirectory)**\umm.Vendors.EpubProj.Tests.csproj</Proj_umm_Vendors_EpubProj_Tests>
-
-    <Proj_Utils>$(MSBuildThisFileDirectory)**\Utils.csproj</Proj_Utils>
-    <Proj_Utils_Tests>$(MSBuildThisFileDirectory)**\Utils.Tests.csproj</Proj_Utils_Tests>
   </PropertyGroup>
 </Project>
