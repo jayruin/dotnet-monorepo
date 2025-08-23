@@ -302,7 +302,7 @@ internal sealed class SvgClient
             : Math.Floor(100 * (passed / (double)total));
         string statusColor = passing ? "success" : "critical";
         string[] filenameParts = Path.GetFileNameWithoutExtension(trxFile).Split('.');
-        string projectName = string.Join('.', filenameParts[..^1]);
+        string projectName = string.Join('.', filenameParts[..^1]).Replace('-', '_');
         string runtime = filenameParts[^1];
         string parameters = $"{projectName}|{runtime}-{passingPercentage}%25-{statusColor}";
         await using Stream stream = await _httpClient.GetStreamAsync($"https://img.shields.io/badge/{parameters}");
