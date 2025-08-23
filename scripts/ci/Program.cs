@@ -71,7 +71,7 @@ internal sealed class GithubCi
         "osx-arm64",
     ];
     public string GhPagesBranchName { get; } = "gh-pages";
-    public ImmutableArray<string> AllTags => [TestResultsTag, .. SystemTags];
+    public ImmutableArray<string> AllTags => [.. SystemTags, TestResultsTag];
 
     public GithubCi(string rootDirectory)
     {
