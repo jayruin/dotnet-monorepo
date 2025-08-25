@@ -299,7 +299,7 @@ internal sealed class Repo
             foreach (string testResultsFile in Directory.EnumerateFiles(projectTestResultsDirectory))
             {
                 string newFilePath = Path.Join(TestResultsDirectory, $"{project.Name}.{Runtime}{Path.GetExtension(testResultsFile)}");
-                File.Move(testResultsFile, newFilePath);
+                File.Move(testResultsFile, newFilePath, true);
             }
         }
     }
@@ -327,7 +327,7 @@ internal sealed class Repo
                     project.Name,
                     $"{Configuration.ToLowerInvariant()}_{Runtime}",
                     executableFileName);
-                File.Move(originalExecutableFile, binExecutableFile);
+                File.Move(originalExecutableFile, binExecutableFile, true);
             }
             else
             {
@@ -336,6 +336,10 @@ internal sealed class Repo
                     "publish",
                     project.Name,
                     $"{Configuration.ToLowerInvariant()}_{Runtime}");
+                if (File.Exists(binZipFile))
+                {
+                    File.Delete(binZipFile);
+                }
                 ZipFile.CreateFromDirectory(outputDirectory, binZipFile);
             }
         }
