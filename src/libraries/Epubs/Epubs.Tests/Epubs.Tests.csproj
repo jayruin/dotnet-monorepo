@@ -1,9 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <PackageReference Include="MSTest" />
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="$(Proj_Epubs)" />
   </ItemGroup>
@@ -54,5 +49,4 @@
     <EmbeddedResource Include="WriterTests\Documents\PackageDocument\Spine\epub3_rtl.opf" />
     <EmbeddedResource Include="WriterTests\Documents\PackageDocument\Spine\epub2_rtl.opf" />
   </ItemGroup>
-
 </Project>

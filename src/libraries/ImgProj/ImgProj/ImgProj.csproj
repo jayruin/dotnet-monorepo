@@ -1,9 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <InternalsVisibleTo Include="ImgProj.Tests" />
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="$(Proj_Epubs)" />
     <ProjectReference Include="$(Proj_FileStorage)" />
@@ -11,5 +6,4 @@
     <ProjectReference Include="$(Proj_Pdfs)" />
     <ProjectReference Include="$(Proj_Utils)" />
   </ItemGroup>
-
 </Project>

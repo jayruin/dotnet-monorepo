@@ -1,12 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <PackageReference Include="MSTest" />
-    <PackageReference Include="NSubstitute" />
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="$(Proj_Images)" />
   </ItemGroup>
-
 </Project>

@@ -1,9 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <InternalsVisibleTo Include="umm.Plugins.Abstractions.Tests" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="System.CommandLine" />
   </ItemGroup>
@@ -12,5 +7,4 @@
     <ProjectReference Include="$(Proj_Apps)" />
     <ProjectReference Include="$(Proj_umm_Catalog)" />
   </ItemGroup>
-
 </Project>

@@ -15,10 +15,12 @@
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
     <DebugType>embedded</DebugType>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
   </PropertyGroup>
 
   <PropertyGroup>
     <Props_Executable>$(MSBuildThisFileDirectory)*Executable.props</Props_Executable>
+    <Props_SourceGenerator>$(MSBuildThisFileDirectory)*SourceGenerator.props</Props_SourceGenerator>
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)**\*Projects.props" />
@@ -35,4 +37,12 @@
     <RuntimeIdentifier Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">osx-x64</RuntimeIdentifier>
     <RuntimeIdentifier Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'">osx-arm64</RuntimeIdentifier>
   </PropertyGroup>
+
+  <ItemGroup Condition ="!$(MSBuildProjectName.EndsWith('.Tests'))">
+    <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
+  </ItemGroup>
+  <ItemGroup Condition ="$(MSBuildProjectName.EndsWith('.Tests'))">
+    <PackageReference Include="MSTest" />
+    <PackageReference Include="NSubstitute" />
+  </ItemGroup>
 </Project>
