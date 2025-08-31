@@ -44,5 +44,6 @@
   <ItemGroup Condition ="$(MSBuildProjectName.EndsWith('.Tests'))">
     <PackageReference Include="MSTest" />
     <PackageReference Include="NSubstitute" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)**\$(MSBuildProjectName.Substring(0, $(MSBuildProjectName.LastIndexOf('.')))).csproj" />
   </ItemGroup>
 </Project>

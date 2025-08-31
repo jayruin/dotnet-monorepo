@@ -371,12 +371,13 @@ internal sealed class Repo
 
 internal sealed class Project
 {
+    public const string TestSuffix = ".Tests";
     public required string Name { get; init; }
     public required string PathToCsproj { get; init; }
     public required bool IsExecutable { get; init; }
     public required bool PublishSingleFile { get; init; }
     public required ImmutableArray<Project> Dependencies { get; init; }
-    public bool IsTest => Name.EndsWith(".Tests");
+    public bool IsTest => Name.EndsWith(TestSuffix);
     public string ProjectDirectory => Path.GetDirectoryName(PathToCsproj)
         ?? throw new InvalidOperationException($"Could not get parent directory of {PathToCsproj}.");
 }
@@ -502,6 +503,13 @@ internal static class ProjectLoader
                     .Select(csprojFile => csprojFilesToProjectNames[csprojFile])
                     .ToList()
             );
+        foreach ((string projectName, List<string> projectDependencyNames) in projectNamesToProjectDependencyNames)
+        {
+            if (!projectName.EndsWith(Project.TestSuffix)) continue;
+            string testDependency = projectName[..^Project.TestSuffix.Length];
+            if (projectDependencyNames.Contains(testDependency)) continue;
+            projectDependencyNames.Add(testDependency);
+        }
         ImmutableArray<Project>.Builder projectsBuilder = ImmutableArray.CreateBuilder<Project>();
         List<string> unprocessedProjectNames = [
             .. allCsprojFiles

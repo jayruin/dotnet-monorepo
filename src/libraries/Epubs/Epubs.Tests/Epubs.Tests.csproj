@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="$(Proj_Epubs)" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="WriterTests\Documents\CoverXhtml\Raster\epub3.xhtml" />
     <EmbeddedResource Include="WriterTests\Documents\CoverXhtml\Raster\epub2.xhtml" />
     <EmbeddedResource Include="WriterTests\Documents\MetaInf\container.xml" />
