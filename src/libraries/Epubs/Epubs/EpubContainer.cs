@@ -142,12 +142,6 @@ public sealed class EpubContainer
         return false;
     }
 
-    public EpubPackager CreatePackager(IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping)
-        => new(this, mediaTypeFileExtensionsMapping);
-
-    public EpubToCbzConverter CreateCbzConverter()
-        => new(this);
-
     internal async Task<EpubContents> TraverseAsync(CancellationToken cancellationToken)
     {
         int version = await GetVersionAsync(cancellationToken).ConfigureAwait(false);

@@ -101,9 +101,9 @@ public sealed class EpubHandler
         EpubContainer container = await GetContainerAsync(contentId, cancellationToken).ConfigureAwait(false);
         int version = await container.GetVersionAsync(cancellationToken).ConfigureAwait(false);
         _strategy.VendorContext.Logger.LogRegeneratingEpubMetadata(_strategy.VendorContext.VendorId, contentId, version);
-        IEpubMetadata epubMetadata = await container.GetMetadataAsync(cancellationToken).ConfigureAwait(false);
-        await ModifyMetadataAsync(contentId, version, epubMetadata, cancellationToken).ConfigureAwait(false);
-        return epubMetadata;
+        IEpubMetadata metadata = await container.GetMetadataAsync(cancellationToken).ConfigureAwait(false);
+        await ModifyMetadataAsync(contentId, version, container, metadata, cancellationToken).ConfigureAwait(false);
+        return metadata;
     }
 
     public ISinglePartSearchEntryEnumerationStrategy<EpubMetadataAdapter> GetEnumerationStrategy()
@@ -117,13 +117,13 @@ public sealed class EpubHandler
         return new EpubHandlerEnumerationStrategy<TMetadata>(_strategy.VendorContext, this, metadataKey);
     }
 
-    private async Task ModifyMetadataAsync(string contentId, int version, IEpubMetadata epubMetadata, CancellationToken cancellationToken)
+    private async Task ModifyMetadataAsync(string contentId, int version, EpubContainer container, IEpubMetadata metadata, CancellationToken cancellationToken)
     {
         _strategy.VendorContext.Logger.LogModifyingEpubMetadata(_strategy.VendorContext.VendorId, contentId, version);
-        if (_strategy.CanModifyMetadata)
+        if (_strategy.ModifyMetadataAsync is not null)
         {
             IDirectory epubDirectory = await GetEpubDirectoryAsync(contentId, cancellationToken).ConfigureAwait(false);
-            foreach (MetadataPropertyChange metadataPropertyChange in await _strategy.ModifyMetadataAsync(epubDirectory, contentId, epubMetadata, cancellationToken).ConfigureAwait(false))
+            foreach (MetadataPropertyChange metadataPropertyChange in await _strategy.ModifyMetadataAsync(container, contentId, metadata, cancellationToken).ConfigureAwait(false))
             {
                 _strategy.VendorContext.Logger.LogMetadataChanged(_strategy.VendorContext.VendorId, contentId, metadataPropertyChange);
             }
@@ -131,7 +131,7 @@ public sealed class EpubHandler
         if (_strategy.AllowEpubMetadataOverrides && await _strategy.VendorContext.MetadataStorage.ContainsAsync(_strategy.VendorContext.VendorId, contentId, EpubMetadataOverrideKey, cancellationToken).ConfigureAwait(false))
         {
             BasicEpubMetadataOverride epubMetadataOverride = await _strategy.VendorContext.MetadataStorage.GetAsync<BasicEpubMetadataOverride>(_strategy.VendorContext.VendorId, contentId, EpubMetadataOverrideKey, cancellationToken).ConfigureAwait(false);
-            foreach (MetadataPropertyChange metadataPropertyChange in epubMetadataOverride.WriteTo(epubMetadata))
+            foreach (MetadataPropertyChange metadataPropertyChange in epubMetadataOverride.WriteTo(metadata))
             {
                 _strategy.VendorContext.Logger.LogMetadataChanged(_strategy.VendorContext.VendorId, contentId, metadataPropertyChange);
             }
@@ -253,7 +253,7 @@ public sealed class EpubHandler
     private async Task<EpubPackager> GetPackagerAsync(string contentId, CancellationToken cancellationToken)
     {
         EpubContainer container = await GetContainerAsync(contentId, cancellationToken).ConfigureAwait(false);
-        EpubPackager packager = container.CreatePackager(_strategy.MediaTypeFileExtensionsMapping);
+        EpubPackager packager = new(container, _strategy.MediaTypeFileExtensionsMapping);
 
         IFile? coverOverrideFile = await GetCoverOverrideAsync(contentId, cancellationToken).ConfigureAwait(false);
         if (coverOverrideFile is not null)
@@ -267,16 +267,16 @@ public sealed class EpubHandler
             });
         }
 
-        if (_strategy.AllowEpubMetadataOverrides || _strategy.CanModifyMetadata)
+        if (_strategy.AllowEpubMetadataOverrides || _strategy.ModifyMetadataAsync is not null)
         {
             int version = await container.GetVersionAsync(cancellationToken).ConfigureAwait(false);
-            packager.WithMetadataHandler((epubMetadata, metadataCancellationToken)
-                => ModifyMetadataAsync(contentId, version, epubMetadata, metadataCancellationToken));
+            packager.WithMetadataHandler((metadata, metadataCancellationToken)
+                => ModifyMetadataAsync(contentId, version, container, metadata, metadataCancellationToken));
         }
 
-        if (_strategy.CanModifyXhtml)
+        if (_strategy.HandleXhtml is not null)
         {
-            packager.WithXhtmlHandler(_strategy.ModifyXhtml);
+            packager.WithXhtmlHandler(_strategy.HandleXhtml);
         }
 
         return packager;
@@ -285,7 +285,7 @@ public sealed class EpubHandler
     private async Task<EpubToCbzConverter> GetCbzConverterAsync(string contentId, CancellationToken cancellationToken)
     {
         EpubContainer container = await GetContainerAsync(contentId, cancellationToken).ConfigureAwait(false);
-        EpubToCbzConverter cbzConverter = container.CreateCbzConverter();
+        EpubToCbzConverter cbzConverter = new(container);
         return cbzConverter;
     }
 

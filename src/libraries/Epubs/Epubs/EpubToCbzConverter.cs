@@ -15,7 +15,7 @@ public sealed class EpubToCbzConverter
 {
     private readonly EpubContainer _container;
 
-    internal EpubToCbzConverter(EpubContainer container)
+    public EpubToCbzConverter(EpubContainer container)
     {
         _container = container;
     }

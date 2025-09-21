@@ -17,7 +17,7 @@ public sealed class EpubPackager
     private readonly EpubContainer _container;
     private readonly IMediaTypeFileExtensionsMapping _mediaTypeFileExtensionsMapping;
 
-    internal EpubPackager(EpubContainer container, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping)
+    public EpubPackager(EpubContainer container, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping)
     {
         _container = container;
         _mediaTypeFileExtensionsMapping = mediaTypeFileExtensionsMapping;

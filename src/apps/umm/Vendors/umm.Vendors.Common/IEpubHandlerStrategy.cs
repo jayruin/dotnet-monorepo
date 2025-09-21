@@ -1,8 +1,6 @@
-using Epubs;
-using FileStorage;
 using Images;
 using MediaTypes;
-using System.Collections.Generic;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -16,9 +14,7 @@ public interface IEpubHandlerStrategy
     IMediaTypeFileExtensionsMapping MediaTypeFileExtensionsMapping { get; }
     bool AllowEpubMetadataOverrides { get; }
     bool AllowCoverOverride { get; }
-    bool CanModifyMetadata { get; }
-    bool CanModifyXhtml { get; }
-    Task<IReadOnlyCollection<MetadataPropertyChange>> ModifyMetadataAsync(IDirectory epubDirectory, string contentId, IEpubMetadata epubMetadata, CancellationToken cancellationToken);
-    void ModifyXhtml(XDocument document);
+    EpubHandlerModifyMetadataAsync? ModifyMetadataAsync { get; }
+    Action<XDocument>? HandleXhtml { get; }
     Task<bool?> ContainsEpubAsync(string contentId, CancellationToken cancellationToken);
 }
