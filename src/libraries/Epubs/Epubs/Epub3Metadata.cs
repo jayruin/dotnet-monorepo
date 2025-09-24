@@ -12,6 +12,19 @@ namespace Epubs;
 internal sealed class Epub3Metadata : IEpubMetadata, IEpubOpfMetadata
 {
     DateTimeOffset? IEpubMetadata.LastModified => LastModified;
+    string IEpubMetadata.Identifier
+    {
+        get => Identifier.Value;
+        set
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
+            Identifier = new()
+            {
+                Value = value,
+            };
+            Identifiers = null;
+        }
+    }
     string IEpubMetadata.Title
     {
         get => Title.Value;

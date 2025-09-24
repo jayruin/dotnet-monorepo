@@ -279,6 +279,12 @@ public sealed class EpubHandler
             packager.WithXhtmlHandler(_strategy.HandleXhtml);
         }
 
+        IReadOnlyDictionary<string, string?>? fileNameOverrides = await _strategy.GetFileNameOverridesAsync(container, contentId, cancellationToken).ConfigureAwait(false);
+        if (fileNameOverrides is not null)
+        {
+            packager.WithFileNameOverrides(fileNameOverrides);
+        }
+
         return packager;
     }
 

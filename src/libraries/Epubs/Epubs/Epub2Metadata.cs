@@ -15,6 +15,19 @@ internal sealed class Epub2Metadata : IEpubMetadata, IEpubOpfMetadata
         : Dates
             .Select(e => e.Value.ToDateTimeOffsetNullable())
             .Max();
+    string IEpubMetadata.Identifier
+    {
+        get => Identifier.Value;
+        set
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
+            Identifier = new()
+            {
+                Value = value,
+            };
+            Identifiers = null;
+        }
+    }
     string IEpubMetadata.Title
     {
         get => Title.Value;

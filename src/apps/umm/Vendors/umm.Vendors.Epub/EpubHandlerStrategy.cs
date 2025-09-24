@@ -1,6 +1,8 @@
+using Epubs;
 using Images;
 using MediaTypes;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -35,5 +37,11 @@ internal sealed class EpubHandlerStrategy : IEpubHandlerStrategy
     {
         cancellationToken.ThrowIfCancellationRequested();
         return Task.FromResult<bool?>(null);
+    }
+
+    public Task<IReadOnlyDictionary<string, string?>?> GetFileNameOverridesAsync(EpubContainer container, string contentId, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return Task.FromResult<IReadOnlyDictionary<string, string?>?>(null);
     }
 }
