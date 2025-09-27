@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="8eb5e894-2ffb-454d-a36e-b3668ddfe94b" name="@Mac-1758936894240 2025-09-27 02:19:10" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-09-27T02:19:10.8121800+00:00" queuing="2025-09-27T02:19:10.8121800+00:00" start="2025-09-27T02:19:09.3548290+00:00" finish="2025-09-27T02:19:10.8283460+00:00" />
+  <TestSettings name="default" id="bdfe0ad6-949d-484c-a7d5-27a48581badb">
+    <Deployment runDeploymentRoot="_Mac-1758936894240_2025-09-27_02_19_10" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="5b45cf24-882f-4287-a91d-4d477df8c3f4" testId="4fd9a3a3-12a2-8ee7-e246-b332f4fcea97" testName="TestNonZeroExitCode" computerName="Mac-1758936894240" duration="00:00:00.2285581" startTime="2025-09-27T02:19:10.4136830+00:00" endTime="2025-09-27T02:19:10.6455350+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5b45cf24-882f-4287-a91d-4d477df8c3f4" />
+    <UnitTestResult executionId="d3bec6ab-5882-45a2-bbd1-f99416cc4132" testId="a4981429-de39-0147-847c-1e12d2fa3351" testName="TestZeroExitCode" computerName="Mac-1758936894240" duration="00:00:00.2461888" startTime="2025-09-27T02:19:10.1335570+00:00" endTime="2025-09-27T02:19:10.4072220+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d3bec6ab-5882-45a2-bbd1-f99416cc4132" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestZeroExitCode" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/subprocesses.tests/release_osx-x64/subprocesses.tests.dll" id="a4981429-de39-0147-847c-1e12d2fa3351">
+      <Execution id="d3bec6ab-5882-45a2-bbd1-f99416cc4132" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Subprocesses.Tests/release_osx-x64/Subprocesses.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Subprocesses.Tests.SubprocessRunnerTests" name="TestZeroExitCode" />
+    </UnitTest>
+    <UnitTest name="TestNonZeroExitCode" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/subprocesses.tests/release_osx-x64/subprocesses.tests.dll" id="4fd9a3a3-12a2-8ee7-e246-b332f4fcea97">
+      <Execution id="5b45cf24-882f-4287-a91d-4d477df8c3f4" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Subprocesses.Tests/release_osx-x64/Subprocesses.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Subprocesses.Tests.SubprocessRunnerTests" name="TestNonZeroExitCode" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="4fd9a3a3-12a2-8ee7-e246-b332f4fcea97" executionId="5b45cf24-882f-4287-a91d-4d477df8c3f4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a4981429-de39-0147-847c-1e12d2fa3351" executionId="d3bec6ab-5882-45a2-bbd1-f99416cc4132" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+</TestRun>

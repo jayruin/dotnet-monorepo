@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="4d3f7466-8ddc-4b45-bad2-e93afc8b771b" name="@Mac-1758936894240 2025-09-27 02:19:58" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-09-27T02:19:58.7419350+00:00" queuing="2025-09-27T02:19:58.7419350+00:00" start="2025-09-27T02:19:57.0739830+00:00" finish="2025-09-27T02:19:58.7513440+00:00" />
+  <TestSettings name="default" id="f3d9c042-6877-4c44-b102-e8b44f2b4621">
+    <Deployment runDeploymentRoot="_Mac-1758936894240_2025-09-27_02_19_58" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="52d059d4-89a6-4a8e-8473-f6d750e74ff4" testId="a9948244-f6d1-6650-e390-e99310afde60" testName="TestRead" computerName="Mac-1758936894240" duration="00:00:00.0202363" startTime="2025-09-27T02:19:58.3606550+00:00" endTime="2025-09-27T02:19:58.4118510+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="52d059d4-89a6-4a8e-8473-f6d750e74ff4" />
+    <UnitTestResult executionId="d00c9a00-38cd-4a39-8b7a-7c6ed0ae9269" testId="5f53b647-14d5-eb82-d13c-372a2ae89515" testName="TestExtension" computerName="Mac-1758936894240" duration="00:00:00.0004372" startTime="2025-09-27T02:19:58.4486400+00:00" endTime="2025-09-27T02:19:58.4526570+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d00c9a00-38cd-4a39-8b7a-7c6ed0ae9269" />
+    <UnitTestResult executionId="39e35ae0-15f0-4ec5-8e15-31d89c22b8aa" testId="3de73b21-a659-ca93-7362-3fd9fdbb1cf8" testName="TestDispose" computerName="Mac-1758936894240" duration="00:00:00.0039144" startTime="2025-09-27T02:19:58.4272540+00:00" endTime="2025-09-27T02:19:58.4319220+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="39e35ae0-15f0-4ec5-8e15-31d89c22b8aa" />
+    <UnitTestResult executionId="2cc06e56-a1bf-45f5-b9c2-1e613bf76a68" testId="64e35d23-06cc-16c7-c657-ae70d402cc1e" testName="TestDisposeAsync" computerName="Mac-1758936894240" duration="00:00:00.0017653" startTime="2025-09-27T02:19:58.4319950+00:00" endTime="2025-09-27T02:19:58.4339520+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2cc06e56-a1bf-45f5-b9c2-1e613bf76a68" />
+    <UnitTestResult executionId="d8874702-d9f2-4141-9e76-6c1ec00a437a" testId="1a9c7ce4-c669-ed74-3766-c75d2eba36dd" testName="TestRead" computerName="Mac-1758936894240" duration="00:00:00.0099055" startTime="2025-09-27T02:19:58.4340190+00:00" endTime="2025-09-27T02:19:58.4484730+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d8874702-d9f2-4141-9e76-6c1ec00a437a" />
+    <UnitTestResult executionId="cf17842d-0848-4fac-be5d-720c6116b4ed" testId="6e3a9c0c-f5fc-f0fc-6bff-afd6dd9ffc81" testName="TestExtension" computerName="Mac-1758936894240" duration="00:00:00.0020841" startTime="2025-09-27T02:19:58.4214020+00:00" endTime="2025-09-27T02:19:58.4267920+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cf17842d-0848-4fac-be5d-720c6116b4ed" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestRead" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/caching.tests/release_osx-x64/caching.tests.dll" id="a9948244-f6d1-6650-e390-e99310afde60">
+      <Execution id="52d059d4-89a6-4a8e-8473-f6d750e74ff4" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Caching.Tests/release_osx-x64/Caching.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Caching.Tests.MemoryFileCacheTests" name="TestRead" />
+    </UnitTest>
+    <UnitTest name="TestDispose" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/caching.tests/release_osx-x64/caching.tests.dll" id="3de73b21-a659-ca93-7362-3fd9fdbb1cf8">
+      <Execution id="39e35ae0-15f0-4ec5-8e15-31d89c22b8aa" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Caching.Tests/release_osx-x64/Caching.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Caching.Tests.TempFileCacheTests" name="TestDispose" />
+    </UnitTest>
+    <UnitTest name="TestDisposeAsync" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/caching.tests/release_osx-x64/caching.tests.dll" id="64e35d23-06cc-16c7-c657-ae70d402cc1e">
+      <Execution id="2cc06e56-a1bf-45f5-b9c2-1e613bf76a68" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Caching.Tests/release_osx-x64/Caching.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Caching.Tests.TempFileCacheTests" name="TestDisposeAsync" />
+    </UnitTest>
+    <UnitTest name="TestExtension" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/caching.tests/release_osx-x64/caching.tests.dll" id="6e3a9c0c-f5fc-f0fc-6bff-afd6dd9ffc81">
+      <Execution id="cf17842d-0848-4fac-be5d-720c6116b4ed" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Caching.Tests/release_osx-x64/Caching.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Caching.Tests.MemoryFileCacheTests" name="TestExtension" />
+    </UnitTest>
+    <UnitTest name="TestExtension" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/caching.tests/release_osx-x64/caching.tests.dll" id="5f53b647-14d5-eb82-d13c-372a2ae89515">
+      <Execution id="d00c9a00-38cd-4a39-8b7a-7c6ed0ae9269" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Caching.Tests/release_osx-x64/Caching.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Caching.Tests.TempFileCacheTests" name="TestExtension" />
+    </UnitTest>
+    <UnitTest name="TestRead" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/caching.tests/release_osx-x64/caching.tests.dll" id="1a9c7ce4-c669-ed74-3766-c75d2eba36dd">
+      <Execution id="d8874702-d9f2-4141-9e76-6c1ec00a437a" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Caching.Tests/release_osx-x64/Caching.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="Caching.Tests.TempFileCacheTests" name="TestRead" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="a9948244-f6d1-6650-e390-e99310afde60" executionId="52d059d4-89a6-4a8e-8473-f6d750e74ff4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5f53b647-14d5-eb82-d13c-372a2ae89515" executionId="d00c9a00-38cd-4a39-8b7a-7c6ed0ae9269" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3de73b21-a659-ca93-7362-3fd9fdbb1cf8" executionId="39e35ae0-15f0-4ec5-8e15-31d89c22b8aa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="64e35d23-06cc-16c7-c657-ae70d402cc1e" executionId="2cc06e56-a1bf-45f5-b9c2-1e613bf76a68" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1a9c7ce4-c669-ed74-3766-c75d2eba36dd" executionId="d8874702-d9f2-4141-9e76-6c1ec00a437a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e3a9c0c-f5fc-f0fc-6bff-afd6dd9ffc81" executionId="cf17842d-0848-4fac-be5d-720c6116b4ed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="6" executed="6" passed="6" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+</TestRun>
