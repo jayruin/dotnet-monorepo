@@ -21,7 +21,7 @@ internal sealed partial class CancellationTokenMiddleware
     {
         try
         {
-            await _next(context);
+            await _next(context).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
