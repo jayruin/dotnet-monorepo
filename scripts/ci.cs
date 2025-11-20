@@ -8,15 +8,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml.Linq;
 
-// TODO change to using AppContext.GetData("EntryPointFileDirectoryPath")
-string rootDirectory = Directory.GetCurrentDirectory();
-if (Path.GetFileName(rootDirectory) == "repo")
-{
-    rootDirectory = Path.GetDirectoryName(rootDirectory)
-        ?? throw new InvalidOperationException($"No parent directory of {rootDirectory}.");
-    rootDirectory = Path.GetDirectoryName(rootDirectory)
-        ?? throw new InvalidOperationException($"No parent directory of {rootDirectory}.");
-}
+string rootDirectory = Path.GetDirectoryName((string?)AppContext.GetData("EntryPointFileDirectoryPath") ?? string.Empty) 
+    ?? string.Empty;
 return Cli.CreateRootCommand(rootDirectory).Parse(args).Invoke();
 
 internal static class Cli
