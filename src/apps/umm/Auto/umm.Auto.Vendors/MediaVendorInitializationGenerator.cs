@@ -14,12 +14,14 @@ public class MediaVendorInitializationGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        // TODO embedded attribute
         context
-            //.AddEmbeddedAttributeDefinition()
-            .RegisterPostInitializationOutput(ctx => ctx.AddSource(
-                "AutoAddMediaVendorsAttribute.g.cs",
-                SourceText.From(AutoAddMediaVendors, new UTF8Encoding())));
+            .RegisterPostInitializationOutput(ctx =>
+            {
+                ctx.AddEmbeddedAttributeDefinition();
+                ctx.AddSource(
+                    "AutoAddMediaVendorsAttribute.g.cs",
+                    SourceText.From(AutoAddMediaVendors, new UTF8Encoding()));
+            });
 
         IncrementalValuesProvider<ClassToGenerate?> classToGenerate = context.SyntaxProvider
             .ForAttributeWithMetadataName(
@@ -39,8 +41,7 @@ public class MediaVendorInitializationGenerator : IIncrementalGenerator
     private const string AutoAddMediaVendors = """
 namespace umm.Auto.Vendors;
 
-// TODO embedded attribute
-// [Microsoft.CodeAnalysis.Embedded]
+[Microsoft.CodeAnalysis.Embedded]
 [System.AttributeUsage(System.AttributeTargets.Class)]
 internal sealed class AutoAddMediaVendorsAttribute : System.Attribute
 {

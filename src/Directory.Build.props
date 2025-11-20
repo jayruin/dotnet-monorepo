@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -45,5 +45,7 @@
     <PackageReference Include="MSTest" />
     <PackageReference Include="NSubstitute" />
     <ProjectReference Include="$(MSBuildThisFileDirectory)**\$(MSBuildProjectName.Substring(0, $(MSBuildProjectName.LastIndexOf('.')))).csproj" />
+    <AssemblyAttribute Include="Microsoft.VisualStudio.TestTools.UnitTesting.ParallelizeAttribute">
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>

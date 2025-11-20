@@ -7,54 +7,60 @@ namespace Utils;
 
 public static class StringExtensions
 {
-    public static string Slugify(this string inputString, string separator = "-")
+    extension(string inputString)
     {
-        StringBuilder builder = new(inputString.Length);
-        string normalizedString = inputString.Normalize(NormalizationForm.FormD);
-        bool isStart = true;
-        bool separatorSequence = false;
-        foreach (Rune rune in normalizedString.EnumerateRunes())
+        public string Slugify(string separator = "-")
         {
-            switch (Rune.GetUnicodeCategory(rune))
+            StringBuilder builder = new(inputString.Length);
+            string normalizedString = inputString.Normalize(NormalizationForm.FormD);
+            bool isStart = true;
+            bool separatorSequence = false;
+            foreach (Rune rune in normalizedString.EnumerateRunes())
             {
-                case UnicodeCategory.LineSeparator:
-                case UnicodeCategory.ParagraphSeparator:
-                case UnicodeCategory.SpaceSeparator:
-                case UnicodeCategory.DashPunctuation:
-                case UnicodeCategory.ConnectorPunctuation:
-                    separatorSequence = true;
-                    break;
-                case UnicodeCategory.LowercaseLetter:
-                case UnicodeCategory.UppercaseLetter:
-                case UnicodeCategory.DecimalDigitNumber:
-                    if (separatorSequence && !isStart)
-                    {
-                        builder.Append(separator);
-                    }
-                    separatorSequence = false;
-                    isStart = false;
-                    builder.Append(Rune.ToLowerInvariant(rune));
-                    break;
-                default:
-                    break;
+                switch (Rune.GetUnicodeCategory(rune))
+                {
+                    case UnicodeCategory.LineSeparator:
+                    case UnicodeCategory.ParagraphSeparator:
+                    case UnicodeCategory.SpaceSeparator:
+                    case UnicodeCategory.DashPunctuation:
+                    case UnicodeCategory.ConnectorPunctuation:
+                        separatorSequence = true;
+                        break;
+                    case UnicodeCategory.LowercaseLetter:
+                    case UnicodeCategory.UppercaseLetter:
+                    case UnicodeCategory.DecimalDigitNumber:
+                        if (separatorSequence && !isStart)
+                        {
+                            builder.Append(separator);
+                        }
+                        separatorSequence = false;
+                        isStart = false;
+                        builder.Append(Rune.ToLowerInvariant(rune));
+                        break;
+                    default:
+                        break;
+                }
             }
+            return builder.ToString();
         }
-        return builder.ToString();
     }
 
-    public static string LongestCommonPrefix(this IReadOnlyCollection<string> strings)
+    extension(IReadOnlyCollection<string> strings)
     {
-        if (strings.Count == 0) return string.Empty;
-        string first = strings.First();
-        if (strings.Count == 1) return first;
-        for (int i = 0; i < first.Length; i++)
+        public string LongestCommonPrefix()
         {
-            char c = first[i];
-            foreach (string s in strings.Skip(1))
+            if (strings.Count == 0) return string.Empty;
+            string first = strings.First();
+            if (strings.Count == 1) return first;
+            for (int i = 0; i < first.Length; i++)
             {
-                if (i == s.Length || c != s[i]) return first[..i];
+                char c = first[i];
+                foreach (string s in strings.Skip(1))
+                {
+                    if (i == s.Length || c != s[i]) return first[..i];
+                }
             }
+            return first;
         }
-        return first;
     }
 }

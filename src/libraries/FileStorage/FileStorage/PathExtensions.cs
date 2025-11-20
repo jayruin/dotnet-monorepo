@@ -1,10 +1,21 @@
+using System.IO;
+
 namespace FileStorage;
 
 public static class PathExtensions
 {
-    public static IDirectory? GetParentDirectory(this IPath path)
+    extension(IPath path)
     {
-        if (path.PathParts.Length < 2) return null;
-        return path.FileStorage.GetDirectory(path.PathParts[..^1]);
+        public IDirectory? GetParentDirectory()
+        {
+            if (path.PathParts.Length < 2) return null;
+            return path.FileStorage.GetDirectory(path.PathParts[..^1]);
+        }
+
+        public string Name => path.PathParts[^1];
+
+        public string Stem => Path.GetFileNameWithoutExtension(path.Name);
+
+        public string Extension => Path.GetExtension(path.Name);
     }
 }

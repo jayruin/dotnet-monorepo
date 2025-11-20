@@ -7,6 +7,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -79,8 +80,8 @@ public sealed class EpubPackager
             Compression = compressionLevel,
             CompressionOverrides = [("mimetype", CompressionLevel.NoCompression)],
         };
-        // TODO Async Zip
-        using ZipFileStorage fileStorage = new(outputStream, options);
+        ZipFileStorage fileStorage = await ZipFileStorage.CreateAsync(outputStream, options, cancellationToken).ConfigureAwait(false);
+        await using ConfiguredAsyncDisposable configuredZipFileStorage = fileStorage.ConfigureAwait(false);
         IDirectory directory = fileStorage.GetDirectory();
         await PackageAsync(directory, cancellationToken).ConfigureAwait(false);
     }

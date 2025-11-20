@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FileStorage.Zip;
 
-// TODO Async Zip
-public sealed class ZipFileStorage : IFileStorage, IDisposable
+public sealed class ZipFileStorage : IFileStorage, IDisposable, IAsyncDisposable
 {
     private readonly ZipArchive _archive;
     private readonly List<ZipArchiveEntry> _createModeEntries = [];
@@ -18,10 +19,10 @@ public sealed class ZipFileStorage : IFileStorage, IDisposable
             ? _createModeEntries
             : _archive.Entries;
 
-    public ZipFileStorage(Stream stream, ZipFileStorageOptions? options = null)
+    private ZipFileStorage(ZipArchive zipArchive, ZipFileStorageOptions options)
     {
-        Options = options ?? new();
-        _archive = new ZipArchive(stream, Options.Mode);
+        _archive = zipArchive;
+        Options = options;
         if (Options.Mode == ZipArchiveMode.Update && Options.FixedTimestamp is DateTimeOffset fixedTimestamp)
         {
             foreach (ZipArchiveEntry entry in _archive.Entries)
@@ -29,6 +30,20 @@ public sealed class ZipFileStorage : IFileStorage, IDisposable
                 entry.LastWriteTime = fixedTimestamp;
             }
         }
+    }
+
+    public static ZipFileStorage Create(Stream stream, ZipFileStorageOptions? options = null)
+    {
+        options ??= new();
+        ZipArchive zipArchive = new(stream, options.Mode);
+        return new ZipFileStorage(zipArchive, options);
+    }
+
+    public static async Task<ZipFileStorage> CreateAsync(Stream stream, ZipFileStorageOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        options ??= new();
+        ZipArchive zipArchive = await ZipArchive.CreateAsync(stream, options.Mode, false, null, cancellationToken).ConfigureAwait(false);
+        return new ZipFileStorage(zipArchive, options);
     }
 
     public IFile GetFile(params IEnumerable<string> paths)
@@ -41,10 +56,9 @@ public sealed class ZipFileStorage : IFileStorage, IDisposable
         return new ZipDirectory(this, JoinPaths(paths));
     }
 
-    public void Dispose()
-    {
-        _archive.Dispose();
-    }
+    public void Dispose() => _archive.Dispose();
+
+    public ValueTask DisposeAsync() => _archive.DisposeAsync();
 
     internal static string JoinPaths(IEnumerable<string> paths)
     {

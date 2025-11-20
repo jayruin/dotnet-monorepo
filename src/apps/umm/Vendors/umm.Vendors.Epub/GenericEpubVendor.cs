@@ -58,7 +58,6 @@ public sealed class GenericEpubVendor : IMediaVendor
     public Task ExportAsync(string contentId, string partId, string mediaType, IDirectory directory, CancellationToken cancellationToken = default)
         => _epubHandler.ExportAsync(contentId, partId, mediaType, directory, cancellationToken);
 
-    // TODO LINQ
     public IAsyncEnumerable<string> UpdateContentAsync(IReadOnlyDictionary<string, StringValues> searchQuery, bool force, CancellationToken cancellationToken = default)
         => AsyncEnumerable.Empty<string>();
 }

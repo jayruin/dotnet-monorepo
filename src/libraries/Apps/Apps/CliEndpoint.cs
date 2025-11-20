@@ -79,8 +79,7 @@ public static class CliEndpoint
             });
         });
         webApplicationBuilder.WebHost.UseKestrelCore()
-            // TODO remove once ZipArchive gets async APIs
-            .ConfigureKestrel(o => o.AllowSynchronousIO = true)
+            //.ConfigureKestrel(o => o.AllowSynchronousIO = true)
             .UseUrls([.. urls]);
         InitializeDefaultConfigurationSources(webApplicationBuilder.Configuration);
         initialization.InitializeConfigurationSources(webApplicationBuilder.Configuration, webApplicationBuilder.Configuration);

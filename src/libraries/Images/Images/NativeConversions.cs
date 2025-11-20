@@ -4,18 +4,24 @@ namespace Images;
 
 internal static class NativeConversions
 {
-    public static SKColor ToNativeInternal(this Color color)
+    extension(Color color)
     {
-        return new SKColor(color.Red, color.Green, color.Blue, color.Alpha);
+        public SKColor ToNativeInternal()
+        {
+            return new SKColor(color.Red, color.Green, color.Blue, color.Alpha);
+        }
     }
 
-    public static SKEncodedImageFormat ToNativeInternal(this ImageFormat imageFormat)
+    extension(ImageFormat imageFormat)
     {
-        return imageFormat switch
+        public SKEncodedImageFormat ToNativeInternal()
         {
-            ImageFormat.Png => SKEncodedImageFormat.Png,
-            ImageFormat.Webp => SKEncodedImageFormat.Webp,
-            ImageFormat.Jpeg or _ => SKEncodedImageFormat.Jpeg,
-        };
+            return imageFormat switch
+            {
+                ImageFormat.Png => SKEncodedImageFormat.Png,
+                ImageFormat.Webp => SKEncodedImageFormat.Webp,
+                ImageFormat.Jpeg or _ => SKEncodedImageFormat.Jpeg,
+            };
+        }
     }
 }

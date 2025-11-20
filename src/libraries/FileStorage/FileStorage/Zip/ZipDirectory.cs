@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading;
@@ -22,12 +21,6 @@ internal sealed class ZipDirectory : IDirectory
 
     public ImmutableArray<string> PathParts { get; }
 
-    public string Name { get; }
-
-    public string Stem { get; }
-
-    public string Extension { get; }
-
     public ZipDirectory(ZipFileStorage fileStorage, string path)
     {
         _fileStorage = fileStorage;
@@ -35,9 +28,6 @@ internal sealed class ZipDirectory : IDirectory
         {
             FullPath = path;
             PathParts = ZipFileStorage.SplitFullPath(FullPath).ToImmutableArray();
-            Name = Path.GetFileName(FullPath);
-            Stem = Path.GetFileNameWithoutExtension(FullPath);
-            Extension = Path.GetExtension(FullPath);
             _archivePath = FullPath + '/';
         }
         catch (Exception exception)
@@ -80,7 +70,6 @@ internal sealed class ZipDirectory : IDirectory
         }
     }
 
-    // TODO Async Zip
     public Task CreateAsync(CancellationToken cancellationToken = default)
         => _asyncAdapter.CreateAsync(cancellationToken);
 

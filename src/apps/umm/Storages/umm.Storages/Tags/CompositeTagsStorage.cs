@@ -21,24 +21,20 @@ public sealed class CompositeTagsStorage : ITagsStorage
 
     public bool Supports(string vendorId) => _tagsStorages.Any(s => s.Supports(vendorId));
 
-    // TODO LINQ
     public Task<bool> ContainsAsync(string vendorId, string contentId, CancellationToken cancellationToken = default)
-        => _tagsStorages.ToAsyncEnumerable().AnyAwaitAsync(s => new ValueTask<bool>(s.ContainsAsync(vendorId, contentId, cancellationToken)), cancellationToken).AsTask();
+        => _tagsStorages.ToAsyncEnumerable().AnyAsync((s, ct) => new ValueTask<bool>(s.ContainsAsync(vendorId, contentId, ct)), cancellationToken).AsTask();
 
-    // TODO LINQ
     public IAsyncEnumerable<(string VendorId, string ContentId)> EnumerateContentAsync(CancellationToken cancellationToken = default)
         => _tagsStorages.ToAsyncEnumerable().SelectMany(s => s.EnumerateContentAsync(cancellationToken));
 
-    // TODO LINQ
     public async Task SaveAsync(string vendorId, string contentId, IReadOnlySet<string> tags, CancellationToken cancellationToken = default)
     {
-        ITagsStorage tagsStorage = await _tagsStorages.ToAsyncEnumerable().FirstOrDefaultAwaitAsync(s => new ValueTask<bool>(s.ContainsAsync(vendorId, contentId, cancellationToken)), cancellationToken).ConfigureAwait(false)
+        ITagsStorage tagsStorage = await _tagsStorages.ToAsyncEnumerable().FirstOrDefaultAsync((s, ct) => new ValueTask<bool>(s.ContainsAsync(vendorId, contentId, ct)), cancellationToken).ConfigureAwait(false)
             ?? _tagsStorages.First(s => s.Supports(vendorId));
         _logger.LogSavingTags(vendorId, contentId);
         await tagsStorage.SaveAsync(vendorId, contentId, tags, cancellationToken).ConfigureAwait(false);
     }
 
-    // TODO LINQ
     public async Task<ImmutableSortedSet<string>> GetAsync(string vendorId, string contentId, CancellationToken cancellationToken = default)
     {
         foreach (ITagsStorage tagsStorage in _tagsStorages)

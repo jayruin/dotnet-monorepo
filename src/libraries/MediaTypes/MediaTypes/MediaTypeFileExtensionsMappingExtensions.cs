@@ -6,34 +6,37 @@ namespace MediaTypes;
 
 public static class MediaTypeFileExtensionsMappingExtensions
 {
-    public static bool TryGetMediaTypesFromPath(this IMediaTypeFileExtensionsMapping mapping, string path, out ImmutableArray<string> mediaTypes)
+    extension(IMediaTypeFileExtensionsMapping mapping)
     {
-        string? fileExtension = GetFileExtensionFromPath(path);
-        if (fileExtension is null)
+        public bool TryGetMediaTypesFromPath(string path, out ImmutableArray<string> mediaTypes)
         {
-            mediaTypes = default;
-            return false;
+            string? fileExtension = GetFileExtensionFromPath(path);
+            if (fileExtension is null)
+            {
+                mediaTypes = default;
+                return false;
+            }
+            return mapping.TryGetMediaTypes(fileExtension, out mediaTypes);
         }
-        return mapping.TryGetMediaTypes(fileExtension, out mediaTypes);
+
+        [return: NotNullIfNotNull(nameof(fallback))]
+        public string? GetFileExtension(string mediaType, string? fallback = null)
+            => mapping.TryGetFileExtensions(mediaType, out ImmutableArray<string> fileExtensions)
+                ? fileExtensions.First()
+                : fallback;
+
+        [return: NotNullIfNotNull(nameof(fallback))]
+        public string? GetMediaType(string fileExtension, string? fallback = null)
+            => mapping.TryGetMediaTypes(fileExtension, out ImmutableArray<string> mediaTypes)
+                ? mediaTypes.First()
+                : fallback;
+
+        [return: NotNullIfNotNull(nameof(fallback))]
+        public string? GetMediaTypeFromPath(string path, string? fallback = null)
+            => mapping.TryGetMediaTypesFromPath(path, out ImmutableArray<string> mediaTypes)
+                ? mediaTypes.First()
+                : fallback;
     }
-
-    [return: NotNullIfNotNull(nameof(fallback))]
-    public static string? GetFileExtension(this IMediaTypeFileExtensionsMapping mapping, string mediaType, string? fallback = null)
-        => mapping.TryGetFileExtensions(mediaType, out ImmutableArray<string> fileExtensions)
-            ? fileExtensions.First()
-            : fallback;
-
-    [return: NotNullIfNotNull(nameof(fallback))]
-    public static string? GetMediaType(this IMediaTypeFileExtensionsMapping mapping, string fileExtension, string? fallback = null)
-        => mapping.TryGetMediaTypes(fileExtension, out ImmutableArray<string> mediaTypes)
-            ? mediaTypes.First()
-            : fallback;
-
-    [return: NotNullIfNotNull(nameof(fallback))]
-    public static string? GetMediaTypeFromPath(this IMediaTypeFileExtensionsMapping mapping, string path, string? fallback = null)
-        => mapping.TryGetMediaTypesFromPath(path, out ImmutableArray<string> mediaTypes)
-            ? mediaTypes.First()
-            : fallback;
 
     private static string? GetFileExtensionFromPath(string path)
     {

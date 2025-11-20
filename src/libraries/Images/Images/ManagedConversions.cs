@@ -8,22 +8,28 @@ namespace Images;
 
 internal static class ManagedConversions
 {
-    public static SixLabors.ImageSharp.Color ToManagedInternal(this Color color)
+    extension(Color color)
     {
-        return new SixLabors.ImageSharp.Color(new Rgba32(color.Red, color.Green, color.Blue, color.Alpha));
+        public SixLabors.ImageSharp.Color ToManagedInternal()
+        {
+            return new SixLabors.ImageSharp.Color(new Rgba32(color.Red, color.Green, color.Blue, color.Alpha));
+        }
     }
 
     private static JpegEncoder JpegEncoder { get; } = new JpegEncoder() { SkipMetadata = true, Quality = 100, };
     private static PngEncoder PngEncoder { get; } = new PngEncoder() { SkipMetadata = true, CompressionLevel = PngCompressionLevel.NoCompression, };
     private static WebpEncoder WebpEncoder { get; } = new WebpEncoder() { SkipMetadata = true, Quality = 100, };
 
-    public static IImageEncoder ToManagedInternal(this ImageFormat imageFormat)
+    extension(ImageFormat imageFormat)
     {
-        return imageFormat switch
+        public IImageEncoder ToManagedInternal()
         {
-            ImageFormat.Png => PngEncoder,
-            ImageFormat.Webp => WebpEncoder,
-            ImageFormat.Jpeg or _ => JpegEncoder,
-        };
+            return imageFormat switch
+            {
+                ImageFormat.Png => PngEncoder,
+                ImageFormat.Webp => WebpEncoder,
+                ImageFormat.Jpeg or _ => JpegEncoder,
+            };
+        }
     }
 }

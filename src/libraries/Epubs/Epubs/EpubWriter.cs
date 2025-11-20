@@ -101,7 +101,7 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
             Compression = options.Compression,
             CompressionOverrides = [("mimetype", CompressionLevel.NoCompression)],
         };
-        ZipFileStorage zipFileStorage = new(stream, zipFileStorageOptions);
+        ZipFileStorage zipFileStorage = await ZipFileStorage.CreateAsync(stream, zipFileStorageOptions, cancellationToken).ConfigureAwait(false);
         EpubWriter epubWriter = new(zipFileStorage.GetDirectory(), options, mediaTypeFileExtensionsMapping, zipFileStorage);
         await epubWriter.WriteMimetypeAsync(cancellationToken).ConfigureAwait(false);
         await epubWriter.WriteContainerXmlAsync(cancellationToken).ConfigureAwait(false);
@@ -127,7 +127,7 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
             Compression = options.Compression,
             CompressionOverrides = [("mimetype", CompressionLevel.NoCompression)],
         };
-        ZipFileStorage zipFileStorage = new(stream, zipFileStorageOptions);
+        ZipFileStorage zipFileStorage = ZipFileStorage.Create(stream, zipFileStorageOptions);
         EpubWriter epubWriter = new(zipFileStorage.GetDirectory(), options, mediaTypeFileExtensionsMapping, zipFileStorage);
         epubWriter.WriteMimetype();
         epubWriter.WriteContainerXml();
@@ -224,8 +224,10 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
     {
         SaveChanges();
         await WriteSpecialDocumentsAsync(default).ConfigureAwait(false);
-        // TODO Async Zip
-        _zipFileStorage?.Dispose();
+        if (_zipFileStorage is not null)
+        {
+            await _zipFileStorage.DisposeAsync().ConfigureAwait(false);
+        }
     }
 
     private string GetResourcePath(string href)

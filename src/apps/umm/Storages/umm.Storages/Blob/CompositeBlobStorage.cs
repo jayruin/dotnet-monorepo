@@ -17,18 +17,15 @@ public sealed class CompositeBlobStorage : IBlobStorage
 
     public bool Supports(string vendorId) => _blobStorages.Any(s => s.Supports(vendorId));
 
-    // TODO LINQ
     public Task<bool> ContainsAsync(string vendorId, string contentId, CancellationToken cancellationToken = default)
-        => _blobStorages.ToAsyncEnumerable().AnyAwaitAsync(s => new ValueTask<bool>(s.ContainsAsync(vendorId, contentId, cancellationToken)), cancellationToken).AsTask();
+        => _blobStorages.ToAsyncEnumerable().AnyAsync((s, ct) => new ValueTask<bool>(s.ContainsAsync(vendorId, contentId, ct)), cancellationToken).AsTask();
 
-    // TODO LINQ
     public IAsyncEnumerable<(string VendorId, string ContentId)> EnumerateContentAsync(CancellationToken cancellationToken = default)
         => _blobStorages.ToAsyncEnumerable().SelectMany(s => s.EnumerateContentAsync(cancellationToken));
 
-    // TODO LINQ
     public async Task<IDirectory> GetStorageContainerAsync(string vendorId, string contentId, CancellationToken cancellationToken = default)
     {
-        IBlobStorage blobStorage = await _blobStorages.ToAsyncEnumerable().FirstOrDefaultAwaitAsync(s => new ValueTask<bool>(s.ContainsAsync(vendorId, contentId, cancellationToken)), cancellationToken).ConfigureAwait(false)
+        IBlobStorage blobStorage = await _blobStorages.ToAsyncEnumerable().FirstOrDefaultAsync((s, ct) => new ValueTask<bool>(s.ContainsAsync(vendorId, contentId, ct)), cancellationToken).ConfigureAwait(false)
             ?? _blobStorages.First(s => s.Supports(vendorId));
         return await blobStorage.GetStorageContainerAsync(vendorId, contentId, cancellationToken).ConfigureAwait(false);
     }

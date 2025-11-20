@@ -43,7 +43,6 @@ public sealed class SinglePartSearchEntryEnumerationHandler<TMetadata>
         TMetadata metadata = await _strategy.GetMetadataAsync(contentId, cancellationToken).ConfigureAwait(false);
         UniversalMediaMetadata universalMetadata = metadata.Universalize();
         // TODO ToImmutableArrayAsync
-        // TODO LINQ
         ImmutableArray<MediaExportTarget> exportTargets = [.. await _strategy.EnumerateExportTargetsAsync(contentId, partId, cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false)];
         ImmutableSortedSet<string> tags = await _strategy.GetTagsAsync(contentId, cancellationToken).ConfigureAwait(false);
         ImmutableArray<MetadataSearchField> metadataSearchFields = [

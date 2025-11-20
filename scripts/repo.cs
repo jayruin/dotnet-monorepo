@@ -1,3 +1,6 @@
+#:sdk Microsoft.NET.Sdk.Web
+#:package System.CommandLine@*
+
 using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 using Microsoft.Extensions.Primitives;

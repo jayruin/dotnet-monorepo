@@ -19,7 +19,6 @@ internal sealed class EpubHandlerBasicEnumerationStrategy : ISinglePartSearchEnt
 
     public MediaVendorContext VendorContext { get; }
 
-    // TODO LINQ
     public IAsyncEnumerable<string> EnumerateContentIdsAsync(CancellationToken cancellationToken)
         => VendorContext.MetadataStorage.EnumerateContentAsync(cancellationToken)
             .Where(t => t.VendorId == VendorContext.VendorId)

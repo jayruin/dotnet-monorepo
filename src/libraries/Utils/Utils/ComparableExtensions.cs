@@ -4,11 +4,13 @@ namespace Utils;
 
 public static class ComparableExtensions
 {
-    public static T Clamp<T>(this T value, T min, T max)
-        where T : IComparable<T>
+    extension<T>(T value) where T : IComparable<T>
     {
-        if (value.CompareTo(min) < 0) return min;
-        else if (value.CompareTo(max) > 0) return max;
-        return value;
+        public T Clamp(T min, T max)
+        {
+            if (value.CompareTo(min) < 0) return min;
+            else if (value.CompareTo(max) > 0) return max;
+            return value;
+        }
     }
 }

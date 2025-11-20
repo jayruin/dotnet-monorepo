@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Utils;
@@ -30,15 +31,14 @@ public sealed class EpubToCbzConverter
             FixedTimestamp = timestamp,
             Compression = compressionLevel,
         };
-        // TODO Async Zip
-        using ZipFileStorage fileStorage = new(outputStream, options);
+        ZipFileStorage fileStorage = await ZipFileStorage.CreateAsync(outputStream, options, cancellationToken).ConfigureAwait(false);
+        await using ConfiguredAsyncDisposable configuredZipFileStorage = fileStorage.ConfigureAwait(false);
         IDirectory directory = fileStorage.GetDirectory();
         await WriteAsync(directory, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task WriteAsync(IDirectory outputDirectory, CancellationToken cancellationToken = default)
     {
-        // TODO LINQ
         List<IFile> imageFiles = await _container.GetPrePaginatedImageFilesAsync(cancellationToken)
             .ToListAsync(cancellationToken).ConfigureAwait(false);
 

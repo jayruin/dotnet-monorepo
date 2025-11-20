@@ -66,7 +66,6 @@ internal static class IndexCacheCli
         {
             if (vendorIdsSet.Count > 0 && !vendorIdsSet.Contains(mediaVendor.VendorId)) continue;
 
-            // TODO LINQ
             List<SearchableMediaEntry> searchableMediaEntries = await mediaVendor.EnumerateAsync(cancellationToken)
                 .ToListAsync(cancellationToken).ConfigureAwait(false);
 
@@ -125,7 +124,6 @@ internal static class IndexCacheCli
         }
 
         IMediaVendor mediaVendor = serviceProvider.GetServices<IMediaVendor>().First(m => m.VendorId == vendorId);
-        // TODO LINQ
         List<SearchableMediaEntry> searchableMediaEntries = await contentIds.ToAsyncEnumerable()
             .SelectMany(contentId => mediaVendor.EnumerateAsync(contentId, cancellationToken))
             .ToListAsync(cancellationToken).ConfigureAwait(false);

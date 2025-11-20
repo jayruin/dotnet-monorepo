@@ -18,7 +18,7 @@ public class ZipFileStorageTests : FileStorageTests
     public void Initialize()
     {
         _stream = new MemoryStream();
-        _zipFileStorage = new ZipFileStorage(_stream);
+        _zipFileStorage = ZipFileStorage.Create(_stream);
         FileStorage = _zipFileStorage;
     }
 
@@ -84,7 +84,7 @@ public class ZipFileStorageTests : FileStorageTests
     private static byte[] GetData(ZipFileStorageOptions options)
     {
         using MemoryStream memoryStream = new();
-        using (ZipFileStorage fileStorage = new(memoryStream, options))
+        using (ZipFileStorage fileStorage = ZipFileStorage.Create(memoryStream, options))
         {
             fileStorage.GetFile("test1.txt").WriteText("text1", Encoding.ASCII);
             fileStorage.GetFile("test2.txt").WriteText("text2", Encoding.ASCII);

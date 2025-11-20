@@ -1,3 +1,6 @@
+#:sdk Microsoft.NET.Sdk
+#:package System.CommandLine@*
+
 using System.Collections.Immutable;
 using System.CommandLine;
 using System.Diagnostics;

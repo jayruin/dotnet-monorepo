@@ -147,7 +147,6 @@ public sealed class EpubHandler
 
     private async Task<bool> ContainsEpubAsync(string contentId, CancellationToken cancellationToken)
     {
-        // TODO LINQ
         bool containsEpub = await _strategy.ContainsEpubAsync(contentId, cancellationToken).ConfigureAwait(false)
             ?? await (await GetEpubDirectoryAsync(contentId, cancellationToken).ConfigureAwait(false)).ExistsAsync(cancellationToken).ConfigureAwait(false);
         if (!containsEpub)
@@ -299,7 +298,6 @@ public sealed class EpubHandler
     {
         if (!_strategy.AllowCoverOverride) return null;
         IDirectory contentDirectory = await _strategy.VendorContext.BlobStorage.GetStorageContainerAsync(_strategy.VendorContext.VendorId, contentId, cancellationToken).ConfigureAwait(false);
-        // TODO LINQ
         IFile? coverOverrideFile = await contentDirectory
                 .EnumerateFilesAsync(cancellationToken)
                 .FirstOrDefaultAsync(f => f.Stem == $".{CoverOverrideFileName}" && CoverOverrideExtensions.Contains(f.Extension), cancellationToken)

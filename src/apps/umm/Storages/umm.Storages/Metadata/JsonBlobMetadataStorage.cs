@@ -26,9 +26,8 @@ public sealed class JsonBlobMetadataStorage : IMetadataStorage
     public async Task<bool> ContainsAsync(string vendorId, string contentId, string key, CancellationToken cancellationToken = default)
         => Supports(vendorId) && await (await GetJsonFileAsync(vendorId, contentId, key, cancellationToken).ConfigureAwait(false)).ExistsAsync(cancellationToken).ConfigureAwait(false);
 
-    // TODO LINQ
     public IAsyncEnumerable<(string VendorId, string ContentId)> EnumerateContentAsync(CancellationToken cancellationToken = default)
-        => _blobStorage.EnumerateContentAsync(cancellationToken).WhereAwait(t => new ValueTask<bool>(ContainsAsync(t.VendorId, t.ContentId, cancellationToken)));
+        => _blobStorage.EnumerateContentAsync(cancellationToken).Where((t, ct) => new ValueTask<bool>(ContainsAsync(t.VendorId, t.ContentId, ct)));
 
     public async Task SaveAsync<TMetadata>(string vendorId, string contentId, string key, TMetadata metadata, CancellationToken cancellationToken = default)
         where TMetadata : ISerializableMetadata<TMetadata>

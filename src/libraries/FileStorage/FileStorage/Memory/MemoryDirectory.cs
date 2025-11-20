@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,20 +16,11 @@ internal sealed class MemoryDirectory : IDirectory
 
     public ImmutableArray<string> PathParts { get; }
 
-    public string Name { get; }
-
-    public string Stem { get; }
-
-    public string Extension { get; }
-
     public MemoryDirectory(MemoryFileStorage fileStorage, string path)
     {
         _fileStorage = fileStorage;
         FullPath = path;
         PathParts = _fileStorage.SplitFullPath(FullPath).ToImmutableArray();
-        Name = PathParts[^1];
-        Stem = Path.GetFileNameWithoutExtension(Name);
-        Extension = Path.GetExtension(Name);
         _asyncAdapter = new(this);
     }
 

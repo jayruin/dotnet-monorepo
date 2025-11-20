@@ -54,7 +54,6 @@ internal static class UpdateCli
             if (!matchesVendorId) continue;
             await foreach (string contentId in mediaVendor.UpdateContentAsync(searchQuery, force, cancellationToken).ConfigureAwait(false))
             {
-                // TODO LINQ
                 List<SearchableMediaEntry> searchableMediaEntries = await mediaVendor.EnumerateAsync(contentId, cancellationToken)
                     .ToListAsync(cancellationToken).ConfigureAwait(false);
                 if (searchIndex is not null)

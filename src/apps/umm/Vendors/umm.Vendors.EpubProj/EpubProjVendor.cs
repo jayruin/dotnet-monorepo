@@ -64,7 +64,6 @@ public sealed class EpubProjVendor : IMediaVendor
     public IAsyncEnumerable<SearchableMediaEntry> EnumerateAsync(string contentId, CancellationToken cancellationToken = default)
         => EnumerateEntriesAsync(contentId, [string.Empty, Epub2Id], cancellationToken);
 
-    // TODO LINQ
     public Task<SearchableMediaEntry?> GetEntryAsync(string contentId, string partId, CancellationToken cancellationToken = default)
         => EnumerateEntriesAsync(contentId, [partId], cancellationToken).FirstOrDefaultAsync(cancellationToken).AsTask();
 
@@ -136,7 +135,6 @@ public sealed class EpubProjVendor : IMediaVendor
         throw new InvalidOperationException($"{VendorId} - Unsupported MediaType {mediaType} for directory export.");
     }
 
-    // TODO LINQ
     public IAsyncEnumerable<string> UpdateContentAsync(IReadOnlyDictionary<string, StringValues> searchQuery, bool force, CancellationToken cancellationToken = default)
         => AsyncEnumerable.Empty<string>();
 
@@ -144,7 +142,7 @@ public sealed class EpubProjVendor : IMediaVendor
     {
         EpubProjMetadataAdapter metadata = await GetMetadataAsync(contentId, cancellationToken).ConfigureAwait(false);
         UniversalMediaMetadata universalMetadata = metadata.Universalize();
-        // TODO LINQ
+        // TODO ToImmutableArrayAsync
         ImmutableArray<MediaExportTarget> exportTargets = [.. await EnumerateExportTargetsAsync(contentId, cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false)];
         ImmutableSortedSet<string> tags = await GetTagsAsync(contentId, cancellationToken).ConfigureAwait(false);
         ImmutableArray<MetadataSearchField> sharedSearchFields = [

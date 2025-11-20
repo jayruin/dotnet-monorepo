@@ -13,43 +13,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           global-json-file: src/global.json
       - name: Reset Tags
         run: |
-          dotnet run --project scripts/ci -- delete-tags
+          dotnet run scripts/ci.cs -- delete-tags
           sleep 10
-          dotnet run --project scripts/ci -- create-tags
+          dotnet run scripts/ci.cs -- create-tags
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   test-and-publish:
     needs: reset-tags
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-13, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-15-intel, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           global-json-file: src/global.json
       - name: Restore
-        run: dotnet run --project scripts/repo -- -r
+        run: dotnet run scripts/repo.cs -- -r
       - name: Build
-        run: dotnet run --project scripts/repo -- -b
+        run: dotnet run scripts/repo.cs -- -b
       - name: Test
-        run: dotnet run --project scripts/repo -- -t
+        run: dotnet run scripts/repo.cs -- -t
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish
-        run: dotnet run --project scripts/repo -- -p
+        run: dotnet run scripts/repo.cs -- -p
       - name: Create Releases
-        run: dotnet run --project scripts/ci -- create-releases
+        run: dotnet run scripts/ci.cs -- create-releases
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   update-pages:
