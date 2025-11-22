@@ -1,6 +1,7 @@
 using Browsers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Runtime.CompilerServices;
 
 namespace Dom;
 
@@ -10,7 +11,7 @@ public static class HtmlClientServiceCollectionExtensions
     {
         public IServiceCollection TryAddHtmlClient(string implementation)
         {
-            if (implementation == HtmlClientImplementation.Browser)
+            if (implementation == HtmlClientImplementation.Browser && RuntimeFeature.IsDynamicCodeSupported)
             {
                 serviceCollection
                     .TryAddPlaywrightServices()
