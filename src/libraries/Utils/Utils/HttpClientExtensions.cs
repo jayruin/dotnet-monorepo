@@ -24,6 +24,13 @@ public static class HttpClientExtensions
             response.EnsureSuccessStatusCode();
         }
 
+        public async Task<TResponse> PostJsonAsync<TResponse>(string requestUri, JsonTypeInfo<TResponse> responseJsonTypeInfo, CancellationToken cancellationToken = default)
+        {
+            using HttpResponseMessage response = await client.PostAsync(requestUri, null, cancellationToken).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync(responseJsonTypeInfo, cancellationToken).ConfigureAwait(false) ?? throw new JsonException();
+        }
+
         public async Task<TResponse> PostJsonAsync<TRequest, TResponse>(string requestUri, TRequest request,
             JsonTypeInfo<TRequest> requestJsonTypeInfo, JsonTypeInfo<TResponse> responseJsonTypeInfo, CancellationToken cancellationToken = default)
         {
