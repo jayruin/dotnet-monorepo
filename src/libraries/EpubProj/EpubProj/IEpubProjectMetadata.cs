@@ -6,8 +6,8 @@ namespace EpubProj;
 public interface IEpubProjectMetadata
 {
     string Title { get; }
-    ImmutableArray<IEpubProjectCreator> Creators { get; }
-    ImmutableArray<string> Languages { get; }
+    IImmutableList<IEpubProjectCreator> Creators { get; }
+    IImmutableList<string> Languages { get; }
     EpubProjectDirection Direction { get; }
     string? Date { get; }
     string Identifier { get; }

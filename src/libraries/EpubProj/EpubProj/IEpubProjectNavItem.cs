@@ -6,5 +6,5 @@ public interface IEpubProjectNavItem
 {
     string Text { get; }
     string Href { get; }
-    ImmutableArray<IEpubProjectNavItem> Children { get; }
+    IImmutableList<IEpubProjectNavItem> Children { get; }
 }

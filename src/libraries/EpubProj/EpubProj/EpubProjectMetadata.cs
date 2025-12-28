@@ -6,8 +6,8 @@ namespace EpubProj;
 internal sealed class EpubProjectMetadata : IEpubProjectMetadata
 {
     public required string Title { get; init; }
-    public required ImmutableArray<IEpubProjectCreator> Creators { get; init; }
-    public required ImmutableArray<string> Languages { get; init; }
+    public required IImmutableList<IEpubProjectCreator> Creators { get; init; }
+    public required IImmutableList<string> Languages { get; init; }
     public required EpubProjectDirection Direction { get; init; }
     public required string? Date { get; init; }
     public required string Identifier { get; init; }
