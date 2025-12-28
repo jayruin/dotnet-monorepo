@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,10 +26,11 @@ public static class StreamExtensions
             {
                 streamLength = null;
             }
-            using MemoryStream newMemoryStream = streamLength is long length
+            MemoryStream newMemoryStream = streamLength is long length
                 ? new((int)(length & int.MaxValue))
                 : new();
-            await stream.CopyToAsync(newMemoryStream, cancellationToken);
+            await using ConfiguredAsyncDisposable configuredNewMemoryStream = newMemoryStream.ConfigureAwait(false);
+            await stream.CopyToAsync(newMemoryStream, cancellationToken).ConfigureAwait(false);
             return newMemoryStream.ToArray();
         }
     }
