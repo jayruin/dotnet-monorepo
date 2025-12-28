@@ -65,7 +65,7 @@ public sealed class EpubProjectLoader : IEpubProjectLoader
     {
         List<IFile> globalFiles = [];
         IDirectory? implicitGlobalDirectory = projectDirectory.GetParentDirectory()?.GetDirectory("_global");
-        if (implicitGlobalDirectory is not null)
+        if (implicitGlobalDirectory is not null && await implicitGlobalDirectory.ExistsAsync(cancellationToken).ConfigureAwait(false))
         {
             await foreach (IFile file in implicitGlobalDirectory.EnumerateFilesAsync(cancellationToken).ConfigureAwait(false))
             {
