@@ -2,6 +2,7 @@ namespace Epubs;
 
 public static class EpubXmlNamespaces
 {
+    public const string Xmlns = "http://www.w3.org/2000/xmlns/";
     public const string Container = "urn:oasis:names:tc:opendocument:xmlns:container";
     public const string Dc = "http://purl.org/dc/elements/1.1/";
     public const string Ncx = "http://www.daisy.org/z3986/2005/ncx/";

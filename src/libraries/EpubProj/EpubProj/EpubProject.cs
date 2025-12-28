@@ -4,16 +4,13 @@ using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using Epubs;
 using FileStorage;
-using Markdig;
 using MediaTypes;
 using System;
-using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Utils;
@@ -22,22 +19,18 @@ namespace EpubProj;
 
 internal sealed class EpubProject : IEpubProject
 {
-    private const string ContentsDirectoryName = "contents";
-    private const string GlobalDirectoryName = "_global";
     private static readonly ImmutableArray<string> _contentDocumentMediaTypes = [
         MediaType.Application.Xhtml_Xml,
         MediaType.Text.Html,
         MediaType.Text.Markdown,
         MediaType.Text.Plain,
     ];
-    private static readonly FrozenSet<string> _convertibleMediaTypes = FrozenSet.Create(MediaType.Text.Html, MediaType.Text.Markdown, MediaType.Text.Plain);
-    private static readonly Encoding _encoding = new UTF8Encoding();
     private readonly IDirectory _projectDirectory;
     private readonly ImmutableArray<IEpubProjectNavItem> _navItems;
     private readonly IMediaTypeFileExtensionsMapping _mediaTypeFileExtensionsMapping;
     private readonly IHtmlParser _htmlParser;
-    private readonly IImplementation _domImplementation;
     private readonly IMarkupFormatter _markupFormatter;
+    private readonly EpubProjectConverter _converter;
 
     public IEpubProjectMetadata Metadata { get; }
     public IFile? CoverFile { get; }
@@ -52,8 +45,8 @@ internal sealed class EpubProject : IEpubProject
         CoverFile = coverFile;
         _mediaTypeFileExtensionsMapping = mediaTypeFileExtensionsMapping;
         _htmlParser = htmlParser;
-        _domImplementation = domImplementation;
         _markupFormatter = markupFormatter;
+        _converter = new(mediaTypeFileExtensionsMapping, htmlParser, domImplementation);
     }
 
     public Task ExportEpub3Async(Stream stream, IReadOnlyCollection<IFile> globalFiles, CancellationToken cancellationToken = default)
@@ -67,12 +60,6 @@ internal sealed class EpubProject : IEpubProject
 
     public Task ExportEpub2Async(IDirectory directory, IReadOnlyCollection<IFile> globalFiles, CancellationToken cancellationToken = default)
         => ExportEpubAsync(directory, globalFiles, EpubVersion.Epub2, cancellationToken);
-
-    private static IHtmlHeadingElement? GetHighestHeadingElement(IDocument document)
-        => Enumerable.Range(1, 6)
-            .Select(i => $"h{i}")
-            .Select(name => document.QuerySelector<IHtmlHeadingElement>(name))
-            .FirstOrDefault(e => e is not null);
 
     private static bool IsScriptedXhtml(IDocument document)
         => document.QuerySelector<IHtmlScriptElement>("script") is not null;
@@ -159,27 +146,6 @@ internal sealed class EpubProject : IEpubProject
         await sourceStream.CopyToAsync(destinationStream, cancellationToken).ConfigureAwait(false);
     }
 
-    private string ConvertRelativeAnchorHref(string href)
-    {
-        string xhtmlExtension = _mediaTypeFileExtensionsMapping.GetFileExtension(MediaType.Application.Xhtml_Xml)
-            ?? throw new InvalidOperationException("No xhtml extension.");
-        string trimmedXhtmlExtension = xhtmlExtension.Trim('.');
-        string[] hrefParts = href.Split('#');
-        string hrefPath = hrefParts[0];
-        List<string> hrefPathParts = [.. hrefPath.Split('.')];
-        string? mediaType = _mediaTypeFileExtensionsMapping.GetMediaType($".{hrefPathParts[^1]}");
-        if (mediaType != null && _convertibleMediaTypes.Contains(mediaType))
-        {
-            hrefPathParts[^1] = trimmedXhtmlExtension;
-        }
-        else if (hrefPathParts[^1] != trimmedXhtmlExtension)
-        {
-            hrefPathParts.Add(trimmedXhtmlExtension);
-        }
-        hrefParts[0] = string.Join('.', hrefPathParts);
-        return string.Join('#', hrefParts);
-    }
-
     private void WriteToc(EpubWriter epubWriter)
     {
         epubWriter.AddToc(_navItems.Select(ConvertNavItem).ToList(), true);
@@ -189,7 +155,7 @@ internal sealed class EpubProject : IEpubProject
             return new()
             {
                 Text = navItem.Text,
-                Reference = ConvertRelativeAnchorHref(navItem.Href),
+                Reference = _converter.ConvertRelativeAnchorHref(navItem.Href),
                 Children = navItem.Children.Select(ConvertNavItem).ToList(),
             };
         }
@@ -225,7 +191,7 @@ internal sealed class EpubProject : IEpubProject
         {
             EpubResource epubResource = new()
             {
-                Href = string.Join('/', GlobalDirectoryName, globalFile.Name),
+                Href = string.Join('/', EpubProjectConstants.GlobalDirectoryName, globalFile.Name),
             };
             Stream resourceStream = await globalFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
             await using (resourceStream.ConfigureAwait(false))
@@ -302,9 +268,9 @@ internal sealed class EpubProject : IEpubProject
             {
                 IDocument? xhtmlDocument = mediaType switch
                 {
-                    MediaType.Text.Html => await CreateXhtmlFromHtmlAsync(contentDocumentResource.File, contentDocumentResource.RelativePathParts, globalFiles, epubVersion, cancellationToken).ConfigureAwait(false),
-                    MediaType.Text.Markdown => await CreateXhtmlFromMarkdownAsync(contentDocumentResource.File, contentDocumentResource.RelativePathParts, globalFiles, epubVersion, cancellationToken).ConfigureAwait(false),
-                    MediaType.Text.Plain => await CreateXhtmlFromPlainTextAsync(contentDocumentResource.File, contentDocumentResource.RelativePathParts, globalFiles, epubVersion, cancellationToken).ConfigureAwait(false),
+                    MediaType.Text.Html => await _converter.CreateXhtmlFromHtmlAsync(contentDocumentResource.File, contentDocumentResource.RelativePathParts, globalFiles, epubVersion, cancellationToken).ConfigureAwait(false),
+                    MediaType.Text.Markdown => await _converter.CreateXhtmlFromMarkdownAsync(contentDocumentResource.File, contentDocumentResource.RelativePathParts, globalFiles, epubVersion, cancellationToken).ConfigureAwait(false),
+                    MediaType.Text.Plain => await _converter.CreateXhtmlFromPlainTextAsync(contentDocumentResource.File, contentDocumentResource.RelativePathParts, globalFiles, epubVersion, cancellationToken).ConfigureAwait(false),
                     _ => null,
                 };
                 if (xhtmlDocument is null) return;
@@ -320,184 +286,16 @@ internal sealed class EpubProject : IEpubProject
                 };
                 Stream resourceStream = await epubWriter.CreateResourceAsync(epubResource, cancellationToken).ConfigureAwait(false);
                 await using ConfiguredAsyncDisposable configuredResourceStream = resourceStream.ConfigureAwait(false);
-                await using StreamWriter streamWriter = new(resourceStream, _encoding);
+                await using StreamWriter streamWriter = new(resourceStream, EpubProjectConstants.TextEncoding);
                 xhtmlDocument.ToHtml(streamWriter, _markupFormatter);
             }
         }
     }
 
-    private IDocument CreateTemplateXhtmlDocument(string title, ImmutableArray<string> relativePathParts,
-        IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion)
-    {
-        IDocument xhtmlDocument = _domImplementation.CreateHtmlDocument(title);
-
-        IDocumentType doctype = epubVersion switch
-        {
-            EpubVersion.Epub2 => _domImplementation.CreateDocumentType("html", "-//W3C//DTD XHTML 1.1//EN", "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"),
-            EpubVersion.Epub3 => _domImplementation.CreateDocumentType("html", "", ""),
-            _ => throw new InvalidOperationException("Invalid epub version."),
-        };
-        xhtmlDocument.Doctype.ReplaceWith(doctype);
-
-        IProcessingInstruction xmlHeader = xhtmlDocument.CreateProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
-        xhtmlDocument.InsertBefore(xmlHeader, xhtmlDocument.FirstChild);
-
-        xhtmlDocument.DocumentElement.SetAttribute("http://www.w3.org/2000/xmlns/", "xmlns", "http://www.w3.org/1999/xhtml");
-
-        if (epubVersion == EpubVersion.Epub3)
-        {
-            xhtmlDocument.DocumentElement.SetAttribute("http://www.w3.org/2000/xmlns/", "xmlns:epub", "http://www.idpf.org/2007/ops");
-        }
-
-        IHtmlMetaElement meta = (IHtmlMetaElement)xhtmlDocument.CreateElement("meta");
-        if (epubVersion == EpubVersion.Epub3)
-        {
-            meta.Charset = "utf-8";
-        }
-        else if (epubVersion == EpubVersion.Epub2)
-        {
-            meta.HttpEquivalent = "content-type";
-            meta.Content = "application/xhtml+xml; charset=utf-8";
-        }
-        xhtmlDocument.Head?.AppendChild(meta);
-
-        foreach (IFile globalFile in globalFiles)
-        {
-            string pathToGlobalFile = string.Join('/', [.. Enumerable.Repeat("..", relativePathParts.Length - 1), GlobalDirectoryName, globalFile.Name]);
-            string? mediaType = _mediaTypeFileExtensionsMapping.GetMediaType(globalFile.Extension);
-            if (mediaType == MediaType.Text.Css)
-            {
-                IHtmlLinkElement link = (IHtmlLinkElement)xhtmlDocument.CreateElement("link");
-                link.Href = pathToGlobalFile;
-                link.Type = mediaType;
-                link.Relation = "stylesheet";
-                xhtmlDocument.Head?.Append(link);
-            }
-            else if (mediaType == MediaType.Text.Javascript && epubVersion == EpubVersion.Epub3)
-            {
-                IHtmlScriptElement script = (IHtmlScriptElement)xhtmlDocument.CreateElement("script");
-                script.Source = pathToGlobalFile;
-                script.Type = globalFile.Extension == ".mjs"
-                    ? "module"
-                    : mediaType;
-                xhtmlDocument.Head?.Append(script);
-            }
-        }
-
-        return xhtmlDocument;
-    }
-
-    private IDocument CreateXhtmlDocumentFromHtmlDocument(IDocument htmlDocument, ImmutableArray<string> relativePathParts,
-        IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion)
-    {
-        string title = htmlDocument.Title
-            ?? GetHighestHeadingElement(htmlDocument)?.TextContent
-            ?? Path.GetFileNameWithoutExtension(relativePathParts[^1]);
-        IDocument xhtmlDocument = CreateTemplateXhtmlDocument(title, relativePathParts, globalFiles, epubVersion);
-
-        if (htmlDocument.Head is not null)
-        {
-            xhtmlDocument.Head?.Append(htmlDocument.Head.QuerySelectorAll<IHtmlLinkElement>("link[rel=\"stylesheet\"]").Select(n => n.Clone(true)).ToArray());
-            xhtmlDocument.Head?.Append(htmlDocument.Head.QuerySelectorAll<IHtmlScriptElement>("script").Select(n => n.Clone(true)).ToArray());
-        }
-
-        if (htmlDocument.Body is not null)
-        {
-            xhtmlDocument.Body?.Append(htmlDocument.Body.Children.Select(n => n.Clone(true)).ToArray());
-        }
-
-        ConvertRelativeAnchorHrefs(xhtmlDocument);
-
-        return xhtmlDocument;
-
-        void ConvertRelativeAnchorHrefs(IDocument xhtmlDocument)
-        {
-            foreach (IHtmlAnchorElement a in xhtmlDocument.QuerySelectorAll<IHtmlAnchorElement>("a"))
-            {
-                string? href = a.GetAttribute("href");
-                if (string.IsNullOrWhiteSpace(href)) continue;
-                if (Uri.IsWellFormedUriString(href, UriKind.Absolute)) continue;
-                a.SetAttribute("href", ConvertRelativeAnchorHref(href));
-            }
-        }
-    }
-
-    private async Task<IDocument> CreateXhtmlFromHtmlAsync(IFile htmlFile, ImmutableArray<string> relativePathParts,
-        IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion,
-        CancellationToken cancellationToken)
-    {
-        IDocument htmlDocument;
-        Stream htmlStream = await htmlFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
-        await using (htmlStream.ConfigureAwait(false))
-        {
-            htmlDocument = await _htmlParser.ParseDocumentAsync(htmlStream, cancellationToken).ConfigureAwait(false);
-        }
-
-        return CreateXhtmlDocumentFromHtmlDocument(htmlDocument, relativePathParts, globalFiles, epubVersion);
-    }
-
-    private async Task<IDocument> CreateXhtmlFromMarkdownAsync(IFile markdownFile, ImmutableArray<string> relativePathParts,
-        IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion,
-        CancellationToken cancellationToken)
-    {
-        byte[] markdownBytes;
-        Stream markdownStream = await markdownFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
-        await using (markdownStream.ConfigureAwait(false))
-        {
-            markdownBytes = await markdownStream.ToByteArrayAsync(cancellationToken).ConfigureAwait(false);
-        }
-        string markdownString = _encoding.GetString(markdownBytes);
-        string htmlString = Markdown.ToHtml(markdownString);
-
-        IDocument htmlDocument = await _htmlParser.ParseDocumentAsync(htmlString, cancellationToken).ConfigureAwait(false);
-
-        return CreateXhtmlDocumentFromHtmlDocument(htmlDocument, relativePathParts, globalFiles, epubVersion);
-    }
-
-    private async Task<IDocument> CreateXhtmlFromPlainTextAsync(IFile textFile, ImmutableArray<string> relativePathParts,
-        IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion,
-        CancellationToken cancellationToken)
-    {
-        IDocument? htmlDocument = null;
-        Stream textStream = await textFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
-        await using (textStream.ConfigureAwait(false))
-        {
-            using StreamReader streamReader = new(textStream, _encoding);
-            string? line;
-            while ((line = await streamReader.ReadLineAsync(cancellationToken).ConfigureAwait(false)) is not null)
-            {
-                if (string.IsNullOrWhiteSpace(line)) continue;
-                string text = line.Trim();
-                if (htmlDocument is null)
-                {
-                    htmlDocument = _domImplementation.CreateHtmlDocument(text);
-                    IElement heading = htmlDocument.CreateElement("h1");
-                    heading.TextContent = text;
-                    htmlDocument.Body?.Append(heading);
-                }
-                else
-                {
-                    IElement paragraph = htmlDocument.CreateElement("p");
-                    paragraph.TextContent = text;
-                    htmlDocument.Body?.Append(paragraph);
-                }
-            }
-        }
-        if (htmlDocument is null)
-        {
-            string text = textFile.Stem.Trim();
-            htmlDocument = _domImplementation.CreateHtmlDocument(text);
-            IElement heading = htmlDocument.CreateElement("h1");
-            heading.TextContent = text;
-            htmlDocument.Body?.Append(heading);
-        }
-        return CreateXhtmlDocumentFromHtmlDocument(htmlDocument, relativePathParts, globalFiles, epubVersion);
-    }
-
     private async Task<Dictionary<string, Dictionary<string, ProjectResource>>> TraverseAsync(CancellationToken cancellationToken)
     {
         Dictionary<string, Dictionary<string, ProjectResource>> resources = [];
-        await TraverseAsync(resources, _projectDirectory.GetDirectory(ContentsDirectoryName), [], cancellationToken).ConfigureAwait(false);
+        await TraverseAsync(resources, _projectDirectory.GetDirectory(EpubProjectConstants.ContentsDirectoryName), [], cancellationToken).ConfigureAwait(false);
         return resources;
 
         static async Task TraverseAsync(Dictionary<string, Dictionary<string, ProjectResource>> resources,
