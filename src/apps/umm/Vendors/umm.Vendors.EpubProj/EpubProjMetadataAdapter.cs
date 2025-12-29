@@ -30,6 +30,14 @@ internal sealed class EpubProjMetadataAdapter : ISearchableMetadata, IUniversali
         },
         new()
         {
+            Aliases = ["description"],
+            Values = _epubProjectMetadata.Description is null
+                ? []
+                : [_epubProjectMetadata.Description],
+            ExactMatch = false,
+        },
+        new()
+        {
             Aliases = ["series"],
             Values = _epubProjectMetadata.Series is null
                 ? []
@@ -46,7 +54,7 @@ internal sealed class EpubProjMetadataAdapter : ISearchableMetadata, IUniversali
                 ? $"{c.Name} ({string.Join(", ", c.Roles)})"
                 : c.Name)
             .ToImmutableArray();
-        string description = string.Empty;
+        string description = _epubProjectMetadata.Description ?? string.Empty;
         return new(title, creators, description);
     }
 }

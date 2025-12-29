@@ -196,6 +196,15 @@ internal sealed class PackageDocumentHandler
         }
     }
 
+    public void AddDescription(string description)
+    {
+        MetadataElement.Add(
+            new XElement((XNamespace)EpubXmlNamespaces.Dc + "description",
+                description
+            )
+        );
+    }
+
     public void AddDate(DateTimeOffset date)
     {
         MetadataElement.Add(

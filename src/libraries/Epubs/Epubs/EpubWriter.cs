@@ -63,6 +63,8 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
 
     public IReadOnlyCollection<EpubCreator>? Creators { get; set; }
 
+    public string? Description { get; set; }
+
     public DateTimeOffset? Date { get; set; }
 
     public bool PrePaginated { get; set; }
@@ -334,6 +336,10 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
             {
                 _packageDocumentHandler.AddCreator(creator.Name, creator.Roles);
             }
+        }
+        if (!string.IsNullOrWhiteSpace(Description))
+        {
+            _packageDocumentHandler.AddDescription(Description);
         }
         if (Date is not null) _packageDocumentHandler.AddDate((DateTimeOffset)Date);
         if (PrePaginated) _packageDocumentHandler.AddPrePaginated();

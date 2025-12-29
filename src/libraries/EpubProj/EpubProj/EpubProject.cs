@@ -100,6 +100,7 @@ internal sealed class EpubProject : IEpubProject
         epubWriter.Creators = Metadata.Creators
             .Select(ConvertCreator)
             .ToList();
+        epubWriter.Description = Metadata.Description;
         epubWriter.Languages = Metadata.Languages;
         epubWriter.Direction = ConvertDirection(Metadata.Direction);
         epubWriter.Date = Metadata.Date.ToDateTimeOffsetNullable();

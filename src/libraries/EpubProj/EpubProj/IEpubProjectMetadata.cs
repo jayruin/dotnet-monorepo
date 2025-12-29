@@ -7,6 +7,7 @@ public interface IEpubProjectMetadata
 {
     string Title { get; }
     IImmutableList<IEpubProjectCreator> Creators { get; }
+    string? Description { get; }
     IImmutableList<string> Languages { get; }
     EpubProjectDirection Direction { get; }
     string? Date { get; }

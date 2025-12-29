@@ -9,6 +9,7 @@ internal sealed class MutableMetadata
 {
     public required string Title { get; set; }
     public List<MutableCreator> Creators { get; set; } = [];
+    public string? Description { get; set; }
     public List<string> Languages { get; set; } = ["en"];
     public EpubProjectDirection Direction { get; set; } = EpubProjectDirection.Default;
     public string? Date { get; set; }
@@ -20,6 +21,7 @@ internal sealed class MutableMetadata
     {
         Title = Title,
         Creators = Creators.Select(c => c.ToImmutable()).ToImmutableArray(),
+        Description = Description,
         Languages = [.. Languages],
         Direction = Direction,
         Date = Date,

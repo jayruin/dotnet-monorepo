@@ -67,6 +67,19 @@ public class MetadataTests
     [TestMethod]
     [DataRow(EpubVersion.Epub3)]
     [DataRow(EpubVersion.Epub2)]
+    public void TestAddDescription(EpubVersion epubVersion)
+    {
+        string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
+        PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
+        handler.AddDescription("Description");
+        XDocument document = handler.GetDocument();
+        string expectedDocumentResource = $"WriterTests/Documents/PackageDocument/Metadata/Description/{fileName}";
+        CustomAssert.AreDocumentsEqual(expectedDocumentResource, document);
+    }
+
+    [TestMethod]
+    [DataRow(EpubVersion.Epub3)]
+    [DataRow(EpubVersion.Epub2)]
     public void TestAddDate(EpubVersion epubVersion)
     {
         string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
