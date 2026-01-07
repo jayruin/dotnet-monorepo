@@ -76,9 +76,7 @@ public sealed class SinglePartSearchEntryEnumerationHandler<TMetadata>
         {
             MediaEntry = new()
             {
-                VendorId = _strategy.VendorContext.VendorId,
-                ContentId = contentId,
-                PartId = string.Empty,
+                Id = new(_strategy.VendorContext.VendorId, contentId, string.Empty),
                 Metadata = universalMetadata,
                 ExportTargets = exportTargets,
                 Tags = tags,

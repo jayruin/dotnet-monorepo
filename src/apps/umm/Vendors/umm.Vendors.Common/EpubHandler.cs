@@ -92,7 +92,8 @@ public sealed class EpubHandler
 
     public async Task<IDirectory> GetEpubDirectoryAsync(string contentId, CancellationToken cancellationToken)
     {
-        IDirectory contentDirectory = await _strategy.VendorContext.BlobStorage.GetStorageContainerAsync(_strategy.VendorContext.VendorId, contentId, cancellationToken).ConfigureAwait(false);
+        MediaMainId id = new(_strategy.VendorContext.VendorId, contentId);
+        IDirectory contentDirectory = await _strategy.VendorContext.BlobStorage.GetStorageContainerAsync(id, cancellationToken).ConfigureAwait(false);
         return contentDirectory.GetDirectory(EpubDirectoryName);
     }
 
@@ -120,6 +121,7 @@ public sealed class EpubHandler
     private async Task ModifyMetadataAsync(string contentId, int version, EpubContainer container, IEpubMetadata metadata, CancellationToken cancellationToken)
     {
         _strategy.VendorContext.Logger.LogModifyingEpubMetadata(_strategy.VendorContext.VendorId, contentId, version);
+        MediaMainId id = new(_strategy.VendorContext.VendorId, contentId);
         if (_strategy.ModifyMetadataAsync is not null)
         {
             IDirectory epubDirectory = await GetEpubDirectoryAsync(contentId, cancellationToken).ConfigureAwait(false);
@@ -128,9 +130,9 @@ public sealed class EpubHandler
                 _strategy.VendorContext.Logger.LogMetadataChanged(_strategy.VendorContext.VendorId, contentId, metadataPropertyChange);
             }
         }
-        if (_strategy.AllowEpubMetadataOverrides && await _strategy.VendorContext.MetadataStorage.ContainsAsync(_strategy.VendorContext.VendorId, contentId, EpubMetadataOverrideKey, cancellationToken).ConfigureAwait(false))
+        if (_strategy.AllowEpubMetadataOverrides && await _strategy.VendorContext.MetadataStorage.ContainsAsync(id, EpubMetadataOverrideKey, cancellationToken).ConfigureAwait(false))
         {
-            BasicEpubMetadataOverride epubMetadataOverride = await _strategy.VendorContext.MetadataStorage.GetAsync<BasicEpubMetadataOverride>(_strategy.VendorContext.VendorId, contentId, EpubMetadataOverrideKey, cancellationToken).ConfigureAwait(false);
+            BasicEpubMetadataOverride epubMetadataOverride = await _strategy.VendorContext.MetadataStorage.GetAsync<BasicEpubMetadataOverride>(id, EpubMetadataOverrideKey, cancellationToken).ConfigureAwait(false);
             foreach (MetadataPropertyChange metadataPropertyChange in epubMetadataOverride.WriteTo(metadata))
             {
                 _strategy.VendorContext.Logger.LogMetadataChanged(_strategy.VendorContext.VendorId, contentId, metadataPropertyChange);
@@ -297,7 +299,8 @@ public sealed class EpubHandler
     private async Task<IFile?> GetCoverOverrideAsync(string contentId, CancellationToken cancellationToken)
     {
         if (!_strategy.AllowCoverOverride) return null;
-        IDirectory contentDirectory = await _strategy.VendorContext.BlobStorage.GetStorageContainerAsync(_strategy.VendorContext.VendorId, contentId, cancellationToken).ConfigureAwait(false);
+        MediaMainId id = new(_strategy.VendorContext.VendorId, contentId);
+        IDirectory contentDirectory = await _strategy.VendorContext.BlobStorage.GetStorageContainerAsync(id, cancellationToken).ConfigureAwait(false);
         IFile? coverOverrideFile = await contentDirectory
                 .EnumerateFilesAsync(cancellationToken)
                 .FirstOrDefaultAsync(f => f.Stem == $".{CoverOverrideFileName}" && CoverOverrideExtensions.Contains(f.Extension), cancellationToken)

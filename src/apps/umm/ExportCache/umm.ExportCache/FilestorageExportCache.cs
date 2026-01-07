@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using umm.Library;
 
 namespace umm.ExportCache;
 
@@ -18,46 +19,46 @@ public sealed class FilestorageExportCache : IExportCache
         _options = options;
     }
 
-    public Task<bool> CanHandleFileAsync(string vendorId, string contentId, string partId, string mediaType, CancellationToken cancellationToken = default)
+    public Task<bool> CanHandleFileAsync(string vendorId, string mediaType, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         return Task.FromResult(_options.HandleFiles && CanHandleMediaType(vendorId, mediaType));
     }
 
-    public Task<bool> CanHandleDirectoryAsync(string vendorId, string contentId, string partId, string mediaType, CancellationToken cancellationToken = default)
+    public Task<bool> CanHandleDirectoryAsync(string vendorId, string mediaType, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         return Task.FromResult(_options.HandleDirectories && CanHandleMediaType(vendorId, mediaType));
     }
 
-    public async Task<Stream> GetStreamForCachingAsync(string vendorId, string contentId, string partId, string mediaType, CancellationToken cancellationToken = default)
+    public async Task<Stream> GetStreamForCachingAsync(MediaFullId id, string mediaType, CancellationToken cancellationToken = default)
     {
         ThrowIfCannotHandleFiles();
-        await GetVendorDirectory(vendorId).CreateAsync(cancellationToken).ConfigureAwait(false);
-        return await GetFile(vendorId, contentId, partId, mediaType).OpenWriteAsync(cancellationToken).ConfigureAwait(false);
+        await GetVendorDirectory(id.VendorId).CreateAsync(cancellationToken).ConfigureAwait(false);
+        return await GetFile(id, mediaType).OpenWriteAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<IDirectory> GetDirectoryForCachingAsync(string vendorId, string contentId, string partId, string mediaType, CancellationToken cancellationToken = default)
+    public async Task<IDirectory> GetDirectoryForCachingAsync(MediaFullId id, string mediaType, CancellationToken cancellationToken = default)
     {
         ThrowIfCannotHandleDirectories();
-        await GetVendorDirectory(vendorId).CreateAsync(cancellationToken).ConfigureAwait(false);
-        return GetDirectory(vendorId, contentId, partId, mediaType);
+        await GetVendorDirectory(id.VendorId).CreateAsync(cancellationToken).ConfigureAwait(false);
+        return GetDirectory(id, mediaType);
     }
 
-    public async Task ExportAsync(string vendorId, string contentId, string partId, string mediaType, Stream stream, CancellationToken cancellationToken = default)
+    public async Task ExportAsync(MediaFullId id, string mediaType, Stream stream, CancellationToken cancellationToken = default)
     {
         ThrowIfCannotHandleFiles();
-        Stream sourceStream = await GetFile(vendorId, contentId, partId, mediaType).OpenReadAsync(cancellationToken).ConfigureAwait(false);
+        Stream sourceStream = await GetFile(id, mediaType).OpenReadAsync(cancellationToken).ConfigureAwait(false);
         await using (sourceStream.ConfigureAwait(false))
         {
             await sourceStream.CopyToAsync(stream, cancellationToken).ConfigureAwait(false);
         }
     }
 
-    public Task ExportAsync(string vendorId, string contentId, string partId, string mediaType, IDirectory directory, CancellationToken cancellationToken = default)
+    public Task ExportAsync(MediaFullId id, string mediaType, IDirectory directory, CancellationToken cancellationToken = default)
     {
         ThrowIfCannotHandleDirectories();
-        return GetDirectory(vendorId, contentId, partId, mediaType).CopyToAsync(directory, cancellationToken);
+        return GetDirectory(id, mediaType).CopyToAsync(directory, cancellationToken);
     }
 
     public async Task ClearAsync(string vendorId, CancellationToken cancellationToken = default)
@@ -90,12 +91,12 @@ public sealed class FilestorageExportCache : IExportCache
     private IDirectory GetVendorDirectory(string vendorId)
         => _options.RootDirectory.GetDirectory(vendorId);
 
-    private IFile GetFile(string vendorId, string contentId, string partId, string mediaType)
-        => GetVendorDirectory(vendorId).GetFile(GetName(vendorId, contentId, partId, mediaType, "file"));
+    private IFile GetFile(MediaFullId id, string mediaType)
+        => GetVendorDirectory(id.VendorId).GetFile(GetName(id, mediaType, "file"));
 
-    private IDirectory GetDirectory(string vendorId, string contentId, string partId, string mediaType)
-        => GetVendorDirectory(vendorId).GetDirectory(GetName(vendorId, contentId, partId, mediaType, "directory"));
+    private IDirectory GetDirectory(MediaFullId id, string mediaType)
+        => GetVendorDirectory(id.VendorId).GetDirectory(GetName(id, mediaType, "directory"));
 
-    private string GetName(string vendorId, string contentId, string partId, string mediaType, string type)
-        => $"{vendorId}.{contentId}.{partId}.{type}{_mediaTypeFileExtensionsMapping.GetFileExtension(mediaType)}";
+    private string GetName(MediaFullId id, string mediaType, string type)
+        => $"{id.ToCombinedString()}.{type}{_mediaTypeFileExtensionsMapping.GetFileExtension(mediaType)}";
 }

@@ -29,14 +29,14 @@ internal sealed class EpubHandlerEnumerationStrategy<TMetadata> : ISinglePartSea
             .Select(t => t.ContentId);
 
     public Task<bool> ContainsMetadataAsync(string contentId, CancellationToken cancellationToken)
-        => VendorContext.MetadataStorage.ContainsAsync(VendorContext.VendorId, contentId, cancellationToken);
+        => VendorContext.MetadataStorage.ContainsAsync(new(VendorContext.VendorId, contentId), cancellationToken);
 
     public Task<TMetadata> GetMetadataAsync(string contentId, CancellationToken cancellationToken)
-        => VendorContext.MetadataStorage.GetAsync<TMetadata>(VendorContext.VendorId, contentId, _metadataKey, cancellationToken);
+        => VendorContext.MetadataStorage.GetAsync<TMetadata>(new(VendorContext.VendorId, contentId), _metadataKey, cancellationToken);
 
     public IAsyncEnumerable<MediaExportTarget> EnumerateExportTargetsAsync(string contentId, string partId, CancellationToken cancellationToken)
         => _epubHandler.EnumerateExportTargetsAsync(contentId, partId, cancellationToken);
 
     public Task<ImmutableSortedSet<string>> GetTagsAsync(string contentId, CancellationToken cancellationToken)
-        => VendorContext.TagsStorage.GetAsync(VendorContext.VendorId, contentId, cancellationToken);
+        => VendorContext.TagsStorage.GetAsync(new(VendorContext.VendorId, contentId), cancellationToken);
 }

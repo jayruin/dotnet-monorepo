@@ -63,15 +63,15 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         JsonNode sortNode = new JsonArray(
             new JsonObject()
             {
-                [$"{MediaEntryKey}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.VendorId))}"] = "asc",
+                [$"{MediaEntryKey}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.VendorId))}"] = "asc",
             },
             new JsonObject()
             {
-                [$"{MediaEntryKey}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.ContentId))}"] = "asc",
+                [$"{MediaEntryKey}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.ContentId))}"] = "asc",
             },
             new JsonObject()
             {
-                [$"{MediaEntryKey}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.PartId))}"] = "asc",
+                [$"{MediaEntryKey}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.PartId))}"] = "asc",
             });
         JsonNode? searchAfterNode = null;
         do
@@ -116,10 +116,10 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         } while (searchAfterNode is not null);
     }
 
-    public async Task<MediaEntry?> GetMediaEntryAsync(string vendorId, string contentId, string partId, CancellationToken cancellationToken = default)
+    public async Task<MediaEntry?> GetMediaEntryAsync(MediaFullId id, CancellationToken cancellationToken = default)
     {
-        string documentId = GetDocumentId(vendorId, contentId, partId);
-        using HttpRequestMessage request = new(HttpMethod.Get, $"{vendorId}/_doc/{documentId}");
+        string documentId = GetDocumentId(id);
+        using HttpRequestMessage request = new(HttpMethod.Get, $"{id.VendorId}/_doc/{documentId}");
         using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
         if (response.StatusCode == HttpStatusCode.NotFound) return null;
         response.EnsureSuccessStatusCode();
@@ -162,7 +162,7 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
 
     private async Task AddOrUpdateAsync(SearchableMediaEntry entry, HashSet<string> indexesReady, CancellationToken cancellationToken)
     {
-        string vendorId = entry.MediaEntry.VendorId;
+        string vendorId = entry.MediaEntry.Id.VendorId;
         if (!indexesReady.Contains(vendorId))
         {
             bool indexExists = await CheckIfIndexExistsAsync(vendorId, cancellationToken).ConfigureAwait(false);
@@ -220,15 +220,15 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                     {
                         ["properties"] = new JsonObject()
                         {
-                            [jsonNamingPolicy.ConvertName(nameof(MediaEntry.VendorId))] = new JsonObject()
+                            [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.VendorId))] = new JsonObject()
                             {
                                 ["type"] = "keyword",
                             },
-                            [jsonNamingPolicy.ConvertName(nameof(MediaEntry.ContentId))] = new JsonObject()
+                            [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.ContentId))] = new JsonObject()
                             {
                                 ["type"] = "keyword",
                             },
-                            [jsonNamingPolicy.ConvertName(nameof(MediaEntry.PartId))] = new JsonObject()
+                            [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.PartId))] = new JsonObject()
                             {
                                 ["type"] = "keyword",
                             },
@@ -278,7 +278,7 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
             },
         };
         using HttpContent content = CreateHttpContent(payload);
-        using HttpRequestMessage request = new(HttpMethod.Put, entry.MediaEntry.VendorId)
+        using HttpRequestMessage request = new(HttpMethod.Put, entry.MediaEntry.Id.VendorId)
         {
             Content = content,
         };
@@ -301,10 +301,10 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
             [MediaEntryKey] = mediaEntryNode,
         };
 
-        string documentId = GetDocumentId(entry.MediaEntry.VendorId, entry.MediaEntry.ContentId, entry.MediaEntry.PartId);
+        string documentId = GetDocumentId(entry.MediaEntry.Id);
 
         using HttpContent content = CreateHttpContent(payload);
-        using HttpRequestMessage request = new(HttpMethod.Put, $"{entry.MediaEntry.VendorId}/_doc/{documentId}")
+        using HttpRequestMessage request = new(HttpMethod.Put, $"{entry.MediaEntry.Id.VendorId}/_doc/{documentId}")
         {
             Content = content,
         };
@@ -315,6 +315,5 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
     private static HttpContent CreateHttpContent(JsonNode jsonNode)
         => new StringContent(jsonNode.ToJsonString(), new UTF8Encoding(), MediaType.Application.Json);
 
-    private static string GetDocumentId(string vendorId, string contentId, string partId)
-        => string.IsNullOrWhiteSpace(partId) ? $"{vendorId}.{contentId}" : $"{vendorId}.{contentId}.{partId}";
+    private static string GetDocumentId(MediaFullId id) => id.ToCombinedString();
 }

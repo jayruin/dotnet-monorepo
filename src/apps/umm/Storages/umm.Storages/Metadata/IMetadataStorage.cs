@@ -1,14 +1,15 @@
 using System.Threading;
 using System.Threading.Tasks;
+using umm.Library;
 
 namespace umm.Storages.Metadata;
 
 public interface IMetadataStorage : IMediaStorage
 {
-    Task<bool> ContainsAsync(string vendorId, string contentId, string key, CancellationToken cancellationToken = default);
-    Task SaveAsync<TMetadata>(string vendorId, string contentId, string key, TMetadata metadata, CancellationToken cancellationToken = default)
+    Task<bool> ContainsAsync(MediaMainId id, string key, CancellationToken cancellationToken = default);
+    Task SaveAsync<TMetadata>(MediaMainId id, string key, TMetadata metadata, CancellationToken cancellationToken = default)
         where TMetadata : ISerializableMetadata<TMetadata>;
-    Task<TMetadata> GetAsync<TMetadata>(string vendorId, string contentId, string key, CancellationToken cancellationToken = default)
+    Task<TMetadata> GetAsync<TMetadata>(MediaMainId id, string key, CancellationToken cancellationToken = default)
         where TMetadata : ISerializableMetadata<TMetadata>;
-    Task DeleteAsync(string vendorId, string contentId, string key, CancellationToken cancellationToken = default);
+    Task DeleteAsync(MediaMainId id, string key, CancellationToken cancellationToken = default);
 }

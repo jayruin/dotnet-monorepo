@@ -79,19 +79,17 @@ internal static class ExportCli
                     || formatsList.Any(format =>
                         mediaTypeFileExtensionsMapping.GetMediaType($".{format}") == exportTarget.MediaType);
                 if (!matchesFormat) continue;
-                List<string> nameParts = [mediaEntry.VendorId, mediaEntry.ContentId];
-                if (mediaEntry.PartId.Length > 0) nameParts.Add(mediaEntry.PartId);
-                string name = string.Join('.', nameParts);
+                string name = mediaEntry.Id.ToCombinedString();
                 string outputName = $"{name}{mediaTypeFileExtensionsMapping.GetFileExtension(exportTarget.MediaType)}";
                 if (expanded && exportTarget.SupportsDirectory)
                 {
                     IDirectory directory = outputDirectory.GetDirectory(outputName);
-                    await catalog.ExportAsync(mediaEntry.VendorId, mediaEntry.ContentId, mediaEntry.PartId, exportTarget.MediaType, directory, cancellationToken).ConfigureAwait(false);
+                    await catalog.ExportAsync(mediaEntry.Id, exportTarget.MediaType, directory, cancellationToken).ConfigureAwait(false);
                 }
                 else if (!expanded && exportTarget.SupportsFile)
                 {
                     IFile file = outputDirectory.GetFile(outputName);
-                    await catalog.ExportAsync(mediaEntry.VendorId, mediaEntry.ContentId, mediaEntry.PartId, exportTarget.MediaType, file, cancellationToken).ConfigureAwait(false);
+                    await catalog.ExportAsync(mediaEntry.Id, exportTarget.MediaType, file, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -128,6 +126,7 @@ internal static class ExportCli
         string outputFile, string vendorId, string contentId, string partId, string format,
         CancellationToken cancellationToken)
     {
+        MediaFullId id = new(vendorId, contentId, partId);
         IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping = serviceProvider.GetRequiredService<IMediaTypeFileExtensionsMapping>();
         IMediaCatalog catalog = serviceProvider.GetRequiredService<IMediaCatalog>();
         FilesystemFileStorage filesystemFileStorage = new();
@@ -142,12 +141,12 @@ internal static class ExportCli
         }
         string mediaType = mediaTypeFileExtensionsMapping.GetMediaType($".{format}")
             ?? throw new InvalidOperationException($"Cannot handle format {format}.");
-        MediaEntry? mediaEntry = await catalog.GetMediaEntryAsync(vendorId, contentId, partId, cancellationToken).ConfigureAwait(false);
+        MediaEntry? mediaEntry = await catalog.GetMediaEntryAsync(id, cancellationToken).ConfigureAwait(false);
         if (mediaEntry is null || !mediaEntry.ExportTargets.Any(t => t.MediaType == mediaType && t.SupportsFile))
         {
             throw new InvalidOperationException("Cannot export file.");
         }
-        await catalog.ExportAsync(vendorId, contentId, partId, mediaType, file, cancellationToken).ConfigureAwait(false);
+        await catalog.ExportAsync(id, mediaType, file, cancellationToken).ConfigureAwait(false);
     }
 
     private static Command CreateDirectoryCommand()
@@ -181,6 +180,7 @@ internal static class ExportCli
         string outputDirectory, string vendorId, string contentId, string partId, string format,
         CancellationToken cancellationToken)
     {
+        MediaFullId id = new(vendorId, contentId, partId);
         IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping = serviceProvider.GetRequiredService<IMediaTypeFileExtensionsMapping>();
         IMediaCatalog catalog = serviceProvider.GetRequiredService<IMediaCatalog>();
         FilesystemFileStorage filesystemFileStorage = new();
@@ -195,12 +195,12 @@ internal static class ExportCli
         }
         string mediaType = mediaTypeFileExtensionsMapping.GetMediaType($".{format}")
             ?? throw new InvalidOperationException($"Cannot handle format {format}.");
-        MediaEntry? mediaEntry = await catalog.GetMediaEntryAsync(vendorId, contentId, partId, cancellationToken).ConfigureAwait(false);
+        MediaEntry? mediaEntry = await catalog.GetMediaEntryAsync(id, cancellationToken).ConfigureAwait(false);
         if (mediaEntry is null || !mediaEntry.ExportTargets.Any(t => t.MediaType == mediaType && t.SupportsDirectory))
         {
             throw new InvalidOperationException("Cannot export directory.");
         }
-        await catalog.ExportAsync(vendorId, contentId, partId, mediaType, directory, cancellationToken).ConfigureAwait(false);
+        await catalog.ExportAsync(id, mediaType, directory, cancellationToken).ConfigureAwait(false);
     }
 
     private static Argument<string> CreateVendorIdArgument() => new("vendorId");

@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using umm.Library;
 using umm.Storages.Blob;
 
 namespace umm.Storages.Tags;
@@ -23,15 +24,15 @@ public sealed class TxtBlobTagsStorage : ITagsStorage
 
     public bool Supports(string vendorId) => _blobStorage.Supports(vendorId);
 
-    public Task<bool> ContainsAsync(string vendorId, string contentId, CancellationToken cancellationToken = default)
-        => _blobStorage.ContainsAsync(vendorId, contentId, cancellationToken);
+    public Task<bool> ContainsAsync(MediaMainId id, CancellationToken cancellationToken = default)
+        => _blobStorage.ContainsAsync(id, cancellationToken);
 
-    public IAsyncEnumerable<(string VendorId, string ContentId)> EnumerateContentAsync(CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<MediaMainId> EnumerateContentAsync(CancellationToken cancellationToken = default)
         => _blobStorage.EnumerateContentAsync(cancellationToken);
 
-    public async Task SaveAsync(string vendorId, string contentId, IReadOnlySet<string> tags, CancellationToken cancellationToken = default)
+    public async Task SaveAsync(MediaMainId id, IReadOnlySet<string> tags, CancellationToken cancellationToken = default)
     {
-        IFile file = await GetTxtFileAsync(vendorId, contentId, cancellationToken).ConfigureAwait(false);
+        IFile file = await GetTxtFileAsync(id, cancellationToken).ConfigureAwait(false);
         Stream stream = await file.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
         await using ConfiguredAsyncDisposable configuredStream = stream.ConfigureAwait(false);
         StreamWriter streamWriter = new(stream, FileEncoding);
@@ -43,13 +44,13 @@ public sealed class TxtBlobTagsStorage : ITagsStorage
         }
     }
 
-    public async Task<ImmutableSortedSet<string>> GetAsync(string vendorId, string contentId, CancellationToken cancellationToken = default)
+    public async Task<ImmutableSortedSet<string>> GetAsync(MediaMainId id, CancellationToken cancellationToken = default)
     {
-        if (!await ContainsAsync(vendorId, contentId, cancellationToken).ConfigureAwait(false))
+        if (!await ContainsAsync(id, cancellationToken).ConfigureAwait(false))
         {
-            throw new InvalidOperationException($"Tags for {vendorId} {contentId} not found.");
+            throw new InvalidOperationException($"Tags for {id.ToCombinedString()} not found.");
         }
-        IFile file = await GetTxtFileAsync(vendorId, contentId, cancellationToken).ConfigureAwait(false);
+        IFile file = await GetTxtFileAsync(id, cancellationToken).ConfigureAwait(false);
         if (!await file.ExistsAsync(cancellationToken).ConfigureAwait(false)) return [];
         ImmutableSortedSet<string>.Builder builder = ImmutableSortedSet.CreateBuilder<string>();
         Stream stream = await file.OpenReadAsync(cancellationToken).ConfigureAwait(false);
@@ -64,10 +65,10 @@ public sealed class TxtBlobTagsStorage : ITagsStorage
         return builder.ToImmutable();
     }
 
-    private async Task<IFile> GetTxtFileAsync(string vendorId, string contentId, CancellationToken cancellationToken)
+    private async Task<IFile> GetTxtFileAsync(MediaMainId id, CancellationToken cancellationToken)
     {
-        MediaStorageValidation.ThrowIfNotSupported(this, vendorId);
-        IDirectory storageContainer = await _blobStorage.GetStorageContainerAsync(vendorId, contentId, cancellationToken).ConfigureAwait(false);
+        MediaStorageValidation.ThrowIfNotSupported(this, id.VendorId);
+        IDirectory storageContainer = await _blobStorage.GetStorageContainerAsync(id, cancellationToken).ConfigureAwait(false);
         return storageContainer.GetFile(".tags.txt");
     }
 }

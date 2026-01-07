@@ -32,23 +32,19 @@ public static class ExportCacheExtensions
         {
             if (exportTarget.SupportsFile
                 && await exportCache.CanHandleFileAsync(
-                    entry.VendorId,
-                    entry.ContentId,
-                    entry.PartId,
+                    entry.Id.VendorId,
                     exportTarget.MediaType,
                     cancellationToken).ConfigureAwait(false))
             {
                 Stream stream = await exportCache.GetStreamForCachingAsync(
-                    entry.VendorId,
-                    entry.ContentId,
-                    entry.PartId,
+                    entry.Id,
                     exportTarget.MediaType,
                     cancellationToken).ConfigureAwait(false);
                 await using (stream.ConfigureAwait(false))
                 {
                     await mediaVendor.ExportAsync(
-                        entry.ContentId,
-                        entry.PartId,
+                        entry.Id.ContentId,
+                        entry.Id.PartId,
                         exportTarget.MediaType,
                         stream,
                         cancellationToken).ConfigureAwait(false);
@@ -56,21 +52,17 @@ public static class ExportCacheExtensions
             }
             if (exportTarget.SupportsDirectory
                 && await exportCache.CanHandleDirectoryAsync(
-                    entry.VendorId,
-                    entry.ContentId,
-                    entry.PartId,
+                    entry.Id.VendorId,
                     exportTarget.MediaType,
                     cancellationToken).ConfigureAwait(false))
             {
                 IDirectory directory = await exportCache.GetDirectoryForCachingAsync(
-                    entry.VendorId,
-                    entry.ContentId,
-                    entry.PartId,
+                    entry.Id,
                     exportTarget.MediaType,
                     cancellationToken).ConfigureAwait(false);
                 await mediaVendor.ExportAsync(
-                    entry.ContentId,
-                    entry.PartId,
+                    entry.Id.ContentId,
+                    entry.Id.PartId,
                     exportTarget.MediaType,
                     directory,
                     cancellationToken).ConfigureAwait(false);

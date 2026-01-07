@@ -69,9 +69,10 @@ public sealed class EpubProjVendor : IMediaVendor
 
     public async Task ExportAsync(string contentId, string partId, string mediaType, Stream stream, CancellationToken cancellationToken = default)
     {
+        MediaMainId id = new(VendorId, contentId);
         if (partId.Length == 0 || partId == Epub2Id)
         {
-            IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(VendorId, contentId, cancellationToken).ConfigureAwait(false);
+            IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(id, cancellationToken).ConfigureAwait(false);
             IEpubProject project = await _projectLoader.LoadFromDirectoryAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
             if (mediaType == MediaType.Application.Epub_Zip)
             {
@@ -110,9 +111,10 @@ public sealed class EpubProjVendor : IMediaVendor
 
     public async Task ExportAsync(string contentId, string partId, string mediaType, IDirectory directory, CancellationToken cancellationToken = default)
     {
+        MediaMainId id = new(VendorId, contentId);
         if (partId.Length == 0 || partId == Epub2Id)
         {
-            IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(VendorId, contentId, cancellationToken).ConfigureAwait(false);
+            IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(id, cancellationToken).ConfigureAwait(false);
             IEpubProject project = await _projectLoader.LoadFromDirectoryAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
             if (mediaType == MediaType.Application.Epub_Zip)
             {
@@ -189,9 +191,7 @@ public sealed class EpubProjVendor : IMediaVendor
                 {
                     MediaEntry = new()
                     {
-                        VendorId = VendorId,
-                        ContentId = contentId,
-                        PartId = string.Empty,
+                        Id = new(VendorId, contentId, string.Empty),
                         Metadata = universalMetadata,
                         ExportTargets = exportTargets,
                         Tags = tags,
@@ -219,9 +219,7 @@ public sealed class EpubProjVendor : IMediaVendor
                 {
                     MediaEntry = new()
                     {
-                        VendorId = VendorId,
-                        ContentId = contentId,
-                        PartId = Epub2Id,
+                        Id = new(VendorId, contentId, Epub2Id),
                         Metadata = universalMetadata.With(title: $"{universalMetadata.Title} (epub2)"),
                         ExportTargets = exportTargets,
                         Tags = tags,
@@ -233,18 +231,20 @@ public sealed class EpubProjVendor : IMediaVendor
     }
 
     private Task<ImmutableSortedSet<string>> GetTagsAsync(string contentId, CancellationToken cancellationToken)
-        => _tagsStorage.GetAsync(VendorId, contentId, cancellationToken);
+        => _tagsStorage.GetAsync(new(VendorId, contentId), cancellationToken);
 
     private async Task<EpubProjMetadataAdapter> GetMetadataAsync(string contentId, CancellationToken cancellationToken)
     {
-        IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(VendorId, contentId, cancellationToken).ConfigureAwait(false);
+        MediaMainId id = new(VendorId, contentId);
+        IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(id, cancellationToken).ConfigureAwait(false);
         IEpubProject project = await _projectLoader.LoadFromDirectoryAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
         return new EpubProjMetadataAdapter(project.Metadata);
     }
 
     private async IAsyncEnumerable<MediaExportTarget> EnumerateExportTargetsAsync(string contentId, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(VendorId, contentId, cancellationToken).ConfigureAwait(false);
+        MediaMainId id = new(VendorId, contentId);
+        IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(id, cancellationToken).ConfigureAwait(false);
         if (!await projectDirectory.ExistsAsync(cancellationToken).ConfigureAwait(false)) yield break;
         yield return new(MediaType.Application.Epub_Zip, true, true);
         IEpubProject project = await _projectLoader.LoadFromDirectoryAsync(projectDirectory, cancellationToken).ConfigureAwait(false);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using umm.Library;
 
 namespace umm.Storages.Blob;
 
@@ -20,34 +21,31 @@ public sealed class FileBlobStorage : IBlobStorage
 
     public bool Supports(string vendorId) => _vendorIds.Contains(vendorId);
 
-    public Task<bool> ContainsAsync(string vendorId, string contentId, CancellationToken cancellationToken = default)
+    public Task<bool> ContainsAsync(MediaMainId id, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        if (!Supports(vendorId)) return Task.FromResult(false);
-        IDirectory storageContainer = GetStorageContainer(vendorId, contentId);
+        if (!Supports(id.VendorId)) return Task.FromResult(false);
+        IDirectory storageContainer = GetStorageContainer(id);
         return storageContainer.ExistsAsync(cancellationToken);
     }
 
-    public async IAsyncEnumerable<(string VendorId, string ContentId)> EnumerateContentAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<MediaMainId> EnumerateContentAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         await foreach (IDirectory directory in _baseDirectory.EnumerateDirectoriesAsync(cancellationToken).ConfigureAwait(false))
         {
-            string[] parts = directory.Name.Split('.');
-            if (parts.Length != 2) continue;
-            string vendorId = parts[0];
-            string contentId = parts[1];
-            if (!Supports(vendorId)) continue;
-            yield return (vendorId, contentId);
+            MediaMainId? id = MediaMainId.FromCombinedString(directory.Name);
+            if (id is null || !Supports(id.VendorId)) continue;
+            yield return id;
         }
     }
 
-    public Task<IDirectory> GetStorageContainerAsync(string vendorId, string contentId, CancellationToken cancellationToken = default)
+    public Task<IDirectory> GetStorageContainerAsync(MediaMainId id, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        MediaStorageValidation.ThrowIfNotSupported(this, vendorId);
-        return Task.FromResult(GetStorageContainer(vendorId, contentId));
+        MediaStorageValidation.ThrowIfNotSupported(this, id.VendorId);
+        return Task.FromResult(GetStorageContainer(id));
     }
 
-    private IDirectory GetStorageContainer(string vendorId, string contentId)
-        => _baseDirectory.GetDirectory($"{vendorId}.{contentId}");
+    private IDirectory GetStorageContainer(MediaMainId id)
+        => _baseDirectory.GetDirectory(id.ToCombinedString());
 }
