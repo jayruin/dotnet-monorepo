@@ -43,6 +43,44 @@ public sealed class MediaCatalog : IMediaCatalog
         return RawEnumerateAsync(searchQuery, cancellationToken);
     }
 
+    public IAsyncEnumerable<MediaEntry> EnumeratePageAsync(IReadOnlyDictionary<string, StringValues> searchQuery, MediaFullId? after, int count, CancellationToken cancellationToken = default)
+    {
+        if (_searchIndex is not null)
+        {
+            _logger.LogUsingSearchIndex();
+            return _searchIndex.EnumeratePageAsync(searchQuery, after, count, cancellationToken);
+        }
+        _logger.LogUsingRawVendor();
+        IAsyncEnumerable<MediaEntry> result = RawEnumerateAsync(searchQuery, cancellationToken);
+        if (after is not null)
+        {
+            result = result
+                .SkipWhile(e => e.Id != after)
+                .Skip(1);
+        }
+        result = result.Take(count);
+        return result;
+    }
+
+    public IAsyncEnumerable<MediaEntry> EnumeratePageAsync(string searchTerm, MediaFullId? after, int count, CancellationToken cancellationToken = default)
+    {
+        if (_searchIndex is not null)
+        {
+            _logger.LogUsingSearchIndex();
+            return _searchIndex.EnumeratePageAsync(searchTerm, after, count, cancellationToken);
+        }
+        _logger.LogUsingRawVendor();
+        IAsyncEnumerable<MediaEntry> result = RawEnumerateAsync(searchTerm, cancellationToken);
+        if (after is not null)
+        {
+            result = result
+                .SkipWhile(e => e.Id != after)
+                .Skip(1);
+        }
+        result = result.Take(count);
+        return result;
+    }
+
     public Task<MediaEntry?> GetMediaEntryAsync(MediaFullId id, CancellationToken cancellationToken = default)
     {
         if (_searchIndex is not null)
@@ -94,6 +132,21 @@ public sealed class MediaCatalog : IMediaCatalog
                 .ThenBy(e => e.MediaEntry.Id.PartId).ConfigureAwait(false))
             {
                 bool matches = SearchQuery.Matches(searchQuery, searchableEntry.MetadataSearchFields);
+                if (!matches) continue;
+                yield return searchableEntry.MediaEntry;
+            }
+        }
+    }
+
+    private async IAsyncEnumerable<MediaEntry> RawEnumerateAsync(string searchTerm, [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        foreach (IMediaVendor mediaVendor in _mediaVendors.Values.OrderBy(v => v.VendorId))
+        {
+            await foreach (SearchableMediaEntry searchableEntry in mediaVendor.EnumerateAsync(cancellationToken)
+                .OrderBy(e => e.MediaEntry.Id.ContentId)
+                .ThenBy(e => e.MediaEntry.Id.PartId).ConfigureAwait(false))
+            {
+                bool matches = SearchQuery.Matches(searchTerm, searchableEntry.MetadataSearchFields);
                 if (!matches) continue;
                 yield return searchableEntry.MediaEntry;
             }

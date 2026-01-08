@@ -38,6 +38,40 @@ public sealed class JsonFileSearchIndex : ISearchIndex, IDisposable
             .ToAsyncEnumerable();
     }
 
+    public IAsyncEnumerable<MediaEntry> EnumeratePageAsync(IReadOnlyDictionary<string, StringValues> searchQuery, MediaFullId? after, int count, CancellationToken cancellationToken = default)
+    {
+        IAsyncEnumerable<MediaEntry> result = EnumerateAsync(searchQuery, cancellationToken);
+        if (after is not null)
+        {
+            result = result
+                .SkipWhile(e => e.Id != after)
+                .Skip(1);
+        }
+        result = result.Take(count);
+        return result;
+    }
+
+    public IAsyncEnumerable<MediaEntry> EnumeratePageAsync(string searchTerm, MediaFullId? after, int count, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        IAsyncEnumerable<MediaEntry> result = _allEntries
+            .SelectMany(kvp => kvp.Value)
+            .Where(e => SearchQuery.Matches(searchTerm, e.MetadataSearchFields))
+            .Select(e => e.MediaEntry)
+            .OrderBy(e => e.Id.VendorId)
+            .ThenBy(e => e.Id.ContentId)
+            .ThenBy(e => e.Id.PartId)
+            .ToAsyncEnumerable();
+        if (after is not null)
+        {
+            result = result
+                .SkipWhile(e => e.Id != after)
+                .Skip(1);
+        }
+        result = result.Take(count);
+        return result;
+    }
+
     public Task<MediaEntry?> GetMediaEntryAsync(MediaFullId id, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();

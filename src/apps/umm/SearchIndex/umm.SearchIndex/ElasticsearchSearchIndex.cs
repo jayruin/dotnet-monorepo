@@ -2,17 +2,16 @@ using MediaTypes;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using umm.Library;
+using Utils;
 
 namespace umm.SearchIndex;
 
@@ -32,47 +31,8 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
 
     public async IAsyncEnumerable<MediaEntry> EnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        JsonNamingPolicy jsonNamingPolicy = MediaEntriesJsonContext.Default.Options.PropertyNamingPolicy
-            ?? throw new InvalidOperationException("No JsonNamingPolicy");
-        JsonNode queryNode = new JsonObject()
-        {
-            ["bool"] = new JsonObject()
-            {
-                ["must"] = new JsonArray([.. searchQuery.Select(kvp => {
-                    (string searchKey, StringValues searchValues) = kvp;
-                    return new JsonObject()
-                    {
-                        ["bool"] = new JsonObject()
-                        {
-                            ["should"] = new JsonArray([.. searchValues.Select(searchValue => new JsonObject()
-                            {
-                                ["match"] = new JsonObject()
-                                {
-                                    [$"{SearchFieldsKey}.{searchKey.ToLowerInvariant()}"] = new JsonObject()
-                                    {
-                                        ["query"] = searchValue,
-                                        ["operator"] = "and",
-                                    },
-                                }
-                            })]),
-                        },
-                    };
-                })]),
-            }
-        };
-        JsonNode sortNode = new JsonArray(
-            new JsonObject()
-            {
-                [$"{MediaEntryKey}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.VendorId))}"] = "asc",
-            },
-            new JsonObject()
-            {
-                [$"{MediaEntryKey}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.ContentId))}"] = "asc",
-            },
-            new JsonObject()
-            {
-                [$"{MediaEntryKey}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.PartId))}"] = "asc",
-            });
+        JsonNode queryNode = CreateQueryNode(searchQuery);
+        JsonNode sortNode = CreateSortNode();
         JsonNode? searchAfterNode = null;
         do
         {
@@ -85,17 +45,7 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
             {
                 payload["search_after"] = searchAfterNode.DeepClone();
             }
-            using HttpContent content = CreateHttpContent(payload);
-            using HttpRequestMessage request = new(HttpMethod.Get, "*,-.*/_search")
-            {
-                Content = content,
-            };
-            using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            Stream responseStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
-            await using ConfiguredAsyncDisposable configuredResponseStream = responseStream.ConfigureAwait(false);
-            JsonNode responseNode = await JsonNode.ParseAsync(responseStream, cancellationToken: cancellationToken).ConfigureAwait(false)
-                ?? throw new JsonException();
+            JsonNode responseNode = await SearchAsync(payload, cancellationToken).ConfigureAwait(false);
             JsonArray hitsArray = responseNode["hits"]?["hits"]?.AsArray()
                 ?? throw new JsonException();
             searchAfterNode = null;
@@ -112,21 +62,71 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                     throw new JsonException();
                 }
             }
-
         } while (searchAfterNode is not null);
+    }
+
+    public async IAsyncEnumerable<MediaEntry> EnumeratePageAsync(IReadOnlyDictionary<string, StringValues> searchQuery, MediaFullId? after, int count, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        JsonNode payload = new JsonObject()
+        {
+            ["query"] = CreateQueryNode(searchQuery),
+            ["sort"] = CreateSortNode(),
+            ["size"] = count,
+        };
+        if (after is not null)
+        {
+            payload["search_after"] = new JsonArray(after.VendorId, after.ContentId, after.PartId);
+        }
+        JsonNode responseNode = await SearchAsync(payload, cancellationToken).ConfigureAwait(false);
+        JsonArray hitsArray = responseNode["hits"]?["hits"]?.AsArray()
+            ?? throw new JsonException();
+        foreach (JsonNode? hitNode in hitsArray)
+        {
+            JsonNode mediaEntryNode = hitNode?["_source"]?[MediaEntryKey]
+                ?? throw new JsonException();
+            MediaEntry mediaEntry = mediaEntryNode.Deserialize(MediaEntriesJsonContext.Default.MediaEntry)
+                ?? throw new JsonException();
+            yield return mediaEntry;
+        }
+    }
+
+    public async IAsyncEnumerable<MediaEntry> EnumeratePageAsync(string searchTerm, MediaFullId? after, int count, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        JsonNode payload = new JsonObject()
+        {
+            ["query"] = CreateQueryNode(searchTerm),
+            ["sort"] = CreateSortNode(),
+            ["size"] = count,
+        };
+        if (after is not null)
+        {
+            payload["search_after"] = new JsonArray(after.VendorId, after.ContentId, after.PartId);
+        }
+        JsonNode responseNode = await SearchAsync(payload, cancellationToken).ConfigureAwait(false);
+        JsonArray hitsArray = responseNode["hits"]?["hits"]?.AsArray()
+            ?? throw new JsonException();
+        foreach (JsonNode? hitNode in hitsArray)
+        {
+            JsonNode mediaEntryNode = hitNode?["_source"]?[MediaEntryKey]
+                ?? throw new JsonException();
+            MediaEntry mediaEntry = mediaEntryNode.Deserialize(MediaEntriesJsonContext.Default.MediaEntry)
+                ?? throw new JsonException();
+            yield return mediaEntry;
+        }
     }
 
     public async Task<MediaEntry?> GetMediaEntryAsync(MediaFullId id, CancellationToken cancellationToken = default)
     {
         string documentId = GetDocumentId(id);
-        using HttpRequestMessage request = new(HttpMethod.Get, $"{id.VendorId}/_doc/{documentId}");
-        using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        if (response.StatusCode == HttpStatusCode.NotFound) return null;
-        response.EnsureSuccessStatusCode();
-        Stream responseStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
-        await using ConfiguredAsyncDisposable configuredResponseStream = responseStream.ConfigureAwait(false);
-        JsonNode responseNode = await JsonNode.ParseAsync(responseStream, cancellationToken: cancellationToken).ConfigureAwait(false)
-            ?? throw new JsonException();
+        JsonNode responseNode;
+        try
+        {
+            responseNode = await _httpClient.GetJsonAsync($"{id.VendorId}/_doc/{documentId}", cancellationToken).ConfigureAwait(false);
+        }
+        catch (HttpRequestException e) when (e.StatusCode == HttpStatusCode.NotFound)
+        {
+            return null;
+        }
         JsonNode mediaEntryNode = responseNode["_source"]?[MediaEntryKey]
                     ?? throw new JsonException();
         MediaEntry mediaEntry = mediaEntryNode.Deserialize(MediaEntriesJsonContext.Default.MediaEntry)
@@ -160,6 +160,71 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         response.EnsureSuccessStatusCode();
     }
 
+    private static JsonNode CreateQueryNode(IReadOnlyDictionary<string, StringValues> searchQuery)
+    {
+        return new JsonObject()
+        {
+            ["bool"] = new JsonObject()
+            {
+                ["must"] = new JsonArray([.. searchQuery.Select(kvp => {
+                    (string searchKey, StringValues searchValues) = kvp;
+                    return new JsonObject()
+                    {
+                        ["bool"] = new JsonObject()
+                        {
+                            ["should"] = new JsonArray([.. searchValues.Select(searchValue => new JsonObject()
+                            {
+                                ["match"] = new JsonObject()
+                                {
+                                    [$"{SearchFieldsKey}.{searchKey.ToLowerInvariant()}"] = new JsonObject()
+                                    {
+                                        ["query"] = searchValue,
+                                        ["operator"] = "and",
+                                    },
+                                }
+                            })]),
+                        },
+                    };
+                })]),
+            }
+        };
+    }
+
+    private static JsonNode CreateQueryNode(string searchTerm)
+    {
+        return new JsonObject()
+        {
+            ["simple_query_string"] = new JsonObject()
+            {
+                ["query"] = searchTerm,
+            }
+        };
+    }
+
+    private static JsonNode CreateSortNode()
+    {
+        JsonNamingPolicy jsonNamingPolicy = MediaEntriesJsonContext.Default.Options.PropertyNamingPolicy
+            ?? throw new InvalidOperationException("No JsonNamingPolicy");
+        return new JsonArray(
+            new JsonObject()
+            {
+                [$"{MediaEntryKey}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id))}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.VendorId))}"] = "asc",
+            },
+            new JsonObject()
+            {
+                [$"{MediaEntryKey}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id))}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.ContentId))}"] = "asc",
+            },
+            new JsonObject()
+            {
+                [$"{MediaEntryKey}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id))}.{jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.PartId))}"] = "asc",
+            });
+    }
+
+    private Task<JsonNode> SearchAsync(JsonNode payload, CancellationToken cancellationToken)
+    {
+        return _httpClient.GetJsonAsync("*,-.*/_search", payload, cancellationToken);
+    }
+
     private async Task AddOrUpdateAsync(SearchableMediaEntry entry, HashSet<string> indexesReady, CancellationToken cancellationToken)
     {
         string vendorId = entry.MediaEntry.Id.VendorId;
@@ -182,7 +247,7 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         return response.IsSuccessStatusCode;
     }
 
-    private async Task CreateIndexWithMappingAsync(SearchableMediaEntry entry, CancellationToken cancellationToken)
+    private Task CreateIndexWithMappingAsync(SearchableMediaEntry entry, CancellationToken cancellationToken)
     {
         JsonNamingPolicy jsonNamingPolicy = MediaEntriesJsonContext.Default.Options.PropertyNamingPolicy
             ?? throw new InvalidOperationException("No JsonNamingPolicy");
@@ -220,17 +285,23 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                     {
                         ["properties"] = new JsonObject()
                         {
-                            [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.VendorId))] = new JsonObject()
+                            [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id))] = new JsonObject()
                             {
-                                ["type"] = "keyword",
-                            },
-                            [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.ContentId))] = new JsonObject()
-                            {
-                                ["type"] = "keyword",
-                            },
-                            [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.PartId))] = new JsonObject()
-                            {
-                                ["type"] = "keyword",
+                                ["properties"] = new JsonObject()
+                                {
+                                    [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.VendorId))] = new JsonObject()
+                                    {
+                                        ["type"] = "keyword",
+                                    },
+                                    [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.ContentId))] = new JsonObject()
+                                    {
+                                        ["type"] = "keyword",
+                                    },
+                                    [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.PartId))] = new JsonObject()
+                                    {
+                                        ["type"] = "keyword",
+                                    },
+                                },
                             },
                             [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Metadata))] = new JsonObject()
                             {
@@ -277,16 +348,10 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                 },
             },
         };
-        using HttpContent content = CreateHttpContent(payload);
-        using HttpRequestMessage request = new(HttpMethod.Put, entry.MediaEntry.Id.VendorId)
-        {
-            Content = content,
-        };
-        using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        response.EnsureSuccessStatusCode();
+        return _httpClient.PutAsync(entry.MediaEntry.Id.VendorId, payload, cancellationToken);
     }
 
-    private async Task PutDocumentAsync(SearchableMediaEntry entry, CancellationToken cancellationToken)
+    private Task PutDocumentAsync(SearchableMediaEntry entry, CancellationToken cancellationToken)
     {
         JsonNode mediaEntryNode = JsonSerializer.SerializeToNode(entry.MediaEntry, MediaEntriesJsonContext.Default.MediaEntry)
             ?? throw new JsonException();
@@ -303,17 +368,8 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
 
         string documentId = GetDocumentId(entry.MediaEntry.Id);
 
-        using HttpContent content = CreateHttpContent(payload);
-        using HttpRequestMessage request = new(HttpMethod.Put, $"{entry.MediaEntry.Id.VendorId}/_doc/{documentId}")
-        {
-            Content = content,
-        };
-        using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        response.EnsureSuccessStatusCode();
+        return _httpClient.PutAsync($"{entry.MediaEntry.Id.VendorId}/_doc/{documentId}", payload, cancellationToken);
     }
-
-    private static HttpContent CreateHttpContent(JsonNode jsonNode)
-        => new StringContent(jsonNode.ToJsonString(), new UTF8Encoding(), MediaType.Application.Json);
 
     private static string GetDocumentId(MediaFullId id) => id.ToCombinedString();
 }
