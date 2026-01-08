@@ -5,6 +5,7 @@ using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -83,12 +84,14 @@ public sealed class MediaCatalog : IMediaCatalog
 
     private async IAsyncEnumerable<MediaEntry> RawEnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        foreach (IMediaVendor mediaVendor in _mediaVendors.Values)
+        foreach (IMediaVendor mediaVendor in _mediaVendors.Values.OrderBy(v => v.VendorId))
         {
             bool matchesVendorId = SearchQuery.MatchesExactly(searchQuery, ["vendorid"], [mediaVendor.VendorId]);
             if (!matchesVendorId) continue;
 
-            await foreach (SearchableMediaEntry searchableEntry in mediaVendor.EnumerateAsync(cancellationToken).ConfigureAwait(false))
+            await foreach (SearchableMediaEntry searchableEntry in mediaVendor.EnumerateAsync(cancellationToken)
+                .OrderBy(e => e.MediaEntry.Id.ContentId)
+                .ThenBy(e => e.MediaEntry.Id.PartId).ConfigureAwait(false))
             {
                 bool matches = SearchQuery.Matches(searchQuery, searchableEntry.MetadataSearchFields);
                 if (!matches) continue;

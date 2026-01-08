@@ -1,11 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.Extensions.Http" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="$(Proj_FileStorage)" />
     <ProjectReference Include="$(Proj_MediaTypes)" />
+    <ProjectReference Include="$(Proj_Utils)" />
     <ProjectReference Include="$(Proj_umm_Library)" />
   </ItemGroup>
 </Project>

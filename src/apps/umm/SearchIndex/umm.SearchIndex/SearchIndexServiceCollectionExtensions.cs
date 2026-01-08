@@ -1,3 +1,4 @@
+using FileStorage.Filesystem;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -44,6 +45,15 @@ public static class SearchIndexServiceCollectionExtensions
                 }
             }
         }
+        else if (searchIndexType.Equals("jsonfile", StringComparison.OrdinalIgnoreCase))
+        {
+            var options = searchIndexConfiguration.Get<JsonFileSearchIndexOptions>();
+            string? path = options?.Path;
+            if (!string.IsNullOrWhiteSpace(path))
+            {
+                serviceCollection.AddSingleton<ISearchIndex, JsonFileSearchIndex>(_ => new(new FilesystemFileStorage().GetFile(path)));
+            }
+        }
         return serviceCollection;
     }
 
@@ -53,5 +63,10 @@ public static class SearchIndexServiceCollectionExtensions
         public string? Username { get; set; }
         public string? Password { get; set; }
         public bool Insecure { get; set; }
+    }
+
+    internal sealed class JsonFileSearchIndexOptions
+    {
+        public string? Path { get; set; }
     }
 }
