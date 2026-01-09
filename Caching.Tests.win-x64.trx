@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="4d4c0d2a-81c7-4878-92de-0bbffd73d64f" name="runneradmin@runnervmybtk3 2026-01-09 12:50:00" runUser="runnervmybtk3\runneradmin" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-01-09T12:50:00.8251135+00:00" queuing="2026-01-09T12:50:00.8251136+00:00" start="2026-01-09T12:50:00.1169923+00:00" finish="2026-01-09T12:50:00.8306595+00:00" />
+  <TestSettings name="default" id="d2e8737d-eefc-4eee-992a-60d179786529">
+    <Deployment runDeploymentRoot="runneradmin_runnervmybtk3_2026-01-09_12_50_00" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="5a06067e-ebff-45f6-b41c-57a20ca106be" testId="1f98b4c3-69ca-8d39-ae60-a12285580402" testName="TestExtension" computerName="runnervmybtk3" duration="00:00:00.0014971" startTime="2026-01-09T12:50:00.6954524+00:00" endTime="2026-01-09T12:50:00.6981725+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5a06067e-ebff-45f6-b41c-57a20ca106be" />
+    <UnitTestResult executionId="8dce09dd-2ece-4ae6-a06d-d7cbe4bae795" testId="1da997f2-075f-85db-a3a9-eb3cc5c03223" testName="TestDisposeAsync" computerName="runnervmybtk3" duration="00:00:00.0023307" startTime="2026-01-09T12:50:00.6954516+00:00" endTime="2026-01-09T12:50:00.6983460+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8dce09dd-2ece-4ae6-a06d-d7cbe4bae795" />
+    <UnitTestResult executionId="f57be98a-fe80-43ae-825b-52d446f343d9" testId="1c04dc58-2586-85d2-8948-23e283c7c198" testName="TestRead" computerName="runnervmybtk3" duration="00:00:00.0074228" startTime="2026-01-09T12:50:00.6984749+00:00" endTime="2026-01-09T12:50:00.7093309+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f57be98a-fe80-43ae-825b-52d446f343d9" />
+    <UnitTestResult executionId="edc25e98-8623-4f95-8ed2-743da06db90e" testId="13b1c169-b067-8744-a536-344a611c3725" testName="TestDispose" computerName="runnervmybtk3" duration="00:00:00.0165924" startTime="2026-01-09T12:50:00.6514492+00:00" endTime="2026-01-09T12:50:00.6894869+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="edc25e98-8623-4f95-8ed2-743da06db90e" />
+    <UnitTestResult executionId="91a1591a-f5b7-468e-bb1e-fa51fea93938" testId="10f5dd94-ac11-8f07-bafd-7fc4a65d0140" testName="TestRead" computerName="runnervmybtk3" duration="00:00:00.0165455" startTime="2026-01-09T12:50:00.6514548+00:00" endTime="2026-01-09T12:50:00.6894870+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="91a1591a-f5b7-468e-bb1e-fa51fea93938" />
+    <UnitTestResult executionId="2e271950-0de7-4b5d-b1ee-788685b8161c" testId="161bf7b4-4c0a-80f9-a7a9-daa7f749fd5e" testName="TestExtension" computerName="runnervmybtk3" duration="00:00:00.0008409" startTime="2026-01-09T12:50:00.7093898+00:00" endTime="2026-01-09T12:50:00.7108700+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2e271950-0de7-4b5d-b1ee-788685b8161c" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestRead" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\caching.tests\release_win-x64\caching.tests.dll" id="1c04dc58-2586-85d2-8948-23e283c7c198">
+      <Execution id="f57be98a-fe80-43ae-825b-52d446f343d9" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Caching.Tests\release_win-x64\Caching.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Caching.Tests.TempFileCacheTests" name="TestRead" />
+    </UnitTest>
+    <UnitTest name="TestDisposeAsync" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\caching.tests\release_win-x64\caching.tests.dll" id="1da997f2-075f-85db-a3a9-eb3cc5c03223">
+      <Execution id="8dce09dd-2ece-4ae6-a06d-d7cbe4bae795" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Caching.Tests\release_win-x64\Caching.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Caching.Tests.TempFileCacheTests" name="TestDisposeAsync" />
+    </UnitTest>
+    <UnitTest name="TestExtension" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\caching.tests\release_win-x64\caching.tests.dll" id="1f98b4c3-69ca-8d39-ae60-a12285580402">
+      <Execution id="5a06067e-ebff-45f6-b41c-57a20ca106be" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Caching.Tests\release_win-x64\Caching.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Caching.Tests.MemoryFileCacheTests" name="TestExtension" />
+    </UnitTest>
+    <UnitTest name="TestRead" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\caching.tests\release_win-x64\caching.tests.dll" id="10f5dd94-ac11-8f07-bafd-7fc4a65d0140">
+      <Execution id="91a1591a-f5b7-468e-bb1e-fa51fea93938" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Caching.Tests\release_win-x64\Caching.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Caching.Tests.MemoryFileCacheTests" name="TestRead" />
+    </UnitTest>
+    <UnitTest name="TestDispose" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\caching.tests\release_win-x64\caching.tests.dll" id="13b1c169-b067-8744-a536-344a611c3725">
+      <Execution id="edc25e98-8623-4f95-8ed2-743da06db90e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Caching.Tests\release_win-x64\Caching.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Caching.Tests.TempFileCacheTests" name="TestDispose" />
+    </UnitTest>
+    <UnitTest name="TestExtension" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\caching.tests\release_win-x64\caching.tests.dll" id="161bf7b4-4c0a-80f9-a7a9-daa7f749fd5e">
+      <Execution id="2e271950-0de7-4b5d-b1ee-788685b8161c" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Caching.Tests\release_win-x64\Caching.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Caching.Tests.TempFileCacheTests" name="TestExtension" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="1f98b4c3-69ca-8d39-ae60-a12285580402" executionId="5a06067e-ebff-45f6-b41c-57a20ca106be" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1da997f2-075f-85db-a3a9-eb3cc5c03223" executionId="8dce09dd-2ece-4ae6-a06d-d7cbe4bae795" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1c04dc58-2586-85d2-8948-23e283c7c198" executionId="f57be98a-fe80-43ae-825b-52d446f343d9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="13b1c169-b067-8744-a536-344a611c3725" executionId="edc25e98-8623-4f95-8ed2-743da06db90e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="10f5dd94-ac11-8f07-bafd-7fc4a65d0140" executionId="91a1591a-f5b7-468e-bb1e-fa51fea93938" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="161bf7b4-4c0a-80f9-a7a9-daa7f749fd5e" executionId="2e271950-0de7-4b5d-b1ee-788685b8161c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="6" executed="6" passed="6" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test Parallelization enabled for D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Caching.Tests\release_win-x64\Caching.Tests.dll (Workers: 4, Scope: ClassLevel)&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

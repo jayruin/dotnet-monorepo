@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="77302e5e-4b62-4586-b288-b49f64ff2890" name="@sjc20-cw752-a261d2a3-95ac-4f02-a98d-6f28950e73df-4E7057C0C518 2026-01-09 12:50:18" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-01-09T12:50:18.2186670+00:00" queuing="2026-01-09T12:50:18.2186670+00:00" start="2026-01-09T12:50:17.3260620+00:00" finish="2026-01-09T12:50:18.2252100+00:00" />
+  <TestSettings name="default" id="eb73ba44-625e-4ad1-a85c-32b03d75721f">
+    <Deployment runDeploymentRoot="_sjc20-cw752-a261d2a3-95ac-4f02-a98d-6f28950e73df-4E7057C0C518_2026-01-09_12_50_18" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="4501b1c8-8847-4d43-9798-d4291b94ad61" testId="116eae1f-9144-82c5-aecc-984dcda3184f" testName="TestMultipleFileExtensionsForOneMediaType" computerName="sjc20-cw752-a261d2a3-95ac-4f02-a98d-6f28950e73df-4E7057C0C518" duration="00:00:00.0183689" startTime="2026-01-09T12:50:18.0543250+00:00" endTime="2026-01-09T12:50:18.0749540+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4501b1c8-8847-4d43-9798-d4291b94ad61" />
+    <UnitTestResult executionId="f7d5121a-383a-43bd-9ac0-0b66ab6db1d7" testId="16871a75-76f2-8de3-b59a-d29b6a96b288" testName="TestNoEmptyArrays" computerName="sjc20-cw752-a261d2a3-95ac-4f02-a98d-6f28950e73df-4E7057C0C518" duration="00:00:00.0169069" startTime="2026-01-09T12:50:18.0057230+00:00" endTime="2026-01-09T12:50:18.0449910+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f7d5121a-383a-43bd-9ac0-0b66ab6db1d7" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestNoEmptyArrays" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/mediatypes.tests/release_osx-x64/mediatypes.tests.dll" id="16871a75-76f2-8de3-b59a-d29b6a96b288">
+      <Execution id="f7d5121a-383a-43bd-9ac0-0b66ab6db1d7" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/MediaTypes.Tests/release_osx-x64/MediaTypes.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="MediaTypes.Tests.MediaTypeFileExtensionsMappingTests" name="TestNoEmptyArrays" />
+    </UnitTest>
+    <UnitTest name="TestMultipleFileExtensionsForOneMediaType" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/mediatypes.tests/release_osx-x64/mediatypes.tests.dll" id="116eae1f-9144-82c5-aecc-984dcda3184f">
+      <Execution id="4501b1c8-8847-4d43-9798-d4291b94ad61" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/MediaTypes.Tests/release_osx-x64/MediaTypes.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="MediaTypes.Tests.MediaTypeFileExtensionsMappingTests" name="TestMultipleFileExtensionsForOneMediaType" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="116eae1f-9144-82c5-aecc-984dcda3184f" executionId="4501b1c8-8847-4d43-9798-d4291b94ad61" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="16871a75-76f2-8de3-b59a-d29b6a96b288" executionId="f7d5121a-383a-43bd-9ac0-0b66ab6db1d7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test Parallelization enabled for /Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/MediaTypes.Tests/release_osx-x64/MediaTypes.Tests.dll (Workers: 4, Scope: ClassLevel)
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
