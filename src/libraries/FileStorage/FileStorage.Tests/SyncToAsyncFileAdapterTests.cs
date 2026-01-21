@@ -20,7 +20,7 @@ public class SyncToAsyncFileAdapterTests
         IFile syncFile = Substitute.For<IFile>();
         syncFile.Exists().Returns(expected);
         SyncToAsyncFileAdapter asyncAdapter = new(syncFile);
-        bool actual = await asyncAdapter.ExistsAsync(TestContext.CancellationTokenSource.Token);
+        bool actual = await asyncAdapter.ExistsAsync(TestContext.CancellationToken);
         Assert.AreEqual(expected, actual);
     }
 
@@ -32,7 +32,7 @@ public class SyncToAsyncFileAdapterTests
         IFile syncFile = Substitute.For<IFile>();
         syncFile.OpenRead().Returns(expectedStream);
         SyncToAsyncFileAdapter asyncAdapter = new(syncFile);
-        await using Stream actualStream = await asyncAdapter.OpenReadAsync(TestContext.CancellationTokenSource.Token);
+        await using Stream actualStream = await asyncAdapter.OpenReadAsync(TestContext.CancellationToken);
         Assert.AreEqual(expectedStream, actualStream);
     }
 
@@ -43,7 +43,7 @@ public class SyncToAsyncFileAdapterTests
         IFile syncFile = Substitute.For<IFile>();
         syncFile.OpenWrite().Returns(expectedStream);
         SyncToAsyncFileAdapter asyncAdapter = new(syncFile);
-        await using Stream actualStream = await asyncAdapter.OpenWriteAsync(TestContext.CancellationTokenSource.Token);
+        await using Stream actualStream = await asyncAdapter.OpenWriteAsync(TestContext.CancellationToken);
         Assert.AreEqual(expectedStream, actualStream);
     }
 
@@ -52,7 +52,7 @@ public class SyncToAsyncFileAdapterTests
     {
         IFile syncFile = Substitute.For<IFile>();
         SyncToAsyncFileAdapter asyncAdapter = new(syncFile);
-        await asyncAdapter.DeleteAsync(TestContext.CancellationTokenSource.Token);
+        await asyncAdapter.DeleteAsync(TestContext.CancellationToken);
         syncFile.Received().Delete();
     }
 

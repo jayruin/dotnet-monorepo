@@ -15,7 +15,7 @@ public sealed class RepositoriesIntegrationTests : IntegrationTests
     {
         string owner = "octocat";
         string repo = "Hello-World";
-        var repository = await ApiClient.GetRepositoryAsync(owner, repo, TestContext.CancellationTokenSource.Token);
+        var repository = await ApiClient.GetRepositoryAsync(owner, repo, TestContext.CancellationToken);
         Assert.AreEqual(1296269, repository.Id);
         Assert.AreEqual(owner, repository.Owner.Login);
         Assert.AreEqual(583231, repository.Owner.Id);
@@ -24,7 +24,7 @@ public sealed class RepositoriesIntegrationTests : IntegrationTests
     [TestMethod]
     public async Task TestGetNonexistentRepositoryAsync()
     {
-        HttpRequestException exception = await Assert.ThrowsExactlyAsync<HttpRequestException>(() => ApiClient.GetRepositoryAsync("account", "repo", TestContext.CancellationTokenSource.Token));
+        HttpRequestException exception = await Assert.ThrowsExactlyAsync<HttpRequestException>(() => ApiClient.GetRepositoryAsync("account", "repo", TestContext.CancellationToken));
         Assert.AreEqual(HttpStatusCode.NotFound, exception.StatusCode);
     }
 }

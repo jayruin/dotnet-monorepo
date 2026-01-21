@@ -17,7 +17,7 @@ public sealed class ReleasesIntegrationTests : IntegrationTests
     public async Task TestGetReleasesAsync()
     {
         List<Release> releases = [];
-        await foreach (Release release in ApiClient.GetReleasesAsync("actions", "setup-dotnet", new PaginationOptions { PerPage = 10, Page = 1 }, TestContext.CancellationTokenSource.Token))
+        await foreach (Release release in ApiClient.GetReleasesAsync("actions", "setup-dotnet", new PaginationOptions { PerPage = 10, Page = 1 }, TestContext.CancellationToken))
         {
             releases.Add(release);
         }
@@ -28,7 +28,7 @@ public sealed class ReleasesIntegrationTests : IntegrationTests
     public async Task TestGetReleaseAssetsAsync()
     {
         List<ReleaseAsset> releaseAssets = [];
-        await foreach (ReleaseAsset releaseAsset in ApiClient.GetReleaseAssetsAsync("cli", "cli", 22808788, new PaginationOptions { PerPage = 5, Page = 1 }, TestContext.CancellationTokenSource.Token))
+        await foreach (ReleaseAsset releaseAsset in ApiClient.GetReleaseAssetsAsync("cli", "cli", 22808788, new PaginationOptions { PerPage = 5, Page = 1 }, TestContext.CancellationToken))
         {
             releaseAssets.Add(releaseAsset);
         }
@@ -39,8 +39,8 @@ public sealed class ReleasesIntegrationTests : IntegrationTests
     public async Task TestDownloadReleaseAsync()
     {
         string url = "https://api.github.com/repos/cli/cli/releases/assets/17320341";
-        await using Stream stream = await ApiClient.DownloadAsync(url, TestContext.CancellationTokenSource.Token);
-        string actual = Encoding.UTF8.GetString(await stream.ToByteArrayAsync(TestContext.CancellationTokenSource.Token));
+        await using Stream stream = await ApiClient.DownloadAsync(url, TestContext.CancellationToken);
+        string actual = Encoding.UTF8.GetString(await stream.ToByteArrayAsync(TestContext.CancellationToken));
         string expected = string.Join('\n',
             "85f9b895aab95c9882dfdb55193f9330514ab6e80777a972da04483c7a117010  gh_0.4.0_macOS_amd64.tar.gz",
             "e050d6f6a760a6093d3ea62a3d0aea26f45489a6c6954aa105ed951593a537fe  gh_0.4.0_linux_amd64.rpm",

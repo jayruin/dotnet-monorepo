@@ -21,7 +21,7 @@ public class SyncToAsyncDirectoryAdapterTests
         IDirectory syncDirectory = Substitute.For<IDirectory>();
         syncDirectory.Exists().Returns(expected);
         SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
-        bool actual = await asyncAdapter.ExistsAsync(TestContext.CancellationTokenSource.Token);
+        bool actual = await asyncAdapter.ExistsAsync(TestContext.CancellationToken);
         Assert.AreEqual(expected, actual);
     }
 
@@ -32,8 +32,8 @@ public class SyncToAsyncDirectoryAdapterTests
         IDirectory syncDirectory = Substitute.For<IDirectory>();
         syncDirectory.EnumerateFiles().Returns(expectedFiles);
         SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
-        List<IFile> actualFiles = await asyncAdapter.EnumerateFilesAsync(TestContext.CancellationTokenSource.Token)
-            .ToListAsync(TestContext.CancellationTokenSource.Token);
+        List<IFile> actualFiles = await asyncAdapter.EnumerateFilesAsync(TestContext.CancellationToken)
+            .ToListAsync(TestContext.CancellationToken);
         CollectionAssert.AreEqual(expectedFiles, actualFiles);
     }
 
@@ -44,8 +44,8 @@ public class SyncToAsyncDirectoryAdapterTests
         IDirectory syncDirectory = Substitute.For<IDirectory>();
         syncDirectory.EnumerateDirectories().Returns(expectedDirectories);
         SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
-        List<IDirectory> actualDirectories = await asyncAdapter.EnumerateDirectoriesAsync(TestContext.CancellationTokenSource.Token)
-            .ToListAsync(TestContext.CancellationTokenSource.Token);
+        List<IDirectory> actualDirectories = await asyncAdapter.EnumerateDirectoriesAsync(TestContext.CancellationToken)
+            .ToListAsync(TestContext.CancellationToken);
         CollectionAssert.AreEqual(expectedDirectories, actualDirectories);
     }
 
@@ -54,7 +54,7 @@ public class SyncToAsyncDirectoryAdapterTests
     {
         IDirectory syncDirectory = Substitute.For<IDirectory>();
         SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
-        await asyncAdapter.CreateAsync(TestContext.CancellationTokenSource.Token);
+        await asyncAdapter.CreateAsync(TestContext.CancellationToken);
         syncDirectory.Received().Create();
     }
 
@@ -63,7 +63,7 @@ public class SyncToAsyncDirectoryAdapterTests
     {
         IDirectory syncDirectory = Substitute.For<IDirectory>();
         SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
-        await asyncAdapter.DeleteAsync(TestContext.CancellationTokenSource.Token);
+        await asyncAdapter.DeleteAsync(TestContext.CancellationToken);
         syncDirectory.Received().Delete();
     }
 

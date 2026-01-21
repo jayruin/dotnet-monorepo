@@ -35,15 +35,15 @@ public class SqliteTests
         using TempFile tempFile = new();
         SqliteDataSourceFactory dataSourceFactory = new();
         DbDataSource dataSource = dataSourceFactory.CreateDataSource(tempFile.FilePath, SqliteOpenMode.ReadWriteCreate);
-        await dataSource.ExecuteCommandAsync($"CREATE TABLE TESTTABLE (ID INT PRIMARY KEY NOT NULL, VALUE TEXT NOT NULL);", TestContext.CancellationTokenSource.Token);
+        await dataSource.ExecuteCommandAsync($"CREATE TABLE TESTTABLE (ID INT PRIMARY KEY NOT NULL, VALUE TEXT NOT NULL);", TestContext.CancellationToken);
         await dataSource.ExecuteCommandAsync($"INSERT INTO TESTTABLE (ID, VALUE) VALUES ({1}, {"a"})",
-            TestContext.CancellationTokenSource.Token);
+            TestContext.CancellationToken);
         await dataSource.ExecuteCommandAsync($"INSERT INTO TESTTABLE (ID, VALUE) VALUES ({2}, {"b"})",
-            TestContext.CancellationTokenSource.Token);
+            TestContext.CancellationToken);
         List<string> results = [];
         IAsyncEnumerable<string> queryResults = dataSource.ExecuteCommandAsync($"SELECT * FROM TESTTABLE",
             async row => $"{await row.GetValueAsync<int>(0)}{await row.GetValueAsync<string>(1)}",
-            TestContext.CancellationTokenSource.Token);
+            TestContext.CancellationToken);
         await foreach (string queryResult in queryResults)
         {
             results.Add(queryResult);
@@ -74,13 +74,13 @@ public class SqliteTests
         SqliteDataSourceFactory dataSourceFactory = new();
         DbDataSource dataSource = dataSourceFactory.CreateDataSource(tempFile.FilePath, SqliteOpenMode.ReadWriteCreate);
         await dataSource.ExecuteCommandAsync($"CREATE TABLE TESTTABLE (ID INT PRIMARY KEY NOT NULL, VALUE TEXT);",
-            TestContext.CancellationTokenSource.Token);
+            TestContext.CancellationToken);
         await dataSource.ExecuteCommandAsync($"INSERT INTO TESTTABLE (ID, VALUE) VALUES ({1}, {null})",
-            TestContext.CancellationTokenSource.Token);
+            TestContext.CancellationToken);
         List<bool> results = [];
         IAsyncEnumerable<bool> queryResults = dataSource.ExecuteCommandAsync($"SELECT * FROM TESTTABLE",
             row => row.IsDBNullAsync(1),
-            TestContext.CancellationTokenSource.Token);
+            TestContext.CancellationToken);
         await foreach (bool queryResult in queryResults)
         {
             results.Add(queryResult);

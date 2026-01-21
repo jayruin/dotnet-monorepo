@@ -16,14 +16,14 @@ public sealed class UsersIntegrationTests : IntegrationTests
         // Use client with no token
         using HttpClient httpClient = new();
         GithubApiClient apiClient = new(httpClient);
-        await Assert.ThrowsExactlyAsync<HttpRequestException>(() => apiClient.GetAuthenticatedUserAsync(TestContext.CancellationTokenSource.Token));
+        await Assert.ThrowsExactlyAsync<HttpRequestException>(() => apiClient.GetAuthenticatedUserAsync(TestContext.CancellationToken));
     }
 
     [TestMethod]
     public async Task TestGetUserAsync()
     {
         string username = "octocat";
-        var account = await ApiClient.GetUserAsync(username, TestContext.CancellationTokenSource.Token);
+        var account = await ApiClient.GetUserAsync(username, TestContext.CancellationToken);
         Assert.AreEqual(username, account.Login);
         Assert.AreEqual(583231, account.Id);
     }
@@ -31,7 +31,7 @@ public sealed class UsersIntegrationTests : IntegrationTests
     [TestMethod]
     public async Task TestGetNonexistentUserAsync()
     {
-        HttpRequestException exception = await Assert.ThrowsExactlyAsync<HttpRequestException>(() => ApiClient.GetUserAsync("account", TestContext.CancellationTokenSource.Token));
+        HttpRequestException exception = await Assert.ThrowsExactlyAsync<HttpRequestException>(() => ApiClient.GetUserAsync("account", TestContext.CancellationToken));
         Assert.AreEqual(HttpStatusCode.NotFound, exception.StatusCode);
     }
 }
