@@ -352,7 +352,8 @@ internal sealed class Repo
                 && !projectNamesSet.Any(pn => project.Name.Contains(pn, StringComparison.OrdinalIgnoreCase))) continue;
             Traverse(project, projectsAndDependencies);
         }
-        return [.. projectsAndDependencies.DistinctBy(p => p.Name)];
+        ImmutableArray<Project> result = [.. projectsAndDependencies.DistinctBy(p => p.Name)];
+        return result;
     }
 
     private static void Traverse(Project currentProject, List<Project> projectsAndDependencies)
@@ -478,16 +479,14 @@ internal static class ProjectLoader
                 kvp => kvp.Value,
                 kvp => kvp.Key
             );
-        Dictionary<string, List<string>> projectNamesToProjectReferences = projectNamesToCsprojFiles
+        Dictionary<string, List<(string?, string?)>> projectNamesToProjectReferences = projectNamesToCsprojFiles
             .ToDictionary(
                 kvp => kvp.Key,
                 kvp => Xml.LoadDocument(kvp.Value)
                     .Element("Project")
                     ?.Elements("ItemGroup")
                     ?.Elements("ProjectReference")
-                    ?.Select(e => e.Attribute("Include")?.Value)
-                    ?.OfType<string>()
-                    ?.Select(i => i.TrimStart('$').TrimStart('(').TrimEnd(')'))
+                    ?.Select(e => (e.Attribute("Include")?.Value.TrimStart('$').TrimStart('(').TrimEnd(')'), e.Attribute("Exclude")?.Value.TrimStart('$').TrimStart('(').TrimEnd(')')))
                     ?.ToList()
                     ?? []
             );
@@ -495,7 +494,17 @@ internal static class ProjectLoader
             .ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value
-                    .SelectMany(projectReference => projectReferencesToCsprojFiles[projectReference])
+                    .SelectMany(projectReference =>
+                    {
+                        (string? include, string? exclude) = projectReference;
+                        if (string.IsNullOrWhiteSpace(include)) return [];
+                        IEnumerable<string> csprojFiles = projectReferencesToCsprojFiles[include];
+                        if (!string.IsNullOrWhiteSpace(exclude))
+                        {
+                            csprojFiles = csprojFiles.Except(projectReferencesToCsprojFiles[exclude]);
+                        }
+                        return csprojFiles.ToList();
+                    })
                     .Select(csprojFile => csprojFilesToProjectNames[csprojFile])
                     .ToList()
             );
