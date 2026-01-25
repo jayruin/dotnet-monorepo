@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="c7987141-857b-4d2e-898d-c2d992f10eb0" name="@sjc22-be111-0ebced29-bb31-4b05-9222-638211c2ffd8-2A4E0E58F619 2026-01-25 21:35:19" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-01-25T21:35:19.7518850+00:00" queuing="2026-01-25T21:35:19.7518850+00:00" start="2026-01-25T21:35:18.5723760+00:00" finish="2026-01-25T21:35:19.7617960+00:00" />
+  <TestSettings name="default" id="5d74f21c-30cc-4534-b552-314ea8db0a5c">
+    <Deployment runDeploymentRoot="_sjc22-be111-0ebced29-bb31-4b05-9222-638211c2ffd8-2A4E0E58F619_2026-01-25_21_35_19" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="33fe99df-1389-49bb-bec5-05e1bf1dfa94" testId="1d0d56e0-30b0-857a-9023-a94ee82b3960" testName="TestNonZeroExitCode" computerName="sjc22-be111-0ebced29-bb31-4b05-9222-638211c2ffd8-2A4E0E58F619" duration="00:00:00.3048772" startTime="2026-01-25T21:35:19.3584030+00:00" endTime="2026-01-25T21:35:19.6644380+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="33fe99df-1389-49bb-bec5-05e1bf1dfa94" />
+    <UnitTestResult executionId="392c1c33-617f-4e51-8c4a-5c0432df0ba3" testId="189464b8-fc8a-831f-955d-0835ace877c1" testName="TestZeroExitCode" computerName="sjc22-be111-0ebced29-bb31-4b05-9222-638211c2ffd8-2A4E0E58F619" duration="00:00:00.2530910" startTime="2026-01-25T21:35:19.0902520+00:00" endTime="2026-01-25T21:35:19.3555250+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="392c1c33-617f-4e51-8c4a-5c0432df0ba3" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestZeroExitCode" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/subprocesses.tests/release_osx-arm64/subprocesses.tests.dll" id="189464b8-fc8a-831f-955d-0835ace877c1">
+      <Execution id="392c1c33-617f-4e51-8c4a-5c0432df0ba3" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Subprocesses.Tests/release_osx-arm64/Subprocesses.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Subprocesses.Tests.SubprocessRunnerTests" name="TestZeroExitCode" />
+    </UnitTest>
+    <UnitTest name="TestNonZeroExitCode" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/subprocesses.tests/release_osx-arm64/subprocesses.tests.dll" id="1d0d56e0-30b0-857a-9023-a94ee82b3960">
+      <Execution id="33fe99df-1389-49bb-bec5-05e1bf1dfa94" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Subprocesses.Tests/release_osx-arm64/Subprocesses.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Subprocesses.Tests.SubprocessRunnerTests" name="TestNonZeroExitCode" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="1d0d56e0-30b0-857a-9023-a94ee82b3960" executionId="33fe99df-1389-49bb-bec5-05e1bf1dfa94" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="189464b8-fc8a-831f-955d-0835ace877c1" executionId="392c1c33-617f-4e51-8c4a-5c0432df0ba3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test Parallelization enabled for /Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Subprocesses.Tests/release_osx-arm64/Subprocesses.Tests.dll (Workers: 3, Scope: ClassLevel)
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
