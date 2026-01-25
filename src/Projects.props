@@ -15,6 +15,7 @@
     <Proj_MediaTypes>$(MSBuildThisFileDirectory)**\MediaTypes.csproj</Proj_MediaTypes>
     <Proj_PdfProj>$(MSBuildThisFileDirectory)**\PdfProj.csproj</Proj_PdfProj>
     <Proj_Pdfs>$(MSBuildThisFileDirectory)**\Pdfs.csproj</Proj_Pdfs>
+    <Proj_SourceGenerators>$(MSBuildThisFileDirectory)**\SourceGenerators.csproj</Proj_SourceGenerators>
     <Proj_Subprocesses>$(MSBuildThisFileDirectory)**\Subprocesses.csproj</Proj_Subprocesses>
     <Proj_Temp>$(MSBuildThisFileDirectory)**\Temp.csproj</Proj_Temp>
     <Proj_Utils>$(MSBuildThisFileDirectory)**\Utils.csproj</Proj_Utils>
@@ -22,11 +23,14 @@
 
   <PropertyGroup>
     <Proj_umm_App>$(MSBuildThisFileDirectory)**\umm.App.csproj</Proj_umm_App>
+    <Proj_umm_Auto_Plugins>$(MSBuildThisFileDirectory)**\umm.Auto.Plugins.csproj</Proj_umm_Auto_Plugins>
     <Proj_umm_Auto_Vendors>$(MSBuildThisFileDirectory)**\umm.Auto.Vendors.csproj</Proj_umm_Auto_Vendors>
     <Proj_umm_Catalog>$(MSBuildThisFileDirectory)**\umm.Catalog.csproj</Proj_umm_Catalog>
     <Proj_umm_ExportCache>$(MSBuildThisFileDirectory)**\umm.ExportCache.csproj</Proj_umm_ExportCache>
     <Proj_umm_Library>$(MSBuildThisFileDirectory)**\umm.Library.csproj</Proj_umm_Library>
     <Proj_umm_Plugins_Abstractions>$(MSBuildThisFileDirectory)**\umm.Plugins.Abstractions.csproj</Proj_umm_Plugins_Abstractions>
+    <Proj_umm_Plugins_All>$(MSBuildThisFileDirectory)**\umm.Plugins.*.csproj</Proj_umm_Plugins_All>
+    <Proj_umm_Plugins_Tests_All>$(MSBuildThisFileDirectory)**\umm.Plugins.*.Tests.csproj</Proj_umm_Plugins_Tests_All>
     <Proj_umm_SearchIndex>$(MSBuildThisFileDirectory)**\umm.SearchIndex.csproj</Proj_umm_SearchIndex>
     <Proj_umm_Storages>$(MSBuildThisFileDirectory)**\umm.Storages.csproj</Proj_umm_Storages>
     <Proj_umm_Vendors_All>$(MSBuildThisFileDirectory)**\umm.Vendors.*.csproj</Proj_umm_Vendors_All>

@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(Props_SourceGenerator)" />
+
+  <ItemGroup>
+    <ProjectReference Include="$(Proj_SourceGenerators)" />
+  </ItemGroup>
+</Project>

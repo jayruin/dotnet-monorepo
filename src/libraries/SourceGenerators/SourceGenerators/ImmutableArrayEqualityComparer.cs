@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace umm.Auto.Vendors;
+namespace SourceGenerators;
 
-internal sealed class ImmutableArrayEqualityComparer<T> : IEqualityComparer<ImmutableArray<T>>
+public sealed class ImmutableArrayEqualityComparer<T> : IEqualityComparer<ImmutableArray<T>>
 {
     private static readonly Lazy<ImmutableArrayEqualityComparer<T>> _lazy = new(() => new());
 
