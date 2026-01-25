@@ -84,27 +84,24 @@ namespace {{classToGenerate.Namespace}};
 internal static partial class {{classToGenerate.ClassName}}
 {
 """);
-        stringBuilder.Append("""
+        stringBuilder.AppendLine("""
     public static IEnumerable<ICliPlugin> GetCliPlugins()
     {
 """);
         foreach (PluginClass cliPlugin in cliPlugins.OrderBy(p => p.ClassName))
         {
-            stringBuilder.Append(cliPlugin.RequiresDynamicCode
+            stringBuilder.AppendLine(cliPlugin.RequiresDynamicCode
                 ? $$"""
-
         if (RuntimeFeature.IsDynamicCodeSupported)
         {
             yield return new {{cliPlugin.ClassName}}();
         }
 """
                 : $"""
-
         yield return new {cliPlugin.ClassName}();
 """);
         }
         stringBuilder.AppendLine($$"""
-
         yield break;
     }
 """);

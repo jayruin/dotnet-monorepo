@@ -9,6 +9,11 @@ namespace umm.App;
 
 public static class Application
 {
+    public static Task<int> RunAsync(params IReadOnlyList<string> args)
+        => CreateRootCommand(AutoPlugins.GetCliPlugins(), AutoPlugins.GetServerPlugins())
+            .Parse(args)
+            .InvokeAsync();
+
     public static RootCommand CreateRootCommand(IEnumerable<ICliPlugin> cliPlugins, IEnumerable<IServerPlugin> serverPlugins)
     {
         RootCommand rootCommand = new("Universal Media Manager")
