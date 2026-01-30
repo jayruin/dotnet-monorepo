@@ -6,5 +6,5 @@ namespace umm.Plugins.Abstractions;
 public interface ICliPlugin : IPlugin
 {
     IAppInitialization CreateInitialization();
-    Command CreateCommand(IAppInitialization initialization);
+    Command? CreateCommand(IAppInitialization initialization);
 }

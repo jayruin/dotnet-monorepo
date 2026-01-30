@@ -33,7 +33,8 @@ public static class Application
     private static void AddCliPlugins(RootCommand rootCommand, IEnumerable<ICliPlugin> cliPlugins)
     {
         Dictionary<string, List<ICliPlugin>> tagsToPlugins = [];
-        foreach (ICliPlugin plugin in cliPlugins)
+        List<ICliPlugin> allPlugins = [.. cliPlugins];
+        foreach (ICliPlugin plugin in allPlugins)
         {
             foreach (string tag in plugin.Tags)
             {
@@ -45,7 +46,7 @@ public static class Application
                 tagPlugins.Add(plugin);
             }
         }
-        foreach (ICliPlugin plugin in cliPlugins)
+        foreach (ICliPlugin plugin in allPlugins)
         {
             IAppInitialization initialization = Initialization.Combine(
                 [
@@ -55,8 +56,11 @@ public static class Application
                         .Distinct()
                         .Select(p => p.CreateInitialization()),
                 ]);
-            Command command = plugin.CreateCommand(initialization);
-            rootCommand.Add(command);
+            Command? command = plugin.CreateCommand(initialization);
+            if (command is not null)
+            {
+                rootCommand.Add(command);
+            }
         }
     }
 #if DEBUG
