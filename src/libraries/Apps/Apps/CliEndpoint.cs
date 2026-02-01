@@ -79,7 +79,7 @@ public static class CliEndpoint
             });
         });
         webApplicationBuilder.WebHost.UseKestrelCore()
-            //.ConfigureKestrel(o => o.AllowSynchronousIO = true)
+            .ConfigureKestrel(o => o.AllowSynchronousIO = true)
             .UseUrls([.. urls]);
         InitializeDefaultConfigurationSources(webApplicationBuilder.Configuration);
         initialization.InitializeConfigurationSources(webApplicationBuilder.Configuration, webApplicationBuilder.Configuration);
