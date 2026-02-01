@@ -1,5 +1,6 @@
 using EpubProj;
 using FileStorage;
+using Images;
 using MediaTypes;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
@@ -22,15 +23,18 @@ namespace umm.Vendors.EpubProj;
 
 public sealed class EpubProjVendor : IMediaVendor
 {
+    private static readonly ImmutableArray<string> CoverMediaTypes = [MediaType.Image.Jpeg, MediaType.Image.Png, MediaType.Image.Webp];
+
     private readonly IMetadataStorage _metadataStorage;
     private readonly IBlobStorage _blobStorage;
     private readonly ITagsStorage _tagsStorage;
     private readonly ILogger<EpubProjVendor> _logger;
     private readonly IEpubProjectLoader _projectLoader;
     private readonly IMediaTypeFileExtensionsMapping _mediaTypeFileExtensionsMapping;
+    private readonly IImageLoader _imageLoader;
 
     public EpubProjVendor(IMetadataStorage metadataStorage, IBlobStorage blobStorage, ITagsStorage tagsStorage,
-        IEpubProjectLoader projectLoader, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping,
+        IEpubProjectLoader projectLoader, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, IImageLoader imageLoader,
         ILogger<EpubProjVendor> logger)
     {
         _metadataStorage = metadataStorage;
@@ -39,6 +43,7 @@ public sealed class EpubProjVendor : IMediaVendor
         _logger = logger;
         _projectLoader = projectLoader;
         _mediaTypeFileExtensionsMapping = mediaTypeFileExtensionsMapping;
+        _imageLoader = imageLoader;
     }
 
     public const string Id = "epubproj";
@@ -91,19 +96,24 @@ public sealed class EpubProjVendor : IMediaVendor
                     return;
                 }
             }
-            if (project.CoverFile is not null)
+            if (CoverMediaTypes.Contains(mediaType) && project.CoverFile is not null)
             {
+                _logger.LogExportingFile(VendorId, contentId, partId, mediaType);
                 string? coverMediaType = _mediaTypeFileExtensionsMapping.GetMediaType(project.CoverFile.Extension);
-                if (mediaType == coverMediaType)
+                Stream sourceStream = await project.CoverFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
+                await using (sourceStream.ConfigureAwait(false))
                 {
-                    _logger.LogExportingFile(VendorId, contentId, partId, mediaType);
-                    Stream sourceStream = await project.CoverFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
-                    await using (sourceStream.ConfigureAwait(false))
+                    if (coverMediaType == mediaType)
                     {
                         await sourceStream.CopyToAsync(stream, cancellationToken).ConfigureAwait(false);
                     }
-                    return;
+                    else
+                    {
+                        IImage image = await _imageLoader.LoadImageAsync(sourceStream, cancellationToken).ConfigureAwait(false);
+                        await image.SaveToAsync(stream, ImageFormatParser.FromMediaType(mediaType), cancellationToken).ConfigureAwait(false);
+                    }
                 }
+                return;
             }
         }
         throw new InvalidOperationException($"{VendorId} - Unsupported MediaType {mediaType} for file export.");
@@ -251,9 +261,12 @@ public sealed class EpubProjVendor : IMediaVendor
         if (project.CoverFile is not null)
         {
             string? coverMediaType = _mediaTypeFileExtensionsMapping.GetMediaType(project.CoverFile.Extension);
-            if (coverMediaType is not null)
+            if (coverMediaType is not null && CoverMediaTypes.Contains(coverMediaType))
             {
-                yield return new(coverMediaType, true, false);
+                foreach (string mediaType in CoverMediaTypes)
+                {
+                    yield return new(mediaType, true, false);
+                }
             }
         }
     }
