@@ -157,13 +157,13 @@ public sealed class EpubProjVendor : IMediaVendor
             },
             new()
             {
-                Aliases = ["vendorid"],
+                Aliases = [nameof(MediaFullId.VendorId)],
                 Values = [VendorId],
                 ExactMatch = true,
             },
             new()
             {
-                Aliases = ["contentid"],
+                Aliases = [nameof(MediaFullId.ContentId)],
                 Values = [contentId],
                 ExactMatch = true,
             },
@@ -176,7 +176,7 @@ public sealed class EpubProjVendor : IMediaVendor
                 ImmutableArray<MetadataSearchField> epub3SearchFields = [
                     new()
                     {
-                        Aliases = ["partid"],
+                        Aliases = [nameof(MediaFullId.PartId)],
                         Values = [string.Empty],
                         ExactMatch = true,
                     },
@@ -204,7 +204,7 @@ public sealed class EpubProjVendor : IMediaVendor
                 ImmutableArray<MetadataSearchField> epub2SearchFields = [
                     new()
                     {
-                        Aliases = ["partid"],
+                        Aliases = [nameof(MediaFullId.PartId)],
                         Values = [Epub2Id],
                         ExactMatch = true,
                     },

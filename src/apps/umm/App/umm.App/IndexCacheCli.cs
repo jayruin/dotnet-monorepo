@@ -26,7 +26,10 @@ internal static class IndexCacheCli
 
     private static Command CreateRebuildCommand()
     {
-        Argument<IEnumerable<string>> vendorIdsArgument = new("vendorIds");
+        Argument<IEnumerable<string>> vendorIdsArgument = new("vendorIds")
+        {
+            DefaultValueFactory = _ => [],
+        };
         Option<bool> searchIndexOption = CreateSearchQueryOption();
         Option<bool> exportCacheOption = CreateExportCacheOption();
         Command command = new("rebuild")

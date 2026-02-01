@@ -71,7 +71,12 @@ internal static class ExportCli
         List<string> formatsList = [.. formats];
         IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping = serviceProvider.GetRequiredService<IMediaTypeFileExtensionsMapping>();
         IMediaCatalog catalog = serviceProvider.GetRequiredService<IMediaCatalog>();
-        await foreach (MediaEntry mediaEntry in catalog.EnumerateAsync(searchQuery, cancellationToken).ConfigureAwait(false))
+        SearchOptions searchOptions = new()
+        {
+            IncludeParts = true,
+            Pagination = null,
+        };
+        await foreach (MediaEntry mediaEntry in catalog.EnumerateAsync(searchQuery, searchOptions, cancellationToken).ConfigureAwait(false))
         {
             foreach (MediaExportTarget exportTarget in mediaEntry.ExportTargets)
             {

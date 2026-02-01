@@ -10,9 +10,8 @@ namespace umm.Catalog;
 
 public interface IMediaCatalog
 {
-    IAsyncEnumerable<MediaEntry> EnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, CancellationToken cancellationToken = default);
-    IAsyncEnumerable<MediaEntry> EnumeratePageAsync(IReadOnlyDictionary<string, StringValues> searchQuery, MediaFullId? after, int count, CancellationToken cancellationToken = default);
-    IAsyncEnumerable<MediaEntry> EnumeratePageAsync(string searchTerm, MediaFullId? after, int count, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<MediaEntry> EnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, SearchOptions searchOptions, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<MediaEntry> EnumerateAsync(string searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default);
     Task<MediaEntry?> GetMediaEntryAsync(MediaFullId id, CancellationToken cancellationToken = default);
     Task ExportAsync(MediaFullId id, string mediaType, Stream stream, CancellationToken cancellationToken = default);
     Task ExportAsync(MediaFullId id, string mediaType, IDirectory directory, CancellationToken cancellationToken = default);

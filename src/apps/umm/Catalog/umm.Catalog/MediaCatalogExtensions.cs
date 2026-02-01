@@ -8,12 +8,15 @@ namespace umm.Catalog;
 
 public static class MediaCatalogExtensions
 {
-    public static async Task ExportAsync(this IMediaCatalog mediaCatalog, MediaFullId id, string mediaType, IFile file, CancellationToken cancellationToken = default)
+    extension(IMediaCatalog mediaCatalog)
     {
-        Stream stream = await file.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
-        await using (stream.ConfigureAwait(false))
+        public async Task ExportAsync(MediaFullId id, string mediaType, IFile file, CancellationToken cancellationToken = default)
         {
-            await mediaCatalog.ExportAsync(id, mediaType, stream, cancellationToken).ConfigureAwait(false);
+            Stream stream = await file.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
+            await using (stream.ConfigureAwait(false))
+            {
+                await mediaCatalog.ExportAsync(id, mediaType, stream, cancellationToken).ConfigureAwait(false);
+            }
         }
     }
 }

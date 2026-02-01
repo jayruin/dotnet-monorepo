@@ -55,19 +55,19 @@ public sealed class SinglePartSearchEntryEnumerationHandler<TMetadata>
                 },
                 new()
                 {
-                    Aliases = ["vendorid"],
+                    Aliases = [nameof(MediaFullId.VendorId)],
                     Values = [_strategy.VendorContext.VendorId],
                     ExactMatch = true,
                 },
                 new()
                 {
-                    Aliases = ["contentid"],
+                    Aliases = [nameof(MediaFullId.ContentId)],
                     Values = [contentId],
                     ExactMatch = true,
                 },
                 new()
                 {
-                    Aliases = ["partid"],
+                    Aliases = [nameof(MediaFullId.PartId)],
                     Values = [string.Empty],
                     ExactMatch = true,
                 },

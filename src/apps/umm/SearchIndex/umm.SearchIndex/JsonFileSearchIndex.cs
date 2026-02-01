@@ -24,52 +24,20 @@ public sealed class JsonFileSearchIndex : ISearchIndex, IDisposable
         _allEntries = ReadAllEntries();
     }
 
-    public IAsyncEnumerable<MediaEntry> EnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<MediaEntry> EnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, SearchOptions searchOptions, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return _allEntries
-            .Where(kvp => SearchQuery.MatchesExactly(searchQuery, ["vendorid"], [kvp.Key]))
-            .SelectMany(kvp => kvp.Value)
-            .Where(e => SearchQuery.Matches(searchQuery, e.MetadataSearchFields))
-            .Select(e => e.MediaEntry)
-            .OrderBy(e => e.Id.VendorId)
-            .ThenBy(e => e.Id.ContentId)
-            .ThenBy(e => e.Id.PartId)
-            .ToAsyncEnumerable();
+        IEnumerable<MediaEntry> results = Enumerate(searchQuery);
+        results = ApplySearchOptions(results, searchOptions);
+        return results.ToAsyncEnumerable();
     }
 
-    public IAsyncEnumerable<MediaEntry> EnumeratePageAsync(IReadOnlyDictionary<string, StringValues> searchQuery, MediaFullId? after, int count, CancellationToken cancellationToken = default)
-    {
-        IAsyncEnumerable<MediaEntry> result = EnumerateAsync(searchQuery, cancellationToken);
-        if (after is not null)
-        {
-            result = result
-                .SkipWhile(e => e.Id != after)
-                .Skip(1);
-        }
-        result = result.Take(count);
-        return result;
-    }
-
-    public IAsyncEnumerable<MediaEntry> EnumeratePageAsync(string searchTerm, MediaFullId? after, int count, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<MediaEntry> EnumerateAsync(string searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        IAsyncEnumerable<MediaEntry> result = _allEntries
-            .SelectMany(kvp => kvp.Value)
-            .Where(e => SearchQuery.Matches(searchTerm, e.MetadataSearchFields))
-            .Select(e => e.MediaEntry)
-            .OrderBy(e => e.Id.VendorId)
-            .ThenBy(e => e.Id.ContentId)
-            .ThenBy(e => e.Id.PartId)
-            .ToAsyncEnumerable();
-        if (after is not null)
-        {
-            result = result
-                .SkipWhile(e => e.Id != after)
-                .Skip(1);
-        }
-        result = result.Take(count);
-        return result;
+        IEnumerable<MediaEntry> results = Enumerate(searchTerm);
+        results = ApplySearchOptions(results, searchOptions);
+        return results.ToAsyncEnumerable();
     }
 
     public Task<MediaEntry?> GetMediaEntryAsync(MediaFullId id, CancellationToken cancellationToken = default)
@@ -123,6 +91,53 @@ public sealed class JsonFileSearchIndex : ISearchIndex, IDisposable
     public void Dispose()
     {
         _semaphoreSlim.Dispose();
+    }
+
+    private IEnumerable<MediaEntry> Enumerate(IReadOnlyDictionary<string, StringValues> searchQuery)
+    {
+        return _allEntries
+            .Where(kvp => SearchQuery.MatchesExactly(searchQuery, [nameof(MediaFullId.VendorId)], [kvp.Key]))
+            .SelectMany(kvp => kvp.Value)
+            .Where(e => SearchQuery.Matches(searchQuery, e.MetadataSearchFields))
+            .Select(e => e.MediaEntry)
+            .OrderBy(e => e.Id.VendorId)
+            .ThenBy(e => e.Id.ContentId)
+            .ThenBy(e => e.Id.PartId);
+    }
+
+    private IEnumerable<MediaEntry> Enumerate(string searchTerm)
+    {
+        return _allEntries
+            .SelectMany(kvp => kvp.Value)
+            .Where(e => SearchQuery.Matches(searchTerm, e.MetadataSearchFields))
+            .Select(e => e.MediaEntry)
+            .OrderBy(e => e.Id.VendorId)
+            .ThenBy(e => e.Id.ContentId)
+            .ThenBy(e => e.Id.PartId);
+    }
+
+    private IEnumerable<MediaEntry> ApplySearchOptions(IEnumerable<MediaEntry> entries, SearchOptions searchOptions)
+    {
+        IEnumerable<MediaEntry> results = entries;
+        if (!searchOptions.IncludeParts)
+        {
+            results = results
+                .GroupBy(e => e.Id.ToMainId())
+                .Select(g => g.Key.ToFullId())
+                .Select(id => _allEntries[id.VendorId].First(e => e.MediaEntry.Id == id))
+                .Select(e => e.MediaEntry);
+        }
+        if (searchOptions.Pagination is not null)
+        {
+            if (searchOptions.Pagination.After is not null)
+            {
+                results = results
+                    .SkipWhile(e => e.Id != searchOptions.Pagination.After)
+                    .Skip(1);
+            }
+            results = results.Take(searchOptions.Pagination.Count);
+        }
+        return results;
     }
 
     private Dictionary<string, List<SearchableMediaEntry>> ReadAllEntries()
