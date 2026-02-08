@@ -14,7 +14,7 @@ internal static class DownloadEndpoints
 {
     public static void MapDownloadEndpoints(this IEndpointRouteBuilder builder)
     {
-        builder.MapGet("/download/{format}/{vendorId}/{contentId}/{partId?}", GetDownloadAsync);
+        builder.MapMethods("/download/{format}/{vendorId}/{contentId}/{partId?}", [HttpMethods.Get, HttpMethods.Head], GetDownloadAsync);
     }
 
     public static async Task<IResult> GetDownloadAsync(IMediaCatalog catalog, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping,
