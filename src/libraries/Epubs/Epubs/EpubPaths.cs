@@ -14,7 +14,7 @@ internal static class EpubPaths
         string[] epubPathParts = epubPath.Split('/');
         foreach (string epubPathPart in epubPathParts)
         {
-            currentPath = epubPath == ".."
+            currentPath = epubPathPart == ".."
                 ? currentPath.RemoveAt(currentPath.Length - 1)
                 : currentPath.Add(epubPathPart);
         }

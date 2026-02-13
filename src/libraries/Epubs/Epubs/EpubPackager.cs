@@ -218,20 +218,23 @@ public sealed class EpubPackager
         if (relativeFileNameOverrides is null) return;
         XElement? html = xhtmlDocument.Element((XNamespace)EpubXmlNamespaces.Xhtml + "html");
         if (html is null) return;
-        AdjustXhtmlElementReferences("script", "src", relativeFileNameOverrides, html);
-        AdjustXhtmlElementReferences("link", "href", relativeFileNameOverrides, html);
-        AdjustXhtmlElementReferences("a", "href", relativeFileNameOverrides, html);
-        AdjustXhtmlElementReferences("img", "src", relativeFileNameOverrides, html);
+        AdjustXhtmlElementReferences("script", "src", relativeFileNameOverrides, html, xhtmlPath);
+        AdjustXhtmlElementReferences("link", "href", relativeFileNameOverrides, html, xhtmlPath);
+        AdjustXhtmlElementReferences("a", "href", relativeFileNameOverrides, html, xhtmlPath);
+        AdjustXhtmlElementReferences("img", "src", relativeFileNameOverrides, html, xhtmlPath);
     }
 
     private static void AdjustElementReference(XElement element, XName attributeName,
-        Dictionary<string, string?> relativeFileNameOverrides)
+        Dictionary<string, string?> relativeFileNameOverrides, ImmutableArray<string> filePath)
     {
+        ImmutableArray<string> directoryPath = filePath[..^1];
         string? reference = element.Attribute(attributeName)?.Value;
         if (string.IsNullOrWhiteSpace(reference)) return;
         string[] referenceParts = reference.Split('#');
         string path = referenceParts[0];
-        if (relativeFileNameOverrides.TryGetValue(path, out string? overridePath))
+        string absolutePath = string.Join('/', EpubPaths.ResolvePath(directoryPath, path));
+        string normalizedRelativePath = string.Join('/', EpubPaths.GetRelativePath([.. absolutePath.Split('/')], directoryPath));
+        if (relativeFileNameOverrides.TryGetValue(normalizedRelativePath, out string? overridePath))
         {
             if (string.IsNullOrWhiteSpace(overridePath))
             {
@@ -247,11 +250,11 @@ public sealed class EpubPackager
 
     private static void AdjustXhtmlElementReferences(string elementName, string attributeName,
         Dictionary<string, string?> relativeFileNameOverrides,
-        XElement htmlElement)
+        XElement htmlElement, ImmutableArray<string> xhtmlPath)
     {
         foreach (XElement element in htmlElement.Descendants((XNamespace)EpubXmlNamespaces.Xhtml + elementName).ToList())
         {
-            AdjustElementReference(element, attributeName, relativeFileNameOverrides);
+            AdjustElementReference(element, attributeName, relativeFileNameOverrides, xhtmlPath);
         }
     }
 
@@ -335,7 +338,7 @@ public sealed class EpubPackager
             ?? throw new InvalidOperationException("Could not get manifest element.");
         foreach (XElement item in manifest.Elements((XNamespace)EpubXmlNamespaces.Opf + "item").ToList())
         {
-            AdjustElementReference(item, "href", relativeFileNameOverrides);
+            AdjustElementReference(item, "href", relativeFileNameOverrides, contents.OpfFilePath);
             string? hrefPath = item.Attribute("href")?.Value?.Split('#')?[0];
             if (string.IsNullOrWhiteSpace(hrefPath)) continue;
             XhtmlProperties? matchingProperties = xhtmlProperties
@@ -363,7 +366,7 @@ public sealed class EpubPackager
         XElement? guide = package.Element((XNamespace)EpubXmlNamespaces.Opf + "guide");
         foreach (XElement reference in guide?.Elements((XNamespace)EpubXmlNamespaces.Opf + "reference")?.ToList() ?? [])
         {
-            AdjustElementReference(reference, "href", relativeFileNameOverrides);
+            AdjustElementReference(reference, "href", relativeFileNameOverrides, contents.OpfFilePath);
         }
     }
 
@@ -388,7 +391,7 @@ public sealed class EpubPackager
             ?.Descendants((XNamespace)EpubXmlNamespaces.Ncx + "content")
             ?? [])
         {
-            AdjustElementReference(contentElement, "src", relativeFileNameOverrides);
+            AdjustElementReference(contentElement, "src", relativeFileNameOverrides, contents.NcxFilePath);
         }
     }
 

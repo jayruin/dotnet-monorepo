@@ -19,4 +19,18 @@ public class EpubPathsTests
                 string.IsNullOrWhiteSpace(start) ? [] : [.. start.Split('/')]));
         Assert.AreEqual(expected, actual);
     }
+
+    [TestMethod]
+    [DataRow("", "a/b/c", "a/b/c")]
+    [DataRow("a/b/c", "d/e", "a/b/c/d/e")]
+    [DataRow("a/b/c", "../c", "a/b/c")]
+    [DataRow("a/b/c", "../../d/e", "a/d/e")]
+    [DataRow("a/b/c", "../../../d/e", "d/e")]
+    public void TestResolvePath(string currentDirectoryPath, string epubPath, string expected)
+    {
+        string actual = string.Join('/',
+            EpubPaths.ResolvePath(
+                string.IsNullOrWhiteSpace(currentDirectoryPath) ? [] : [.. currentDirectoryPath.Split('/')],
+                epubPath));
+    }
 }
