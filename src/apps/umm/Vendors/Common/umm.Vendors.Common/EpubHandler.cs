@@ -40,13 +40,14 @@ public sealed class EpubHandler
     public async IAsyncEnumerable<MediaExportTarget> EnumerateExportTargetsAsync(string contentId, string partId, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         if (!await ContainsEpubAsync(contentId, cancellationToken).ConfigureAwait(false) || partId.Length != 0) yield break;
+        bool isPrePaginated = await ContainsPrePaginatedEpubAsync(contentId, cancellationToken).ConfigureAwait(false);
         yield return new()
         {
             ExportId = EpubExportId,
             MediaType = MediaType.Application.Epub_Zip,
             SupportsFile = true,
             SupportsDirectory = true,
-            MediaFormats = [MediaFormat.Ebook],
+            MediaFormats = isPrePaginated ? [MediaFormat.Comic, MediaFormat.Ebook] : [MediaFormat.Ebook],
         };
         if (await ContainsCoverAsync(contentId, cancellationToken).ConfigureAwait(false))
         {
@@ -64,7 +65,7 @@ public sealed class EpubHandler
                 };
             }
         }
-        if (await ContainsPrePaginatedEpubAsync(contentId, cancellationToken).ConfigureAwait(false))
+        if (isPrePaginated)
         {
             yield return new()
             {
