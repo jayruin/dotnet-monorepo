@@ -1,4 +1,3 @@
-using MediaTypes;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
@@ -354,6 +353,10 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                             {
                                 ["properties"] = new JsonObject()
                                 {
+                                    [jsonNamingPolicy.ConvertName(nameof(MediaExportTarget.ExportId))] = new JsonObject()
+                                    {
+                                        ["type"] = "keyword",
+                                    },
                                     [jsonNamingPolicy.ConvertName(nameof(MediaExportTarget.MediaType))] = new JsonObject()
                                     {
                                         ["type"] = "keyword",
@@ -365,6 +368,10 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                                     [jsonNamingPolicy.ConvertName(nameof(MediaExportTarget.SupportsDirectory))] = new JsonObject()
                                     {
                                         ["type"] = "boolean",
+                                    },
+                                    [jsonNamingPolicy.ConvertName(nameof(MediaExportTarget.MediaFormats))] = new JsonObject()
+                                    {
+                                        ["type"] = "keyword",
                                     },
                                 },
                             },

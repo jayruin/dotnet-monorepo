@@ -24,9 +24,9 @@ public static partial class MediaVendorLoggerExtensions
             metadataPropertyChange.Name, metadataPropertyChange.OldValue ?? string.Empty, metadataPropertyChange.NewValue ?? string.Empty,
             callerMemberName);
 
-    [LoggerMessage(LogLevel.Information, "[{VendorId}].[{ContentId}].[{PartId}] Exporting {MediaType} file.")]
-    public static partial void LogExportingFile(this ILogger logger, string vendorId, string contentId, string partId, string mediaType);
+    [LoggerMessage(LogLevel.Information, "[{VendorId}].[{ContentId}].[{PartId}] Exporting {ExportId} file.")]
+    public static partial void LogExportingFile(this ILogger logger, string vendorId, string contentId, string partId, string exportId);
 
-    [LoggerMessage(LogLevel.Information, "[{VendorId}].[{ContentId}].[{PartId}] Exporting {MediaType} directory.")]
-    public static partial void LogExportingDirectory(this ILogger logger, string vendorId, string contentId, string partId, string mediaType);
+    [LoggerMessage(LogLevel.Information, "[{VendorId}].[{ContentId}].[{PartId}] Exporting {ExportId} directory.")]
+    public static partial void LogExportingDirectory(this ILogger logger, string vendorId, string contentId, string partId, string exportId);
 }

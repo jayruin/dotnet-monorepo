@@ -40,9 +40,9 @@ public sealed class MediaCatalog : IMediaCatalog
             return _searchIndex.EnumerateAsync(searchQuery, searchOptions, cancellationToken);
         }
         _logger.LogUsingRawVendor();
-        IAsyncEnumerable<MediaEntry> result = RawEnumerateAsync(searchQuery, cancellationToken);
-        ApplySearchOptionsAsync(result, searchOptions);
-        return result;
+        IAsyncEnumerable<MediaEntry> results = RawEnumerateAsync(searchQuery, cancellationToken);
+        results = ApplySearchOptionsAsync(results, searchOptions);
+        return results;
     }
 
     public IAsyncEnumerable<MediaEntry> EnumerateAsync(string searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
@@ -53,9 +53,9 @@ public sealed class MediaCatalog : IMediaCatalog
             return _searchIndex.EnumerateAsync(searchTerm, searchOptions, cancellationToken);
         }
         _logger.LogUsingRawVendor();
-        IAsyncEnumerable<MediaEntry> result = RawEnumerateAsync(searchTerm, cancellationToken);
-        ApplySearchOptionsAsync(result, searchOptions);
-        return result;
+        IAsyncEnumerable<MediaEntry> results = RawEnumerateAsync(searchTerm, cancellationToken);
+        results = ApplySearchOptionsAsync(results, searchOptions);
+        return results;
     }
 
     public Task<MediaEntry?> GetMediaEntryAsync(MediaFullId id, CancellationToken cancellationToken = default)
@@ -69,31 +69,31 @@ public sealed class MediaCatalog : IMediaCatalog
         return RawGetMediaEntryAsync(id, cancellationToken);
     }
 
-    public async Task ExportAsync(MediaFullId id, string mediaType, Stream stream, CancellationToken cancellationToken = default)
+    public async Task ExportAsync(MediaFullId id, string exportId, Stream stream, CancellationToken cancellationToken = default)
     {
-        if (_exportCache is not null && await _exportCache.CanHandleFileAsync(id.VendorId, mediaType, cancellationToken).ConfigureAwait(false))
+        if (_exportCache is not null && await _exportCache.HasFileAsync(id, exportId, cancellationToken).ConfigureAwait(false))
         {
             _logger.LogUsingExportCache();
-            await _exportCache.ExportAsync(id, mediaType, stream, cancellationToken).ConfigureAwait(false);
+            await _exportCache.ExportAsync(id, exportId, stream, cancellationToken).ConfigureAwait(false);
         }
         else
         {
             _logger.LogUsingRawVendor();
-            await RawExportAsync(id, mediaType, stream, cancellationToken).ConfigureAwait(false);
+            await RawExportAsync(id, exportId, stream, cancellationToken).ConfigureAwait(false);
         }
     }
 
-    public async Task ExportAsync(MediaFullId id, string mediaType, IDirectory directory, CancellationToken cancellationToken = default)
+    public async Task ExportAsync(MediaFullId id, string exportId, IDirectory directory, CancellationToken cancellationToken = default)
     {
-        if (_exportCache is not null && await _exportCache.CanHandleDirectoryAsync(id.VendorId, mediaType, cancellationToken).ConfigureAwait(false))
+        if (_exportCache is not null && await _exportCache.HasDirectoryAsync(id, exportId, cancellationToken).ConfigureAwait(false))
         {
             _logger.LogUsingExportCache();
-            await _exportCache.ExportAsync(id, mediaType, directory, cancellationToken).ConfigureAwait(false);
+            await _exportCache.ExportAsync(id, exportId, directory, cancellationToken).ConfigureAwait(false);
         }
         else
         {
             _logger.LogUsingRawVendor();
-            await RawExportAsync(id, mediaType, directory, cancellationToken).ConfigureAwait(false);
+            await RawExportAsync(id, exportId, directory, cancellationToken).ConfigureAwait(false);
         }
     }
 
@@ -163,15 +163,15 @@ public sealed class MediaCatalog : IMediaCatalog
         return (await mediaVendor.GetEntryAsync(id.ContentId, id.PartId, cancellationToken).ConfigureAwait(false))?.MediaEntry;
     }
 
-    private Task RawExportAsync(MediaFullId id, string mediaType, Stream stream, CancellationToken cancellationToken)
+    private Task RawExportAsync(MediaFullId id, string exportId, Stream stream, CancellationToken cancellationToken)
     {
         if (!_mediaVendors.TryGetValue(id.VendorId, out IMediaVendor? mediaVendor)) throw new InvalidOperationException($"VendorId {id.VendorId} not found.");
-        return mediaVendor.ExportAsync(id.ContentId, id.PartId, mediaType, stream, cancellationToken);
+        return mediaVendor.ExportAsync(id.ContentId, id.PartId, exportId, stream, cancellationToken);
     }
 
-    private Task RawExportAsync(MediaFullId id, string mediaType, IDirectory directory, CancellationToken cancellationToken)
+    private Task RawExportAsync(MediaFullId id, string exportId, IDirectory directory, CancellationToken cancellationToken)
     {
         if (!_mediaVendors.TryGetValue(id.VendorId, out IMediaVendor? mediaVendor)) throw new InvalidOperationException($"VendorId {id.VendorId} not found.");
-        return mediaVendor.ExportAsync(id.ContentId, id.PartId, mediaType, directory, cancellationToken);
+        return mediaVendor.ExportAsync(id.ContentId, id.PartId, exportId, directory, cancellationToken);
     }
 }

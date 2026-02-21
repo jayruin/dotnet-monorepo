@@ -50,6 +50,10 @@ public sealed class EpubProjVendor : IMediaVendor
 
     private const string EpubVersionKey = "epub";
     private const string Epub2Id = "epub2";
+    private const string EpubExportId = "epub";
+    private const string JpgExportId = "jpg";
+    private const string PngExportId = "png";
+    private const string WebpExportId = "webp";
 
     public string VendorId => Id;
 
@@ -72,33 +76,34 @@ public sealed class EpubProjVendor : IMediaVendor
     public Task<SearchableMediaEntry?> GetEntryAsync(string contentId, string partId, CancellationToken cancellationToken = default)
         => EnumerateEntriesAsync(contentId, [partId], cancellationToken).FirstOrDefaultAsync(cancellationToken).AsTask();
 
-    public async Task ExportAsync(string contentId, string partId, string mediaType, Stream stream, CancellationToken cancellationToken = default)
+    public async Task ExportAsync(string contentId, string partId, string exportId, Stream stream, CancellationToken cancellationToken = default)
     {
         MediaMainId id = new(VendorId, contentId);
         if (partId.Length == 0 || partId == Epub2Id)
         {
             IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(id, cancellationToken).ConfigureAwait(false);
             IEpubProject project = await _projectLoader.LoadFromDirectoryAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
-            if (mediaType == MediaType.Application.Epub_Zip)
+            if (exportId == EpubExportId)
             {
                 if (partId.Length == 0)
                 {
-                    _logger.LogExportingFile(VendorId, contentId, partId, mediaType);
+                    _logger.LogExportingFile(VendorId, contentId, partId, exportId);
                     IReadOnlyCollection<IFile> globalFiles = await _projectLoader.GetImplicitGlobalFilesAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
                     await project.ExportEpub3Async(stream, globalFiles, cancellationToken).ConfigureAwait(false);
                     return;
                 }
                 if (partId == Epub2Id)
                 {
-                    _logger.LogExportingFile(VendorId, contentId, partId, mediaType);
+                    _logger.LogExportingFile(VendorId, contentId, partId, exportId);
                     IReadOnlyCollection<IFile> globalFiles = await _projectLoader.GetImplicitGlobalFilesAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
                     await project.ExportEpub2Async(stream, globalFiles, cancellationToken).ConfigureAwait(false);
                     return;
                 }
             }
+            string mediaType = GetCoverMediaType(exportId);
             if (CoverMediaTypes.Contains(mediaType) && project.CoverFile is not null)
             {
-                _logger.LogExportingFile(VendorId, contentId, partId, mediaType);
+                _logger.LogExportingFile(VendorId, contentId, partId, exportId);
                 string? coverMediaType = _mediaTypeFileExtensionsMapping.GetMediaType(project.CoverFile.Extension);
                 Stream sourceStream = await project.CoverFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
                 await using (sourceStream.ConfigureAwait(false))
@@ -116,35 +121,35 @@ public sealed class EpubProjVendor : IMediaVendor
                 return;
             }
         }
-        throw new InvalidOperationException($"{VendorId} - Unsupported MediaType {mediaType} for file export.");
+        throw new InvalidOperationException($"{VendorId} - Unsupported ExportId {exportId} for file export.");
     }
 
-    public async Task ExportAsync(string contentId, string partId, string mediaType, IDirectory directory, CancellationToken cancellationToken = default)
+    public async Task ExportAsync(string contentId, string partId, string exportId, IDirectory directory, CancellationToken cancellationToken = default)
     {
         MediaMainId id = new(VendorId, contentId);
         if (partId.Length == 0 || partId == Epub2Id)
         {
             IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(id, cancellationToken).ConfigureAwait(false);
             IEpubProject project = await _projectLoader.LoadFromDirectoryAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
-            if (mediaType == MediaType.Application.Epub_Zip)
+            if (exportId == EpubExportId)
             {
                 if (partId.Length == 0)
                 {
-                    _logger.LogExportingDirectory(VendorId, contentId, partId, mediaType);
+                    _logger.LogExportingDirectory(VendorId, contentId, partId, exportId);
                     IReadOnlyCollection<IFile> globalFiles = await _projectLoader.GetImplicitGlobalFilesAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
                     await project.ExportEpub3Async(directory, globalFiles, cancellationToken).ConfigureAwait(false);
                     return;
                 }
                 if (partId == Epub2Id)
                 {
-                    _logger.LogExportingDirectory(VendorId, contentId, partId, mediaType);
+                    _logger.LogExportingDirectory(VendorId, contentId, partId, exportId);
                     IReadOnlyCollection<IFile> globalFiles = await _projectLoader.GetImplicitGlobalFilesAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
                     await project.ExportEpub2Async(directory, globalFiles, cancellationToken).ConfigureAwait(false);
                     return;
                 }
             }
         }
-        throw new InvalidOperationException($"{VendorId} - Unsupported MediaType {mediaType} for directory export.");
+        throw new InvalidOperationException($"{VendorId} - Unsupported ExportId {exportId} for directory export.");
     }
 
     public IAsyncEnumerable<string> UpdateContentAsync(IReadOnlyDictionary<string, StringValues> searchQuery, bool force, CancellationToken cancellationToken = default)
@@ -256,7 +261,14 @@ public sealed class EpubProjVendor : IMediaVendor
         MediaMainId id = new(VendorId, contentId);
         IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(id, cancellationToken).ConfigureAwait(false);
         if (!await projectDirectory.ExistsAsync(cancellationToken).ConfigureAwait(false)) yield break;
-        yield return new(MediaType.Application.Epub_Zip, true, true);
+        yield return new()
+        {
+            ExportId = EpubExportId,
+            MediaType = MediaType.Application.Epub_Zip,
+            SupportsFile = true,
+            SupportsDirectory = true,
+            MediaFormats = [MediaFormat.Ebook],
+        };
         IEpubProject project = await _projectLoader.LoadFromDirectoryAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
         if (project.CoverFile is not null)
         {
@@ -265,9 +277,40 @@ public sealed class EpubProjVendor : IMediaVendor
             {
                 foreach (string mediaType in CoverMediaTypes)
                 {
-                    yield return new(mediaType, true, false);
+                    string exportId = GetCoverExportId(mediaType);
+                    if (string.IsNullOrWhiteSpace(exportId)) continue;
+                    yield return new()
+                    {
+                        ExportId = exportId,
+                        MediaType = mediaType,
+                        SupportsFile = true,
+                        SupportsDirectory = false,
+                        MediaFormats = [MediaFormat.Artwork],
+                    };
                 }
             }
         }
+    }
+
+    private static string GetCoverMediaType(string exportId)
+    {
+        return exportId switch
+        {
+            JpgExportId => MediaType.Image.Jpeg,
+            PngExportId => MediaType.Image.Png,
+            WebpExportId => MediaType.Image.Webp,
+            _ => string.Empty,
+        };
+    }
+
+    private static string GetCoverExportId(string coverMediaType)
+    {
+        return coverMediaType switch
+        {
+            MediaType.Image.Jpeg => JpgExportId,
+            MediaType.Image.Png => PngExportId,
+            MediaType.Image.Webp => WebpExportId,
+            _ => string.Empty,
+        };
     }
 }

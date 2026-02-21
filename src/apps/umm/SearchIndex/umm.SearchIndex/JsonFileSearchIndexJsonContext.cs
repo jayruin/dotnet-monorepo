@@ -6,6 +6,7 @@ namespace umm.SearchIndex;
 
 [JsonSourceGenerationOptions(
     PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower,
+    UseStringEnumConverter = true,
     RespectNullableAnnotations = true,
     RespectRequiredConstructorParameters = true)]
 [JsonSerializable(typeof(Dictionary<string, List<SearchableMediaEntry>>))]

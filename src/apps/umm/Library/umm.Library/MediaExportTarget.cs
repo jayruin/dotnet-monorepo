@@ -1,15 +1,12 @@
+using System.Collections.Immutable;
+
 namespace umm.Library;
 
 public sealed class MediaExportTarget
 {
-    public MediaExportTarget(string mediaType, bool supportsFile, bool supportsDirectory)
-    {
-        MediaType = mediaType;
-        SupportsFile = supportsFile;
-        SupportsDirectory = supportsDirectory;
-    }
-
-    public string MediaType { get; }
-    public bool SupportsFile { get; }
-    public bool SupportsDirectory { get; }
+    public required string ExportId { get; init; }
+    public required string MediaType { get; init; }
+    public required bool SupportsFile { get; init; }
+    public required bool SupportsDirectory { get; init; }
+    public required ImmutableSortedSet<MediaFormat> MediaFormats { get; init; }
 }

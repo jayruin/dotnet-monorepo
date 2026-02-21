@@ -14,7 +14,7 @@ public interface IMediaVendor
     IAsyncEnumerable<SearchableMediaEntry> EnumerateAsync(CancellationToken cancellationToken = default);
     IAsyncEnumerable<SearchableMediaEntry> EnumerateAsync(string contentId, CancellationToken cancellationToken = default);
     Task<SearchableMediaEntry?> GetEntryAsync(string contentId, string partId, CancellationToken cancellationToken = default);
-    Task ExportAsync(string contentId, string partId, string mediaType, Stream stream, CancellationToken cancellationToken = default);
-    Task ExportAsync(string contentId, string partId, string mediaType, IDirectory directory, CancellationToken cancellationToken = default);
+    Task ExportAsync(string contentId, string partId, string exportId, Stream stream, CancellationToken cancellationToken = default);
+    Task ExportAsync(string contentId, string partId, string exportId, IDirectory directory, CancellationToken cancellationToken = default);
     IAsyncEnumerable<string> UpdateContentAsync(IReadOnlyDictionary<string, StringValues> searchQuery, bool force, CancellationToken cancellationToken = default);
 }

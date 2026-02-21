@@ -1,5 +1,4 @@
 using FileStorage.Filesystem;
-using MediaTypes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -27,7 +26,6 @@ public static class ExportCacheServiceCollectionExtensions
             if (!string.IsNullOrWhiteSpace(path) && mediaTypes is not null && (handlesFiles || handlesDirectories))
             {
                 serviceCollection.AddTransient<IExportCache, FilestorageExportCache>(sp => new(
-                    sp.GetRequiredService<IMediaTypeFileExtensionsMapping>(),
                     new()
                     {
                         RootDirectory = new FilesystemFileStorage().GetDirectory(path),

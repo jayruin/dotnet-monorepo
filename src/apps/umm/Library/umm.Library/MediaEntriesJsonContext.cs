@@ -4,6 +4,7 @@ namespace umm.Library;
 
 [JsonSourceGenerationOptions(
     PropertyNamingPolicy = JsonKnownNamingPolicy.SnakeCaseLower,
+    UseStringEnumConverter = true,
     RespectNullableAnnotations = true,
     RespectRequiredConstructorParameters = true)]
 [JsonSerializable(typeof(SearchableMediaEntry))]

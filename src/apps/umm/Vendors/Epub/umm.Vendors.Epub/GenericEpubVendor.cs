@@ -52,11 +52,11 @@ public sealed class GenericEpubVendor : IMediaVendor
     public Task<SearchableMediaEntry?> GetEntryAsync(string contentId, string partId, CancellationToken cancellationToken = default)
         => _enumerationHandler.GetEntryAsync(contentId, partId, cancellationToken);
 
-    public Task ExportAsync(string contentId, string partId, string mediaType, Stream stream, CancellationToken cancellationToken = default)
-        => _epubHandler.ExportAsync(contentId, partId, mediaType, stream, cancellationToken);
+    public Task ExportAsync(string contentId, string partId, string exportId, Stream stream, CancellationToken cancellationToken = default)
+        => _epubHandler.ExportAsync(contentId, partId, exportId, stream, cancellationToken);
 
-    public Task ExportAsync(string contentId, string partId, string mediaType, IDirectory directory, CancellationToken cancellationToken = default)
-        => _epubHandler.ExportAsync(contentId, partId, mediaType, directory, cancellationToken);
+    public Task ExportAsync(string contentId, string partId, string exportId, IDirectory directory, CancellationToken cancellationToken = default)
+        => _epubHandler.ExportAsync(contentId, partId, exportId, directory, cancellationToken);
 
     public IAsyncEnumerable<string> UpdateContentAsync(IReadOnlyDictionary<string, StringValues> searchQuery, bool force, CancellationToken cancellationToken = default)
         => AsyncEnumerable.Empty<string>();

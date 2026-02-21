@@ -38,14 +38,14 @@ public static class ExportCacheExtensions
             {
                 Stream stream = await exportCache.GetStreamForCachingAsync(
                     entry.Id,
-                    exportTarget.MediaType,
+                    exportTarget.ExportId,
                     cancellationToken).ConfigureAwait(false);
                 await using (stream.ConfigureAwait(false))
                 {
                     await mediaVendor.ExportAsync(
                         entry.Id.ContentId,
                         entry.Id.PartId,
-                        exportTarget.MediaType,
+                        exportTarget.ExportId,
                         stream,
                         cancellationToken).ConfigureAwait(false);
                 }
@@ -58,12 +58,12 @@ public static class ExportCacheExtensions
             {
                 IDirectory directory = await exportCache.GetDirectoryForCachingAsync(
                     entry.Id,
-                    exportTarget.MediaType,
+                    exportTarget.ExportId,
                     cancellationToken).ConfigureAwait(false);
                 await mediaVendor.ExportAsync(
                     entry.Id.ContentId,
                     entry.Id.PartId,
-                    exportTarget.MediaType,
+                    exportTarget.ExportId,
                     directory,
                     cancellationToken).ConfigureAwait(false);
             }
