@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Primitives;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -19,6 +20,7 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
 {
     private const string SearchFieldsKey = "search_fields";
     private const string MediaEntryKey = "media_entry";
+    private const string FormatsKey = "formats";
     private const string FullIndexType = "full";
     private const string MainIndexType = "main";
 
@@ -33,13 +35,13 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
 
     public IAsyncEnumerable<MediaEntry> EnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, SearchOptions searchOptions, CancellationToken cancellationToken = default)
     {
-        JsonNode queryNode = CreateQueryNode(searchQuery);
+        JsonNode queryNode = CreateQueryNode(searchQuery, searchOptions.MediaFormats);
         return EnumerateAsync(queryNode, searchOptions, cancellationToken);
     }
 
     public IAsyncEnumerable<MediaEntry> EnumerateAsync(string searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
     {
-        JsonNode queryNode = CreateQueryNode(searchTerm);
+        JsonNode queryNode = CreateQueryNode(searchTerm, searchOptions.MediaFormats);
         return EnumerateAsync(queryNode, searchOptions, cancellationToken);
     }
 
@@ -84,44 +86,82 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         response.EnsureSuccessStatusCode();
     }
 
-    private static JsonNode CreateQueryNode(IReadOnlyDictionary<string, StringValues> searchQuery)
+    private static JsonNode CreateMediaFormatsSearchNode(FrozenSet<MediaFormat> mediaFormats)
     {
         return new JsonObject()
         {
             ["bool"] = new JsonObject()
             {
-                ["must"] = new JsonArray([.. searchQuery.Select(kvp => {
-                    (string searchKey, StringValues searchValues) = kvp;
-                    return new JsonObject()
+                ["should"] = new JsonArray([.. mediaFormats.Select(mediaFormat => new JsonObject()
+                {
+                    ["match"] = new JsonObject()
                     {
-                        ["bool"] = new JsonObject()
+                        [FormatsKey] = new JsonObject()
                         {
-                            ["should"] = new JsonArray([.. searchValues.Select(searchValue => new JsonObject()
-                            {
-                                ["match"] = new JsonObject()
-                                {
-                                    [$"{SearchFieldsKey}.{searchKey.ToLowerInvariant()}"] = new JsonObject()
-                                    {
-                                        ["query"] = searchValue,
-                                        ["operator"] = "and",
-                                    },
-                                }
-                            })]),
+                            ["query"] = mediaFormat.ToString(),
                         },
-                    };
+                    },
                 })]),
-            }
+            },
         };
     }
 
-    private static JsonNode CreateQueryNode(string searchTerm)
+    private static JsonNode CreateQueryNode(IReadOnlyDictionary<string, StringValues> searchQuery, FrozenSet<MediaFormat> mediaFormats)
     {
+        JsonArray searchArray = new([.. searchQuery.Select(kvp => {
+            (string searchKey, StringValues searchValues) = kvp;
+            return new JsonObject()
+            {
+                ["bool"] = new JsonObject()
+                {
+                    ["should"] = new JsonArray([.. searchValues.Select(searchValue => new JsonObject()
+                    {
+                        ["match"] = new JsonObject()
+                        {
+                            [$"{SearchFieldsKey}.{searchKey.ToLowerInvariant()}"] = new JsonObject()
+                            {
+                                ["query"] = searchValue,
+                                ["operator"] = "and",
+                            },
+                        },
+                    })]),
+                },
+            };
+        })]);
+        if (mediaFormats.Count > 0)
+        {
+            searchArray.Add(CreateMediaFormatsSearchNode(mediaFormats));
+        }
         return new JsonObject()
         {
-            ["simple_query_string"] = new JsonObject()
+            ["bool"] = new JsonObject()
             {
-                ["query"] = searchTerm,
-            }
+                ["must"] = searchArray,
+            },
+        };
+    }
+
+    private static JsonNode CreateQueryNode(string searchTerm, FrozenSet<MediaFormat> mediaFormats)
+    {
+        JsonArray searchArray = new([
+            new JsonObject()
+            {
+                ["simple_query_string"] = new JsonObject()
+                {
+                    ["query"] = searchTerm,
+                },
+            },
+        ]);
+        if (mediaFormats.Count > 0)
+        {
+            searchArray.Add(CreateMediaFormatsSearchNode(mediaFormats));
+        }
+        return new JsonObject()
+        {
+            ["bool"] = new JsonObject()
+            {
+                ["must"] = searchArray,
+            },
         };
     }
 
@@ -222,7 +262,8 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
             {
                 MediaFullId fullId = idGrouping.Key.ToFullId();
                 SearchableMediaEntry mainEntry = allEntries.First(e => e.MediaEntry.Id == fullId);
-                ImmutableArray<MetadataSearchField> searchFields = idGrouping
+                ImmutableArray<SearchableMediaEntry> groupingEntries = [.. idGrouping];
+                ImmutableArray<MetadataSearchField> searchFields = groupingEntries
                     .SelectMany(e => e.MetadataSearchFields)
                     .GroupBy(sf => sf.Aliases, aliasesEqualityComparer)
                     .Select(searchFieldGrouping =>
@@ -243,10 +284,12 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                         };
                     })
                     .ToImmutableArray();
+                ImmutableSortedSet<MediaFormat> mediaFormats = [.. groupingEntries.SelectMany(e => e.MediaFormats)];
                 return new SearchableMediaEntry()
                 {
                     MediaEntry = mainEntry.MediaEntry,
                     MetadataSearchFields = searchFields,
+                    MediaFormats = mediaFormats,
                 };
             })
             .ToList();
@@ -381,6 +424,10 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                             },
                         },
                     },
+                    [FormatsKey] = new JsonObject()
+                    {
+                        ["type"] = "keyword",
+                    }
                 },
             },
         };
@@ -397,10 +444,13 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         {
             searchFieldsNode[metadataSearchField.Aliases[0].ToLowerInvariant()] = new JsonArray([.. metadataSearchField.Values]);
         }
+        JsonNode formatsNode = JsonSerializer.SerializeToNode(entry.MediaFormats, MediaEntriesJsonContext.Default.ImmutableSortedSetMediaFormat)
+            ?? throw new JsonException();
         JsonNode payload = new JsonObject()
         {
             [SearchFieldsKey] = searchFieldsNode,
             [MediaEntryKey] = mediaEntryNode,
+            [FormatsKey] = formatsNode,
         };
 
         string documentId = GetDocumentId(entry.MediaEntry.Id);

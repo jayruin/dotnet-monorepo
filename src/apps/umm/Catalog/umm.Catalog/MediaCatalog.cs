@@ -40,9 +40,9 @@ public sealed class MediaCatalog : IMediaCatalog
             return _searchIndex.EnumerateAsync(searchQuery, searchOptions, cancellationToken);
         }
         _logger.LogUsingRawVendor();
-        IAsyncEnumerable<MediaEntry> results = RawEnumerateAsync(searchQuery, cancellationToken);
+        IAsyncEnumerable<SearchableMediaEntry> results = RawEnumerateAsync(searchQuery, cancellationToken);
         results = ApplySearchOptionsAsync(results, searchOptions);
-        return results;
+        return results.Select(e => e.MediaEntry);
     }
 
     public IAsyncEnumerable<MediaEntry> EnumerateAsync(string searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
@@ -53,9 +53,9 @@ public sealed class MediaCatalog : IMediaCatalog
             return _searchIndex.EnumerateAsync(searchTerm, searchOptions, cancellationToken);
         }
         _logger.LogUsingRawVendor();
-        IAsyncEnumerable<MediaEntry> results = RawEnumerateAsync(searchTerm, cancellationToken);
+        IAsyncEnumerable<SearchableMediaEntry> results = RawEnumerateAsync(searchTerm, cancellationToken);
         results = ApplySearchOptionsAsync(results, searchOptions);
-        return results;
+        return results.Select(e => e.MediaEntry);
     }
 
     public Task<MediaEntry?> GetMediaEntryAsync(MediaFullId id, CancellationToken cancellationToken = default)
@@ -97,7 +97,7 @@ public sealed class MediaCatalog : IMediaCatalog
         }
     }
 
-    private async IAsyncEnumerable<MediaEntry> RawEnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, [EnumeratorCancellation] CancellationToken cancellationToken)
+    private async IAsyncEnumerable<SearchableMediaEntry> RawEnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         foreach (IMediaVendor mediaVendor in _mediaVendors.Values.OrderBy(v => v.VendorId))
         {
@@ -110,12 +110,12 @@ public sealed class MediaCatalog : IMediaCatalog
             {
                 bool matches = SearchQuery.Matches(searchQuery, searchableEntry.MetadataSearchFields);
                 if (!matches) continue;
-                yield return searchableEntry.MediaEntry;
+                yield return searchableEntry;
             }
         }
     }
 
-    private async IAsyncEnumerable<MediaEntry> RawEnumerateAsync(string searchTerm, [EnumeratorCancellation] CancellationToken cancellationToken)
+    private async IAsyncEnumerable<SearchableMediaEntry> RawEnumerateAsync(string searchTerm, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         foreach (IMediaVendor mediaVendor in _mediaVendors.Values.OrderBy(v => v.VendorId))
         {
@@ -125,18 +125,22 @@ public sealed class MediaCatalog : IMediaCatalog
             {
                 bool matches = SearchQuery.Matches(searchTerm, searchableEntry.MetadataSearchFields);
                 if (!matches) continue;
-                yield return searchableEntry.MediaEntry;
+                yield return searchableEntry;
             }
         }
     }
 
-    private IAsyncEnumerable<MediaEntry> ApplySearchOptionsAsync(IAsyncEnumerable<MediaEntry> entries, SearchOptions searchOptions)
+    private IAsyncEnumerable<SearchableMediaEntry> ApplySearchOptionsAsync(IAsyncEnumerable<SearchableMediaEntry> entries, SearchOptions searchOptions)
     {
-        IAsyncEnumerable<MediaEntry> result = entries;
+        IAsyncEnumerable<SearchableMediaEntry> results = entries;
+        if (searchOptions.MediaFormats.Count > 0)
+        {
+            results = results.Where(e => e.MediaFormats.Overlaps(searchOptions.MediaFormats));
+        }
         if (!searchOptions.IncludeParts)
         {
-            result = result
-                .GroupBy(e => e.Id.ToMainId())
+            results = results
+                .GroupBy(e => e.MediaEntry.Id.ToMainId())
                 .Select(g => g.Key)
                 .Select((id, ct) => RawEnumerateAsync(new Dictionary<string, StringValues>()
                 {
@@ -148,13 +152,13 @@ public sealed class MediaCatalog : IMediaCatalog
         {
             if (searchOptions.Pagination.After is not null)
             {
-                result = result
-                    .SkipWhile(e => e.Id != searchOptions.Pagination.After)
+                results = results
+                    .SkipWhile(e => e.MediaEntry.Id != searchOptions.Pagination.After)
                     .Skip(1);
             }
-            result = result.Take(searchOptions.Pagination.Count);
+            results = results.Take(searchOptions.Pagination.Count);
         }
-        return result;
+        return results;
     }
 
     private async Task<MediaEntry?> RawGetMediaEntryAsync(MediaFullId id, CancellationToken cancellationToken)

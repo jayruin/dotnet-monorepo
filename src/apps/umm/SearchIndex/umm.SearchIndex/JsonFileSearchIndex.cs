@@ -27,17 +27,17 @@ public sealed class JsonFileSearchIndex : ISearchIndex, IDisposable
     public IAsyncEnumerable<MediaEntry> EnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, SearchOptions searchOptions, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        IEnumerable<MediaEntry> results = Enumerate(searchQuery);
+        IEnumerable<SearchableMediaEntry> results = Enumerate(searchQuery);
         results = ApplySearchOptions(results, searchOptions);
-        return results.ToAsyncEnumerable();
+        return results.Select(e => e.MediaEntry).ToAsyncEnumerable();
     }
 
     public IAsyncEnumerable<MediaEntry> EnumerateAsync(string searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        IEnumerable<MediaEntry> results = Enumerate(searchTerm);
+        IEnumerable<SearchableMediaEntry> results = Enumerate(searchTerm);
         results = ApplySearchOptions(results, searchOptions);
-        return results.ToAsyncEnumerable();
+        return results.Select(e => e.MediaEntry).ToAsyncEnumerable();
     }
 
     public Task<MediaEntry?> GetMediaEntryAsync(MediaFullId id, CancellationToken cancellationToken = default)
@@ -93,46 +93,47 @@ public sealed class JsonFileSearchIndex : ISearchIndex, IDisposable
         _semaphoreSlim.Dispose();
     }
 
-    private IEnumerable<MediaEntry> Enumerate(IReadOnlyDictionary<string, StringValues> searchQuery)
+    private IEnumerable<SearchableMediaEntry> Enumerate(IReadOnlyDictionary<string, StringValues> searchQuery)
     {
         return _allEntries
             .Where(kvp => SearchQuery.MatchesExactly(searchQuery, [nameof(MediaFullId.VendorId)], [kvp.Key]))
             .SelectMany(kvp => kvp.Value)
             .Where(e => SearchQuery.Matches(searchQuery, e.MetadataSearchFields))
-            .Select(e => e.MediaEntry)
-            .OrderBy(e => e.Id.VendorId)
-            .ThenBy(e => e.Id.ContentId)
-            .ThenBy(e => e.Id.PartId);
+            .OrderBy(e => e.MediaEntry.Id.VendorId)
+            .ThenBy(e => e.MediaEntry.Id.ContentId)
+            .ThenBy(e => e.MediaEntry.Id.PartId);
     }
 
-    private IEnumerable<MediaEntry> Enumerate(string searchTerm)
+    private IEnumerable<SearchableMediaEntry> Enumerate(string searchTerm)
     {
         return _allEntries
             .SelectMany(kvp => kvp.Value)
             .Where(e => SearchQuery.Matches(searchTerm, e.MetadataSearchFields))
-            .Select(e => e.MediaEntry)
-            .OrderBy(e => e.Id.VendorId)
-            .ThenBy(e => e.Id.ContentId)
-            .ThenBy(e => e.Id.PartId);
+            .OrderBy(e => e.MediaEntry.Id.VendorId)
+            .ThenBy(e => e.MediaEntry.Id.ContentId)
+            .ThenBy(e => e.MediaEntry.Id.PartId);
     }
 
-    private IEnumerable<MediaEntry> ApplySearchOptions(IEnumerable<MediaEntry> entries, SearchOptions searchOptions)
+    private IEnumerable<SearchableMediaEntry> ApplySearchOptions(IEnumerable<SearchableMediaEntry> entries, SearchOptions searchOptions)
     {
-        IEnumerable<MediaEntry> results = entries;
+        IEnumerable<SearchableMediaEntry> results = entries;
+        if (searchOptions.MediaFormats.Count > 0)
+        {
+            results = results.Where(e => e.MediaFormats.Overlaps(searchOptions.MediaFormats));
+        }
         if (!searchOptions.IncludeParts)
         {
             results = results
-                .GroupBy(e => e.Id.ToMainId())
+                .GroupBy(e => e.MediaEntry.Id.ToMainId())
                 .Select(g => g.Key.ToFullId())
-                .Select(id => _allEntries[id.VendorId].First(e => e.MediaEntry.Id == id))
-                .Select(e => e.MediaEntry);
+                .Select(id => _allEntries[id.VendorId].First(e => e.MediaEntry.Id == id));
         }
         if (searchOptions.Pagination is not null)
         {
             if (searchOptions.Pagination.After is not null)
             {
                 results = results
-                    .SkipWhile(e => e.Id != searchOptions.Pagination.After)
+                    .SkipWhile(e => e.MediaEntry.Id != searchOptions.Pagination.After)
                     .Skip(1);
             }
             results = results.Take(searchOptions.Pagination.Count);
