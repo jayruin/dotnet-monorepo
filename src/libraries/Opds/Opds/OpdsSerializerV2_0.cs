@@ -59,46 +59,48 @@ public sealed class OpdsSerializerV2_0
 
     private static JsonArray CreateFeedLinksNode(OpdsFeed feed, string? openSearchTemplateUrl)
     {
-        JsonArray linksNode = new()
+        JsonArray linksNode = new();
+        JsonNode selfNode = new JsonObject()
         {
-            new JsonObject()
-            {
-                ["rel"] = "self",
-                ["title"] = "Current Page",
-                ["type"] = OpdsJsonCatalogMediaType,
-                ["href"] = feed.Self,
-            },
+            ["rel"] = "self",
+            ["title"] = "Current Page",
+            ["type"] = OpdsJsonCatalogMediaType,
+            ["href"] = feed.Self,
         };
+        linksNode.Add(selfNode);
         if (!string.IsNullOrWhiteSpace(feed.Prev))
         {
-            linksNode.Add(new JsonObject()
+            JsonNode prevNode = new JsonObject()
             {
                 ["rel"] = "previous",
                 ["title"] = "Previous Page",
                 ["type"] = OpdsJsonCatalogMediaType,
                 ["href"] = feed.Prev,
-            });
+            };
+            linksNode.Add(prevNode);
         }
         if (!string.IsNullOrWhiteSpace(feed.Next))
         {
-            linksNode.Add(new JsonObject()
+            JsonNode nextNode = new JsonObject()
             {
                 ["rel"] = "next",
                 ["title"] = "Next Page",
                 ["type"] = OpdsJsonCatalogMediaType,
                 ["href"] = feed.Next,
-            });
+            };
+            linksNode.Add(nextNode);
         }
         if (!string.IsNullOrWhiteSpace(openSearchTemplateUrl))
         {
-            linksNode.Add(new JsonObject()
+            JsonNode openSearchTemplateUrlNode = new JsonObject()
             {
                 ["rel"] = "search",
                 ["title"] = "Search",
                 ["type"] = OpdsJsonCatalogMediaType,
                 ["href"] = openSearchTemplateUrl,
                 ["templated"] = true,
-            });
+            };
+            linksNode.Add(openSearchTemplateUrlNode);
         }
         return linksNode;
     }
@@ -147,7 +149,7 @@ public sealed class OpdsSerializerV2_0
         JsonArray imagesNode = new();
         foreach (OpdsResourceLink imageLink in acquisitionEntry.ImageLinks)
         {
-            JsonObject imageNode = new()
+            JsonNode imageNode = new JsonObject()
             {
                 ["href"] = imageLink.Href,
                 ["type"] = imageLink.Type,
@@ -166,7 +168,7 @@ public sealed class OpdsSerializerV2_0
         JsonArray linksNode = new();
         foreach (OpdsResourceLink acquisitionLink in acquisitionEntry.AcquisitionLinks)
         {
-            JsonObject linkNode = new()
+            JsonNode linkNode = new JsonObject()
             {
                 ["rel"] = RelAcquisition,
                 ["href"] = acquisitionLink.Href,
