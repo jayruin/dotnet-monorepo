@@ -44,13 +44,14 @@ public static class EpubXml
         // Trailing whitespace after doctype declaration can be removed using XmlTextWriter
         // However, there is no async support for the older XmlTextWriter
 
-        return new XmlWriterSettings()
+        return new()
         {
             Async = true,
             Encoding = new UTF8Encoding(),
             Indent = true,
             IndentChars = "    ",
             NamespaceHandling = NamespaceHandling.OmitDuplicates,
+            NewLineChars = "\n",
         };
     }
 }
