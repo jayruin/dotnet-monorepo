@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(Proj_Epubs)" />
+    <ProjectReference Include="$(Proj_Opds)" />
+    <ProjectReference Include="$(Proj_umm_Plugins_Abstractions)" />
+  </ItemGroup>
+</Project>
