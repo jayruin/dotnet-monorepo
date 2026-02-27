@@ -23,12 +23,14 @@ internal static class OpdsEndpoints
 {
     public static void MapOpdsEndpoints(IEndpointRouteBuilder builder)
     {
-        RouteGroupBuilder v1_2Group = builder.MapGroup("opds/v1.2");
+        RouteGroupBuilder opdsGroup = builder.MapGroup("opds");
+
+        RouteGroupBuilder v1_2Group = opdsGroup.MapGroup("v1.2");
         v1_2Group.MapGet("advancedsearch/{queryString?}", GetAdvancedSearchOpdsFeedV1_2);
         v1_2Group.MapGet("opensearch", GetOpenSearchOpdsFeedV1_2);
         v1_2Group.MapGet("opensearch/description", GetOpenSearchDescriptionDocumentV1_2);
 
-        RouteGroupBuilder v2_0Group = builder.MapGroup("opds/v2.0");
+        RouteGroupBuilder v2_0Group = opdsGroup.MapGroup("v2.0");
         v2_0Group.MapGet("advancedsearch/{queryString?}", GetAdvancedSearchOpdsFeedV2_0);
         v2_0Group.MapGet("opensearch", GetOpenSearchOpdsFeedV2_0);
     }
