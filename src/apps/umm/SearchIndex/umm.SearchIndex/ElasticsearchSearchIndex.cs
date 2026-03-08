@@ -79,11 +79,15 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
 
     public async Task ClearAsync(string vendorId, CancellationToken cancellationToken = default)
     {
-        string indexName = GetIndexName(vendorId, FullIndexType);
-        bool indexExists = await CheckIfIndexExistsAsync(indexName, cancellationToken).ConfigureAwait(false);
-        if (!indexExists) return;
-        using HttpResponseMessage response = await _httpClient.DeleteAsync(indexName, cancellationToken).ConfigureAwait(false);
-        response.EnsureSuccessStatusCode();
+        string[] indexTypes = [FullIndexType, MainIndexType];
+        foreach (string indexType in indexTypes)
+        {
+            string indexName = GetIndexName(vendorId, indexType);
+            bool indexExists = await CheckIfIndexExistsAsync(indexName, cancellationToken).ConfigureAwait(false);
+            if (!indexExists) continue;
+            using HttpResponseMessage response = await _httpClient.DeleteAsync(indexName, cancellationToken).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+        }
     }
 
     private static JsonNode CreateMediaFormatsSearchNode(FrozenSet<MediaFormat> mediaFormats)
