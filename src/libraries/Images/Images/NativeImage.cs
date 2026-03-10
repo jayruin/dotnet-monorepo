@@ -23,8 +23,10 @@ internal sealed class NativeImage : IImage
 
     public NativeImage ResizeKeepAspectRatio(int width, int height, Color? backgroundColor = null)
     {
-        double imageAspectRatio = new Size(Width, Height).AspectRatio;
-        double targetAspectRatio = new Size(width, height).AspectRatio;
+        Size imageSize = new(Width, Height);
+        Size targetSize = new(width, height);
+        double imageAspectRatio = imageSize.AspectRatio;
+        double targetAspectRatio = targetSize.AspectRatio;
         int resizedWidth;
         int resizedHeight;
         if (targetAspectRatio > imageAspectRatio)
@@ -40,7 +42,8 @@ internal sealed class NativeImage : IImage
         int offsetX = Convert.ToInt32(Math.Floor((double)(width - resizedWidth) / 2));
         int offsetY = Convert.ToInt32(Math.Floor((double)(height - resizedHeight) / 2));
         using SKBitmap bitmap = SKBitmap.FromImage(InternalImage);
-        using SKBitmap resizedBitmap = bitmap.Resize(new SKImageInfo(resizedWidth, resizedHeight), SKFilterQuality.High);
+        SKSamplingOptions samplingOptions = NativePresets.GetHighestQualitySamplingOptions(imageSize, targetSize);
+        using SKBitmap resizedBitmap = bitmap.Resize(new SKImageInfo(resizedWidth, resizedHeight), samplingOptions);
         using SKSurface targetSurface = SKSurface.Create(new SKImageInfo(width, height));
         if (backgroundColor != null)
         {

@@ -50,9 +50,11 @@ internal sealed class NativeImageLoader : IImageLoader
                 using SKPaint paint = new()
                 {
                     IsAntialias = true,
-                    FilterQuality = SKFilterQuality.High,
                 };
-                canvas.DrawImage(resizedImage.InternalImage, point, paint);
+                SKSamplingOptions samplingOptions = NativePresets.GetHighestQualitySamplingOptions(
+                    new(image.Width, image.Height),
+                    new(grid.ItemSize.Width, grid.ItemSize.Height));
+                canvas.DrawImage(resizedImage.InternalImage, point, samplingOptions, paint);
             }
             i += 1;
             image.Dispose();
