@@ -156,6 +156,7 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                 {
                     ["query"] = searchTerm,
                     ["default_operator"] = "and",
+                    ["fields"] = new JsonArray([$"{SearchFieldsKey}.*"]),
                 },
             },
         ]);
@@ -281,7 +282,6 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                         ImmutableArray<string> aliases = searchFieldGrouping.Key;
                         ImmutableArray<string> values = searchFieldGrouping
                             .SelectMany(sf => sf.Values)
-                            .Distinct()
                             .ToImmutableArray();
                         MetadataSearchField mainSearchField = mainEntry.MetadataSearchFields
                             .First(sf => aliasesEqualityComparer.Equals(sf.Aliases, aliases));
@@ -373,14 +373,17 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                                     [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.VendorId))] = new JsonObject()
                                     {
                                         ["type"] = "keyword",
+                                        ["index"] = false,
                                     },
                                     [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.ContentId))] = new JsonObject()
                                     {
                                         ["type"] = "keyword",
+                                        ["index"] = false,
                                     },
                                     [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Id.PartId))] = new JsonObject()
                                     {
                                         ["type"] = "keyword",
+                                        ["index"] = false,
                                     },
                                 },
                             },
@@ -391,14 +394,17 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                                     [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Metadata.Title))] = new JsonObject()
                                     {
                                         ["type"] = "text",
+                                        ["index"] = false,
                                     },
                                     [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Metadata.Creators))] = new JsonObject()
                                     {
                                         ["type"] = "text",
+                                        ["index"] = false,
                                     },
                                     [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Metadata.Description))] = new JsonObject()
                                     {
                                         ["type"] = "text",
+                                        ["index"] = false,
                                     },
                                 },
                             },
@@ -409,28 +415,34 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                                     [jsonNamingPolicy.ConvertName(nameof(MediaExportTarget.ExportId))] = new JsonObject()
                                     {
                                         ["type"] = "keyword",
+                                        ["index"] = false,
                                     },
                                     [jsonNamingPolicy.ConvertName(nameof(MediaExportTarget.MediaType))] = new JsonObject()
                                     {
                                         ["type"] = "keyword",
+                                        ["index"] = false,
                                     },
                                     [jsonNamingPolicy.ConvertName(nameof(MediaExportTarget.SupportsFile))] = new JsonObject()
                                     {
                                         ["type"] = "boolean",
+                                        ["index"] = false,
                                     },
                                     [jsonNamingPolicy.ConvertName(nameof(MediaExportTarget.SupportsDirectory))] = new JsonObject()
                                     {
                                         ["type"] = "boolean",
+                                        ["index"] = false,
                                     },
                                     [jsonNamingPolicy.ConvertName(nameof(MediaExportTarget.MediaFormats))] = new JsonObject()
                                     {
                                         ["type"] = "keyword",
+                                        ["index"] = false,
                                     },
                                 },
                             },
                             [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Tags))] = new JsonObject()
                             {
                                 ["type"] = "keyword",
+                                ["index"] = false,
                             },
                         },
                     },
@@ -452,7 +464,11 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         JsonNode searchFieldsNode = new JsonObject();
         foreach (MetadataSearchField metadataSearchField in entry.MetadataSearchFields)
         {
-            searchFieldsNode[metadataSearchField.Aliases[0].ToLowerInvariant()] = new JsonArray([.. metadataSearchField.Values]);
+            searchFieldsNode[metadataSearchField.Aliases[0].ToLowerInvariant()] = new JsonArray([
+                .. metadataSearchField.Values
+                    .Where(v => !string.IsNullOrWhiteSpace(v))
+                    .Distinct()
+            ]);
         }
         JsonNode formatsNode = JsonSerializer.SerializeToNode(entry.MediaFormats, MediaEntriesJsonContext.Default.ImmutableSortedSetMediaFormat)
             ?? throw new JsonException();
