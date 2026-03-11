@@ -45,6 +45,7 @@ public sealed class SinglePartSearchEntryEnumerationHandler<TMetadata>
         // TODO ToImmutableArrayAsync
         ImmutableArray<MediaExportTarget> exportTargets = [.. await _strategy.EnumerateExportTargetsAsync(contentId, partId, cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false)];
         ImmutableSortedSet<string> tags = await _strategy.GetTagsAsync(contentId, cancellationToken).ConfigureAwait(false);
+        ImmutableArray<string> urls = await _strategy.GetUrlsAsync(metadata, cancellationToken).ConfigureAwait(false);
         ImmutableArray<MetadataSearchField> metadataSearchFields = [
             ..metadata.GetSearchFields(),
                 new()
@@ -80,6 +81,7 @@ public sealed class SinglePartSearchEntryEnumerationHandler<TMetadata>
                 Metadata = universalMetadata,
                 ExportTargets = exportTargets,
                 Tags = tags,
+                Urls = urls,
             },
             MetadataSearchFields = metadataSearchFields,
         };

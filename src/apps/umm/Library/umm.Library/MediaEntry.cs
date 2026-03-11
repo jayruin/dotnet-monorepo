@@ -8,4 +8,5 @@ public sealed class MediaEntry
     public required UniversalMediaMetadata Metadata { get; init; }
     public required ImmutableArray<MediaExportTarget> ExportTargets { get; init; }
     public required ImmutableSortedSet<string> Tags { get; init; }
+    public required ImmutableArray<string> Urls { get; init; }
 }

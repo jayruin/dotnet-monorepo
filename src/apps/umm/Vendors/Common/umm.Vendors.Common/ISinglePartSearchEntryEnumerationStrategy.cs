@@ -15,4 +15,5 @@ public interface ISinglePartSearchEntryEnumerationStrategy<TMetadata>
     Task<TMetadata> GetMetadataAsync(string contentId, CancellationToken cancellationToken);
     IAsyncEnumerable<MediaExportTarget> EnumerateExportTargetsAsync(string contentId, string partId, CancellationToken cancellationToken);
     Task<ImmutableSortedSet<string>> GetTagsAsync(string contentId, CancellationToken cancellationToken);
+    Task<ImmutableArray<string>> GetUrlsAsync(TMetadata metadata, CancellationToken cancellationToken);
 }

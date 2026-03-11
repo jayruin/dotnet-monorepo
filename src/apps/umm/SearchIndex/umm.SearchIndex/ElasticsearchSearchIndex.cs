@@ -444,6 +444,11 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                                 ["type"] = "keyword",
                                 ["index"] = false,
                             },
+                            [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Urls))] = new JsonObject()
+                            {
+                                ["type"] = "keyword",
+                                ["index"] = false,
+                            },
                         },
                     },
                     [FormatsKey] = new JsonObject()

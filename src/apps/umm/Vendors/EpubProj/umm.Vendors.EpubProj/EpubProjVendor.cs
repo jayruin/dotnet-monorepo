@@ -16,6 +16,7 @@ using umm.Library;
 using umm.Storages.Blob;
 using umm.Storages.Metadata;
 using umm.Storages.Tags;
+using umm.Storages.Urls;
 using umm.Vendors.Abstractions;
 using umm.Vendors.Common;
 
@@ -28,18 +29,20 @@ public sealed class EpubProjVendor : IMediaVendor
     private readonly IMetadataStorage _metadataStorage;
     private readonly IBlobStorage _blobStorage;
     private readonly ITagsStorage _tagsStorage;
+    private readonly IUrlsStorage _urlsStorage;
     private readonly ILogger<EpubProjVendor> _logger;
     private readonly IEpubProjectLoader _projectLoader;
     private readonly IMediaTypeFileExtensionsMapping _mediaTypeFileExtensionsMapping;
     private readonly IImageLoader _imageLoader;
 
-    public EpubProjVendor(IMetadataStorage metadataStorage, IBlobStorage blobStorage, ITagsStorage tagsStorage,
+    public EpubProjVendor(IMetadataStorage metadataStorage, IBlobStorage blobStorage, ITagsStorage tagsStorage, IUrlsStorage urlsStorage,
         IEpubProjectLoader projectLoader, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, IImageLoader imageLoader,
         ILogger<EpubProjVendor> logger)
     {
         _metadataStorage = metadataStorage;
         _blobStorage = blobStorage;
         _tagsStorage = tagsStorage;
+        _urlsStorage = urlsStorage;
         _logger = logger;
         _projectLoader = projectLoader;
         _mediaTypeFileExtensionsMapping = mediaTypeFileExtensionsMapping;
@@ -151,6 +154,7 @@ public sealed class EpubProjVendor : IMediaVendor
         // TODO ToImmutableArrayAsync
         ImmutableArray<MediaExportTarget> exportTargets = [.. await EnumerateExportTargetsAsync(contentId, cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false)];
         ImmutableSortedSet<string> tags = await GetTagsAsync(contentId, cancellationToken).ConfigureAwait(false);
+        ImmutableArray<string> urls = await GetUrlsAsync(contentId, cancellationToken).ConfigureAwait(false);
         ImmutableArray<MetadataSearchField> searchFields = [
             ..metadata.GetSearchFields(),
             new()
@@ -186,6 +190,7 @@ public sealed class EpubProjVendor : IMediaVendor
                 Metadata = universalMetadata,
                 ExportTargets = exportTargets,
                 Tags = tags,
+                Urls = urls,
             },
             MetadataSearchFields = searchFields,
         };
@@ -193,6 +198,9 @@ public sealed class EpubProjVendor : IMediaVendor
 
     private Task<ImmutableSortedSet<string>> GetTagsAsync(string contentId, CancellationToken cancellationToken)
         => _tagsStorage.GetAsync(new(VendorId, contentId), cancellationToken);
+
+    private Task<ImmutableArray<string>> GetUrlsAsync(string contentId, CancellationToken cancellationToken)
+        => _urlsStorage.GetAsync(new(VendorId, contentId, string.Empty), cancellationToken);
 
     private async Task<EpubProjMetadataAdapter> GetMetadataAsync(string contentId, CancellationToken cancellationToken)
     {

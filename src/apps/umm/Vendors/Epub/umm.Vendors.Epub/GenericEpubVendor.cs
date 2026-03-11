@@ -12,6 +12,7 @@ using umm.Library;
 using umm.Storages.Blob;
 using umm.Storages.Metadata;
 using umm.Storages.Tags;
+using umm.Storages.Urls;
 using umm.Vendors.Abstractions;
 using umm.Vendors.Common;
 
@@ -22,7 +23,7 @@ public sealed class GenericEpubVendor : IMediaVendor
     private readonly SinglePartSearchEntryEnumerationHandler<EpubMetadataAdapter> _enumerationHandler;
     private readonly EpubHandler _epubHandler;
 
-    public GenericEpubVendor(IMetadataStorage metadataStorage, IBlobStorage blobStorage, ITagsStorage tagsStorage,
+    public GenericEpubVendor(IMetadataStorage metadataStorage, IBlobStorage blobStorage, ITagsStorage tagsStorage, IUrlsStorage urlsStorage,
         IImageLoader imageLoader, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping,
         ILogger<GenericEpubVendor> logger)
     {
@@ -35,7 +36,7 @@ public sealed class GenericEpubVendor : IMediaVendor
             Logger = logger,
         };
         EpubHandler epubHandler = new(new EpubHandlerStrategy(vendorContext, imageLoader, mediaTypeFileExtensionsMapping));
-        _enumerationHandler = new(epubHandler.GetEnumerationStrategy());
+        _enumerationHandler = new(epubHandler.GetEnumerationStrategy(new UrlsStrategy(urlsStorage)));
         _epubHandler = epubHandler;
     }
 

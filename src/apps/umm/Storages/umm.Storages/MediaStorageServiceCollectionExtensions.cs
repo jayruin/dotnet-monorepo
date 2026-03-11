@@ -9,6 +9,7 @@ using System.Linq;
 using umm.Storages.Blob;
 using umm.Storages.Metadata;
 using umm.Storages.Tags;
+using umm.Storages.Urls;
 
 namespace umm.Storages;
 
@@ -38,6 +39,7 @@ public static class MediaStorageServiceCollectionExtensions
                     IBlobStorage blobStorage = new FileBlobStorage(vendorIds, baseDirectory);
                     IMetadataStorage metadataStorage = new JsonBlobMetadataStorage(blobStorage);
                     ITagsStorage tagsStorage = new TxtBlobTagsStorage(blobStorage);
+                    IUrlsStorage urlsStorage = new TxtBlobUrlsStorage(blobStorage);
                     if (options.Metadata)
                     {
                         cluster.Add(metadataStorage);
@@ -49,6 +51,10 @@ public static class MediaStorageServiceCollectionExtensions
                     if (options.Tags)
                     {
                         cluster.Add(tagsStorage);
+                    }
+                    if (options.Urls)
+                    {
+                        cluster.Add(urlsStorage);
                     }
                 }
             }
@@ -62,6 +68,9 @@ public static class MediaStorageServiceCollectionExtensions
         serviceCollection.AddTransient<ITagsStorage, CompositeTagsStorage>(sp =>
             new(sp.GetRequiredService<IMediaStorageCluster>().MediaStorages.OfType<ITagsStorage>().ToList(),
                 sp.GetRequiredService<ILogger<CompositeTagsStorage>>()));
+        serviceCollection.AddTransient<IUrlsStorage, CompositeUrlsStorage>(sp =>
+            new(sp.GetRequiredService<IMediaStorageCluster>().MediaStorages.OfType<IUrlsStorage>().ToList(),
+                sp.GetRequiredService<ILogger<CompositeUrlsStorage>>()));
         return serviceCollection;
     }
 
@@ -94,6 +103,7 @@ public static class MediaStorageServiceCollectionExtensions
         public bool Metadata { get; set; }
         public bool Blob { get; set; }
         public bool Tags { get; set; }
+        public bool Urls { get; set; }
         public List<string>? Supports { get; set; }
     }
 }

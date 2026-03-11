@@ -142,15 +142,15 @@ public sealed class EpubHandler
         return metadata;
     }
 
-    public ISinglePartSearchEntryEnumerationStrategy<EpubMetadataAdapter> GetEnumerationStrategy()
+    public ISinglePartSearchEntryEnumerationStrategy<EpubMetadataAdapter> GetEnumerationStrategy(IUrlsStrategy<EpubMetadataAdapter> urlsStrategy)
     {
-        return new EpubHandlerBasicEnumerationStrategy(_strategy.VendorContext, this);
+        return new EpubHandlerBasicEnumerationStrategy(_strategy.VendorContext, this, urlsStrategy);
     }
 
-    public ISinglePartSearchEntryEnumerationStrategy<TMetadata> GetEnumerationStrategy<TMetadata>(string metadataKey)
+    public ISinglePartSearchEntryEnumerationStrategy<TMetadata> GetEnumerationStrategy<TMetadata>(string metadataKey, IUrlsStrategy<TMetadata> urlsStrategy)
         where TMetadata : ISearchableMetadata, IUniversalizableMediaMetadata, ISerializableMetadata<TMetadata>
     {
-        return new EpubHandlerEnumerationStrategy<TMetadata>(_strategy.VendorContext, this, metadataKey);
+        return new EpubHandlerEnumerationStrategy<TMetadata>(_strategy.VendorContext, this, metadataKey, urlsStrategy);
     }
 
     private async Task ModifyMetadataAsync(string contentId, int version, EpubContainer container, IEpubMetadata metadata, CancellationToken cancellationToken)

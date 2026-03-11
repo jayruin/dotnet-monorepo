@@ -13,12 +13,15 @@ internal sealed class EpubHandlerEnumerationStrategy<TMetadata> : ISinglePartSea
 {
     private readonly EpubHandler _epubHandler;
     private readonly string _metadataKey;
+    private readonly IUrlsStrategy<TMetadata> _urlsStrategy;
 
-    public EpubHandlerEnumerationStrategy(MediaVendorContext vendorContext, EpubHandler epubHandler, string metadataKey)
+    public EpubHandlerEnumerationStrategy(MediaVendorContext vendorContext, EpubHandler epubHandler, string metadataKey,
+        IUrlsStrategy<TMetadata> urlsStrategy)
     {
         VendorContext = vendorContext;
         _epubHandler = epubHandler;
         _metadataKey = metadataKey;
+        _urlsStrategy = urlsStrategy;
     }
 
     public MediaVendorContext VendorContext { get; }
@@ -39,4 +42,7 @@ internal sealed class EpubHandlerEnumerationStrategy<TMetadata> : ISinglePartSea
 
     public Task<ImmutableSortedSet<string>> GetTagsAsync(string contentId, CancellationToken cancellationToken)
         => VendorContext.TagsStorage.GetAsync(new(VendorContext.VendorId, contentId), cancellationToken);
+
+    public Task<ImmutableArray<string>> GetUrlsAsync(TMetadata metadata, CancellationToken cancellationToken)
+        => _urlsStrategy.GetUrlsAsync(metadata, cancellationToken);
 }

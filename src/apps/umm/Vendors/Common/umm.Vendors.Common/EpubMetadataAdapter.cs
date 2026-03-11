@@ -9,10 +9,13 @@ public sealed class EpubMetadataAdapter : ISearchableMetadata, IUniversalizableM
 {
     private readonly IEpubMetadata _metadata;
 
-    public EpubMetadataAdapter(IEpubMetadata metadata)
+    public EpubMetadataAdapter(IEpubMetadata metadata, MediaMainId id)
     {
         _metadata = metadata;
+        Id = id;
     }
+
+    public MediaMainId Id { get; }
 
     public ImmutableArray<MetadataSearchField> GetSearchFields() => [
         new()
