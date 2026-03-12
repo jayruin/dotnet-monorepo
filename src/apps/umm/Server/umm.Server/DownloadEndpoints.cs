@@ -7,16 +7,21 @@ using System.Threading.Tasks;
 using umm.Catalog;
 using umm.Library;
 
-namespace umm.App;
+namespace umm.Server;
 
-internal static class DownloadEndpoints
+public static class DownloadEndpoints
 {
+    public static string GetDownloadUrl(MediaFullId id, string exportId)
+        => id.PartId.Length > 0
+            ? $"/download/{exportId}/{id.VendorId}/{id.ContentId}/{id.PartId}"
+            : $"/download/{exportId}/{id.VendorId}/{id.ContentId}";
+
     public static void MapDownloadEndpoints(this IEndpointRouteBuilder builder)
     {
         builder.MapMethods("/download/{exportId}/{vendorId}/{contentId}/{partId?}", [HttpMethods.Get, HttpMethods.Head], GetDownloadAsync);
     }
 
-    public static async Task<IResult> GetDownloadAsync(IMediaCatalog catalog, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping,
+    private static async Task<IResult> GetDownloadAsync(IMediaCatalog catalog, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping,
         string exportId, string vendorId, string contentId, string partId = "",
         CancellationToken cancellationToken = default)
     {

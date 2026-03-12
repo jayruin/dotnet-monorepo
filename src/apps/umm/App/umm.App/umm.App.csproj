@@ -9,6 +9,7 @@
     <ProjectReference Include="$(Proj_SourceGenerators)" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 
     <ProjectReference Include="$(Proj_umm_Plugins_Abstractions)" />
+    <ProjectReference Include="$(Proj_umm_Server)" />
     <ProjectReference Include="$(Proj_umm_Storages)" />
 
     <ProjectReference Include="$(Proj_umm_Plugins_All)" Exclude="$(Proj_umm_Plugins_Tests_All)" />

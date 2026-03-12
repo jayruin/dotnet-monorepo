@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using umm.Catalog;
 using umm.Library;
+using umm.Server;
 using Utils;
 
 namespace umm.Plugins.Opds;
@@ -348,21 +349,9 @@ internal static class OpdsEndpoints
             .Where(exportTarget => isImage == exportTarget.MediaFormats.Contains(MediaFormat.Artwork))
             .Select(exportTarget => new OpdsResourceLink()
             {
-                Href = GetDownloadUrl(mediaEntry, exportTarget),
+                Href = DownloadEndpoints.GetDownloadUrl(mediaEntry.Id, exportTarget.ExportId),
                 Type = exportTarget.MediaType,
                 Title = exportTarget.ExportId,
             });
-    }
-
-    private static string GetDownloadUrl(MediaEntry mediaEntry, MediaExportTarget exportTarget)
-    {
-        string downloadPath = string.Join('/', new[]
-            {
-                exportTarget.ExportId,
-                mediaEntry.Id.VendorId,
-                mediaEntry.Id.ContentId,
-                mediaEntry.Id.PartId,
-            }.Where(s => s.Length > 0));
-        return $"/download/{downloadPath}";
     }
 }
