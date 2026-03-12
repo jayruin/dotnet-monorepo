@@ -47,9 +47,9 @@ internal static class OpdsEndpoints
         CancellationToken cancellationToken = default)
     {
         string opdsVersion = "1.2";
-        FrozenSet<MediaFormat> mediaFormats = GetMediaFormatsFromQuery(request);
+        FrozenSet<MediaFormat> mediaFormats = Navigation.GetMediaFormatsFromQuery(request);
         Dictionary<string, StringValues> searchQuery = QueryHelpers.ParseQuery(queryString);
-        (string? prevUrl, MediaFullId? after) = GetHistory(history, request);
+        (string? prevUrl, MediaFullId? after) = Navigation.GetHistory(history, request);
         int pageSize = options.Value.PageSize;
         SearchOptions searchOptions = new()
         {
@@ -66,7 +66,7 @@ internal static class OpdsEndpoints
         List<MediaEntry> entries = await catalog.EnumerateAsync(searchQuery, searchOptions, cancellationToken)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
-        string? nextUrl = GetNextUrl(history, request, entries, pageSize);
+        string? nextUrl = Navigation.GetNextUrl(history, request, entries, pageSize);
         OpdsFeed feed = CreateOpdsFeed(opdsVersion, request.Path + request.QueryString,
             entries, timeProvider,
             isAcquisition, isPaginated,
@@ -89,8 +89,8 @@ internal static class OpdsEndpoints
         CancellationToken cancellationToken = default)
     {
         string opdsVersion = "1.2";
-        FrozenSet<MediaFormat> mediaFormats = GetMediaFormatsFromQuery(request);
-        (string? prevUrl, MediaFullId? after) = GetHistory(history, request);
+        FrozenSet<MediaFormat> mediaFormats = Navigation.GetMediaFormatsFromQuery(request);
+        (string? prevUrl, MediaFullId? after) = Navigation.GetHistory(history, request);
         int pageSize = options.Value.PageSize;
         SearchOptions searchOptions = new()
         {
@@ -107,7 +107,7 @@ internal static class OpdsEndpoints
         List<MediaEntry> entries = await catalog.EnumerateAsync(searchTerm ?? string.Empty, searchOptions, cancellationToken)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
-        string? nextUrl = GetNextUrl(history, request, entries, pageSize);
+        string? nextUrl = Navigation.GetNextUrl(history, request, entries, pageSize);
         OpdsFeed feed = CreateOpdsFeed(opdsVersion, request.Path + request.QueryString,
             entries, timeProvider,
             isAcquisition, isPaginated,
@@ -162,9 +162,9 @@ internal static class OpdsEndpoints
         CancellationToken cancellationToken = default)
     {
         string opdsVersion = "2.0";
-        FrozenSet<MediaFormat> mediaFormats = GetMediaFormatsFromQuery(request);
+        FrozenSet<MediaFormat> mediaFormats = Navigation.GetMediaFormatsFromQuery(request);
         Dictionary<string, StringValues> searchQuery = QueryHelpers.ParseQuery(queryString);
-        (string? prevUrl, MediaFullId? after) = GetHistory(history, request);
+        (string? prevUrl, MediaFullId? after) = Navigation.GetHistory(history, request);
         int pageSize = options.Value.PageSize;
         SearchOptions searchOptions = new()
         {
@@ -181,7 +181,7 @@ internal static class OpdsEndpoints
         List<MediaEntry> entries = await catalog.EnumerateAsync(searchQuery, searchOptions, cancellationToken)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
-        string? nextUrl = GetNextUrl(history, request, entries, pageSize);
+        string? nextUrl = Navigation.GetNextUrl(history, request, entries, pageSize);
         OpdsFeed feed = CreateOpdsFeed(opdsVersion, request.Path + request.QueryString,
             entries, timeProvider,
             isAcquisition, isPaginated,
@@ -204,8 +204,8 @@ internal static class OpdsEndpoints
         CancellationToken cancellationToken = default)
     {
         string opdsVersion = "2.0";
-        FrozenSet<MediaFormat> mediaFormats = GetMediaFormatsFromQuery(request);
-        (string? prevUrl, MediaFullId? after) = GetHistory(history, request);
+        FrozenSet<MediaFormat> mediaFormats = Navigation.GetMediaFormatsFromQuery(request);
+        (string? prevUrl, MediaFullId? after) = Navigation.GetHistory(history, request);
         int pageSize = options.Value.PageSize;
         SearchOptions searchOptions = new()
         {
@@ -222,7 +222,7 @@ internal static class OpdsEndpoints
         List<MediaEntry> entries = await catalog.EnumerateAsync(searchTerm ?? string.Empty, searchOptions, cancellationToken)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
-        string? nextUrl = GetNextUrl(history, request, entries, pageSize);
+        string? nextUrl = Navigation.GetNextUrl(history, request, entries, pageSize);
         OpdsFeed feed = CreateOpdsFeed(opdsVersion, request.Path + request.QueryString,
             entries, timeProvider,
             isAcquisition, isPaginated,
@@ -243,58 +243,6 @@ internal static class OpdsEndpoints
             stream => OpdsSerializerV2_0.WriteFeedAsync(stream, feed, serializerOptions, cancellationToken),
             OpdsSerializerV2_0.FeedMediaType,
             $"opds_v{opdsVersion}{OpdsSerializerV2_0.FeedFileExtension}");
-    }
-
-    private static FrozenSet<MediaFormat> GetMediaFormatsFromQuery(HttpRequest request)
-    {
-        return request.Query.TryGetValue("format", out StringValues formats)
-            ? formats
-                .Select<string, MediaFormat?>(s =>
-                    Enum.TryParse(s, true, out MediaFormat mediaFormat)
-                        ? mediaFormat
-                        : null)
-                .OfType<MediaFormat>()
-                .ToFrozenSet()
-            : [];
-    }
-
-    private static (string? PrevUrl, MediaFullId? After) GetHistory(string? history, HttpRequest request)
-    {
-        string[] historyParts = history?.Split(',') ?? [];
-        MediaFullId? after = historyParts.Length > 0
-            ? MediaFullId.FromCombinedString(historyParts[^1])
-            : null;
-        string? prevHistory = historyParts.Length > 1
-            ? string.Join(',', historyParts[..^1])
-            : null;
-        Dictionary<string, StringValues> query = QueryHelpers.ParseQuery(request.QueryString.Value);
-        if (string.IsNullOrWhiteSpace(history))
-        {
-            query.Remove("history");
-        }
-        else
-        {
-            query["history"] = prevHistory;
-        }
-        string? prevUrl = historyParts.Length > 0
-            ? QueryHelpers.AddQueryString(request.Path, query)
-            : null;
-        return (prevUrl, after);
-    }
-
-    private static string? GetNextUrl(string? history, HttpRequest request,
-        List<MediaEntry> entries, int pageSize)
-    {
-        string[] historyParts = history?.Split(',') ?? [];
-        string? nextHistory = entries.Count > 0 && entries.Count == pageSize
-            ? string.Join(',', [.. historyParts, entries[^1].Id.ToCombinedString()])
-            : null;
-        Dictionary<string, StringValues> query = QueryHelpers.ParseQuery(request.QueryString.Value);
-        query["history"] = nextHistory;
-        string? nextUrl = !string.IsNullOrWhiteSpace(nextHistory)
-            ? QueryHelpers.AddQueryString(request.Path, query)
-            : null;
-        return nextUrl;
     }
 
     private static OpdsFeed CreateOpdsFeed(string opdsVersion, string selfUrl, IEnumerable<MediaEntry> entries,

@@ -1,0 +1,57 @@
+@using umm.Library
+@using umm.Server
+
+@inherits RazorSlice<MediaEntry>
+@implements IUsesLayout<Layout, LayoutModel>
+
+<h1>@Model.Id.ToCombinedString()</h1>
+
+<h2>@Model.Metadata.Title</h2>
+    
+<h3>@nameof(Model.Metadata.Creators)</h3>
+<ul>
+    @foreach (string creator in Model.Metadata.Creators)
+    {
+        <li>@creator</li>
+    }
+</ul>
+
+<h3>@nameof(Model.Metadata.Description)</h3>
+<p>@Model.Metadata.Description</p>
+
+<h3>@nameof(Model.Tags)</h3>
+<ul>
+    @foreach (string tag in Model.Tags)
+    {
+        <li>@tag</li>
+    }
+</ul>
+
+<h3>@nameof(Model.Urls)</h3>
+<ul>
+    @foreach (string url in Model.Urls)
+    {
+        <li><a href="@url">@url</a></li>
+    }
+</ul>
+
+<h3>Downloads</h3>
+<dl>
+    @foreach (MediaExportTarget exportTarget in Model.ExportTargets)
+    {
+        <dt><a href="@DownloadEndpoints.GetDownloadUrl(Model.Id, exportTarget.ExportId)">@exportTarget.ExportId</a></dt>
+        <dd>
+            @exportTarget.MediaType
+            <ul>
+                @foreach (MediaFormat mediaFormat in exportTarget.MediaFormats)
+                {
+                    <li>@mediaFormat</li>
+                }
+            </ul>
+        </dd>
+    }
+</dl>
+
+@functions {
+    public LayoutModel LayoutModel => new() { Title = $"umm Entry {Model.Id.ToCombinedString()}" };
+}

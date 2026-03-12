@@ -1,0 +1,94 @@
+@using Microsoft.AspNetCore.WebUtilities
+@using Microsoft.Extensions.Primitives
+@using umm.Library;
+
+@inherits RazorSlice<FeedModel>
+@implements IUsesLayout<Layout, LayoutModel>
+
+<h1>@LayoutModel.Title</h1>
+
+<form action="@Model.CurrentPath">
+    <label>
+        Search Query
+        <input type="text" name="search" value="@Model.SearchQuery" />
+    </label>
+    <label>
+        Advanced
+        @if (Model.IsAdvanced)
+        {
+            <input type="checkbox" name="advanced" value="true" checked />
+        }
+        else
+        {
+            <input type="checkbox" name="advanced" value="true" />
+        }
+    </label>
+    <label>
+        Paginated
+        @if (Model.IsPaginated)
+        {
+            <input type="checkbox" name="paginated" value="true" checked />
+        }
+        else
+        {
+            <input type="checkbox" name="paginated" value="true" />
+        }
+    </label>
+    <label>
+        Include Parts
+        @if (Model.IncludeParts)
+        {
+            <input type="checkbox" name="parts" value="true" checked />
+        }
+        else
+        {
+            <input type="checkbox" name="parts" value="true" />
+        }
+    </label>
+    <input type="submit" value="Submit" />
+</form>
+
+<ul>
+    @if (!string.IsNullOrWhiteSpace(Model.PrevUrl))
+    {
+        <li><a href="@Model.PrevUrl">Previous Page</a></li>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.NextUrl))
+    {
+        <li><a href="@Model.NextUrl">Next Page</a></li>
+    }
+</ul>
+
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+    </tr>
+    @foreach (MediaEntry mediaEntry in Model.MediaEntries)
+    {
+        <tr>
+            <td><a href="@GetUrlForMediaEntry(mediaEntry)">@mediaEntry.Id.ToCombinedString()</a></td>
+            <td>@mediaEntry.Metadata.Title</td>
+        </tr>
+    }
+</table>
+
+@functions {
+    public LayoutModel LayoutModel => new() { Title = "umm Search Feed" };
+}
+
+@functions {
+    public string GetUrlForMediaEntry(MediaEntry entry)
+    {
+        if (Model.IncludeParts)
+        {
+            return string.Join('/', 
+                Model.CurrentPath.Split('/')[..^1].Append("entry").Append(entry.Id.ToCombinedString()));
+        }
+        Dictionary<string, StringValues> query = Model.Query.ToDictionary();
+        query["parts"] = "true";
+        query["advanced"] = "true";
+        query["search"] = $"vendorid={entry.Id.VendorId}&contentid={entry.Id.ContentId}";
+        return QueryHelpers.AddQueryString(Model.CurrentPath, query);
+    }
+}
