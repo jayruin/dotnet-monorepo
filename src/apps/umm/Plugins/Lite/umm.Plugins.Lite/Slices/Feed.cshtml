@@ -12,39 +12,57 @@
         Search Query
         <input type="text" name="search" value="@Model.SearchQuery" />
     </label>
-    <label>
-        Advanced
-        @if (Model.IsAdvanced)
+    <fieldset>
+        <legend>Main Options</legend>
+        <label>
+            Advanced
+            @if (Model.IsAdvanced)
+            {
+                <input type="checkbox" name="advanced" value="true" checked />
+            }
+            else
+            {
+                <input type="checkbox" name="advanced" value="true" />
+            }
+        </label>
+        <label>
+            Paginated
+            @if (Model.IsPaginated)
+            {
+                <input type="checkbox" name="paginated" value="true" checked />
+            }
+            else
+            {
+                <input type="checkbox" name="paginated" value="true" />
+            }
+        </label>
+        <label>
+            Include Parts
+            @if (Model.IncludeParts)
+            {
+                <input type="checkbox" name="parts" value="true" checked />
+            }
+            else
+            {
+                <input type="checkbox" name="parts" value="true" />
+            }
+        </label>
+    </fieldset>
+    <fieldset>
+        <legend>Format Options</legend>
+        @foreach (MediaFormat mediaFormat in Enum.GetValues<MediaFormat>())
         {
-            <input type="checkbox" name="advanced" value="true" checked />
+            @mediaFormat.ToString()
+            @if (Model.MediaFormats.Contains(mediaFormat))
+            {
+                <input type="checkbox" name="format" value="@mediaFormat.ToString()" checked />
+            }
+            else
+            {
+                <input type="checkbox" name="format" value="@mediaFormat.ToString()" />
+            }
         }
-        else
-        {
-            <input type="checkbox" name="advanced" value="true" />
-        }
-    </label>
-    <label>
-        Paginated
-        @if (Model.IsPaginated)
-        {
-            <input type="checkbox" name="paginated" value="true" checked />
-        }
-        else
-        {
-            <input type="checkbox" name="paginated" value="true" />
-        }
-    </label>
-    <label>
-        Include Parts
-        @if (Model.IncludeParts)
-        {
-            <input type="checkbox" name="parts" value="true" checked />
-        }
-        else
-        {
-            <input type="checkbox" name="parts" value="true" />
-        }
-    </label>
+    </fieldset>
     <input type="submit" value="Submit" />
 </form>
 

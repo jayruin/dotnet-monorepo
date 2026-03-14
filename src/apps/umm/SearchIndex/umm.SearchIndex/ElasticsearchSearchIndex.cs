@@ -35,13 +35,13 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
 
     public IAsyncEnumerable<MediaEntry> EnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, SearchOptions searchOptions, CancellationToken cancellationToken = default)
     {
-        JsonNode? queryNode = CreateQueryNode(searchQuery, searchOptions.MediaFormats);
+        JsonNode queryNode = CreateQueryNode(searchQuery, searchOptions.MediaFormats);
         return EnumerateAsync(queryNode, searchOptions, cancellationToken);
     }
 
     public IAsyncEnumerable<MediaEntry> EnumerateAsync(string searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
     {
-        JsonNode? queryNode = CreateQueryNode(searchTerm, searchOptions.MediaFormats);
+        JsonNode queryNode = CreateQueryNode(searchTerm, searchOptions.MediaFormats);
         return EnumerateAsync(queryNode, searchOptions, cancellationToken);
     }
 
@@ -110,29 +110,30 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         };
     }
 
-    private static JsonNode? CreateQueryNode(IReadOnlyDictionary<string, StringValues> searchQuery, FrozenSet<MediaFormat> mediaFormats)
+    private static JsonNode CreateQueryNode(IReadOnlyDictionary<string, StringValues> searchQuery, FrozenSet<MediaFormat> mediaFormats)
     {
-        if (searchQuery.Count == 0) return null;
-        JsonArray searchArray = new([.. searchQuery.Select(kvp => {
-            (string searchKey, StringValues searchValues) = kvp;
-            return new JsonObject()
-            {
-                ["bool"] = new JsonObject()
+        JsonArray searchArray = searchQuery.Count > 0
+            ? new([.. searchQuery.Select(kvp => {
+                (string searchKey, StringValues searchValues) = kvp;
+                return new JsonObject()
                 {
-                    ["should"] = new JsonArray([.. searchValues.Select(searchValue => new JsonObject()
+                    ["bool"] = new JsonObject()
                     {
-                        ["match"] = new JsonObject()
+                        ["should"] = new JsonArray([.. searchValues.Select(searchValue => new JsonObject()
                         {
-                            [$"{SearchFieldsKey}.{searchKey.ToLowerInvariant()}"] = new JsonObject()
+                            ["match"] = new JsonObject()
                             {
-                                ["query"] = searchValue,
-                                ["operator"] = "and",
+                                [$"{SearchFieldsKey}.{searchKey.ToLowerInvariant()}"] = new JsonObject()
+                                {
+                                    ["query"] = searchValue,
+                                    ["operator"] = "and",
+                                },
                             },
-                        },
-                    })]),
-                },
-            };
-        })]);
+                        })]),
+                    },
+                };
+            })])
+            : [];
         if (mediaFormats.Count > 0)
         {
             searchArray.Add(CreateMediaFormatsSearchNode(mediaFormats));
@@ -146,20 +147,21 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         };
     }
 
-    private static JsonNode? CreateQueryNode(string searchTerm, FrozenSet<MediaFormat> mediaFormats)
+    private static JsonNode CreateQueryNode(string searchTerm, FrozenSet<MediaFormat> mediaFormats)
     {
-        if (string.IsNullOrWhiteSpace(searchTerm)) return null;
-        JsonArray searchArray = new([
-            new JsonObject()
-            {
-                ["simple_query_string"] = new JsonObject()
+        JsonArray searchArray = !string.IsNullOrWhiteSpace(searchTerm)
+            ? new([
+                new JsonObject()
                 {
-                    ["query"] = searchTerm,
-                    ["default_operator"] = "and",
-                    ["fields"] = new JsonArray([$"{SearchFieldsKey}.*"]),
+                    ["simple_query_string"] = new JsonObject()
+                    {
+                        ["query"] = searchTerm,
+                        ["default_operator"] = "and",
+                        ["fields"] = new JsonArray([$"{SearchFieldsKey}.*"]),
+                    },
                 },
-            },
-        ]);
+            ])
+            : [];
         if (mediaFormats.Count > 0)
         {
             searchArray.Add(CreateMediaFormatsSearchNode(mediaFormats));
@@ -198,7 +200,7 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         return _httpClient.GetJsonAsync($"{indexWildcardName},-.*/_search", payload, cancellationToken);
     }
 
-    private async IAsyncEnumerable<MediaEntry> EnumerateAsync(JsonNode? queryNode, SearchOptions searchOptions, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    private async IAsyncEnumerable<MediaEntry> EnumerateAsync(JsonNode queryNode, SearchOptions searchOptions, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         JsonNode sortNode = CreateSortNode();
         JsonNode? searchAfterNode = null;
@@ -209,11 +211,8 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
             JsonNode payload = new JsonObject()
             {
                 ["sort"] = sortNode.DeepClone(),
+                ["query"] = queryNode.DeepClone(),
             };
-            if (queryNode is not null)
-            {
-                payload["query"] = queryNode.DeepClone();
-            }
             if (paginationOptions is not null)
             {
                 payload["size"] = paginationOptions.Count;

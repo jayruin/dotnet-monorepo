@@ -13,6 +13,7 @@ public sealed class FeedModel
     public required bool IsAdvanced { get; init; }
     public required bool IsPaginated { get; init; }
     public required bool IncludeParts { get; init; }
+    public required IReadOnlySet<MediaFormat> MediaFormats { get; init; }
     public required string? PrevUrl { get; init; }
     public required string? NextUrl { get; init; }
 }

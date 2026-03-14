@@ -78,6 +78,7 @@ public static class LiteEndpoints
             IsAdvanced = isAdvanced,
             IsPaginated = isPaginated,
             IncludeParts = includeParts,
+            MediaFormats = mediaFormats,
             PrevUrl = prevUrl,
             NextUrl = nextUrl,
         };
