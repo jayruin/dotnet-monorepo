@@ -82,7 +82,7 @@ public static class LiteEndpoints
             PrevUrl = prevUrl,
             NextUrl = nextUrl,
         };
-        return Results.Extensions.RazorSlice<Feed, FeedModel>(model);
+        return Results.RazorSlice<Feed, FeedModel>(model);
     }
 
     private static async Task<IResult> GetEntry(
@@ -94,6 +94,6 @@ public static class LiteEndpoints
         if (mediaFullId is null) return TypedResults.NotFound();
         MediaEntry? mediaEntry = await catalog.GetMediaEntryAsync(mediaFullId, cancellationToken).ConfigureAwait(false);
         if (mediaEntry is null) return TypedResults.NotFound();
-        return Results.Extensions.RazorSlice<Entry, MediaEntry>(mediaEntry);
+        return Results.RazorSlice<Entry, MediaEntry>(mediaEntry);
     }
 }
