@@ -43,7 +43,7 @@ public sealed class ProgressTests
         });
         await App.StartAsync(TestContext.CancellationToken);
         Client = App.GetTestClient();
-        using UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
         await userManager.CreateAsync(new()
         {
             UserName = Username,
@@ -133,7 +133,7 @@ public sealed class ProgressTests
         Assert.IsNotNull(response);
         Assert.AreEqual(request.Document, response.Document);
         IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        using UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument? progressDocument = await progressManager.GetAsync(userId, request.Document, TestContext.CancellationToken);
@@ -194,7 +194,7 @@ public sealed class ProgressTests
         Assert.IsNotNull(response2);
         Assert.AreEqual(request2.Document, response2.Document);
         IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        using UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument? progressDocument = await progressManager.GetAsync(userId, request1.Document, TestContext.CancellationToken);
@@ -209,7 +209,7 @@ public sealed class ProgressTests
     public async Task Test_GetProgressWithoutAuth_Fails()
     {
         IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        using UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument progressDocument = new()
@@ -240,7 +240,7 @@ public sealed class ProgressTests
     public async Task Test_GetProgressWithWrongPassword_Fails()
     {
         IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        using UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument progressDocument = new()
@@ -275,7 +275,7 @@ public sealed class ProgressTests
     public async Task Test_GetProgressWithCorrectAuth_Succeeds()
     {
         IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        using UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument progressDocument = new()
