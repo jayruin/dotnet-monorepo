@@ -69,7 +69,7 @@ public sealed class ProgressTests
             Device = "device",
             DeviceId = "device_id",
         };
-        using HttpResponseMessage responseMessage = await Client.PutAsJsonAsync("/syncs/progress", request, ProgressJsonContext.Default.PutProgressRequest, TestContext.CancellationToken);
+        using HttpResponseMessage responseMessage = await Client.PutAsJsonAsync("syncs/progress", request, ProgressJsonContext.Default.PutProgressRequest, TestContext.CancellationToken);
         Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
         ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
         Assert.IsNotNull(response);
@@ -90,7 +90,7 @@ public sealed class ProgressTests
         };
         using HttpRequestMessage requestMessage = new()
         {
-            RequestUri = new("/syncs/progress", UriKind.Relative),
+            RequestUri = new("syncs/progress", UriKind.Relative),
             Method = HttpMethod.Put,
             Content = JsonContent.Create(request, ProgressJsonContext.Default.PutProgressRequest),
             Headers = {
@@ -119,7 +119,7 @@ public sealed class ProgressTests
         };
         using HttpRequestMessage requestMessage = new()
         {
-            RequestUri = new("/syncs/progress", UriKind.Relative),
+            RequestUri = new("syncs/progress", UriKind.Relative),
             Method = HttpMethod.Put,
             Content = JsonContent.Create(request, ProgressJsonContext.Default.PutProgressRequest),
             Headers = {
@@ -157,7 +157,7 @@ public sealed class ProgressTests
         };
         using HttpRequestMessage requestMessage1 = new()
         {
-            RequestUri = new("/syncs/progress", UriKind.Relative),
+            RequestUri = new("syncs/progress", UriKind.Relative),
             Method = HttpMethod.Put,
             Content = JsonContent.Create(request1, ProgressJsonContext.Default.PutProgressRequest),
             Headers = {
@@ -180,7 +180,7 @@ public sealed class ProgressTests
         };
         using HttpRequestMessage requestMessage2 = new()
         {
-            RequestUri = new("/syncs/progress", UriKind.Relative),
+            RequestUri = new("syncs/progress", UriKind.Relative),
             Method = HttpMethod.Put,
             Content = JsonContent.Create(request2, ProgressJsonContext.Default.PutProgressRequest),
             Headers = {
@@ -225,7 +225,7 @@ public sealed class ProgressTests
         await progressManager.PutAsync(progressDocument, TestContext.CancellationToken);
         using HttpRequestMessage requestMessage = new()
         {
-            RequestUri = new($"/syncs/progress/{progressDocument.Hash}", UriKind.Relative),
+            RequestUri = new($"syncs/progress/{progressDocument.Hash}", UriKind.Relative),
             Method = HttpMethod.Get,
         };
         using HttpResponseMessage responseMessage = await Client.SendAsync(requestMessage, TestContext.CancellationToken);
@@ -256,7 +256,7 @@ public sealed class ProgressTests
         await progressManager.PutAsync(progressDocument, TestContext.CancellationToken);
         using HttpRequestMessage requestMessage = new()
         {
-            RequestUri = new($"/syncs/progress/{progressDocument.Hash}", UriKind.Relative),
+            RequestUri = new($"syncs/progress/{progressDocument.Hash}", UriKind.Relative),
             Method = HttpMethod.Get,
             Headers = {
                 { KoreaderAuthOptions.UsernameHeader, Username },
@@ -291,7 +291,7 @@ public sealed class ProgressTests
         await progressManager.PutAsync(progressDocument, TestContext.CancellationToken);
         using HttpRequestMessage requestMessage = new()
         {
-            RequestUri = new($"/syncs/progress/{progressDocument.Hash}", UriKind.Relative),
+            RequestUri = new($"syncs/progress/{progressDocument.Hash}", UriKind.Relative),
             Method = HttpMethod.Get,
             Headers = {
                 { KoreaderAuthOptions.UsernameHeader, Username },
@@ -315,7 +315,7 @@ public sealed class ProgressTests
     {
         using HttpRequestMessage requestMessage = new()
         {
-            RequestUri = new($"/syncs/progress/document", UriKind.Relative),
+            RequestUri = new($"syncs/progress/document", UriKind.Relative),
             Method = HttpMethod.Get,
             Headers = {
                 { KoreaderAuthOptions.UsernameHeader, Username },

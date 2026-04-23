@@ -1,5 +1,6 @@
 using ksse.Auth;
 using ksse.Errors;
+using ksse.Health;
 using ksse.ReadingProgress;
 using ksse.Users;
 using Logging;
@@ -52,6 +53,8 @@ internal static class Initializations
         services.ConfigureHttpJsonOptions(options =>
         {
             options.SerializerOptions.TypeInfoResolverChain.Insert(0, UsersJsonContext.Default);
+            options.SerializerOptions.TypeInfoResolverChain.Insert(0, ProgressJsonContext.Default);
+            options.SerializerOptions.TypeInfoResolverChain.Insert(0, HealthChecksJsonContext.Default);
             options.SerializerOptions.TypeInfoResolverChain.Insert(0, ErrorsJsonContext.Default);
             options.SerializerOptions.PropertyNamingPolicy = ErrorsJsonContext.Default.Options.PropertyNamingPolicy;
         });
@@ -70,6 +73,11 @@ internal static class Initializations
                 .Build());
 
         services.AddFeatureManagement();
+
+        services
+            .AddHealthChecks()
+            .AddDbContextCheck<UsersDbContext>()
+            .AddDbContextCheck<ProgressDbContext>();
     }
 
     public static void InitializeMiddlewares(IApplicationBuilder applicationBuilder)
@@ -87,6 +95,7 @@ internal static class Initializations
     {
         endpointRouteBuilder.MapUsersEndpoints();
         endpointRouteBuilder.MapProgressEndpoints();
+        endpointRouteBuilder.MapHealthCheckEndpoints();
     }
 
     private static void AddDatabase<TContext>(IServiceCollection services, IConfiguration configuration)

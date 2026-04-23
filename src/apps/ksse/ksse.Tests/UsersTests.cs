@@ -38,7 +38,7 @@ public sealed class UsersTests
             };
             using HttpRequestMessage requestMessage = new()
             {
-                RequestUri = new("/users/create", UriKind.Relative),
+                RequestUri = new("users/create", UriKind.Relative),
                 Method = HttpMethod.Post,
                 Content = JsonContent.Create(request, UsersJsonContext.Default.CreateUserRequest),
             };
@@ -75,7 +75,7 @@ public sealed class UsersTests
             using JsonContent content = JsonContent.Create(request, UsersJsonContext.Default.CreateUserRequest);
             using HttpRequestMessage requestMessage1 = new()
             {
-                RequestUri = new("/users/create", UriKind.Relative),
+                RequestUri = new("users/create", UriKind.Relative),
                 Method = HttpMethod.Post,
                 Content = content,
             };
@@ -124,7 +124,7 @@ public sealed class UsersTests
             };
             using HttpRequestMessage requestMessage = new()
             {
-                RequestUri = new("/users/create", UriKind.Relative),
+                RequestUri = new("users/create", UriKind.Relative),
                 Method = HttpMethod.Post,
                 Content = JsonContent.Create(request, UsersJsonContext.Default.CreateUserRequest),
             };
@@ -156,7 +156,7 @@ public sealed class UsersTests
         {
             using HttpRequestMessage requestMessage = new()
             {
-                RequestUri = new("/users/auth", UriKind.Relative),
+                RequestUri = new("users/auth", UriKind.Relative),
                 Method = HttpMethod.Get,
             };
             using HttpResponseMessage responseMessage = await client.SendAsync(requestMessage, TestContext.CancellationToken);
@@ -187,7 +187,7 @@ public sealed class UsersTests
         {
             using HttpRequestMessage requestMessage = new()
             {
-                RequestUri = new("/users/auth", UriKind.Relative),
+                RequestUri = new("users/auth", UriKind.Relative),
                 Method = HttpMethod.Get,
                 Headers = {
                     { KoreaderAuthOptions.UsernameHeader, "testuser" },
@@ -227,14 +227,14 @@ public sealed class UsersTests
                 Username = username,
                 Password = password,
             };
-            using HttpResponseMessage responseMessage1 = await client.PostAsJsonAsync("/users/create", request1, UsersJsonContext.Default.CreateUserRequest, TestContext.CancellationToken);
+            using HttpResponseMessage responseMessage1 = await client.PostAsJsonAsync("users/create", request1, UsersJsonContext.Default.CreateUserRequest, TestContext.CancellationToken);
             Assert.AreEqual(HttpStatusCode.Created, responseMessage1.StatusCode);
             CreateUserResponse? response1 = await responseMessage1.Content.ReadFromJsonAsync(UsersJsonContext.Default.CreateUserResponse, TestContext.CancellationToken);
             Assert.IsNotNull(response1);
             Assert.AreEqual(request1.Username, response1.UserName);
             using HttpRequestMessage requestMessage2 = new()
             {
-                RequestUri = new("/users/auth", UriKind.Relative),
+                RequestUri = new("users/auth", UriKind.Relative),
                 Method = HttpMethod.Get,
                 Headers = {
                     { KoreaderAuthOptions.UsernameHeader, username },
@@ -269,7 +269,7 @@ public sealed class UsersTests
         {
             string username = "testuser";
             string password = "Password1!";
-            using HttpResponseMessage responseMessage1 = await client.PostAsJsonAsync("/users/create", new CreateUserRequest()
+            using HttpResponseMessage responseMessage1 = await client.PostAsJsonAsync("users/create", new CreateUserRequest()
             {
                 Username = username,
                 Password = password,
@@ -277,7 +277,7 @@ public sealed class UsersTests
             Assert.AreEqual(HttpStatusCode.Created, responseMessage1.StatusCode);
             using HttpRequestMessage requestMessage2 = new()
             {
-                RequestUri = new("/users/auth", UriKind.Relative),
+                RequestUri = new("users/auth", UriKind.Relative),
                 Method = HttpMethod.Get,
                 Headers = {
                     { KoreaderAuthOptions.UsernameHeader, username },
