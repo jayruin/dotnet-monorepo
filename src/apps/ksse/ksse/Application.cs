@@ -1,4 +1,5 @@
 using Apps;
+using ksse.Auth;
 using ksse.ReadingProgress;
 using ksse.Users;
 using Microsoft.AspNetCore.Identity;
@@ -181,7 +182,8 @@ internal static class Application
             UserName = userName,
         };
         cancellationToken.ThrowIfCancellationRequested();
-        IdentityResult identityResult = await userManager.CreateAsync(user, password);
+        string hashedPassword = ClientHash.HashPassword(password);
+        IdentityResult identityResult = await userManager.CreateAsync(user, hashedPassword);
         if (!identityResult.Succeeded)
         {
             throw new InvalidOperationException(string.Join(',', identityResult.Errors.Select(e => $"{e.Code}:{e.Description}")));
