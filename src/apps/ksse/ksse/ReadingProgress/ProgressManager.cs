@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,9 +30,20 @@ internal sealed class ProgressManager : IProgressManager
         }
         else
         {
-            //_dbContext.Entry(existingProgressDocument).CurrentValues.SetValues(progress);
             _dbContext.Update(progress);
         }
         await _dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    public Task DeleteAsync(string user, string hash, CancellationToken cancellationToken = default)
+    {
+        _dbContext.RemoveRange(_dbContext.ProgressDocuments.Where(p => p.User == user && p.Hash == hash));
+        return _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task DeleteAllAsync(string user, CancellationToken cancellationToken = default)
+    {
+        _dbContext.RemoveRange(_dbContext.ProgressDocuments.Where(p => p.User == user));
+        return _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

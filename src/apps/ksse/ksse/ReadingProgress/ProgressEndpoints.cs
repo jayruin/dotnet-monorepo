@@ -15,10 +15,16 @@ internal static class ProgressEndpoints
 {
     public static void MapProgressEndpoints(this IEndpointRouteBuilder builder)
     {
-        RouteGroupBuilder group = builder.MapGroup("/syncs");
+        RouteGroupBuilder group = builder.MapGroup("syncs");
         group.MapGet("progress/{document}", GetProgressAsync)
             .RequireAuthorization();
         group.MapPut("progress", PutProgressAsync)
+            .RequireAuthorization();
+
+        // Extended endpoints
+        group.MapDelete("progress/{document}", DeleteProgressAsync)
+            .RequireAuthorization();
+        group.MapDelete("progress", DeleteAllProgressAsync)
             .RequireAuthorization();
     }
 
@@ -75,5 +81,30 @@ internal static class ProgressEndpoints
             Timestamp = progressDocument.Timestamp.ToUnixTimeSeconds(),
         };
         return TypedResults.Ok(response);
+    }
+
+    private static async Task<IResult> DeleteProgressAsync(
+        string document,
+        ClaimsPrincipal principal,
+        UserManager<IdentityUser> userManager,
+        IProgressManager progressManager,
+        CancellationToken cancellationToken)
+    {
+        IdentityUser? user = await userManager.GetUserAsync(principal).ConfigureAwait(false);
+        if (user is null) return TypedResults.Unauthorized();
+        await progressManager.DeleteAsync(user.Id, document, cancellationToken).ConfigureAwait(false);
+        return TypedResults.Ok();
+    }
+
+    private static async Task<IResult> DeleteAllProgressAsync(
+        ClaimsPrincipal principal,
+        UserManager<IdentityUser> userManager,
+        IProgressManager progressManager,
+        CancellationToken cancellationToken)
+    {
+        IdentityUser? user = await userManager.GetUserAsync(principal).ConfigureAwait(false);
+        if (user is null) return TypedResults.Unauthorized();
+        await progressManager.DeleteAllAsync(user.Id, cancellationToken).ConfigureAwait(false);
+        return TypedResults.Ok();
     }
 }
