@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text.Json.Nodes;
 using System.Threading;
@@ -22,6 +24,8 @@ internal static class ProgressEndpoints
             .RequireAuthorization();
 
         // Extended endpoints
+        group.MapGet("progress", GetAllProgressAsync)
+            .RequireAuthorization();
         group.MapDelete("progress/{document}", DeleteProgressAsync)
             .RequireAuthorization();
         group.MapDelete("progress", DeleteAllProgressAsync)
@@ -42,15 +46,7 @@ internal static class ProgressEndpoints
         {
             return TypedResults.Ok(new JsonObject());
         }
-        GetProgressResponse response = new()
-        {
-            Document = progressDocument.Hash,
-            Progress = progressDocument.Progress,
-            Percentage = progressDocument.Percentage,
-            Device = progressDocument.Device,
-            DeviceId = progressDocument.DeviceId,
-            Timestamp = progressDocument.Timestamp.ToUnixTimeSeconds(),
-        };
+        GetProgressResponse response = GetProgressResponse.FromProgressDocument(progressDocument);
         return TypedResults.Ok(response);
     }
 
@@ -80,6 +76,19 @@ internal static class ProgressEndpoints
             Document = progressDocument.Hash,
             Timestamp = progressDocument.Timestamp.ToUnixTimeSeconds(),
         };
+        return TypedResults.Ok(response);
+    }
+
+    private static async Task<IResult> GetAllProgressAsync(
+        ClaimsPrincipal principal,
+        UserManager<IdentityUser> userManager,
+        IProgressManager progressManager,
+        CancellationToken cancellationToken)
+    {
+        IdentityUser? user = await userManager.GetUserAsync(principal).ConfigureAwait(false);
+        if (user is null) return TypedResults.Unauthorized();
+        IAsyncEnumerable<GetProgressResponse> response = progressManager.GetAllAsync(user.Id)
+            .Select(GetProgressResponse.FromProgressDocument);
         return TypedResults.Ok(response);
     }
 

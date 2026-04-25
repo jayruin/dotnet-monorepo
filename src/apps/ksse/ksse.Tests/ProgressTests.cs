@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -332,6 +333,39 @@ public sealed class ProgressTests
     }
 
     [TestMethod]
+    public async Task Test_DeleteProgressWithoutAuth_Fails()
+    {
+        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
+        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        string? userId = (await userManager.FindByNameAsync(Username))?.Id;
+        Assert.IsNotNull(userId);
+        ProgressDocument progressDocument = new()
+        {
+            User = userId,
+            Hash = "document",
+            Progress = "progress",
+            Percentage = 0.5,
+            Device = "device",
+            DeviceId = "device_id",
+            Timestamp = DateTimeOffset.UtcNow,
+        };
+        await progressManager.PutAsync(progressDocument, TestContext.CancellationToken);
+        ProgressDocument? progressDocumentAfterPut = await progressManager.GetAsync(userId, progressDocument.Hash, TestContext.CancellationToken);
+        Assert.IsNotNull(progressDocumentAfterPut);
+        using HttpRequestMessage requestMessage = new()
+        {
+            RequestUri = new($"syncs/progress/{progressDocument.Hash}", UriKind.Relative),
+            Method = HttpMethod.Delete,
+        };
+        using HttpResponseMessage responseMessage = await Client.SendAsync(requestMessage, TestContext.CancellationToken);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
+        ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
+        Assert.IsNotNull(response);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
+    }
+
+    [TestMethod]
     public async Task Test_DeleteProgressWithCorrectAuth_Succeeds()
     {
         IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
@@ -364,6 +398,52 @@ public sealed class ProgressTests
         Assert.AreEqual(HttpStatusCode.OK, responseMessage.StatusCode);
         ProgressDocument? progressDocumentAfterDelete = await progressManager.GetAsync(userId, progressDocument.Hash, TestContext.CancellationToken);
         Assert.IsNull(progressDocumentAfterDelete);
+    }
+
+    [TestMethod]
+    public async Task Test_DeleteAllProgressWithoutAuth_Fails()
+    {
+        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
+        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        string? userId = (await userManager.FindByNameAsync(Username))?.Id;
+        Assert.IsNotNull(userId);
+        ProgressDocument progressDocument1 = new()
+        {
+            User = userId,
+            Hash = "document1",
+            Progress = "progress",
+            Percentage = 0.5,
+            Device = "device",
+            DeviceId = "device_id",
+            Timestamp = DateTimeOffset.UtcNow,
+        };
+        ProgressDocument progressDocument2 = new()
+        {
+            User = userId,
+            Hash = "document2",
+            Progress = "progress",
+            Percentage = 0.5,
+            Device = "device",
+            DeviceId = "device_id",
+            Timestamp = DateTimeOffset.UtcNow,
+        };
+        await progressManager.PutAsync(progressDocument1, TestContext.CancellationToken);
+        await progressManager.PutAsync(progressDocument2, TestContext.CancellationToken);
+        ProgressDocument? progressDocument1AfterPut = await progressManager.GetAsync(userId, progressDocument1.Hash, TestContext.CancellationToken);
+        Assert.IsNotNull(progressDocument1AfterPut);
+        ProgressDocument? progressDocument2AfterPut = await progressManager.GetAsync(userId, progressDocument2.Hash, TestContext.CancellationToken);
+        Assert.IsNotNull(progressDocument2AfterPut);
+        using HttpRequestMessage requestMessage = new()
+        {
+            RequestUri = new($"syncs/progress", UriKind.Relative),
+            Method = HttpMethod.Delete,
+        };
+        using HttpResponseMessage responseMessage = await Client.SendAsync(requestMessage, TestContext.CancellationToken);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
+        ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
+        Assert.IsNotNull(response);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
     }
 
     [TestMethod]
@@ -414,5 +494,111 @@ public sealed class ProgressTests
         Assert.IsNull(progressDocument1AfterDelete);
         ProgressDocument? progressDocument2AfterDelete = await progressManager.GetAsync(userId, progressDocument2.Hash, TestContext.CancellationToken);
         Assert.IsNull(progressDocument2AfterDelete);
+    }
+
+    [TestMethod]
+    public async Task Test_GetAllProgressWithoutAuth_Fails()
+    {
+        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
+        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        string? userId = (await userManager.FindByNameAsync(Username))?.Id;
+        Assert.IsNotNull(userId);
+        ProgressDocument progressDocument1 = new()
+        {
+            User = userId,
+            Hash = "document1",
+            Progress = "progress",
+            Percentage = 0.5,
+            Device = "device",
+            DeviceId = "device_id",
+            Timestamp = DateTimeOffset.UtcNow,
+        };
+        ProgressDocument progressDocument2 = new()
+        {
+            User = userId,
+            Hash = "document2",
+            Progress = "progress",
+            Percentage = 0.5,
+            Device = "device",
+            DeviceId = "device_id",
+            Timestamp = DateTimeOffset.UtcNow,
+        };
+        await progressManager.PutAsync(progressDocument1, TestContext.CancellationToken);
+        await progressManager.PutAsync(progressDocument2, TestContext.CancellationToken);
+        ProgressDocument? progressDocument1AfterPut = await progressManager.GetAsync(userId, progressDocument1.Hash, TestContext.CancellationToken);
+        Assert.IsNotNull(progressDocument1AfterPut);
+        ProgressDocument? progressDocument2AfterPut = await progressManager.GetAsync(userId, progressDocument2.Hash, TestContext.CancellationToken);
+        Assert.IsNotNull(progressDocument2AfterPut);
+        using HttpRequestMessage requestMessage = new()
+        {
+            RequestUri = new($"syncs/progress", UriKind.Relative),
+            Method = HttpMethod.Get,
+        };
+        using HttpResponseMessage responseMessage = await Client.SendAsync(requestMessage, TestContext.CancellationToken);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
+        ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
+        Assert.IsNotNull(response);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
+    }
+
+    [TestMethod]
+    public async Task Test_GetAllProgressWithCorrectAuth_Succeeds()
+    {
+        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
+        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        string? userId = (await userManager.FindByNameAsync(Username))?.Id;
+        Assert.IsNotNull(userId);
+        ProgressDocument progressDocument1 = new()
+        {
+            User = userId,
+            Hash = "document1",
+            Progress = "progress",
+            Percentage = 0.5,
+            Device = "device",
+            DeviceId = "device_id",
+            Timestamp = DateTimeOffset.UtcNow,
+        };
+        ProgressDocument progressDocument2 = new()
+        {
+            User = userId,
+            Hash = "document2",
+            Progress = "progress",
+            Percentage = 0.5,
+            Device = "device",
+            DeviceId = "device_id",
+            Timestamp = DateTimeOffset.UtcNow,
+        };
+        ImmutableArray<ProgressDocument> progressDocuments = [progressDocument1, progressDocument2];
+        await progressManager.PutAsync(progressDocument1, TestContext.CancellationToken);
+        await progressManager.PutAsync(progressDocument2, TestContext.CancellationToken);
+        ProgressDocument? progressDocument1AfterPut = await progressManager.GetAsync(userId, progressDocument1.Hash, TestContext.CancellationToken);
+        Assert.IsNotNull(progressDocument1AfterPut);
+        ProgressDocument? progressDocument2AfterPut = await progressManager.GetAsync(userId, progressDocument2.Hash, TestContext.CancellationToken);
+        Assert.IsNotNull(progressDocument2AfterPut);
+        using HttpRequestMessage requestMessage = new()
+        {
+            RequestUri = new($"syncs/progress", UriKind.Relative),
+            Method = HttpMethod.Get,
+            Headers = {
+                { KoreaderAuthOptions.UsernameHeader, Username },
+                { KoreaderAuthOptions.PasswordHeader, Password },
+            },
+        };
+        using HttpResponseMessage responseMessage = await Client.SendAsync(requestMessage, TestContext.CancellationToken);
+        Assert.AreEqual(HttpStatusCode.OK, responseMessage.StatusCode);
+        ImmutableArray<GetProgressResponse> response = await responseMessage.Content.ReadFromJsonAsync(ProgressJsonContext.Default.ImmutableArrayGetProgressResponse, TestContext.CancellationToken);
+        Assert.HasCount(progressDocuments.Length, response);
+        for (int i = 0; i < progressDocuments.Length; i++)
+        {
+            ProgressDocument expectedProgress = progressDocuments[i];
+            GetProgressResponse actualProgress = response[i];
+            Assert.AreEqual(expectedProgress.Hash, actualProgress.Document);
+            Assert.AreEqual(expectedProgress.Progress, actualProgress.Progress);
+            Assert.AreEqual(expectedProgress.Percentage, actualProgress.Percentage);
+            Assert.AreEqual(expectedProgress.Device, actualProgress.Device);
+            Assert.AreEqual(expectedProgress.DeviceId, actualProgress.DeviceId);
+            Assert.AreEqual(expectedProgress.Timestamp.ToUnixTimeSeconds(), actualProgress.Timestamp);
+        }
     }
 }

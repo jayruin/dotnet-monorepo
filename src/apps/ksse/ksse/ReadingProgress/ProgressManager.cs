@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,14 @@ internal sealed class ProgressManager : IProgressManager
         return _dbContext.ProgressDocuments
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.User == user && p.Hash == hash, cancellationToken);
+    }
+
+    public IAsyncEnumerable<ProgressDocument> GetAllAsync(string user)
+    {
+        return _dbContext.ProgressDocuments
+            .AsNoTracking()
+            .Where(p => p.User == user)
+            .AsAsyncEnumerable();
     }
 
     public async Task PutAsync(ProgressDocument progress, CancellationToken cancellationToken = default)

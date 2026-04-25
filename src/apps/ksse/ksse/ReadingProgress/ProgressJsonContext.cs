@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Text.Json.Serialization;
 
 namespace ksse.ReadingProgress;
@@ -7,6 +9,8 @@ namespace ksse.ReadingProgress;
 [JsonSerializable(typeof(ProgressDocument))]
 [JsonSerializable(typeof(PutProgressRequest))]
 [JsonSerializable(typeof(PutProgressResponse))]
+[JsonSerializable(typeof(IAsyncEnumerable<GetProgressResponse>))]
+[JsonSerializable(typeof(ImmutableArray<GetProgressResponse>))]
 internal sealed partial class ProgressJsonContext : JsonSerializerContext
 {
 }
