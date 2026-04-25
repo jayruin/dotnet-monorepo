@@ -1,4 +1,6 @@
+using ksse.Auth;
 using ksse.Errors;
+using ksse.ReadingProgress;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +21,12 @@ internal static class UsersEndpoints
         group.MapGet("auth", AuthUser)
             .RequireAuthorization();
         group.MapPost("create", CreateUserAsync);
+
+        // Extended endpoints
+        group.MapPost("changepassword", ChangePasswordAsync)
+            .RequireAuthorization();
+        group.MapDelete("", DeleteUserAsync)
+            .RequireAuthorization();
     }
 
     private static async Task<IResult> AuthUser(
@@ -59,6 +67,46 @@ internal static class UsersEndpoints
             };
             return TypedResults.Created((string?)null, response);
         }
-        return TypedResults.InternalServerError();
+        return TypedResults.BadRequest();
+    }
+
+    private static async Task<IResult> ChangePasswordAsync(
+        ClaimsPrincipal principal,
+        UserManager<IdentityUser> userManager,
+        [FromBody] ChangePasswordRequest request,
+        CancellationToken cancellationToken)
+    {
+        IdentityUser? user = await userManager.GetUserAsync(principal).ConfigureAwait(false);
+        if (user is null) return TypedResults.Unauthorized();
+        string currentPassword = request.CurrentPassword;
+        string newPassword = request.NewPassword;
+        if (request.ApplyClientHash)
+        {
+            currentPassword = ClientHash.HashPassword(currentPassword);
+            newPassword = ClientHash.HashPassword(newPassword);
+        }
+        IdentityResult identityResult = await userManager.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
+        if (identityResult.Succeeded)
+        {
+            return TypedResults.Ok();
+        }
+        return TypedResults.BadRequest();
+    }
+
+    private static async Task<IResult> DeleteUserAsync(
+        ClaimsPrincipal principal,
+        UserManager<IdentityUser> userManager,
+        IProgressManager progressManager,
+        CancellationToken cancellationToken)
+    {
+        IdentityUser? user = await userManager.GetUserAsync(principal).ConfigureAwait(false);
+        if (user is null) return TypedResults.Unauthorized();
+        await progressManager.DeleteAllAsync(user.Id, cancellationToken).ConfigureAwait(false);
+        IdentityResult identityResult = await userManager.DeleteAsync(user).ConfigureAwait(false);
+        if (identityResult.Succeeded)
+        {
+            return TypedResults.Ok();
+        }
+        return TypedResults.BadRequest();
     }
 }

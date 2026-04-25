@@ -10,5 +10,8 @@ Extensions and differences:
 - Uses ASP.NET Core Logging with flexible choice of provider.
 - CLI command to create users by directly interacting with database even while user registration is disabled.
 - Health check will check database status instead of always returning 200.
-- Delete progress at `DELETE progress/{document}`
-- Delete all progress at `DELETE progress`
+- Delete progress at `DELETE syncs/progress/{document}`
+- Delete all progress at `DELETE syncs/progress`
+- Get all progress at `GET syncs/progress`
+- Change password at `POST users/changepassword`
+- Delete user at `DELETE users`

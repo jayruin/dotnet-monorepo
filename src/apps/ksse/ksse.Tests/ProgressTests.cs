@@ -44,7 +44,8 @@ public sealed class ProgressTests
         });
         await App.StartAsync(TestContext.CancellationToken);
         Client = App.GetTestClient();
-        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        await using AsyncServiceScope scope = App.Services.CreateAsyncScope();
+        using UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         await userManager.CreateAsync(new()
         {
             UserName = Username,
@@ -89,11 +90,12 @@ public sealed class ProgressTests
             Device = "device",
             DeviceId = "device_id",
         };
+        using JsonContent content = JsonContent.Create(request, ProgressJsonContext.Default.PutProgressRequest);
         using HttpRequestMessage requestMessage = new()
         {
             RequestUri = new("syncs/progress", UriKind.Relative),
             Method = HttpMethod.Put,
-            Content = JsonContent.Create(request, ProgressJsonContext.Default.PutProgressRequest),
+            Content = content,
             Headers = {
                 { KoreaderAuthOptions.UsernameHeader, Username },
                 { KoreaderAuthOptions.PasswordHeader, $"Not{Password}" },
@@ -118,11 +120,12 @@ public sealed class ProgressTests
             Device = "device",
             DeviceId = "device_id",
         };
+        using JsonContent content = JsonContent.Create(request, ProgressJsonContext.Default.PutProgressRequest);
         using HttpRequestMessage requestMessage = new()
         {
             RequestUri = new("syncs/progress", UriKind.Relative),
             Method = HttpMethod.Put,
-            Content = JsonContent.Create(request, ProgressJsonContext.Default.PutProgressRequest),
+            Content = content,
             Headers = {
                 { KoreaderAuthOptions.UsernameHeader, Username },
                 { KoreaderAuthOptions.PasswordHeader, Password },
@@ -133,8 +136,9 @@ public sealed class ProgressTests
         PutProgressResponse? response = await responseMessage.Content.ReadFromJsonAsync(ProgressJsonContext.Default.PutProgressResponse, TestContext.CancellationToken);
         Assert.IsNotNull(response);
         Assert.AreEqual(request.Document, response.Document);
-        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        await using AsyncServiceScope scope = App.Services.CreateAsyncScope();
+        IProgressManager progressManager = scope.ServiceProvider.GetRequiredService<IProgressManager>();
+        using UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument? progressDocument = await progressManager.GetAsync(userId, request.Document, TestContext.CancellationToken);
@@ -156,11 +160,12 @@ public sealed class ProgressTests
             Device = "device",
             DeviceId = "device_id",
         };
+        using JsonContent content1 = JsonContent.Create(request1, ProgressJsonContext.Default.PutProgressRequest);
         using HttpRequestMessage requestMessage1 = new()
         {
             RequestUri = new("syncs/progress", UriKind.Relative),
             Method = HttpMethod.Put,
-            Content = JsonContent.Create(request1, ProgressJsonContext.Default.PutProgressRequest),
+            Content = content1,
             Headers = {
                 { KoreaderAuthOptions.UsernameHeader, Username },
                 { KoreaderAuthOptions.PasswordHeader, Password },
@@ -179,11 +184,12 @@ public sealed class ProgressTests
             Device = "device2",
             DeviceId = "device_id2",
         };
+        using JsonContent content2 = JsonContent.Create(request2, ProgressJsonContext.Default.PutProgressRequest);
         using HttpRequestMessage requestMessage2 = new()
         {
             RequestUri = new("syncs/progress", UriKind.Relative),
             Method = HttpMethod.Put,
-            Content = JsonContent.Create(request2, ProgressJsonContext.Default.PutProgressRequest),
+            Content = content2,
             Headers = {
                 { KoreaderAuthOptions.UsernameHeader, Username },
                 { KoreaderAuthOptions.PasswordHeader, Password },
@@ -194,8 +200,9 @@ public sealed class ProgressTests
         PutProgressResponse? response2 = await responseMessage2.Content.ReadFromJsonAsync(ProgressJsonContext.Default.PutProgressResponse, TestContext.CancellationToken);
         Assert.IsNotNull(response2);
         Assert.AreEqual(request2.Document, response2.Document);
-        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        await using AsyncServiceScope scope = App.Services.CreateAsyncScope();
+        IProgressManager progressManager = scope.ServiceProvider.GetRequiredService<IProgressManager>();
+        using UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument? progressDocument = await progressManager.GetAsync(userId, request1.Document, TestContext.CancellationToken);
@@ -209,8 +216,9 @@ public sealed class ProgressTests
     [TestMethod]
     public async Task Test_GetProgressWithoutAuth_Fails()
     {
-        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        await using AsyncServiceScope scope = App.Services.CreateAsyncScope();
+        IProgressManager progressManager = scope.ServiceProvider.GetRequiredService<IProgressManager>();
+        using UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument progressDocument = new()
@@ -240,8 +248,9 @@ public sealed class ProgressTests
     [TestMethod]
     public async Task Test_GetProgressWithWrongPassword_Fails()
     {
-        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        await using AsyncServiceScope scope = App.Services.CreateAsyncScope();
+        IProgressManager progressManager = scope.ServiceProvider.GetRequiredService<IProgressManager>();
+        using UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument progressDocument = new()
@@ -275,8 +284,9 @@ public sealed class ProgressTests
     [TestMethod]
     public async Task Test_GetProgressWithCorrectAuth_Succeeds()
     {
-        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        await using AsyncServiceScope scope = App.Services.CreateAsyncScope();
+        IProgressManager progressManager = scope.ServiceProvider.GetRequiredService<IProgressManager>();
+        using UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument progressDocument = new()
@@ -335,8 +345,9 @@ public sealed class ProgressTests
     [TestMethod]
     public async Task Test_DeleteProgressWithoutAuth_Fails()
     {
-        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        await using AsyncServiceScope scope = App.Services.CreateAsyncScope();
+        IProgressManager progressManager = scope.ServiceProvider.GetRequiredService<IProgressManager>();
+        using UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument progressDocument = new()
@@ -368,8 +379,9 @@ public sealed class ProgressTests
     [TestMethod]
     public async Task Test_DeleteProgressWithCorrectAuth_Succeeds()
     {
-        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        await using AsyncServiceScope scope = App.Services.CreateAsyncScope();
+        IProgressManager progressManager = scope.ServiceProvider.GetRequiredService<IProgressManager>();
+        using UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument progressDocument = new()
@@ -403,8 +415,9 @@ public sealed class ProgressTests
     [TestMethod]
     public async Task Test_DeleteAllProgressWithoutAuth_Fails()
     {
-        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        await using AsyncServiceScope scope = App.Services.CreateAsyncScope();
+        IProgressManager progressManager = scope.ServiceProvider.GetRequiredService<IProgressManager>();
+        using UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument progressDocument1 = new()
@@ -449,8 +462,9 @@ public sealed class ProgressTests
     [TestMethod]
     public async Task Test_DeleteAllProgressWithCorrectAuth_Succeeds()
     {
-        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        await using AsyncServiceScope scope = App.Services.CreateAsyncScope();
+        IProgressManager progressManager = scope.ServiceProvider.GetRequiredService<IProgressManager>();
+        using UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument progressDocument1 = new()
@@ -499,8 +513,9 @@ public sealed class ProgressTests
     [TestMethod]
     public async Task Test_GetAllProgressWithoutAuth_Fails()
     {
-        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        await using AsyncServiceScope scope = App.Services.CreateAsyncScope();
+        IProgressManager progressManager = scope.ServiceProvider.GetRequiredService<IProgressManager>();
+        using UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument progressDocument1 = new()
@@ -545,8 +560,9 @@ public sealed class ProgressTests
     [TestMethod]
     public async Task Test_GetAllProgressWithCorrectAuth_Succeeds()
     {
-        IProgressManager progressManager = App.Services.GetRequiredService<IProgressManager>();
-        UserManager<IdentityUser> userManager = App.Services.GetRequiredService<UserManager<IdentityUser>>();
+        await using AsyncServiceScope scope = App.Services.CreateAsyncScope();
+        IProgressManager progressManager = scope.ServiceProvider.GetRequiredService<IProgressManager>();
+        using UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         string? userId = (await userManager.FindByNameAsync(Username))?.Id;
         Assert.IsNotNull(userId);
         ProgressDocument progressDocument1 = new()

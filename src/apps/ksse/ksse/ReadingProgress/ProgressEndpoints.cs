@@ -17,18 +17,18 @@ internal static class ProgressEndpoints
 {
     public static void MapProgressEndpoints(this IEndpointRouteBuilder builder)
     {
-        RouteGroupBuilder group = builder.MapGroup("syncs");
-        group.MapGet("progress/{document}", GetProgressAsync)
+        RouteGroupBuilder group = builder.MapGroup("syncs/progress");
+        group.MapGet("{document}", GetProgressAsync)
             .RequireAuthorization();
-        group.MapPut("progress", PutProgressAsync)
+        group.MapPut("", PutProgressAsync)
             .RequireAuthorization();
 
         // Extended endpoints
-        group.MapGet("progress", GetAllProgressAsync)
+        group.MapGet("", GetAllProgressAsync)
             .RequireAuthorization();
-        group.MapDelete("progress/{document}", DeleteProgressAsync)
+        group.MapDelete("{document}", DeleteProgressAsync)
             .RequireAuthorization();
-        group.MapDelete("progress", DeleteAllProgressAsync)
+        group.MapDelete("", DeleteAllProgressAsync)
             .RequireAuthorization();
     }
 
