@@ -96,6 +96,7 @@ internal static class Initializations
         endpointRouteBuilder.MapUsersEndpoints();
         endpointRouteBuilder.MapProgressEndpoints();
         endpointRouteBuilder.MapHealthCheckEndpoints();
+        endpointRouteBuilder.MapGet("", () => TypedResults.Ok());
     }
 
     private static void AddDatabase<TContext>(IServiceCollection services, IConfiguration configuration)
