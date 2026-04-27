@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="3d730d0b-a63d-40eb-a4d9-47a7d6d72c0f" name="@runnervmeorf1 2026-04-27 02:59:54" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-04-27T02:59:54.6872649+00:00" queuing="2026-04-27T02:59:54.6872650+00:00" start="2026-04-27T02:59:53.7490954+00:00" finish="2026-04-27T02:59:54.6929444+00:00" />
+  <TestSettings name="default" id="40c2d410-0986-48d8-873e-2653b2157ebd">
+    <Deployment runDeploymentRoot="_runnervmeorf1_2026-04-27_02_59_54" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="e42deb25-3a0f-4697-8003-69ed1f35e91d" testId="189464b8-fc8a-831f-955d-0835ace877c1" testName="TestZeroExitCode" computerName="runnervmeorf1" duration="00:00:00.1738814" startTime="2026-04-27T02:59:54.1860650+00:00" endTime="2026-04-27T02:59:54.3788327+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e42deb25-3a0f-4697-8003-69ed1f35e91d" />
+    <UnitTestResult executionId="81aad18d-f415-4e9f-8947-f919bcea1d3c" testId="1d0d56e0-30b0-857a-9023-a94ee82b3960" testName="TestNonZeroExitCode" computerName="runnervmeorf1" duration="00:00:00.1857709" startTime="2026-04-27T02:59:54.3835051+00:00" endTime="2026-04-27T02:59:54.5734451+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="81aad18d-f415-4e9f-8947-f919bcea1d3c" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestZeroExitCode" storage="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/subprocesses.tests/release_linux-x64/subprocesses.tests.dll" id="189464b8-fc8a-831f-955d-0835ace877c1">
+      <Execution id="e42deb25-3a0f-4697-8003-69ed1f35e91d" />
+      <TestMethod codeBase="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Subprocesses.Tests/release_linux-x64/Subprocesses.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Subprocesses.Tests.SubprocessRunnerTests" name="TestZeroExitCode" />
+    </UnitTest>
+    <UnitTest name="TestNonZeroExitCode" storage="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/subprocesses.tests/release_linux-x64/subprocesses.tests.dll" id="1d0d56e0-30b0-857a-9023-a94ee82b3960">
+      <Execution id="81aad18d-f415-4e9f-8947-f919bcea1d3c" />
+      <TestMethod codeBase="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Subprocesses.Tests/release_linux-x64/Subprocesses.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Subprocesses.Tests.SubprocessRunnerTests" name="TestNonZeroExitCode" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="189464b8-fc8a-831f-955d-0835ace877c1" executionId="e42deb25-3a0f-4697-8003-69ed1f35e91d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d0d56e0-30b0-857a-9023-a94ee82b3960" executionId="81aad18d-f415-4e9f-8947-f919bcea1d3c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test Parallelization enabled for /home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Subprocesses.Tests/release_linux-x64/Subprocesses.Tests.dll (Workers: 4, Scope: ClassLevel)
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
