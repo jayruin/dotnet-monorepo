@@ -262,7 +262,7 @@ internal static class OpdsEndpoints
                 ? []
                 : [..entries.Select(mediaEntry => new OpdsNavigationEntry()
                     {
-                        Identifier = $"urn:umm:{mediaEntry.Id.ToCombinedString()}",
+                        Identifier = $"urn:uuid:{mediaEntry.Id.GetDeterministicGuid():D}",
                         Title = mediaEntry.Metadata.Title,
                         NavigationLink = new()
                         {
@@ -276,7 +276,7 @@ internal static class OpdsEndpoints
             AcquisitionEntries = isAcquisitionFeed
                 ? [..entries.Select(mediaEntry => new OpdsAcquisitionEntry()
                     {
-                        Identifier = $"urn:umm:{mediaEntry.Id.ToCombinedString()}",
+                        Identifier = $"urn:uuid:{mediaEntry.Id.GetDeterministicGuid():D}",
                         Title = mediaEntry.Metadata.Title,
                         Modified = modified,
                         Creators = mediaEntry.Metadata.Creators,

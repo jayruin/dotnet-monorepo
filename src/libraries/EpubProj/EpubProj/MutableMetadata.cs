@@ -13,7 +13,7 @@ internal sealed class MutableMetadata
     public List<string> Languages { get; set; } = ["en"];
     public EpubProjectDirection Direction { get; set; } = EpubProjectDirection.Default;
     public string? Date { get; set; }
-    public string Identifier { get; set; } = $"urn:uuid:{Guid.NewGuid():D}";
+    public string Identifier { get; set; } = $"urn:uuid:{Guid.CreateVersion7():D}";
     public DateTimeOffset Modified { get; set; } = DateTimeOffset.UtcNow;
     public MutableSeries? Series { get; set; }
 
