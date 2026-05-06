@@ -612,8 +612,11 @@ internal static class Xml
             NamespaceHandling = NamespaceHandling.OmitDuplicates,
         };
         using FileStream stream = new(path, FileMode.Create, FileAccess.Write, FileShare.None);
-        using XmlWriter writer = XmlWriter.Create(stream, settings);
-        document.Save(writer);
+        using (XmlWriter writer = XmlWriter.Create(stream, settings))
+        {
+            document.Save(writer);
+        }
+        stream.Write(new UTF8Encoding().GetBytes("\n"));
     }
 }
 
