@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -25,6 +26,7 @@ namespace umm.Vendors.EpubProj;
 public sealed class EpubProjVendor : IMediaVendor
 {
     private static readonly ImmutableArray<string> CoverMediaTypes = [MediaType.Image.Jpeg, MediaType.Image.Png, MediaType.Image.Webp];
+    private static readonly CompressionLevel Compression = CompressionLevel.SmallestSize;
 
     private readonly IMetadataStorage _metadataStorage;
     private readonly IBlobStorage _blobStorage;
@@ -51,7 +53,7 @@ public sealed class EpubProjVendor : IMediaVendor
 
     public const string Id = "epubproj";
 
-    private const string EpubExportId = "epub";
+    private const string Epub3ExportId = "epub3";
     private const string Epub2ExportId = "epub2";
     private const string JpgExportId = "jpg";
     private const string PngExportId = "png";
@@ -84,18 +86,18 @@ public sealed class EpubProjVendor : IMediaVendor
         MediaMainId id = new(VendorId, contentId);
         IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(id, cancellationToken).ConfigureAwait(false);
         IEpubProject project = await _projectLoader.LoadFromDirectoryAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
-        if (exportId == EpubExportId)
+        if (exportId == Epub3ExportId)
         {
             _logger.LogExportingFile(VendorId, contentId, partId, exportId);
             IReadOnlyCollection<IFile> globalFiles = await _projectLoader.GetImplicitGlobalFilesAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
-            await project.ExportEpub3Async(stream, globalFiles, cancellationToken).ConfigureAwait(false);
+            await project.ExportEpub3Async(stream, globalFiles, Compression, cancellationToken).ConfigureAwait(false);
             return;
         }
         else if (exportId == Epub2ExportId)
         {
             _logger.LogExportingFile(VendorId, contentId, partId, exportId);
             IReadOnlyCollection<IFile> globalFiles = await _projectLoader.GetImplicitGlobalFilesAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
-            await project.ExportEpub2Async(stream, globalFiles, cancellationToken).ConfigureAwait(false);
+            await project.ExportEpub2Async(stream, globalFiles, Compression, cancellationToken).ConfigureAwait(false);
             return;
         }
         string mediaType = GetCoverMediaType(exportId);
@@ -127,7 +129,7 @@ public sealed class EpubProjVendor : IMediaVendor
         MediaMainId id = new(VendorId, contentId);
         IDirectory projectDirectory = await _blobStorage.GetStorageContainerAsync(id, cancellationToken).ConfigureAwait(false);
         IEpubProject project = await _projectLoader.LoadFromDirectoryAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
-        if (exportId == EpubExportId)
+        if (exportId == Epub3ExportId)
         {
             _logger.LogExportingDirectory(VendorId, contentId, partId, exportId);
             IReadOnlyCollection<IFile> globalFiles = await _projectLoader.GetImplicitGlobalFilesAsync(projectDirectory, cancellationToken).ConfigureAwait(false);
@@ -217,7 +219,7 @@ public sealed class EpubProjVendor : IMediaVendor
         if (!await projectDirectory.ExistsAsync(cancellationToken).ConfigureAwait(false)) yield break;
         yield return new()
         {
-            ExportId = EpubExportId,
+            ExportId = Epub3ExportId,
             MediaType = MediaType.Application.Epub_Zip,
             SupportsFile = true,
             SupportsDirectory = true,

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -49,31 +50,32 @@ internal sealed class EpubProject : IEpubProject
         _converter = new(mediaTypeFileExtensionsMapping, htmlParser, domImplementation);
     }
 
-    public Task ExportEpub3Async(Stream stream, IReadOnlyCollection<IFile> globalFiles, CancellationToken cancellationToken = default)
-        => ExportEpubAsync(stream, globalFiles, EpubVersion.Epub3, cancellationToken);
+    public Task ExportEpub3Async(Stream stream, IReadOnlyCollection<IFile>? globalFiles = null, CompressionLevel compression = CompressionLevel.NoCompression, CancellationToken cancellationToken = default)
+        => ExportEpubAsync(stream, globalFiles ?? [], EpubVersion.Epub3, compression, cancellationToken);
 
-    public Task ExportEpub3Async(IDirectory directory, IReadOnlyCollection<IFile> globalFiles, CancellationToken cancellationToken = default)
-        => ExportEpubAsync(directory, globalFiles, EpubVersion.Epub3, cancellationToken);
+    public Task ExportEpub3Async(IDirectory directory, IReadOnlyCollection<IFile>? globalFiles = null, CancellationToken cancellationToken = default)
+        => ExportEpubAsync(directory, globalFiles ?? [], EpubVersion.Epub3, cancellationToken);
 
-    public Task ExportEpub2Async(Stream stream, IReadOnlyCollection<IFile> globalFiles, CancellationToken cancellationToken = default)
-        => ExportEpubAsync(stream, globalFiles, EpubVersion.Epub2, cancellationToken);
+    public Task ExportEpub2Async(Stream stream, IReadOnlyCollection<IFile>? globalFiles = null, CompressionLevel compression = CompressionLevel.NoCompression, CancellationToken cancellationToken = default)
+        => ExportEpubAsync(stream, globalFiles ?? [], EpubVersion.Epub2, compression, cancellationToken);
 
-    public Task ExportEpub2Async(IDirectory directory, IReadOnlyCollection<IFile> globalFiles, CancellationToken cancellationToken = default)
-        => ExportEpubAsync(directory, globalFiles, EpubVersion.Epub2, cancellationToken);
+    public Task ExportEpub2Async(IDirectory directory, IReadOnlyCollection<IFile>? globalFiles = null, CancellationToken cancellationToken = default)
+        => ExportEpubAsync(directory, globalFiles ?? [], EpubVersion.Epub2, cancellationToken);
 
     private static bool IsScriptedXhtml(IDocument document)
         => document.QuerySelector<IHtmlScriptElement>("script") is not null;
 
-    private EpubWriterOptions CreateEpubWriterOptions(EpubVersion epubVersion)
+    private EpubWriterOptions CreateEpubWriterOptions(EpubVersion epubVersion, CompressionLevel compression)
         => new()
         {
             Version = epubVersion,
+            Compression = compression,
             Modified = Metadata.Modified,
         };
 
-    private async Task ExportEpubAsync(Stream stream, IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion, CancellationToken cancellationToken)
+    private async Task ExportEpubAsync(Stream stream, IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion, CompressionLevel compression, CancellationToken cancellationToken)
     {
-        EpubWriter epubWriter = await EpubWriter.CreateAsync(stream, CreateEpubWriterOptions(epubVersion), _mediaTypeFileExtensionsMapping, cancellationToken).ConfigureAwait(false);
+        EpubWriter epubWriter = await EpubWriter.CreateAsync(stream, CreateEpubWriterOptions(epubVersion, compression), _mediaTypeFileExtensionsMapping, cancellationToken).ConfigureAwait(false);
         await using ConfiguredAsyncDisposable configuredEpubWriter = epubWriter.ConfigureAwait(false);
         await WriteEpubAsync(epubWriter, globalFiles, epubVersion, cancellationToken);
     }
@@ -81,7 +83,7 @@ internal sealed class EpubProject : IEpubProject
     private async Task ExportEpubAsync(IDirectory directory, IReadOnlyCollection<IFile> globalFiles, EpubVersion epubVersion, CancellationToken cancellationToken)
     {
         await directory.EnsureIsEmptyAsync(cancellationToken).ConfigureAwait(false);
-        EpubWriter epubWriter = await EpubWriter.CreateAsync(directory, CreateEpubWriterOptions(epubVersion), _mediaTypeFileExtensionsMapping, cancellationToken).ConfigureAwait(false);
+        EpubWriter epubWriter = await EpubWriter.CreateAsync(directory, CreateEpubWriterOptions(epubVersion, CompressionLevel.NoCompression), _mediaTypeFileExtensionsMapping, cancellationToken).ConfigureAwait(false);
         await using ConfiguredAsyncDisposable configuredEpubWriter = epubWriter.ConfigureAwait(false);
         await WriteEpubAsync(epubWriter, globalFiles, epubVersion, cancellationToken);
     }
