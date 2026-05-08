@@ -59,7 +59,7 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
             return null;
         }
         JsonNode mediaEntryNode = responseNode["_source"]?[MediaEntryKey]
-                    ?? throw new JsonException();
+            ?? throw new JsonException();
         MediaEntry mediaEntry = mediaEntryNode.Deserialize(MediaEntriesJsonContext.Default.MediaEntry)
             ?? throw new JsonException();
         return mediaEntry;

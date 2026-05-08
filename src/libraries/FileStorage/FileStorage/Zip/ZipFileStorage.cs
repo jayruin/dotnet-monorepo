@@ -35,14 +35,14 @@ public sealed class ZipFileStorage : IFileStorage, IDisposable, IAsyncDisposable
     public static ZipFileStorage Create(Stream stream, ZipFileStorageOptions? options = null)
     {
         options ??= new();
-        ZipArchive zipArchive = new(stream, options.Mode);
+        ZipArchive zipArchive = new(stream, options.Mode, true);
         return new ZipFileStorage(zipArchive, options);
     }
 
     public static async Task<ZipFileStorage> CreateAsync(Stream stream, ZipFileStorageOptions? options = null, CancellationToken cancellationToken = default)
     {
         options ??= new();
-        ZipArchive zipArchive = await ZipArchive.CreateAsync(stream, options.Mode, false, null, cancellationToken).ConfigureAwait(false);
+        ZipArchive zipArchive = await ZipArchive.CreateAsync(stream, options.Mode, true, null, cancellationToken).ConfigureAwait(false);
         return new ZipFileStorage(zipArchive, options);
     }
 

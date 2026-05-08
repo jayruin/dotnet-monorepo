@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using umm.ExportCache;
+using umm.HashCache;
 using umm.Library;
 using umm.SearchIndex;
 using umm.Vendors.Abstractions;
@@ -48,6 +49,8 @@ internal static class UpdateCli
         Dictionary<string, StringValues> searchQuery = QueryHelpers.ParseQuery(searchQueryString);
         ISearchIndex? searchIndex = serviceProvider.GetService<ISearchIndex>();
         IExportCache? exportCache = serviceProvider.GetService<IExportCache>();
+        IHashCache? hashCache = serviceProvider.GetService<IHashCache>();
+        IMultiHashProvider? multiHashProvider = serviceProvider.GetService<IMultiHashProvider>();
         foreach (IMediaVendor mediaVendor in serviceProvider.GetServices<IMediaVendor>())
         {
             bool matchesVendorId = SearchQuery.MatchesExactly(searchQuery, ["vendorid"], [mediaVendor.VendorId]);
@@ -63,6 +66,10 @@ internal static class UpdateCli
                 if (exportCache is not null)
                 {
                     await exportCache.AddOrUpdateCacheAsync(mediaVendor, searchableMediaEntries.Select(e => e.MediaEntry), cancellationToken).ConfigureAwait(false);
+                }
+                if (hashCache is not null && multiHashProvider is not null)
+                {
+                    await hashCache.AddOrUpdateCacheAsync(mediaVendor, searchableMediaEntries.Select(e => e.MediaEntry), multiHashProvider, cancellationToken).ConfigureAwait(false);
                 }
             }
         }

@@ -2,6 +2,7 @@ using MediaTypes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using umm.Catalog;
@@ -31,9 +32,14 @@ public static class DownloadEndpoints
         string mediaType = mediaExportTarget.MediaType;
         string extension = mediaTypeFileExtensionsMapping.GetFileExtension(mediaType, "");
         string name = id.ToCombinedString();
-        return TypedResults.Stream(
-            stream => catalog.ExportAsync(id, exportId, stream, cancellationToken),
-            mediaType,
-            $"{name}{extension}");
+        // Streaming the export by writing to a non-seekable stream produces a file with a different hash
+        //return TypedResults.Stream(
+        //    stream => catalog.ExportAsync(id, exportId, stream, cancellationToken),
+        //    mediaType,
+        //    $"{name}{extension}");
+        MemoryStream memoryStream = new();
+        await catalog.ExportAsync(id, exportId, memoryStream, cancellationToken).ConfigureAwait(false);
+        memoryStream.Seek(0, SeekOrigin.Begin);
+        return TypedResults.Stream(memoryStream, mediaType, $"{name}{extension}");
     }
 }

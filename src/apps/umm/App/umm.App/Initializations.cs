@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using umm.Catalog;
 using umm.ExportCache;
+using umm.HashCache;
 using umm.SearchIndex;
 using umm.Server;
 using umm.Storages;
@@ -26,7 +27,8 @@ internal static class Initializations
             .AddMediaVendors(configuration)
             .AddMediaCatalog(configuration)
             .AddSearchIndex(configuration)
-            .AddExportCache(configuration);
+            .AddExportCache(configuration)
+            .AddHashCache(configuration);
     }
 
     public static void InitializeEndpoints(IEndpointRouteBuilder endpointRouteBuilder)

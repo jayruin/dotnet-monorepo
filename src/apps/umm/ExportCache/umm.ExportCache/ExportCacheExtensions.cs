@@ -10,62 +10,65 @@ namespace umm.ExportCache;
 
 public static class ExportCacheExtensions
 {
-    public static async Task AddOrUpdateCacheAsync(this IExportCache exportCache, IMediaVendor mediaVendor, IAsyncEnumerable<MediaEntry> entries, CancellationToken cancellationToken = default)
+    extension(IExportCache exportCache)
     {
-        await foreach (MediaEntry entry in entries.ConfigureAwait(false))
+        public async Task AddOrUpdateCacheAsync(IMediaVendor mediaVendor, IAsyncEnumerable<MediaEntry> entries, CancellationToken cancellationToken = default)
         {
-            await exportCache.AddOrUpdateCacheAsync(mediaVendor, entry, cancellationToken).ConfigureAwait(false);
-        }
-    }
-
-    public static async Task AddOrUpdateCacheAsync(this IExportCache exportCache, IMediaVendor mediaVendor, IEnumerable<MediaEntry> entries, CancellationToken cancellationToken = default)
-    {
-        foreach (MediaEntry entry in entries)
-        {
-            await exportCache.AddOrUpdateCacheAsync(mediaVendor, entry, cancellationToken).ConfigureAwait(false);
-        }
-    }
-
-    private static async Task AddOrUpdateCacheAsync(this IExportCache exportCache, IMediaVendor mediaVendor, MediaEntry entry, CancellationToken cancellationToken = default)
-    {
-        foreach (MediaExportTarget exportTarget in entry.ExportTargets)
-        {
-            if (exportTarget.SupportsFile
-                && await exportCache.CanHandleFileAsync(
-                    entry.Id.VendorId,
-                    exportTarget.MediaType,
-                    cancellationToken).ConfigureAwait(false))
+            await foreach (MediaEntry entry in entries.ConfigureAwait(false))
             {
-                Stream stream = await exportCache.GetStreamForCachingAsync(
-                    entry.Id,
-                    exportTarget.ExportId,
-                    cancellationToken).ConfigureAwait(false);
-                await using (stream.ConfigureAwait(false))
+                await exportCache.AddOrUpdateCacheAsync(mediaVendor, entry, cancellationToken).ConfigureAwait(false);
+            }
+        }
+
+        public async Task AddOrUpdateCacheAsync(IMediaVendor mediaVendor, IEnumerable<MediaEntry> entries, CancellationToken cancellationToken = default)
+        {
+            foreach (MediaEntry entry in entries)
+            {
+                await exportCache.AddOrUpdateCacheAsync(mediaVendor, entry, cancellationToken).ConfigureAwait(false);
+            }
+        }
+
+        private async Task AddOrUpdateCacheAsync(IMediaVendor mediaVendor, MediaEntry entry, CancellationToken cancellationToken = default)
+        {
+            foreach (MediaExportTarget exportTarget in entry.ExportTargets)
+            {
+                if (exportTarget.SupportsFile
+                    && await exportCache.CanHandleFileAsync(
+                        entry.Id.VendorId,
+                        exportTarget.MediaType,
+                        cancellationToken).ConfigureAwait(false))
                 {
+                    Stream stream = await exportCache.GetStreamForCachingAsync(
+                        entry.Id,
+                        exportTarget.ExportId,
+                        cancellationToken).ConfigureAwait(false);
+                    await using (stream.ConfigureAwait(false))
+                    {
+                        await mediaVendor.ExportAsync(
+                            entry.Id.ContentId,
+                            entry.Id.PartId,
+                            exportTarget.ExportId,
+                            stream,
+                            cancellationToken).ConfigureAwait(false);
+                    }
+                }
+                if (exportTarget.SupportsDirectory
+                    && await exportCache.CanHandleDirectoryAsync(
+                        entry.Id.VendorId,
+                        exportTarget.MediaType,
+                        cancellationToken).ConfigureAwait(false))
+                {
+                    IDirectory directory = await exportCache.GetDirectoryForCachingAsync(
+                        entry.Id,
+                        exportTarget.ExportId,
+                        cancellationToken).ConfigureAwait(false);
                     await mediaVendor.ExportAsync(
                         entry.Id.ContentId,
                         entry.Id.PartId,
                         exportTarget.ExportId,
-                        stream,
+                        directory,
                         cancellationToken).ConfigureAwait(false);
                 }
-            }
-            if (exportTarget.SupportsDirectory
-                && await exportCache.CanHandleDirectoryAsync(
-                    entry.Id.VendorId,
-                    exportTarget.MediaType,
-                    cancellationToken).ConfigureAwait(false))
-            {
-                IDirectory directory = await exportCache.GetDirectoryForCachingAsync(
-                    entry.Id,
-                    exportTarget.ExportId,
-                    cancellationToken).ConfigureAwait(false);
-                await mediaVendor.ExportAsync(
-                    entry.Id.ContentId,
-                    entry.Id.PartId,
-                    exportTarget.ExportId,
-                    directory,
-                    cancellationToken).ConfigureAwait(false);
             }
         }
     }

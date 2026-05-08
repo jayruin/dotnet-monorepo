@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="System.IO.Hashing" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(Proj_Databases)" />
+    <ProjectReference Include="$(Proj_umm_Library)" />
+    <ProjectReference Include="$(Proj_umm_Vendors_Abstractions)" />
+  </ItemGroup>
+</Project>

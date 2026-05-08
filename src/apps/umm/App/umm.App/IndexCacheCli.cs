@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using umm.ExportCache;
+using umm.HashCache;
 using umm.Library;
 using umm.SearchIndex;
 using umm.Vendors.Abstractions;
@@ -32,27 +33,30 @@ internal static class IndexCacheCli
         };
         Option<bool> searchIndexOption = CreateSearchQueryOption();
         Option<bool> exportCacheOption = CreateExportCacheOption();
+        Option<bool> hashCacheOption = CreateHashCacheOption();
         Command command = new("rebuild")
         {
             vendorIdsArgument,
             searchIndexOption,
             exportCacheOption,
+            hashCacheOption,
         };
         command.SetAction((parseResult, cancellationToken) => CliEndpoint.ExecuteAsync(
             sp => HandleRebuildCommandAsync(sp,
                 parseResult.GetRequiredValue(vendorIdsArgument),
                 parseResult.GetRequiredValue(searchIndexOption),
                 parseResult.GetRequiredValue(exportCacheOption),
+                parseResult.GetRequiredValue(hashCacheOption),
                 cancellationToken),
             initializeServices: Initializations.InitializeServices));
         return command;
     }
 
     private static async Task HandleRebuildCommandAsync(IServiceProvider serviceProvider,
-        IEnumerable<string> vendorIds, bool handleSearchIndex, bool handleExportCache,
+        IEnumerable<string> vendorIds, bool handleSearchIndex, bool handleExportCache, bool handleHashCache,
         CancellationToken cancellationToken)
     {
-        if (!handleSearchIndex && !handleExportCache)
+        if (!handleSearchIndex && !handleExportCache && !handleHashCache)
         {
             return;
         }
@@ -61,9 +65,15 @@ internal static class IndexCacheCli
 
         ISearchIndex searchIndex = serviceProvider.GetRequiredService<ISearchIndex>();
         IExportCache exportCache = serviceProvider.GetRequiredService<IExportCache>();
+        IHashCache hashCache = serviceProvider.GetRequiredService<IHashCache>();
+        IMultiHashProvider multiHashProvider = serviceProvider.GetRequiredService<IMultiHashProvider>();
         if (handleExportCache && vendorIdsSet.Count == 0)
         {
             await exportCache.ResetAsync(cancellationToken).ConfigureAwait(false);
+        }
+        if (handleHashCache && vendorIdsSet.Count == 0)
+        {
+            await hashCache.ResetAsync(cancellationToken).ConfigureAwait(false);
         }
         foreach (IMediaVendor mediaVendor in serviceProvider.GetServices<IMediaVendor>())
         {
@@ -90,6 +100,17 @@ internal static class IndexCacheCli
                     cancellationToken
                 ).ConfigureAwait(false);
             }
+
+            if (handleHashCache)
+            {
+                await hashCache.ClearAsync(mediaVendor.VendorId, cancellationToken).ConfigureAwait(false);
+                await hashCache.AddOrUpdateCacheAsync(
+                    mediaVendor,
+                    searchableMediaEntries.Select(e => e.MediaEntry),
+                    multiHashProvider,
+                    cancellationToken
+                ).ConfigureAwait(false);
+            }
         }
     }
 
@@ -99,12 +120,14 @@ internal static class IndexCacheCli
         Argument<IEnumerable<string>> contentIdsArgument = new("contentIds");
         Option<bool> searchIndexOption = CreateSearchQueryOption();
         Option<bool> exportCacheOption = CreateExportCacheOption();
+        Option<bool> hashCacheOption = CreateHashCacheOption();
         Command command = new("update")
         {
             vendorIdArgument,
             contentIdsArgument,
             searchIndexOption,
             exportCacheOption,
+            hashCacheOption,
         };
         command.SetAction((parseResult, cancellationToken) => CliEndpoint.ExecuteAsync(
             sp => HandleUpdateCommandAsync(sp,
@@ -112,16 +135,17 @@ internal static class IndexCacheCli
                 parseResult.GetRequiredValue(contentIdsArgument),
                 parseResult.GetRequiredValue(searchIndexOption),
                 parseResult.GetRequiredValue(exportCacheOption),
+                parseResult.GetRequiredValue(hashCacheOption),
                 cancellationToken),
             initializeServices: Initializations.InitializeServices));
         return command;
     }
 
     private static async Task HandleUpdateCommandAsync(IServiceProvider serviceProvider,
-        string vendorId, IEnumerable<string> contentIds, bool handleSearchIndex, bool handleExportCache,
+        string vendorId, IEnumerable<string> contentIds, bool handleSearchIndex, bool handleExportCache, bool handleHashCache,
         CancellationToken cancellationToken)
     {
-        if (!handleSearchIndex && !handleExportCache)
+        if (!handleSearchIndex && !handleExportCache && !handleHashCache)
         {
             return;
         }
@@ -149,6 +173,18 @@ internal static class IndexCacheCli
                 cancellationToken
             ).ConfigureAwait(false);
         }
+
+        if (handleHashCache)
+        {
+            IHashCache hashCache = serviceProvider.GetRequiredService<IHashCache>();
+            IMultiHashProvider multiHashProvider = serviceProvider.GetRequiredService<IMultiHashProvider>();
+            await hashCache.AddOrUpdateCacheAsync(
+                mediaVendor,
+                searchableMediaEntries.Select(e => e.MediaEntry),
+                multiHashProvider,
+                cancellationToken
+            ).ConfigureAwait(false);
+        }
     }
 
     private static Option<bool> CreateSearchQueryOption() => new("--search-index", "-s")
@@ -157,6 +193,11 @@ internal static class IndexCacheCli
     };
 
     private static Option<bool> CreateExportCacheOption() => new("--export-cache", "-e")
+    {
+        DefaultValueFactory = _ => false,
+    };
+
+    private static Option<bool> CreateHashCacheOption() => new("--hash-cache", "-a")
     {
         DefaultValueFactory = _ => false,
     };
