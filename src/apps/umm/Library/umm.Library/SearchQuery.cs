@@ -35,23 +35,52 @@ public static class SearchQuery
         Func<string, string, bool> valueMatchesSearchValue)
     {
         if (searchQuery.Count == 0) return true;
-        StringValues allSearchValues = new();
+        StringValues allPositiveSearchValues = new();
+        StringValues allNegativeSearchValues = new();
         foreach (string searchKey in searchKeys)
         {
-            if (!searchQuery.TryGetValue(searchKey, out StringValues searchValues)) continue;
-            allSearchValues = StringValues.Concat(allSearchValues, searchValues);
+            if (searchQuery.TryGetValue(searchKey, out StringValues positiveSearchValues))
+            {
+                allPositiveSearchValues = StringValues.Concat(allPositiveSearchValues, positiveSearchValues);
+            }
+            if (searchQuery.TryGetValue($"-{searchKey}", out StringValues negativeSearchValues))
+            {
+                allNegativeSearchValues = StringValues.Concat(allNegativeSearchValues, negativeSearchValues);
+            }
         }
-        if (allSearchValues.Count == 0) return true;
+        IReadOnlyCollection<string> valuesList = values as IReadOnlyCollection<string> ?? [.. values];
+        return MatchesPositively(valuesList, allPositiveSearchValues, valueMatchesSearchValue)
+            && MatchesNegatively(valuesList, allNegativeSearchValues, valueMatchesSearchValue);
+    }
+
+    private static bool MatchesPositively(IEnumerable<string> values, StringValues allPositiveSearchValues, Func<string, string, bool> valueMatchesSearchValue)
+    {
+        if (allPositiveSearchValues.Count == 0) return true;
         foreach (string value in values)
         {
             if (string.IsNullOrWhiteSpace(value)) continue;
-            foreach (string? searchValue in allSearchValues)
+            foreach (string? searchValue in allPositiveSearchValues)
             {
                 if (string.IsNullOrWhiteSpace(searchValue)) continue;
                 if (valueMatchesSearchValue(value, searchValue)) return true;
             }
         }
         return false;
+    }
+
+    private static bool MatchesNegatively(IEnumerable<string> values, StringValues allNegativeSearchValues, Func<string, string, bool> valueMatchesSearchValue)
+    {
+        if (allNegativeSearchValues.Count == 0) return true;
+        foreach (string value in values)
+        {
+            if (string.IsNullOrWhiteSpace(value)) continue;
+            foreach (string? searchValue in allNegativeSearchValues)
+            {
+                if (string.IsNullOrWhiteSpace(searchValue)) continue;
+                if (valueMatchesSearchValue(value, searchValue)) return false;
+            }
+        }
+        return true;
     }
 
     private static bool Matches(string searchTerm,

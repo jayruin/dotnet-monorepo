@@ -113,17 +113,24 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
     private static JsonNode CreateQueryNode(IReadOnlyDictionary<string, StringValues> searchQuery, FrozenSet<MediaFormat> mediaFormats)
     {
         JsonArray searchArray = searchQuery.Count > 0
-            ? new([.. searchQuery.Select(kvp => {
+            ? new([.. searchQuery.Select(kvp =>
+            {
                 (string searchKey, StringValues searchValues) = kvp;
+                bool isNegative = searchKey.StartsWith('-');
+                string searchKeyToUse = searchKey.ToLowerInvariant();
+                if (isNegative)
+                {
+                    searchKeyToUse = searchKeyToUse.Trim('-');
+                }
                 return new JsonObject()
                 {
                     ["bool"] = new JsonObject()
                     {
-                        ["should"] = new JsonArray([.. searchValues.Select(searchValue => new JsonObject()
+                        [!isNegative ? "should" : "must_not"] = new JsonArray([.. searchValues.Select(searchValue => new JsonObject()
                         {
                             ["match"] = new JsonObject()
                             {
-                                [$"{SearchFieldsKey}.{searchKey.ToLowerInvariant()}"] = new JsonObject()
+                                [$"{SearchFieldsKey}.{searchKeyToUse}"] = new JsonObject()
                                 {
                                     ["query"] = searchValue,
                                     ["operator"] = "and",
