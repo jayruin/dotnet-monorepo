@@ -20,6 +20,7 @@ using umm.Storages.Tags;
 using umm.Storages.Urls;
 using umm.Vendors.Abstractions;
 using umm.Vendors.Common;
+using Utils;
 
 namespace umm.Vendors.EpubProj;
 
@@ -153,8 +154,8 @@ public sealed class EpubProjVendor : IMediaVendor
     {
         EpubProjMetadataAdapter metadata = await GetMetadataAsync(contentId, cancellationToken).ConfigureAwait(false);
         UniversalMediaMetadata universalMetadata = metadata.Universalize();
-        // TODO ToImmutableArrayAsync
-        ImmutableArray<MediaExportTarget> exportTargets = [.. await EnumerateExportTargetsAsync(contentId, cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false)];
+        ImmutableArray<MediaExportTarget> exportTargets = await EnumerateExportTargetsAsync(contentId, cancellationToken)
+            .ToImmutableArrayAsync(cancellationToken).ConfigureAwait(false);
         ImmutableSortedSet<string> tags = await GetTagsAsync(contentId, cancellationToken).ConfigureAwait(false);
         ImmutableArray<string> urls = await GetUrlsAsync(contentId, cancellationToken).ConfigureAwait(false);
         ImmutableArray<MetadataSearchField> searchFields = [

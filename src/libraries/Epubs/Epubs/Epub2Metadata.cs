@@ -139,6 +139,12 @@ internal sealed class Epub2Metadata : IEpubMetadata, IEpubOpfMetadata
         }
     }
 
+    EpubDirection? IEpubMetadata.Direction
+    {
+        get => null;
+        set { }
+    }
+
     public required Epub2IdentifierMetadataEntry Identifier { get; set; }
     public required Epub2HumanReadableMetadataEntry Title { get; set; }
     public required Epub2MetadataEntry Language { get; set; }

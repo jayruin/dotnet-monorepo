@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using umm.Library;
+using Utils;
 
 namespace umm.Vendors.Common;
 
@@ -42,8 +42,8 @@ public sealed class SinglePartSearchEntryEnumerationHandler<TMetadata>
     {
         TMetadata metadata = await _strategy.GetMetadataAsync(contentId, cancellationToken).ConfigureAwait(false);
         UniversalMediaMetadata universalMetadata = metadata.Universalize();
-        // TODO ToImmutableArrayAsync
-        ImmutableArray<MediaExportTarget> exportTargets = [.. await _strategy.EnumerateExportTargetsAsync(contentId, partId, cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false)];
+        ImmutableArray<MediaExportTarget> exportTargets = await _strategy.EnumerateExportTargetsAsync(contentId, partId, cancellationToken)
+            .ToImmutableArrayAsync(cancellationToken).ConfigureAwait(false);
         ImmutableSortedSet<string> tags = await _strategy.GetTagsAsync(contentId, cancellationToken).ConfigureAwait(false);
         ImmutableArray<string> urls = await _strategy.GetUrlsAsync(metadata, cancellationToken).ConfigureAwait(false);
         ImmutableArray<MetadataSearchField> metadataSearchFields = [

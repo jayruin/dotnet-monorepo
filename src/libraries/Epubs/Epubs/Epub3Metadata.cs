@@ -140,6 +140,24 @@ internal sealed class Epub3Metadata : IEpubMetadata, IEpubOpfMetadata
         }
     }
 
+    EpubDirection? IEpubMetadata.Direction
+    {
+        get => PageProgressionDirection switch
+        {
+            "rtl" => EpubDirection.RightToLeft,
+            "ltr" => EpubDirection.LeftToRight,
+            "default" => EpubDirection.Default,
+            _ => null,
+        };
+        set => PageProgressionDirection = value switch
+        {
+            EpubDirection.RightToLeft => "rtl",
+            EpubDirection.LeftToRight => "ltr",
+            EpubDirection.Default => "default",
+            _ => null,
+        };
+    }
+
     public required DateTimeOffset LastModified { get; set; }
     public required Epub3MetadataEntry Identifier { get; set; }
     public required Epub3DirLangMetadataEntry Title { get; set; }
@@ -160,7 +178,9 @@ internal sealed class Epub3Metadata : IEpubMetadata, IEpubOpfMetadata
     public List<Epub3DirLangMetadataEntry>? Subjects { get; set; }
     public List<Epub3MetadataEntry>? Types { get; set; }
     public List<Epub3MetaEntry>? Metas { get; set; }
+    public string? PageProgressionDirection { get; set; }
 
+    private const string PageProgressionDirectionAttributeName = "page-progression-direction";
     private static readonly XName PackageName = (XNamespace)EpubXmlNamespaces.Opf + "package";
     private static readonly XName MetadataName = (XNamespace)EpubXmlNamespaces.Opf + "metadata";
     private static readonly XName ManifestName = (XNamespace)EpubXmlNamespaces.Opf + "manifest";
@@ -182,6 +202,7 @@ internal sealed class Epub3Metadata : IEpubMetadata, IEpubOpfMetadata
     private static readonly XName TypeName = (XNamespace)EpubXmlNamespaces.Dc + "type";
     private static readonly XName MetaName = (XNamespace)EpubXmlNamespaces.Opf + "meta";
     private static readonly XName XmlLangName = XNamespace.Xml + "lang";
+    private static readonly XName SpineName = (XNamespace)EpubXmlNamespaces.Opf + "spine";
 
     public static Epub3Metadata ReadFromOpf(XDocument document)
     {
@@ -298,6 +319,11 @@ internal sealed class Epub3Metadata : IEpubMetadata, IEpubOpfMetadata
             .Select(e => CreateMetaEntry(e, packageMetadata))
             .ToList();
 
+        string? pageProgressionDirection = package
+            .Element(SpineName)
+            ?.Attribute(PageProgressionDirectionAttributeName)
+            ?.Value;
+
         return new()
         {
             LastModified = lastModified,
@@ -320,6 +346,7 @@ internal sealed class Epub3Metadata : IEpubMetadata, IEpubOpfMetadata
             Subjects = subjects.Count == 0 ? null : subjects,
             Types = types.Count == 0 ? null : types,
             Metas = metas.Count == 0 ? null : metas,
+            PageProgressionDirection = pageProgressionDirection,
         };
     }
 
@@ -369,6 +396,11 @@ internal sealed class Epub3Metadata : IEpubMetadata, IEpubOpfMetadata
                 new XAttribute("href", newCover),
                 new XAttribute("media-type", mediaTypeFileExtensionsMapping.GetMediaTypeFromPath(newCover, MediaType.Image.Jpeg)),
                 new XAttribute("properties", "cover-image")));
+        }
+        if (!string.IsNullOrWhiteSpace(PageProgressionDirection))
+        {
+            package.Element(SpineName)
+                ?.SetAttributeValue(PageProgressionDirectionAttributeName, PageProgressionDirection);
         }
     }
 

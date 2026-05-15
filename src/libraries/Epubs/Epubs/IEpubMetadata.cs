@@ -12,4 +12,5 @@ public interface IEpubMetadata
     DateTimeOffset? Date { get; set; }
     string? Description { get; set; }
     EpubSeries? Series { get; set; }
+    EpubDirection? Direction { get; set; }
 }
