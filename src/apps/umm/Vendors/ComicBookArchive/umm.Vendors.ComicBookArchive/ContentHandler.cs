@@ -201,7 +201,7 @@ internal sealed class ContentHandler
             searchFieldsBuilder[depthSearchFieldIndex] = new()
             {
                 Aliases = depthSearchField.Aliases,
-                Values = [coordinates.ToString() ?? string.Empty],
+                Values = [coordinates.Length.ToString() ?? string.Empty],
                 ExactMatch = depthSearchField.ExactMatch,
             };
             yield return new()
