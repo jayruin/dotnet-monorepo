@@ -49,6 +49,12 @@ internal sealed class BrowserHtmlClient : IHtmlClient, IAsyncDisposable
         IPage page = await GetPageAsync(cancellationToken).ConfigureAwait(false);
         string finalUrl = BaseUri is null ? url : new Uri(BaseUri, url).AbsoluteUri;
         await page.GotoAsync(finalUrl).ConfigureAwait(false);
+        await page.WaitForLoadStateAsync(LoadState.DOMContentLoaded).ConfigureAwait(false);
+        await page.Locator("a#privacy-link[href*=cloudflare]")
+            .WaitForAsync(new()
+            {
+                State = WaitForSelectorState.Detached,
+            }).ConfigureAwait(false);
         await page.WaitForLoadStateAsync(LoadState.NetworkIdle).ConfigureAwait(false);
         string htmlString = await page.ContentAsync().ConfigureAwait(false);
         return await _htmlParser.ParseDocumentAsync(htmlString, cancellationToken).ConfigureAwait(false);
