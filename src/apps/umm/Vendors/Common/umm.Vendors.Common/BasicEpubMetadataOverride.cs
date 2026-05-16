@@ -21,6 +21,7 @@ public sealed partial class BasicEpubMetadataOverride : ISerializableMetadata<Ba
     private static BasicEpubMetadataOverrideJsonContext JsonContext => BasicEpubMetadataOverrideJsonContext.Default;
 
     // System.Text.Json does not support init-only properties with default values
+    public string? Identifier { get; set; }
     public string? Title { get; set; }
     public ImmutableArray<EpubCreator> Creators { get; set; } = [];
     public string? Description { get; set; }
@@ -40,6 +41,12 @@ public sealed partial class BasicEpubMetadataOverride : ISerializableMetadata<Ba
     }
 
     public ImmutableArray<MetadataSearchField> GetSearchFields() => [
+        new()
+        {
+            Aliases = ["identifier"],
+            Values = [Identifier ?? string.Empty],
+            ExactMatch = true,
+        },
         new()
         {
             Aliases = ["title"],
@@ -69,6 +76,11 @@ public sealed partial class BasicEpubMetadataOverride : ISerializableMetadata<Ba
     public IReadOnlyList<MetadataPropertyChange> WriteTo(IEpubMetadata epubMetadata)
     {
         ImmutableArray<MetadataPropertyChange>.Builder builder = ImmutableArray.CreateBuilder<MetadataPropertyChange>();
+        if (!string.IsNullOrWhiteSpace(Identifier))
+        {
+            builder.Add(new(nameof(Identifier), epubMetadata.Identifier, Identifier));
+            epubMetadata.Identifier = Identifier;
+        }
         if (!string.IsNullOrWhiteSpace(Title))
         {
             builder.Add(new(nameof(Title), epubMetadata.Title, Title));
