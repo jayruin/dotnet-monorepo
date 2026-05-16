@@ -20,12 +20,13 @@ public sealed partial class BasicEpubMetadataOverride : ISerializableMetadata<Ba
 {
     private static BasicEpubMetadataOverrideJsonContext JsonContext => BasicEpubMetadataOverrideJsonContext.Default;
 
-    public string? Title { get; init; }
-    public ImmutableArray<EpubCreator> Creators { get; init; } = [];
-    public string? Description { get; init; }
-    public EpubSeries? Series { get; init; }
-    public string? Date { get; init; }
-    public EpubDirection? Direction { get; init; }
+    // System.Text.Json does not support init-only properties with default values
+    public string? Title { get; set; }
+    public ImmutableArray<EpubCreator> Creators { get; set; } = [];
+    public string? Description { get; set; }
+    public EpubSeries? Series { get; set; }
+    public string? Date { get; set; }
+    public EpubDirection? Direction { get; set; }
 
     public static async Task<BasicEpubMetadataOverride> FromJsonAsync(Stream stream, CancellationToken cancellationToken = default)
     {

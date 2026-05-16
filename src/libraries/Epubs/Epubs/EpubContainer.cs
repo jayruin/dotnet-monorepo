@@ -39,7 +39,7 @@ public sealed class EpubContainer
         }
         string? versionString = reader.GetAttribute("version");
         if (reader.NodeType != XmlNodeType.Element
-            || reader.Name != "package"
+            || reader.LocalName != "package"
             || reader.NamespaceURI != EpubXmlNamespaces.Opf
             || string.IsNullOrWhiteSpace(versionString))
         {
