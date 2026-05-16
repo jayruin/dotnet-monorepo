@@ -45,24 +45,16 @@ internal sealed class ContentHandler
         _mediaTypeFileExtensionsMapping = mediaTypeFileExtensionsMapping;
     }
 
-    public async IAsyncEnumerable<SearchableMediaEntry> EnumerateAsync([EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        await foreach ((string vendorId, string contentId) in _vendorContext.MetadataStorage.EnumerateContentAsync(cancellationToken).ConfigureAwait(false))
-        {
-            if (vendorId != _vendorContext.VendorId) continue;
-
-            await foreach (SearchableMediaEntry entry in EnumerateEntriesAsync(contentId, cancellationToken).ConfigureAwait(false))
-            {
-                yield return entry;
-            }
-        }
-    }
+    public IAsyncEnumerable<SearchableMediaEntry> EnumerateAsync(CancellationToken cancellationToken)
+        => _vendorContext.MetadataStorage.EnumerateContentAsync(cancellationToken)
+            .Where(id => id.VendorId == _vendorContext.VendorId)
+            .SelectMany(id => EnumerateEntriesAsync(id.ContentId, cancellationToken));
 
     public IAsyncEnumerable<SearchableMediaEntry> EnumerateAsync(string contentId, CancellationToken cancellationToken)
         => EnumerateEntriesAsync(contentId, cancellationToken);
 
     public Task<SearchableMediaEntry?> GetEntryAsync(string contentId, string partId, CancellationToken cancellationToken)
-        => EnumerateEntriesAsync(contentId, cancellationToken).FirstOrDefaultAsync(cancellationToken).AsTask();
+        => EnumerateEntriesAsync(contentId, cancellationToken).FirstOrDefaultAsync(e => e.MediaEntry.Id.PartId == partId, cancellationToken).AsTask();
 
     public async Task<EpubMetadataOverrideMetadataAdapter> GetMetadataAsync(string contentId, CancellationToken cancellationToken)
         => new(
@@ -153,6 +145,12 @@ internal sealed class ContentHandler
                 Values = [string.Empty],
                 ExactMatch = true,
             },
+            new()
+            {
+                Aliases = ["depth"],
+                Values = ["0"],
+                ExactMatch = true,
+            },
         ];
         yield return new()
         {
@@ -196,6 +194,15 @@ internal sealed class ContentHandler
                 Aliases = titleSearchField.Aliases,
                 Values = [resolvedFullTitle],
                 ExactMatch = titleSearchField.ExactMatch,
+            };
+            (int depthSearchFieldIndex, MetadataSearchField depthSearchField) = searchFieldsBuilder
+                .Index()
+                .First(t => t.Item.Aliases.Any(a => a.Equals("depth", StringComparison.OrdinalIgnoreCase)));
+            searchFieldsBuilder[depthSearchFieldIndex] = new()
+            {
+                Aliases = depthSearchField.Aliases,
+                Values = [coordinates.ToString() ?? string.Empty],
+                ExactMatch = depthSearchField.ExactMatch,
             };
             yield return new()
             {
