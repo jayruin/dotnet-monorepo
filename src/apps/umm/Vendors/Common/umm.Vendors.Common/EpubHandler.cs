@@ -147,7 +147,7 @@ public sealed class EpubHandler
         return new EpubHandlerBasicEnumerationStrategy(_strategy.VendorContext, this, urlsStrategy);
     }
 
-    public ISinglePartSearchEntryEnumerationStrategy<TMetadata> GetEnumerationStrategy<TMetadata>(string metadataKey, IUrlsStrategy<TMetadata> urlsStrategy)
+    public ISinglePartSearchEntryEnumerationStrategy<EpubFallbackMetadata<TMetadata>> GetEnumerationStrategy<TMetadata>(string metadataKey, IUrlsStrategy<TMetadata> urlsStrategy)
         where TMetadata : ISearchableMetadata, IUniversalizableMediaMetadata, ISerializableMetadata<TMetadata>
     {
         return new EpubHandlerEnumerationStrategy<TMetadata>(_strategy.VendorContext, this, metadataKey, urlsStrategy);

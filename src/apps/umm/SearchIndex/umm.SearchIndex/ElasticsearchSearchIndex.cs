@@ -412,6 +412,11 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                                         ["type"] = "text",
                                         ["index"] = false,
                                     },
+                                    [jsonNamingPolicy.ConvertName(nameof(MediaEntry.Metadata.Identifiers))] = new JsonObject()
+                                    {
+                                        ["type"] = "text",
+                                        ["index"] = false,
+                                    },
                                 },
                             },
                             [jsonNamingPolicy.ConvertName(nameof(MediaEntry.ExportTargets))] = new JsonObject()

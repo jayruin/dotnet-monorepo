@@ -55,6 +55,6 @@ internal sealed class EpubProjMetadataAdapter : ISearchableMetadata, IUniversali
                 : c.Name)
             .ToImmutableArray();
         string description = _epubProjectMetadata.Description ?? string.Empty;
-        return new(title, creators, description);
+        return new(title, creators, description, []);
     }
 }

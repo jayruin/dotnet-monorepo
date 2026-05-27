@@ -54,6 +54,14 @@ public sealed class EpubMetadataAdapter : ISearchableMetadata, IUniversalizableM
                 ],
             ExactMatch = false,
         },
+        new()
+        {
+            Aliases = ["isbn"],
+            Values = IsbnIdentifier.TryParse(_metadata.Identifier, out IsbnIdentifier? isbn)
+                ? [isbn.Value]
+                : [],
+            ExactMatch = true,
+        },
     ];
 
     public UniversalMediaMetadata Universalize()
@@ -63,6 +71,12 @@ public sealed class EpubMetadataAdapter : ISearchableMetadata, IUniversalizableM
             .Select(c => c.ToString())
             .ToImmutableArray();
         string description = _metadata.Description ?? string.Empty;
-        return new(title, creators, description);
+        string? identifier = _metadata.Identifier;
+        string normalizedIdentifier = IsbnIdentifier.Parse(identifier)?.ToFullString()
+            ?? string.Empty;
+        ImmutableArray<string> identifiers = string.IsNullOrWhiteSpace(normalizedIdentifier)
+            ? []
+            : [normalizedIdentifier];
+        return new(title, creators, description, identifiers);
     }
 }

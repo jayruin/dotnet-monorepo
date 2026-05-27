@@ -144,7 +144,13 @@ public sealed partial class BasicEpubMetadataOverride : ISerializableMetadata<Ba
             .Select(c => c.Name)
             .ToImmutableArray();
         string description = Description ?? string.Empty;
-        return new(title, creators, description);
+        string? identifier = Identifier;
+        string normalizedIdentifier = IsbnIdentifier.Parse(identifier)?.ToFullString()
+            ?? string.Empty;
+        ImmutableArray<string> identifiers = string.IsNullOrWhiteSpace(normalizedIdentifier)
+            ? []
+            : [normalizedIdentifier];
+        return new(title, creators, description, identifiers);
     }
 
     [JsonSourceGenerationOptions(

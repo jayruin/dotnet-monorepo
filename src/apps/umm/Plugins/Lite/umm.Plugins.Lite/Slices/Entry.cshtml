@@ -19,6 +19,14 @@
 <h3>@nameof(Model.Metadata.Description)</h3>
 <p>@Model.Metadata.Description</p>
 
+<h3>@nameof(Model.Metadata.Identifiers)</h3>
+<ul>
+    @foreach (string identifier in Model.Metadata.Identifiers)
+    {
+        <li>@identifier</li>
+    }
+</ul>
+
 <h3>@nameof(Model.Tags)</h3>
 <ul>
     @foreach (string tag in Model.Tags)
