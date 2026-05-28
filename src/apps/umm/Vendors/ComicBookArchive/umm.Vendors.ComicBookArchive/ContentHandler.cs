@@ -365,7 +365,7 @@ internal sealed class ContentHandler
             ? fullTitle
             : new MediaFullId(_vendorContext.VendorId, metadata.ContentId, partId).ToCombinedString();
         epubWriter.Title = title;
-        if (metadata.EpubMetadataOverride.Creators.Length > 0)
+        if (metadata.EpubMetadataOverride.Creators is not null && metadata.EpubMetadataOverride.Creators.Count > 0)
         {
             epubWriter.Creators = metadata.EpubMetadataOverride.Creators;
         }

@@ -23,7 +23,7 @@ public sealed partial class BasicEpubMetadataOverride : ISerializableMetadata<Ba
     // System.Text.Json does not support init-only properties with default values
     public string? Identifier { get; set; }
     public string? Title { get; set; }
-    public ImmutableArray<EpubCreator> Creators { get; set; } = [];
+    public List<EpubCreator>? Creators { get; set; }
     public string? Description { get; set; }
     public EpubSeries? Series { get; set; }
     public string? Date { get; set; }
@@ -56,7 +56,7 @@ public sealed partial class BasicEpubMetadataOverride : ISerializableMetadata<Ba
         new()
         {
             Aliases = ["creator"],
-            Values = [..Creators.Select(c => c.Name)],
+            Values = [..(Creators ?? []).Select(c => c.Name)],
             ExactMatch = false,
         },
         new()
@@ -86,12 +86,12 @@ public sealed partial class BasicEpubMetadataOverride : ISerializableMetadata<Ba
             builder.Add(new(nameof(Title), epubMetadata.Title, Title));
             epubMetadata.Title = Title;
         }
-        if (Creators.Length > 0)
+        if (Creators is not null && Creators.Count > 0)
         {
             List<EpubCreator> epubMetadataCreators = [.. epubMetadata.Creators];
-            for (int i = 0; i < Math.Max(Creators.Length, epubMetadataCreators.Count); i++)
+            for (int i = 0; i < Math.Max(Creators.Count, epubMetadataCreators.Count); i++)
             {
-                EpubCreator? creator = i < Creators.Length ? Creators[i] : null;
+                EpubCreator? creator = i < Creators.Count ? Creators[i] : null;
                 EpubCreator? epubMetadataCreator = i < epubMetadataCreators.Count ? epubMetadataCreators[i] : null;
                 if (creator?.Name != epubMetadataCreator?.Name)
                 {
@@ -140,7 +140,7 @@ public sealed partial class BasicEpubMetadataOverride : ISerializableMetadata<Ba
     public UniversalMediaMetadata Universalize()
     {
         string title = Title ?? string.Empty;
-        ImmutableArray<string> creators = Creators
+        ImmutableArray<string> creators = (Creators ?? [])
             .Select(c => c.Name)
             .ToImmutableArray();
         string description = Description ?? string.Empty;

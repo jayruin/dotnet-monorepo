@@ -63,15 +63,15 @@ internal static class IndexCacheCli
 
         HashSet<string> vendorIdsSet = [.. vendorIds];
 
-        ISearchIndex searchIndex = serviceProvider.GetRequiredService<ISearchIndex>();
-        IExportCache exportCache = serviceProvider.GetRequiredService<IExportCache>();
-        IHashCache hashCache = serviceProvider.GetRequiredService<IHashCache>();
-        IMultiHashProvider multiHashProvider = serviceProvider.GetRequiredService<IMultiHashProvider>();
-        if (handleExportCache && vendorIdsSet.Count == 0)
+        ISearchIndex? searchIndex = serviceProvider.GetService<ISearchIndex>();
+        IExportCache? exportCache = serviceProvider.GetService<IExportCache>();
+        IHashCache? hashCache = serviceProvider.GetService<IHashCache>();
+        IMultiHashProvider? multiHashProvider = serviceProvider.GetService<IMultiHashProvider>();
+        if (handleExportCache && exportCache is not null && vendorIdsSet.Count == 0)
         {
             await exportCache.ResetAsync(cancellationToken).ConfigureAwait(false);
         }
-        if (handleHashCache && vendorIdsSet.Count == 0)
+        if (handleHashCache && hashCache is not null && multiHashProvider is not null && vendorIdsSet.Count == 0)
         {
             await hashCache.ResetAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -82,7 +82,7 @@ internal static class IndexCacheCli
             List<SearchableMediaEntry> searchableMediaEntries = await mediaVendor.EnumerateAsync(cancellationToken)
                 .ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            if (handleSearchIndex)
+            if (handleSearchIndex && searchIndex is not null)
             {
                 await searchIndex.ClearAsync(mediaVendor.VendorId, cancellationToken).ConfigureAwait(false);
                 await searchIndex.AddOrUpdateAsync(
@@ -91,7 +91,7 @@ internal static class IndexCacheCli
                 ).ConfigureAwait(false);
             }
 
-            if (handleExportCache)
+            if (handleExportCache && exportCache is not null)
             {
                 await exportCache.ClearAsync(mediaVendor.VendorId, cancellationToken).ConfigureAwait(false);
                 await exportCache.AddOrUpdateCacheAsync(
@@ -101,7 +101,7 @@ internal static class IndexCacheCli
                 ).ConfigureAwait(false);
             }
 
-            if (handleHashCache)
+            if (handleHashCache && hashCache is not null && multiHashProvider is not null)
             {
                 await hashCache.ClearAsync(mediaVendor.VendorId, cancellationToken).ConfigureAwait(false);
                 await hashCache.AddOrUpdateCacheAsync(
