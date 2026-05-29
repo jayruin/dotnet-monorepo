@@ -33,6 +33,7 @@ internal sealed class ComicBookArchiveStorageNode
             .ThenBy(f => f.Name, StringComparer.OrdinalIgnoreCase)
             .ToImmutableArrayAsync(cancellationToken).ConfigureAwait(false);
         ImmutableArray<ComicBookArchiveStorageNode> childNodes = await directory.EnumerateDirectoriesAsync(cancellationToken)
+            .OrderBy(d => d.Name, StringComparer.Create(CultureInfo.InvariantCulture, CompareOptions.NumericOrdering))
             .Select(async (d, ct) => await FromDirectoryAsync(d, null, ct))
             .ToImmutableArrayAsync(cancellationToken).ConfigureAwait(false);
         return new()
