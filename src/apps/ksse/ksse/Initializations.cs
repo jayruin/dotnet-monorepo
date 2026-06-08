@@ -78,6 +78,10 @@ internal static class Initializations
             .AddHealthChecks()
             .AddDbContextCheck<UsersDbContext>()
             .AddDbContextCheck<ProgressDbContext>();
+
+        services.Configure<DatabaseHeartbeatOptions>(configuration.GetSection(nameof(DatabaseHeartbeatOptions)));
+        services.AddHostedService<DatabaseHeartbeatBackgroundService<UsersDbContext>>();
+        services.AddHostedService<DatabaseHeartbeatBackgroundService<ProgressDbContext>>();
     }
 
     public static void InitializeMiddlewares(IApplicationBuilder applicationBuilder)
