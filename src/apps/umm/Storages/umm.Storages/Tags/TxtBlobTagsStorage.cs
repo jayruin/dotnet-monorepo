@@ -37,10 +37,16 @@ public sealed class TxtBlobTagsStorage : ITagsStorage
         await using ConfiguredAsyncDisposable configuredStream = stream.ConfigureAwait(false);
         StreamWriter streamWriter = new(stream, FileEncoding);
         await using ConfiguredAsyncDisposable configuredStreamWriter = streamWriter.ConfigureAwait(false);
+        bool isFirst = true;
         foreach (string tag in tags)
         {
             if (string.IsNullOrWhiteSpace(tag)) continue;
-            await streamWriter.WriteLineAsync(tag.AsMemory(), cancellationToken).ConfigureAwait(false);
+            if (!isFirst)
+            {
+                await streamWriter.WriteAsync("\n".AsMemory(), cancellationToken).ConfigureAwait(false);
+            }
+            await streamWriter.WriteAsync(tag.AsMemory(), cancellationToken).ConfigureAwait(false);
+            isFirst = false;
         }
     }
 
