@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="2fb90d8f-d736-4e74-af54-5a7cf6e48138" name="@sjc20-cw715-ae3b62fa-9e9c-4782-abb9-1363c9a39204-DE6F7A996D48 2026-06-11 01:54:26" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-06-11T01:54:26.3662470+00:00" queuing="2026-06-11T01:54:26.3662470+00:00" start="2026-06-11T01:54:25.7820180+00:00" finish="2026-06-11T01:54:26.3852450+00:00" />
+  <TestSettings name="default" id="4b254b41-c31d-4b26-a84c-aeb0927d0c03">
+    <Deployment runDeploymentRoot="_sjc20-cw715-ae3b62fa-9e9c-4782-abb9-1363c9a39204-DE6F7A996D48_2026-06-11_01_54_26" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="10a36621-4741-4a7c-ab57-f5a3fc550d5a" testId="1812fa91-4b40-8d2c-a06f-33e38a680aa2" testName="Test_MainId_FromCombinedString_Succeeds (&quot;vendor.content&quot;,&quot;vendor&quot;,&quot;content&quot;)" computerName="sjc20-cw715-ae3b62fa-9e9c-4782-abb9-1363c9a39204-DE6F7A996D48" duration="00:00:00.0058152" startTime="2026-06-11T01:54:26.2931540+00:00" endTime="2026-06-11T01:54:26.3090950+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="10a36621-4741-4a7c-ab57-f5a3fc550d5a" />
+    <UnitTestResult executionId="4dea19f9-a14a-4097-a1b9-75acd6cca6de" testId="163250cb-97e1-8765-9d5c-47e4dbc79399" testName="Test_FullId_ToCombinedString (&quot;vendor&quot;,&quot;content&quot;,&quot;part&quot;,&quot;vendor.content.part&quot;)" computerName="sjc20-cw715-ae3b62fa-9e9c-4782-abb9-1363c9a39204-DE6F7A996D48" duration="00:00:00.0003645" startTime="2026-06-11T01:54:26.3311060+00:00" endTime="2026-06-11T01:54:26.3329020+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4dea19f9-a14a-4097-a1b9-75acd6cca6de" />
+    <UnitTestResult executionId="09d725f4-99f6-433c-8f36-8c63227ac892" testId="10891ea7-c1c8-8d48-97f1-f7941c4c1465" testName="Test_MainId_ToCombinedString (&quot;vendor&quot;,&quot;content&quot;,&quot;vendor.content&quot;)" computerName="sjc20-cw715-ae3b62fa-9e9c-4782-abb9-1363c9a39204-DE6F7A996D48" duration="00:00:00.0002931" startTime="2026-06-11T01:54:26.3126430+00:00" endTime="2026-06-11T01:54:26.3136300+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="09d725f4-99f6-433c-8f36-8c63227ac892" />
+    <UnitTestResult executionId="a1f1c500-ef73-41c0-93d1-dcb9473a67fa" testId="1b196890-d513-8f3f-b0fc-33df65e64028" testName="Test_FullId_ToCombinedString (&quot;vendor&quot;,&quot;content&quot;,&quot;&quot;,&quot;vendor.content&quot;)" computerName="sjc20-cw715-ae3b62fa-9e9c-4782-abb9-1363c9a39204-DE6F7A996D48" duration="00:00:00.0002150" startTime="2026-06-11T01:54:26.3127300+00:00" endTime="2026-06-11T01:54:26.3129640+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a1f1c500-ef73-41c0-93d1-dcb9473a67fa" />
+    <UnitTestResult executionId="0f7b677e-f201-41e6-9c3d-1d6cfce761cc" testId="1e507f92-a65a-8b69-9b05-d70cc07e749d" testName="Test_MainId_FromCombinedString_Fails (&quot;vendor&quot;)" computerName="sjc20-cw715-ae3b62fa-9e9c-4782-abb9-1363c9a39204-DE6F7A996D48" duration="00:00:00.0001765" startTime="2026-06-11T01:54:26.3121260+00:00" endTime="2026-06-11T01:54:26.3125100+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0f7b677e-f201-41e6-9c3d-1d6cfce761cc" />
+    <UnitTestResult executionId="728d8c1e-d77d-4f06-b930-07a9d6cd5614" testId="1954043b-9b98-8d06-b9f6-fefc9f600e4a" testName="Test_FullId_FromCombinedString_Succeeds (&quot;vendor.content&quot;,&quot;vendor&quot;,&quot;content&quot;,&quot;&quot;)" computerName="sjc20-cw715-ae3b62fa-9e9c-4782-abb9-1363c9a39204-DE6F7A996D48" duration="00:00:00.0058057" startTime="2026-06-11T01:54:26.2931450+00:00" endTime="2026-06-11T01:54:26.3090950+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="728d8c1e-d77d-4f06-b930-07a9d6cd5614" />
+    <UnitTestResult executionId="48d31f1f-b91c-4c89-8e1f-4ea8251eef9a" testId="1c6d3616-c264-8901-9c85-d2cc0be827c3" testName="Test_MainId_FromCombinedString_Fails (&quot;vendor.content.part&quot;)" computerName="sjc20-cw715-ae3b62fa-9e9c-4782-abb9-1363c9a39204-DE6F7A996D48" duration="00:00:00.0000644" startTime="2026-06-11T01:54:26.3125360+00:00" endTime="2026-06-11T01:54:26.3126320+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="48d31f1f-b91c-4c89-8e1f-4ea8251eef9a" />
+    <UnitTestResult executionId="9939b47e-5447-4ef2-9d0b-5591d34ed69a" testId="18e21466-8bf4-8517-81c0-a3d671980bfe" testName="Test_FullId_FromCombinedString_Succeeds (&quot;vendor.content.part&quot;,&quot;vendor&quot;,&quot;content&quot;,&quot;part&quot;)" computerName="sjc20-cw715-ae3b62fa-9e9c-4782-abb9-1363c9a39204-DE6F7A996D48" duration="00:00:00.0001743" startTime="2026-06-11T01:54:26.3123640+00:00" endTime="2026-06-11T01:54:26.3125720+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9939b47e-5447-4ef2-9d0b-5591d34ed69a" />
+    <UnitTestResult executionId="ec9ab763-1b70-4dc6-946d-ab13a0d9003a" testId="1e536d23-a4ef-8a29-8d92-cb0e183bbf0a" testName="Test_FullId_FromCombinedString_Fails (&quot;vendor&quot;)" computerName="sjc20-cw715-ae3b62fa-9e9c-4782-abb9-1363c9a39204-DE6F7A996D48" duration="00:00:00.0000450" startTime="2026-06-11T01:54:26.3126560+00:00" endTime="2026-06-11T01:54:26.3127230+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ec9ab763-1b70-4dc6-946d-ab13a0d9003a" />
+    <UnitTestResult executionId="94cd38ec-1a7d-41e6-a756-8f6a2a5c37e0" testId="13e471bf-8585-89f3-a9d0-897fa3ab673e" testName="Test_FullId_FromCombinedString_Fails (&quot;&quot;)" computerName="sjc20-cw715-ae3b62fa-9e9c-4782-abb9-1363c9a39204-DE6F7A996D48" duration="00:00:00.0000312" startTime="2026-06-11T01:54:26.3125970+00:00" endTime="2026-06-11T01:54:26.3126470+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="94cd38ec-1a7d-41e6-a756-8f6a2a5c37e0" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Test_MainId_FromCombinedString_Succeeds (&quot;vendor.content&quot;,&quot;vendor&quot;,&quot;content&quot;)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.library.tests/release_osx-arm64/umm.library.tests.dll" id="1812fa91-4b40-8d2c-a06f-33e38a680aa2">
+      <Execution id="10a36621-4741-4a7c-ab57-f5a3fc550d5a" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.Library.Tests/release_osx-arm64/umm.Library.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="umm.Library.Tests.MediaMainIdTests" name="Test_MainId_FromCombinedString_Succeeds" />
+    </UnitTest>
+    <UnitTest name="Test_FullId_FromCombinedString_Succeeds (&quot;vendor.content.part&quot;,&quot;vendor&quot;,&quot;content&quot;,&quot;part&quot;)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.library.tests/release_osx-arm64/umm.library.tests.dll" id="18e21466-8bf4-8517-81c0-a3d671980bfe">
+      <Execution id="9939b47e-5447-4ef2-9d0b-5591d34ed69a" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.Library.Tests/release_osx-arm64/umm.Library.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="umm.Library.Tests.MediaFullIdTests" name="Test_FullId_FromCombinedString_Succeeds" />
+    </UnitTest>
+    <UnitTest name="Test_FullId_ToCombinedString (&quot;vendor&quot;,&quot;content&quot;,&quot;part&quot;,&quot;vendor.content.part&quot;)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.library.tests/release_osx-arm64/umm.library.tests.dll" id="163250cb-97e1-8765-9d5c-47e4dbc79399">
+      <Execution id="4dea19f9-a14a-4097-a1b9-75acd6cca6de" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.Library.Tests/release_osx-arm64/umm.Library.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="umm.Library.Tests.MediaFullIdTests" name="Test_FullId_ToCombinedString" />
+    </UnitTest>
+    <UnitTest name="Test_FullId_ToCombinedString (&quot;vendor&quot;,&quot;content&quot;,&quot;&quot;,&quot;vendor.content&quot;)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.library.tests/release_osx-arm64/umm.library.tests.dll" id="1b196890-d513-8f3f-b0fc-33df65e64028">
+      <Execution id="a1f1c500-ef73-41c0-93d1-dcb9473a67fa" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.Library.Tests/release_osx-arm64/umm.Library.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="umm.Library.Tests.MediaFullIdTests" name="Test_FullId_ToCombinedString" />
+    </UnitTest>
+    <UnitTest name="Test_MainId_FromCombinedString_Fails (&quot;vendor&quot;)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.library.tests/release_osx-arm64/umm.library.tests.dll" id="1e507f92-a65a-8b69-9b05-d70cc07e749d">
+      <Execution id="0f7b677e-f201-41e6-9c3d-1d6cfce761cc" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.Library.Tests/release_osx-arm64/umm.Library.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="umm.Library.Tests.MediaMainIdTests" name="Test_MainId_FromCombinedString_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_FullId_FromCombinedString_Fails (&quot;&quot;)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.library.tests/release_osx-arm64/umm.library.tests.dll" id="13e471bf-8585-89f3-a9d0-897fa3ab673e">
+      <Execution id="94cd38ec-1a7d-41e6-a756-8f6a2a5c37e0" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.Library.Tests/release_osx-arm64/umm.Library.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="umm.Library.Tests.MediaFullIdTests" name="Test_FullId_FromCombinedString_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_FullId_FromCombinedString_Succeeds (&quot;vendor.content&quot;,&quot;vendor&quot;,&quot;content&quot;,&quot;&quot;)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.library.tests/release_osx-arm64/umm.library.tests.dll" id="1954043b-9b98-8d06-b9f6-fefc9f600e4a">
+      <Execution id="728d8c1e-d77d-4f06-b930-07a9d6cd5614" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.Library.Tests/release_osx-arm64/umm.Library.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="umm.Library.Tests.MediaFullIdTests" name="Test_FullId_FromCombinedString_Succeeds" />
+    </UnitTest>
+    <UnitTest name="Test_MainId_FromCombinedString_Fails (&quot;vendor.content.part&quot;)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.library.tests/release_osx-arm64/umm.library.tests.dll" id="1c6d3616-c264-8901-9c85-d2cc0be827c3">
+      <Execution id="48d31f1f-b91c-4c89-8e1f-4ea8251eef9a" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.Library.Tests/release_osx-arm64/umm.Library.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="umm.Library.Tests.MediaMainIdTests" name="Test_MainId_FromCombinedString_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_MainId_ToCombinedString (&quot;vendor&quot;,&quot;content&quot;,&quot;vendor.content&quot;)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.library.tests/release_osx-arm64/umm.library.tests.dll" id="10891ea7-c1c8-8d48-97f1-f7941c4c1465">
+      <Execution id="09d725f4-99f6-433c-8f36-8c63227ac892" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.Library.Tests/release_osx-arm64/umm.Library.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="umm.Library.Tests.MediaMainIdTests" name="Test_MainId_ToCombinedString" />
+    </UnitTest>
+    <UnitTest name="Test_FullId_FromCombinedString_Fails (&quot;vendor&quot;)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.library.tests/release_osx-arm64/umm.library.tests.dll" id="1e536d23-a4ef-8a29-8d92-cb0e183bbf0a">
+      <Execution id="ec9ab763-1b70-4dc6-946d-ab13a0d9003a" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.Library.Tests/release_osx-arm64/umm.Library.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="umm.Library.Tests.MediaFullIdTests" name="Test_FullId_FromCombinedString_Fails" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="1812fa91-4b40-8d2c-a06f-33e38a680aa2" executionId="10a36621-4741-4a7c-ab57-f5a3fc550d5a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="163250cb-97e1-8765-9d5c-47e4dbc79399" executionId="4dea19f9-a14a-4097-a1b9-75acd6cca6de" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="10891ea7-c1c8-8d48-97f1-f7941c4c1465" executionId="09d725f4-99f6-433c-8f36-8c63227ac892" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1b196890-d513-8f3f-b0fc-33df65e64028" executionId="a1f1c500-ef73-41c0-93d1-dcb9473a67fa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1e507f92-a65a-8b69-9b05-d70cc07e749d" executionId="0f7b677e-f201-41e6-9c3d-1d6cfce761cc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1954043b-9b98-8d06-b9f6-fefc9f600e4a" executionId="728d8c1e-d77d-4f06-b930-07a9d6cd5614" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1c6d3616-c264-8901-9c85-d2cc0be827c3" executionId="48d31f1f-b91c-4c89-8e1f-4ea8251eef9a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18e21466-8bf4-8517-81c0-a3d671980bfe" executionId="9939b47e-5447-4ef2-9d0b-5591d34ed69a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1e536d23-a4ef-8a29-8d92-cb0e183bbf0a" executionId="ec9ab763-1b70-4dc6-946d-ab13a0d9003a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="13e471bf-8585-89f3-a9d0-897fa3ab673e" executionId="94cd38ec-1a7d-41e6-a756-8f6a2a5c37e0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="10" executed="10" passed="10" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test Parallelization enabled for /Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/umm.Library.Tests/release_osx-arm64/umm.Library.Tests.dll (Workers: 3, Scope: ClassLevel)
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

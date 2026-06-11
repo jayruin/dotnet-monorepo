@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="a379bf4b-aa03-47c9-81dd-39deec3e7636" name="@runnervm1li68 2026-06-11 01:53:12" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-06-11T01:53:12.0246375+00:00" queuing="2026-06-11T01:53:12.0246376+00:00" start="2026-06-11T01:53:11.3719188+00:00" finish="2026-06-11T01:53:12.0304507+00:00" />
+  <TestSettings name="default" id="13d01c0c-5428-4979-82c0-5c2d222bfb7a">
+    <Deployment runDeploymentRoot="_runnervm1li68_2026-06-11_01_53_12" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="e826eebb-a80f-4a64-984e-c1cbb4f90b11" testId="1960e17d-26fa-86e7-a811-7d0c5e0ce4fd" testName="TestReadWriteNull" computerName="runnervm1li68" duration="00:00:00.0042083" startTime="2026-06-11T01:53:11.8987746+00:00" endTime="2026-06-11T01:53:11.9031377+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e826eebb-a80f-4a64-984e-c1cbb4f90b11" />
+    <UnitTestResult executionId="bfe805c0-4e1a-46bc-a955-015bc8361570" testId="16da70a9-dca3-820f-9739-b8b0844dc44b" testName="TestReadWriteRows" computerName="runnervm1li68" duration="00:00:00.0440219" startTime="2026-06-11T01:53:11.8215669+00:00" endTime="2026-06-11T01:53:11.8828257+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bfe805c0-4e1a-46bc-a955-015bc8361570" />
+    <UnitTestResult executionId="a0ebfb73-8729-4f20-858f-89a5624373f3" testId="1bad3b4a-3da4-878c-8d08-7a8530edda5b" testName="TestReadWriteNullAsync" computerName="runnervm1li68" duration="00:00:00.0049749" startTime="2026-06-11T01:53:11.9031660+00:00" endTime="2026-06-11T01:53:11.9114740+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a0ebfb73-8729-4f20-858f-89a5624373f3" />
+    <UnitTestResult executionId="db198563-48af-49e9-8d5d-8c2de1dc3fec" testId="10e6d720-0d80-8255-95fa-c3395d8bc8fa" testName="TestReadWriteRowsAsync" computerName="runnervm1li68" duration="00:00:00.0102895" startTime="2026-06-11T01:53:11.8875283+00:00" endTime="2026-06-11T01:53:11.8984146+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="db198563-48af-49e9-8d5d-8c2de1dc3fec" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestReadWriteNullAsync" storage="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/databases.tests/release_linux-x64/databases.tests.dll" id="1bad3b4a-3da4-878c-8d08-7a8530edda5b">
+      <Execution id="a0ebfb73-8729-4f20-858f-89a5624373f3" />
+      <TestMethod codeBase="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Databases.Tests/release_linux-x64/Databases.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Databases.Tests.SqliteTests" name="TestReadWriteNullAsync" />
+    </UnitTest>
+    <UnitTest name="TestReadWriteRows" storage="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/databases.tests/release_linux-x64/databases.tests.dll" id="16da70a9-dca3-820f-9739-b8b0844dc44b">
+      <Execution id="bfe805c0-4e1a-46bc-a955-015bc8361570" />
+      <TestMethod codeBase="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Databases.Tests/release_linux-x64/Databases.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Databases.Tests.SqliteTests" name="TestReadWriteRows" />
+    </UnitTest>
+    <UnitTest name="TestReadWriteNull" storage="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/databases.tests/release_linux-x64/databases.tests.dll" id="1960e17d-26fa-86e7-a811-7d0c5e0ce4fd">
+      <Execution id="e826eebb-a80f-4a64-984e-c1cbb4f90b11" />
+      <TestMethod codeBase="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Databases.Tests/release_linux-x64/Databases.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Databases.Tests.SqliteTests" name="TestReadWriteNull" />
+    </UnitTest>
+    <UnitTest name="TestReadWriteRowsAsync" storage="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/databases.tests/release_linux-x64/databases.tests.dll" id="10e6d720-0d80-8255-95fa-c3395d8bc8fa">
+      <Execution id="db198563-48af-49e9-8d5d-8c2de1dc3fec" />
+      <TestMethod codeBase="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Databases.Tests/release_linux-x64/Databases.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Databases.Tests.SqliteTests" name="TestReadWriteRowsAsync" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="1960e17d-26fa-86e7-a811-7d0c5e0ce4fd" executionId="e826eebb-a80f-4a64-984e-c1cbb4f90b11" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="16da70a9-dca3-820f-9739-b8b0844dc44b" executionId="bfe805c0-4e1a-46bc-a955-015bc8361570" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1bad3b4a-3da4-878c-8d08-7a8530edda5b" executionId="a0ebfb73-8729-4f20-858f-89a5624373f3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="10e6d720-0d80-8255-95fa-c3395d8bc8fa" executionId="db198563-48af-49e9-8d5d-8c2de1dc3fec" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="4" executed="4" passed="4" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test Parallelization enabled for /home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/Databases.Tests/release_linux-x64/Databases.Tests.dll (Workers: 4, Scope: ClassLevel)
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
