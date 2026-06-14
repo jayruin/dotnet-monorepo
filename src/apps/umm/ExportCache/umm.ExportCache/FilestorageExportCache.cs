@@ -70,6 +70,22 @@ public sealed class FilestorageExportCache : IExportCache
         return GetDirectory(id, exportId).CopyToAsync(directory, cancellationToken);
     }
 
+    public async Task DeleteAsync(MediaMainId id, CancellationToken cancellationToken = default)
+    {
+        IDirectory vendorDirectory = GetVendorDirectory(id.VendorId);
+        string idCombinedString = id.ToCombinedString();
+        await foreach (IFile file in vendorDirectory.EnumerateFilesAsync(cancellationToken).ConfigureAwait(false))
+        {
+            if (!file.Name.StartsWith(idCombinedString)) continue;
+            await file.DeleteAsync(cancellationToken).ConfigureAwait(false);
+        }
+        await foreach (IDirectory directory in vendorDirectory.EnumerateDirectoriesAsync(cancellationToken).ConfigureAwait(false))
+        {
+            if (!directory.Name.StartsWith(idCombinedString)) continue;
+            await directory.DeleteAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
     public async Task ClearAsync(string vendorId, CancellationToken cancellationToken = default)
     {
         IDirectory vendorDirectory = GetVendorDirectory(vendorId);

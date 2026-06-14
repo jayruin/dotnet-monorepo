@@ -78,6 +78,17 @@ public sealed class JsonFileSearchIndex : ISearchIndex, IDisposable
         }
     }
 
+    public async Task DeleteAsync(MediaMainId id, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (!_allEntries.TryGetValue(id.VendorId, out List<SearchableMediaEntry>? vendorEntries)) return;
+        using (await _semaphoreSlim.EnterScopeAsync(cancellationToken).ConfigureAwait(false))
+        {
+            vendorEntries.RemoveAll(e => e.MediaEntry.Id.ToMainId() == id);
+            await WriteAllEntriesAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
     public async Task ClearAsync(string vendorId, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();

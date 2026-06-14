@@ -54,6 +54,14 @@ public sealed class DbHashCache : IHashCache
         }
     }
 
+    public Task DeleteAsync(MediaMainId id, CancellationToken cancellationToken = default)
+    {
+        return _dataSource.ExecuteCommandAsync($"""
+                DELETE FROM hashes
+                WHERE vendor_id = {id.VendorId} AND content_id = {id.ContentId};
+            """, cancellationToken);
+    }
+
     public Task ClearAsync(string vendorId, CancellationToken cancellationToken = default)
     {
         return _dataSource.ExecuteCommandAsync($"""

@@ -77,6 +77,28 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         await AddOrUpdateAllEntriesAsync(allEntries, cancellationToken).ConfigureAwait(false);
     }
 
+    public async Task DeleteAsync(MediaMainId id, CancellationToken cancellationToken = default)
+    {
+        JsonNamingPolicy jsonNamingPolicy = MediaEntriesJsonContext.Default.Options.PropertyNamingPolicy
+            ?? throw new InvalidOperationException("No JsonNamingPolicy");
+        JsonNode payload = new JsonObject()
+        {
+            ["query"] = CreateQueryNode(new Dictionary<string, StringValues>()
+            {
+                { nameof(MediaMainId.VendorId), id.VendorId },
+                { nameof(MediaMainId.ContentId), id.ContentId },
+            }, []),
+        };
+        string[] indexTypes = [FullIndexType, MainIndexType];
+        foreach (string indexType in indexTypes)
+        {
+            string indexName = GetIndexName(id.VendorId, indexType);
+            bool indexExists = await CheckIfIndexExistsAsync(indexName, cancellationToken).ConfigureAwait(false);
+            if (!indexExists) continue;
+            await _httpClient.PostAsync($"{indexName}/_delete_by_query", payload, cancellationToken).ConfigureAwait(false);
+        }
+    }
+
     public async Task ClearAsync(string vendorId, CancellationToken cancellationToken = default)
     {
         string[] indexTypes = [FullIndexType, MainIndexType];

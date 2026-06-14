@@ -22,6 +22,7 @@ internal static class IndexCacheCli
         {
             CreateRebuildCommand(),
             CreateUpdateCommand(),
+            CreateDeleteCommand(),
         };
     }
 
@@ -184,6 +185,65 @@ internal static class IndexCacheCli
                 multiHashProvider,
                 cancellationToken
             ).ConfigureAwait(false);
+        }
+    }
+
+    private static Command CreateDeleteCommand()
+    {
+        Argument<string> vendorIdArgument = new("vendorId");
+        Argument<IEnumerable<string>> contentIdsArgument = new("contentIds");
+        Option<bool> searchIndexOption = CreateSearchQueryOption();
+        Option<bool> exportCacheOption = CreateExportCacheOption();
+        Option<bool> hashCacheOption = CreateHashCacheOption();
+        Command command = new("delete")
+        {
+            vendorIdArgument,
+            contentIdsArgument,
+            searchIndexOption,
+            exportCacheOption,
+            hashCacheOption,
+        };
+        command.SetAction((parseResult, cancellationToken) => CliEndpoint.ExecuteAsync(
+            sp => HandleDeleteCommandAsync(sp,
+                parseResult.GetRequiredValue(vendorIdArgument),
+                parseResult.GetRequiredValue(contentIdsArgument),
+                parseResult.GetRequiredValue(searchIndexOption),
+                parseResult.GetRequiredValue(exportCacheOption),
+                parseResult.GetRequiredValue(hashCacheOption),
+                cancellationToken),
+            initializeServices: Initializations.InitializeServices));
+        return command;
+    }
+
+    private static async Task HandleDeleteCommandAsync(IServiceProvider serviceProvider,
+        string vendorId, IEnumerable<string> contentIds, bool handleSearchIndex, bool handleExportCache, bool handleHashCache,
+        CancellationToken cancellationToken)
+    {
+        if (!handleSearchIndex && !handleExportCache && !handleHashCache)
+        {
+            return;
+        }
+
+        foreach (string contentId in contentIds)
+        {
+            MediaMainId id = new(vendorId, contentId);
+            if (handleSearchIndex)
+            {
+                ISearchIndex searchIndex = serviceProvider.GetRequiredService<ISearchIndex>();
+                await searchIndex.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
+            }
+
+            if (handleExportCache)
+            {
+                IExportCache exportCache = serviceProvider.GetRequiredService<IExportCache>();
+                await exportCache.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
+            }
+
+            if (handleHashCache)
+            {
+                IHashCache hashCache = serviceProvider.GetRequiredService<IHashCache>();
+                await hashCache.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
+            }
         }
     }
 
