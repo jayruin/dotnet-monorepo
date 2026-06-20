@@ -102,7 +102,7 @@ public sealed partial class BasicEpubMetadataOverride : ISerializableMetadata<Ba
                 for (int j = 0; j < Math.Max(creatorRoles.Count, epubMetadataCreatorRoles.Count); j++)
                 {
                     string? creatorRole = j < creatorRoles.Count ? creatorRoles[j] : null;
-                    string? epubMetadataCreatorRole = j < epubMetadataCreatorRoles.Count ? epubMetadataCreatorRoles[i] : null;
+                    string? epubMetadataCreatorRole = j < epubMetadataCreatorRoles.Count ? epubMetadataCreatorRoles[j] : null;
                     if (creatorRole != epubMetadataCreatorRole)
                     {
                         builder.Add(new($"{nameof(Creators)}[{i}].{nameof(EpubCreator.Roles)}[{j}]", epubMetadataCreatorRole, creatorRole));
