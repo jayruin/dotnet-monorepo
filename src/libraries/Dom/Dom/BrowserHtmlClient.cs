@@ -55,7 +55,16 @@ internal sealed class BrowserHtmlClient : IHtmlClient, IAsyncDisposable
             {
                 State = WaitForSelectorState.Detached,
             }).ConfigureAwait(false);
-        await page.WaitForLoadStateAsync(LoadState.DOMContentLoaded).ConfigureAwait(false);
+        try
+        {
+            await page.WaitForLoadStateAsync(LoadState.NetworkIdle, new()
+            {
+                Timeout = 5 * 1000,
+            }).ConfigureAwait(false);
+        }
+        catch (TimeoutException)
+        {
+        }
         string htmlString = await page.ContentAsync().ConfigureAwait(false);
         return await _htmlParser.ParseDocumentAsync(htmlString, cancellationToken).ConfigureAwait(false);
     }
