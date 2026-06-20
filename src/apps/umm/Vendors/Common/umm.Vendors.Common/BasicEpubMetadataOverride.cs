@@ -101,7 +101,7 @@ public sealed partial class BasicEpubMetadataOverride : ISerializableMetadata<Ba
                 List<string> epubMetadataCreatorRoles = [.. epubMetadataCreator?.Roles ?? []];
                 for (int j = 0; j < Math.Max(creatorRoles.Count, epubMetadataCreatorRoles.Count); j++)
                 {
-                    string? creatorRole = j < creatorRoles.Count ? creatorRoles[i] : null;
+                    string? creatorRole = j < creatorRoles.Count ? creatorRoles[j] : null;
                     string? epubMetadataCreatorRole = j < epubMetadataCreatorRoles.Count ? epubMetadataCreatorRoles[i] : null;
                     if (creatorRole != epubMetadataCreatorRole)
                     {
@@ -109,6 +109,7 @@ public sealed partial class BasicEpubMetadataOverride : ISerializableMetadata<Ba
                     }
                 }
             }
+            epubMetadata.Creators = Creators;
         }
         if (!string.IsNullOrWhiteSpace(Description))
         {
