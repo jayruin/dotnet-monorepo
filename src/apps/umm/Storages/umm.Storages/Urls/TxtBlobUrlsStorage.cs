@@ -41,9 +41,15 @@ public sealed class TxtBlobUrlsStorage : IUrlsStorage
         IEnumerable<string> validUrls = urls
             .Where(url => !string.IsNullOrWhiteSpace(url))
             .Distinct();
+        bool isFirst = true;
         foreach (string url in validUrls)
         {
-            await streamWriter.WriteLineAsync(url.AsMemory(), cancellationToken).ConfigureAwait(false);
+            if (!isFirst)
+            {
+                await streamWriter.WriteAsync("\n".AsMemory(), cancellationToken).ConfigureAwait(false);
+            }
+            await streamWriter.WriteAsync(url.AsMemory(), cancellationToken).ConfigureAwait(false);
+            isFirst = false;
         }
     }
 
