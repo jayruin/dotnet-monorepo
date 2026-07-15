@@ -1,4 +1,5 @@
 using Browsers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Runtime.CompilerServices;
@@ -24,6 +25,11 @@ public static class HtmlClientServiceCollectionExtensions
                     .TryAddKeyedTransient<IHtmlClient, HttpClientHtmlClient>(HtmlClientImplementation.HttpClient);
             }
             return serviceCollection;
+        }
+
+        public IServiceCollection ConfigureBrowserOptions(IConfiguration configuration)
+        {
+            return serviceCollection.Configure<BrowserHtmlClientOptions>(configuration);
         }
     }
 }

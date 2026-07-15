@@ -1,6 +1,7 @@
 using AngleSharp;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
 using System;
 using System.Threading;
@@ -12,15 +13,17 @@ internal sealed class BrowserHtmlClient : IHtmlClient, IAsyncDisposable
 {
     private readonly IPlaywright _playwright;
     private readonly IHtmlParser _htmlParser;
+    private readonly BrowserHtmlClientOptions _options;
     private IBrowser? _browser;
     private IBrowserContext? _browserContext;
     private IPage? _page;
 
-    public BrowserHtmlClient(IPlaywright playwright)
+    public BrowserHtmlClient(IPlaywright playwright, IOptionsSnapshot<BrowserHtmlClientOptions>? options = null)
     {
         _playwright = playwright;
         _htmlParser = BrowsingContext.New(Configuration.Default).GetService<IHtmlParser>()
             ?? throw new InvalidOperationException("Could not construct html parser.");
+        _options = options?.Value ?? new();
     }
 
     public Uri? BaseUri { get; set; }
@@ -50,11 +53,14 @@ internal sealed class BrowserHtmlClient : IHtmlClient, IAsyncDisposable
         string finalUrl = BaseUri is null ? url : new Uri(BaseUri, url).AbsoluteUri;
         await page.GotoAsync(finalUrl).ConfigureAwait(false);
         await page.WaitForLoadStateAsync(LoadState.DOMContentLoaded).ConfigureAwait(false);
-        await page.Locator("a#privacy-link[href*=cloudflare]")
-            .WaitForAsync(new()
-            {
-                State = WaitForSelectorState.Detached,
-            }).ConfigureAwait(false);
+        foreach (string negativeSelector in _options.NegativeSelectors)
+        {
+            await page.Locator(negativeSelector)
+                .WaitForAsync(new()
+                {
+                    State = WaitForSelectorState.Detached,
+                }).ConfigureAwait(false);
+        }
         try
         {
             await page.WaitForLoadStateAsync(LoadState.NetworkIdle, new()

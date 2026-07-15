@@ -1,3 +1,4 @@
+using Dom;
 using Images;
 using Logging;
 using MediaTypes;
@@ -22,6 +23,7 @@ internal static class Initializations
             .AddSingleton(TimeProvider.System)
             .AddSingleton<IMediaTypeFileExtensionsMapping>(MediaTypeFileExtensionsMapping.Default)
             .AddTransient<IImageLoader, ImageLoader>()
+            .ConfigureBrowserOptions(configuration.GetSection("Browser"))
             .AddConfiguredLogging(configuration)
             .AddMediaStorage(configuration)
             .AddMediaVendors(configuration)
