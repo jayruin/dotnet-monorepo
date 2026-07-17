@@ -4,6 +4,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="$(Proj_Dom)" />
     <ProjectReference Include="$(Proj_Logging)" />
 
     <ProjectReference Include="$(Proj_SourceGenerators)" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
