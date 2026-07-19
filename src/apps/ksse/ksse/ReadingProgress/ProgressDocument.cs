@@ -1,5 +1,3 @@
-using System;
-
 namespace ksse.ReadingProgress;
 
 internal sealed class ProgressDocument
@@ -10,5 +8,5 @@ internal sealed class ProgressDocument
     public required double Percentage { get; init; }
     public required string Device { get; init; }
     public required string DeviceId { get; init; }
-    public required DateTimeOffset Timestamp { get; init; }
+    public required long Timestamp { get; init; }
 }

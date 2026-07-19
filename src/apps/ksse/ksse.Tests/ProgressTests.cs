@@ -229,7 +229,7 @@ public sealed class ProgressTests
             Percentage = 0.5,
             Device = "device",
             DeviceId = "device_id",
-            Timestamp = DateTimeOffset.UtcNow,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
         await progressManager.PutAsync(progressDocument, TestContext.CancellationToken);
         using HttpRequestMessage requestMessage = new()
@@ -261,7 +261,7 @@ public sealed class ProgressTests
             Percentage = 0.5,
             Device = "device",
             DeviceId = "device_id",
-            Timestamp = DateTimeOffset.UtcNow,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
         await progressManager.PutAsync(progressDocument, TestContext.CancellationToken);
         using HttpRequestMessage requestMessage = new()
@@ -297,7 +297,7 @@ public sealed class ProgressTests
             Percentage = 0.5,
             Device = "device",
             DeviceId = "device_id",
-            Timestamp = DateTimeOffset.UtcNow,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
         await progressManager.PutAsync(progressDocument, TestContext.CancellationToken);
         using HttpRequestMessage requestMessage = new()
@@ -318,7 +318,7 @@ public sealed class ProgressTests
         Assert.AreEqual(progressDocument.Percentage, response.Percentage);
         Assert.AreEqual(progressDocument.Device, response.Device);
         Assert.AreEqual(progressDocument.DeviceId, response.DeviceId);
-        Assert.AreEqual(progressDocument.Timestamp.ToUnixTimeSeconds(), response.Timestamp);
+        Assert.AreEqual(progressDocument.Timestamp, response.Timestamp);
     }
 
     [TestMethod]
@@ -358,7 +358,7 @@ public sealed class ProgressTests
             Percentage = 0.5,
             Device = "device",
             DeviceId = "device_id",
-            Timestamp = DateTimeOffset.UtcNow,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
         await progressManager.PutAsync(progressDocument, TestContext.CancellationToken);
         ProgressDocument? progressDocumentAfterPut = await progressManager.GetAsync(userId, progressDocument.Hash, TestContext.CancellationToken);
@@ -392,7 +392,7 @@ public sealed class ProgressTests
             Percentage = 0.5,
             Device = "device",
             DeviceId = "device_id",
-            Timestamp = DateTimeOffset.UtcNow,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
         await progressManager.PutAsync(progressDocument, TestContext.CancellationToken);
         ProgressDocument? progressDocumentAfterPut = await progressManager.GetAsync(userId, progressDocument.Hash, TestContext.CancellationToken);
@@ -428,7 +428,7 @@ public sealed class ProgressTests
             Percentage = 0.5,
             Device = "device",
             DeviceId = "device_id",
-            Timestamp = DateTimeOffset.UtcNow,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
         ProgressDocument progressDocument2 = new()
         {
@@ -438,7 +438,7 @@ public sealed class ProgressTests
             Percentage = 0.5,
             Device = "device",
             DeviceId = "device_id",
-            Timestamp = DateTimeOffset.UtcNow,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
         await progressManager.PutAsync(progressDocument1, TestContext.CancellationToken);
         await progressManager.PutAsync(progressDocument2, TestContext.CancellationToken);
@@ -475,7 +475,7 @@ public sealed class ProgressTests
             Percentage = 0.5,
             Device = "device",
             DeviceId = "device_id",
-            Timestamp = DateTimeOffset.UtcNow,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
         ProgressDocument progressDocument2 = new()
         {
@@ -485,7 +485,7 @@ public sealed class ProgressTests
             Percentage = 0.5,
             Device = "device",
             DeviceId = "device_id",
-            Timestamp = DateTimeOffset.UtcNow,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
         await progressManager.PutAsync(progressDocument1, TestContext.CancellationToken);
         await progressManager.PutAsync(progressDocument2, TestContext.CancellationToken);
@@ -526,7 +526,7 @@ public sealed class ProgressTests
             Percentage = 0.5,
             Device = "device",
             DeviceId = "device_id",
-            Timestamp = DateTimeOffset.UtcNow,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
         ProgressDocument progressDocument2 = new()
         {
@@ -536,7 +536,7 @@ public sealed class ProgressTests
             Percentage = 0.5,
             Device = "device",
             DeviceId = "device_id",
-            Timestamp = DateTimeOffset.UtcNow,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
         await progressManager.PutAsync(progressDocument1, TestContext.CancellationToken);
         await progressManager.PutAsync(progressDocument2, TestContext.CancellationToken);
@@ -573,7 +573,7 @@ public sealed class ProgressTests
             Percentage = 0.5,
             Device = "device",
             DeviceId = "device_id",
-            Timestamp = DateTimeOffset.UtcNow,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
         ProgressDocument progressDocument2 = new()
         {
@@ -583,7 +583,7 @@ public sealed class ProgressTests
             Percentage = 0.5,
             Device = "device",
             DeviceId = "device_id",
-            Timestamp = DateTimeOffset.UtcNow,
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         };
         ImmutableArray<ProgressDocument> progressDocuments = [progressDocument1, progressDocument2];
         await progressManager.PutAsync(progressDocument1, TestContext.CancellationToken);
@@ -614,7 +614,7 @@ public sealed class ProgressTests
             Assert.AreEqual(expectedProgress.Percentage, actualProgress.Percentage);
             Assert.AreEqual(expectedProgress.Device, actualProgress.Device);
             Assert.AreEqual(expectedProgress.DeviceId, actualProgress.DeviceId);
-            Assert.AreEqual(expectedProgress.Timestamp.ToUnixTimeSeconds(), actualProgress.Timestamp);
+            Assert.AreEqual(expectedProgress.Timestamp, actualProgress.Timestamp);
         }
     }
 }

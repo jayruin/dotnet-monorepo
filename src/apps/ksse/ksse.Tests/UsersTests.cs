@@ -544,7 +544,7 @@ public sealed class UsersTests
                 Percentage = 0.5,
                 Device = "device",
                 DeviceId = "device_id",
-                Timestamp = DateTimeOffset.UtcNow,
+                Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
             };
             ProgressDocument progressDocument2 = new()
             {
@@ -554,7 +554,7 @@ public sealed class UsersTests
                 Percentage = 0.5,
                 Device = "device",
                 DeviceId = "device_id",
-                Timestamp = DateTimeOffset.UtcNow,
+                Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
             };
             ImmutableArray<ProgressDocument> progressDocuments = [progressDocument1, progressDocument2];
             await progressManager1.PutAsync(progressDocument1, TestContext.CancellationToken);

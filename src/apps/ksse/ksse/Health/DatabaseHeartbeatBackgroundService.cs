@@ -40,7 +40,6 @@ internal sealed partial class DatabaseHeartbeatBackgroundService<TContext> : Bac
             using PeriodicTimer periodicTimer = new(period, _timeProvider);
             while (await periodicTimer.WaitForNextTickAsync(stoppingToken).ConfigureAwait(false))
             {
-                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
                 AsyncServiceScope scope = _serviceProvider.CreateAsyncScope();
                 await using ConfiguredAsyncDisposable configuredScope = scope.ConfigureAwait(false);
                 await CheckDatabaseAsync(scope.ServiceProvider, stoppingToken).ConfigureAwait(false);

@@ -15,3 +15,4 @@ Extensions and differences:
 - Get all progress at `GET syncs/progress`
 - Change password at `POST users/changepassword`
 - Delete user at `DELETE users`
+- Optional periodic purging of older progress

@@ -82,6 +82,9 @@ internal static class Initializations
         services.Configure<DatabaseHeartbeatOptions>(configuration.GetSection(nameof(DatabaseHeartbeatOptions)));
         services.AddHostedService<DatabaseHeartbeatBackgroundService<UsersDbContext>>();
         services.AddHostedService<DatabaseHeartbeatBackgroundService<ProgressDbContext>>();
+
+        services.Configure<ProgressPurgeOptions>(configuration.GetSection(nameof(ProgressPurgeOptions)));
+        services.AddHostedService<ProgressPurgeBackgroundService>();
     }
 
     public static void InitializeMiddlewares(IApplicationBuilder applicationBuilder)

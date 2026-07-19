@@ -46,13 +46,25 @@ internal sealed class ProgressManager : IProgressManager
 
     public Task DeleteAsync(string user, string hash, CancellationToken cancellationToken = default)
     {
-        _dbContext.RemoveRange(_dbContext.ProgressDocuments.Where(p => p.User == user && p.Hash == hash));
-        return _dbContext.SaveChangesAsync(cancellationToken);
+        if (_dbContext.Database.IsInMemory())
+        {
+            _dbContext.RemoveRange(_dbContext.ProgressDocuments.Where(p => p.User == user && p.Hash == hash));
+            return _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        return _dbContext.ProgressDocuments
+            .Where(p => p.User == user && p.Hash == hash)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 
     public Task DeleteAllAsync(string user, CancellationToken cancellationToken = default)
     {
-        _dbContext.RemoveRange(_dbContext.ProgressDocuments.Where(p => p.User == user));
-        return _dbContext.SaveChangesAsync(cancellationToken);
+        if (_dbContext.Database.IsInMemory())
+        {
+            _dbContext.RemoveRange(_dbContext.ProgressDocuments.Where(p => p.User == user));
+            return _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        return _dbContext.ProgressDocuments
+            .Where(p => p.User == user)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 }

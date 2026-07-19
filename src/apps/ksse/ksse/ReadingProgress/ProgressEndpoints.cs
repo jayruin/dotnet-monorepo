@@ -68,13 +68,13 @@ internal static class ProgressEndpoints
             Percentage = request.Percentage,
             Device = request.Device,
             DeviceId = request.DeviceId,
-            Timestamp = timeProvider.GetUtcNow(),
+            Timestamp = timeProvider.GetUtcNow().ToUnixTimeSeconds(),
         };
         await progressManager.PutAsync(progressDocument, cancellationToken).ConfigureAwait(false);
         PutProgressResponse response = new()
         {
             Document = progressDocument.Hash,
-            Timestamp = progressDocument.Timestamp.ToUnixTimeSeconds(),
+            Timestamp = progressDocument.Timestamp,
         };
         return TypedResults.Ok(response);
     }

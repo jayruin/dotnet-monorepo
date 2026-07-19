@@ -18,6 +18,10 @@ internal sealed class ProgressDbContext : DbContext
         modelBuilder.HasDefaultSchema(Id);
         modelBuilder.Entity<ProgressDocument>()
             .HasKey(p => new { p.User, p.Hash });
+        modelBuilder.Entity<ProgressDocument>()
+            .HasIndex(p => p.User);
+        modelBuilder.Entity<ProgressDocument>()
+            .HasIndex(p => p.Timestamp);
         base.OnModelCreating(modelBuilder);
     }
 }

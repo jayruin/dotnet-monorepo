@@ -16,6 +16,6 @@ internal sealed class GetProgressResponse
         Percentage = progressDocument.Percentage,
         Device = progressDocument.Device,
         DeviceId = progressDocument.DeviceId,
-        Timestamp = progressDocument.Timestamp.ToUnixTimeSeconds(),
+        Timestamp = progressDocument.Timestamp,
     };
 }
