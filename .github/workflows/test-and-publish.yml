@@ -8,6 +8,9 @@ on:
       - scripts/**
       - src/**
   workflow_dispatch:
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  SIXLABORS_LICENSE_KEY: ${{ secrets.SIXLABORS_LICENSE_KEY }}
 jobs:
   reset-tags:
     runs-on: ubuntu-latest
@@ -23,8 +26,6 @@ jobs:
           dotnet run scripts/ci.cs -- delete-tags
           sleep 10
           dotnet run scripts/ci.cs -- create-tags
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   test-and-publish:
     needs: reset-tags
     strategy:
@@ -44,14 +45,10 @@ jobs:
         run: dotnet run scripts/repo.cs -- -b
       - name: Test
         run: dotnet run scripts/repo.cs -- -t
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish
         run: dotnet run scripts/repo.cs -- -p
       - name: Create Releases
         run: dotnet run scripts/ci.cs -- create-releases
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   update-pages:
     needs: test-and-publish
     uses: ./.github/workflows/update-pages.yml

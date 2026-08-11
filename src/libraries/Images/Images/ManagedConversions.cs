@@ -12,7 +12,7 @@ internal static class ManagedConversions
     {
         public SixLabors.ImageSharp.Color ToManagedInternal()
         {
-            return new SixLabors.ImageSharp.Color(new Rgba32(color.Red, color.Green, color.Blue, color.Alpha));
+            return SixLabors.ImageSharp.Color.FromPixel(new Rgba32(color.Red, color.Green, color.Blue, color.Alpha));
         }
     }
 

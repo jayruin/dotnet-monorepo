@@ -25,6 +25,8 @@
 
   <Import Project="$(MSBuildThisFileDirectory)**\*Projects.props" />
 
+  <Import Project="$(MSBuildThisFileDirectory)**\*Licenses.props" />
+
   <PropertyGroup Condition="$([System.OperatingSystem]::IsLinux())">
     <RuntimeIdentifier Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">linux-x64</RuntimeIdentifier>
     <RuntimeIdentifier Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'">linux-arm64</RuntimeIdentifier>
