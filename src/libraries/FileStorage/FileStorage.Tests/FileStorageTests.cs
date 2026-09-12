@@ -155,9 +155,9 @@ public abstract class FileStorageTests
             Assert.IsTrue(file.Exists());
         }
         List<string> actualDirectoryNames = startingDirectory.EnumerateDirectories().Select(d => d.Name).ToList();
-        CollectionAssert.AreEquivalent(directoryNames, actualDirectoryNames);
+        Assert.AreSequenceEqual(directoryNames, actualDirectoryNames, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
         List<string> actualFileNames = startingDirectory.EnumerateFiles().Select(f => f.Name).ToList();
-        CollectionAssert.AreEquivalent(fileNames, actualFileNames);
+        Assert.AreSequenceEqual(fileNames, actualFileNames, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
     }
 
     [TestMethod]
@@ -182,58 +182,58 @@ public abstract class FileStorageTests
         expected = [
             "file1.txt",
         ];
-        CollectionAssert.AreEquivalent(expected, actual);
+        Assert.AreSequenceEqual(expected, actual, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
         actual = FileStorage.GetDirectory("").EnumerateDirectories().Select(d => d.Name).ToList();
         expected = [
             "dir1",
             "dir2",
         ];
-        CollectionAssert.AreEquivalent(expected, actual);
+        Assert.AreSequenceEqual(expected, actual, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
         actual = FileStorage.GetDirectory("dir1").EnumerateFiles().Select(f => f.Name).ToList();
         expected = [
             "file11.txt",
             "file12.txt",
         ];
-        CollectionAssert.AreEquivalent(expected, actual);
+        Assert.AreSequenceEqual(expected, actual, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
         actual = FileStorage.GetDirectory("dir1").EnumerateDirectories().Select(d => d.Name).ToList();
         expected = [];
-        CollectionAssert.AreEquivalent(expected, actual);
+        Assert.AreSequenceEqual(expected, actual, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
         actual = FileStorage.GetDirectory("dir2").EnumerateFiles().Select(f => f.Name).ToList();
         expected = [];
-        CollectionAssert.AreEquivalent(expected, actual);
+        Assert.AreSequenceEqual(expected, actual, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
         actual = FileStorage.GetDirectory("dir2").EnumerateDirectories().Select(d => d.Name).ToList();
         expected = [
             "dir21",
             "dir22",
         ];
-        CollectionAssert.AreEquivalent(expected, actual);
+        Assert.AreSequenceEqual(expected, actual, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
         actual = FileStorage.GetDirectory("dir2", "dir21").EnumerateFiles().Select(f => f.Name).ToList();
         expected = [
             "file211.txt",
             "file212.txt",
         ];
-        CollectionAssert.AreEquivalent(expected, actual);
+        Assert.AreSequenceEqual(expected, actual, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
         actual = FileStorage.GetDirectory("dir2", "dir21").EnumerateDirectories().Select(d => d.Name).ToList();
         expected = [];
-        CollectionAssert.AreEquivalent(expected, actual);
+        Assert.AreSequenceEqual(expected, actual, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
         actual = FileStorage.GetDirectory("dir2", "dir22").EnumerateFiles().Select(f => f.Name).ToList();
         expected = [
             "file221.txt",
             "file222.txt",
         ];
-        CollectionAssert.AreEquivalent(expected, actual);
+        Assert.AreSequenceEqual(expected, actual, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
         actual = FileStorage.GetDirectory("dir2", "dir22").EnumerateDirectories().Select(d => d.Name).ToList();
         expected = [];
-        CollectionAssert.AreEquivalent(expected, actual);
+        Assert.AreSequenceEqual(expected, actual, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
     }
 
     [TestMethod]

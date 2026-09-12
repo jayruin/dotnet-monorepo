@@ -39,7 +39,7 @@ public class ZipFileStorageTests : FileStorageTests
         byte[] data2 = GetData(options);
         Assert.IsNotEmpty(data1);
         Assert.IsNotEmpty(data2);
-        CollectionAssert.AreNotEqual(data1, data2);
+        Assert.AreNotSequenceEqual(data1, data2);
     }
 
     [TestMethod]
@@ -55,7 +55,7 @@ public class ZipFileStorageTests : FileStorageTests
         byte[] data2 = GetData(options);
         Assert.IsNotEmpty(data1);
         Assert.IsNotEmpty(data2);
-        CollectionAssert.AreEqual(data1, data2);
+        Assert.AreSequenceEqual(data1, data2);
     }
 
     [TestMethod]

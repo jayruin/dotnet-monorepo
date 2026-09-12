@@ -27,7 +27,7 @@ public abstract class FileCacheTests
         await using Stream stream = cachedFile.OpenRead();
         await using MemoryStream memoryStream = new();
         await stream.CopyToAsync(memoryStream, TestContext.CancellationToken);
-        CollectionAssert.AreEqual(data, memoryStream.ToArray());
+        Assert.AreSequenceEqual(data, memoryStream.ToArray());
     }
 
     [TestMethod]

@@ -23,11 +23,11 @@ public sealed class MediaTypeFileExtensionsMappingTests
         Assert.HasCount(1, mapping.MediaTypeToFileExtensions);
         Assert.HasCount(2, mapping.FileExtensionToMediaTypes);
         Assert.IsTrue(mapping.TryGetFileExtensions(expectedMediaTypes[0], out ImmutableArray<string> actualFileExtensions));
-        CollectionAssert.AreEqual(expectedFileExtensions, actualFileExtensions);
+        Assert.AreSequenceEqual(expectedFileExtensions, actualFileExtensions);
         foreach (string expectedFileExtension in expectedFileExtensions)
         {
             Assert.IsTrue(mapping.TryGetMediaTypes(expectedFileExtension, out ImmutableArray<string> actualMediaTypes));
-            CollectionAssert.AreEqual(expectedMediaTypes, actualMediaTypes);
+            Assert.AreSequenceEqual(expectedMediaTypes, actualMediaTypes);
         }
     }
 }

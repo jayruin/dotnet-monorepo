@@ -49,7 +49,7 @@ internal sealed class NativeImage : IImage
         {
             targetSurface.Canvas.Clear(backgroundColor.ToNativeInternal());
         }
-        targetSurface.Canvas.DrawBitmap(resizedBitmap, new SKPoint(offsetX, offsetY));
+        targetSurface.Canvas.DrawBitmap(resizedBitmap, new SKPoint(offsetX, offsetY), samplingOptions);
         return new NativeImage(targetSurface.Snapshot());
     }
 

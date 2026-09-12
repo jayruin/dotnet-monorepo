@@ -34,7 +34,7 @@ public class SyncToAsyncDirectoryAdapterTests
         SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
         List<IFile> actualFiles = await asyncAdapter.EnumerateFilesAsync(TestContext.CancellationToken)
             .ToListAsync(TestContext.CancellationToken);
-        CollectionAssert.AreEqual(expectedFiles, actualFiles);
+        Assert.AreSequenceEqual(expectedFiles, actualFiles);
     }
 
     [TestMethod]
@@ -46,7 +46,7 @@ public class SyncToAsyncDirectoryAdapterTests
         SyncToAsyncDirectoryAdapter asyncAdapter = new(syncDirectory);
         List<IDirectory> actualDirectories = await asyncAdapter.EnumerateDirectoriesAsync(TestContext.CancellationToken)
             .ToListAsync(TestContext.CancellationToken);
-        CollectionAssert.AreEqual(expectedDirectories, actualDirectories);
+        Assert.AreSequenceEqual(expectedDirectories, actualDirectories);
     }
 
     [TestMethod]
