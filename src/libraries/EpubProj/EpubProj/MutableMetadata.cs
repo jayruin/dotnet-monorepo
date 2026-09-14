@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace EpubProj;
 
-internal sealed class MutableMetadata
+public sealed class MutableMetadata
 {
     public required string Title { get; set; }
     public List<MutableCreator> Creators { get; set; } = [];

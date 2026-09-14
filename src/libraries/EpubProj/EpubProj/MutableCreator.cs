@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace EpubProj;
 
-internal sealed class MutableCreator
+public sealed class MutableCreator
 {
     public required string Name { get; set; }
     public required List<string> Roles { get; set; }

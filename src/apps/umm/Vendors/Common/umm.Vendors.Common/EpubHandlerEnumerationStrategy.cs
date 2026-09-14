@@ -28,11 +28,12 @@ internal sealed class EpubHandlerEnumerationStrategy<TMetadata> : ISinglePartSea
 
     public IAsyncEnumerable<string> EnumerateContentIdsAsync(CancellationToken cancellationToken)
         => VendorContext.MetadataStorage.EnumerateContentAsync(cancellationToken)
-            .Where(t => t.VendorId == VendorContext.VendorId)
-            .Select(t => t.ContentId);
+            .Where(id => id.VendorId == VendorContext.VendorId)
+            .Where((id, ct) => new ValueTask<bool>(ContainsMetadataAsync(id.ContentId, ct)))
+            .Select(id => id.ContentId);
 
     public Task<bool> ContainsMetadataAsync(string contentId, CancellationToken cancellationToken)
-        => VendorContext.MetadataStorage.ContainsAsync(new(VendorContext.VendorId, contentId), cancellationToken);
+        => VendorContext.MetadataStorage.ContainsAsync(new(VendorContext.VendorId, contentId), _metadataKey, cancellationToken);
 
     public async Task<EpubFallbackMetadata<TMetadata>> GetMetadataAsync(string contentId, CancellationToken cancellationToken)
     {

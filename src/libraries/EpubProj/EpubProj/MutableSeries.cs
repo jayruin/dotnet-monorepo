@@ -1,6 +1,6 @@
 namespace EpubProj;
 
-internal sealed class MutableSeries
+public sealed class MutableSeries
 {
     public required string Name { get; set; }
     public required string Index { get; set; }

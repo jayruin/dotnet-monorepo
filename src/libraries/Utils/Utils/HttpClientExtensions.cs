@@ -18,7 +18,7 @@ public static class HttpClientExtensions
     {
         public async Task<JsonNode> GetJsonAsync(string requestUri, JsonNode request, CancellationToken cancellationToken = default)
         {
-            HttpContent content = CreateHttpContent(request);
+            using HttpContent content = CreateHttpContent(request);
             using HttpRequestMessage requestMessage = new(HttpMethod.Get, requestUri)
             {
                 Content = content,
@@ -72,7 +72,7 @@ public static class HttpClientExtensions
 
         public async Task PostAsync(string requestUri, JsonNode request, CancellationToken cancellationToken = default)
         {
-            HttpContent content = CreateHttpContent(request);
+            using HttpContent content = CreateHttpContent(request);
             using HttpRequestMessage requestMessage = new(HttpMethod.Post, requestUri)
             {
                 Content = content,
@@ -83,7 +83,7 @@ public static class HttpClientExtensions
 
         public async Task PutAsync(string requestUri, JsonNode request, CancellationToken cancellationToken = default)
         {
-            HttpContent content = CreateHttpContent(request);
+            using HttpContent content = CreateHttpContent(request);
             using HttpRequestMessage requestMessage = new(HttpMethod.Put, requestUri)
             {
                 Content = content,

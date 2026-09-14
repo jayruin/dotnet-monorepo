@@ -79,7 +79,9 @@ public sealed class EpubProjVendor : IMediaVendor
         => EnumerateEntriesAsync(contentId, cancellationToken);
 
     public Task<SearchableMediaEntry?> GetEntryAsync(string contentId, string partId, CancellationToken cancellationToken = default)
-        => EnumerateEntriesAsync(contentId, cancellationToken).FirstOrDefaultAsync(cancellationToken).AsTask();
+        => partId.Length == 0
+            ? EnumerateEntriesAsync(contentId, cancellationToken).FirstOrDefaultAsync(cancellationToken).AsTask()
+            : Task.FromResult<SearchableMediaEntry?>(null);
 
     public async Task ExportAsync(string contentId, string partId, string exportId, Stream stream, CancellationToken cancellationToken = default)
     {
@@ -152,6 +154,7 @@ public sealed class EpubProjVendor : IMediaVendor
 
     private async IAsyncEnumerable<SearchableMediaEntry> EnumerateEntriesAsync(string contentId, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
+        if (!await ContainsAsync(contentId, cancellationToken).ConfigureAwait(false)) yield break;
         EpubProjMetadataAdapter metadata = await GetMetadataAsync(contentId, cancellationToken).ConfigureAwait(false);
         UniversalMediaMetadata universalMetadata = metadata.Universalize();
         ImmutableArray<MediaExportTarget> exportTargets = await EnumerateExportTargetsAsync(contentId, cancellationToken)
@@ -204,6 +207,9 @@ public sealed class EpubProjVendor : IMediaVendor
 
     private Task<ImmutableArray<string>> GetUrlsAsync(string contentId, CancellationToken cancellationToken)
         => _urlsStorage.GetAsync(new(VendorId, contentId, string.Empty), cancellationToken);
+
+    private Task<bool> ContainsAsync(string contentId, CancellationToken cancellationToken)
+        => _blobStorage.ContainsAsync(new(VendorId, contentId), cancellationToken);
 
     private async Task<EpubProjMetadataAdapter> GetMetadataAsync(string contentId, CancellationToken cancellationToken)
     {

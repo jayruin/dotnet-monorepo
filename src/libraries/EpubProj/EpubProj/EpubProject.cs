@@ -26,7 +26,7 @@ internal sealed class EpubProject : IEpubProject
         MediaType.Text.Markdown,
         MediaType.Text.Plain,
     ];
-    private readonly IDirectory _projectDirectory;
+    private readonly IDirectory _contentsDirectory;
     private readonly ImmutableArray<IEpubProjectNavItem> _navItems;
     private readonly IMediaTypeFileExtensionsMapping _mediaTypeFileExtensionsMapping;
     private readonly IHtmlParser _htmlParser;
@@ -36,11 +36,11 @@ internal sealed class EpubProject : IEpubProject
     public IEpubProjectMetadata Metadata { get; }
     public IFile? CoverFile { get; }
 
-    public EpubProject(IDirectory projectDirectory, IEpubProjectMetadata metadata, ImmutableArray<IEpubProjectNavItem> navItems, IFile? coverFile,
+    public EpubProject(IDirectory contentsDirectory, IEpubProjectMetadata metadata, ImmutableArray<IEpubProjectNavItem> navItems, IFile? coverFile,
         IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping,
         IHtmlParser htmlParser, IImplementation domImplementation, IMarkupFormatter markupFormatter)
     {
-        _projectDirectory = projectDirectory;
+        _contentsDirectory = contentsDirectory;
         Metadata = metadata;
         _navItems = navItems;
         CoverFile = coverFile;
@@ -298,7 +298,7 @@ internal sealed class EpubProject : IEpubProject
     private async Task<Dictionary<string, Dictionary<string, ProjectResource>>> TraverseAsync(CancellationToken cancellationToken)
     {
         Dictionary<string, Dictionary<string, ProjectResource>> resources = [];
-        await TraverseAsync(resources, _projectDirectory.GetDirectory(EpubProjectConstants.ContentsDirectoryName), [], cancellationToken).ConfigureAwait(false);
+        await TraverseAsync(resources, _contentsDirectory, [], cancellationToken).ConfigureAwait(false);
         return resources;
 
         static async Task TraverseAsync(Dictionary<string, Dictionary<string, ProjectResource>> resources,

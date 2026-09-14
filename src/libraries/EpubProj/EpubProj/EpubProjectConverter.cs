@@ -182,7 +182,7 @@ internal sealed class EpubProjectConverter
         IProcessingInstruction xmlHeader = xhtmlDocument.CreateProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
         xhtmlDocument.InsertBefore(xmlHeader, xhtmlDocument.FirstChild);
 
-        xhtmlDocument.DocumentElement.SetAttribute(EpubXmlNamespaces.Xmlns, "xmlns", "http://www.w3.org/1999/xhtml");
+        xhtmlDocument.DocumentElement.SetAttribute(EpubXmlNamespaces.Xmlns, "xmlns", EpubXmlNamespaces.Xhtml);
 
         if (epubVersion == EpubVersion.Epub3)
         {

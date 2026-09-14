@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace EpubProj;
 
-internal sealed class MutableNavItem
+public sealed class MutableNavItem
 {
     public required string Text { get; set; }
     public required string Href { get; set; }

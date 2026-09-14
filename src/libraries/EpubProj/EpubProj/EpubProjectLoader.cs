@@ -32,21 +32,33 @@ public sealed class EpubProjectLoader : IEpubProjectLoader
     {
         JsonContext jsonContext = JsonContext.Default;
 
+        IDirectory contentsDirectory = projectDirectory.GetDirectory(EpubProjectConstants.ContentsDirectoryName);
+
         IFile metadataFile = projectDirectory.GetFile(".metadata.json");
         Stream metadataStream = await metadataFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
         await using ConfiguredAsyncDisposable configuredMetadataStream = metadataStream.ConfigureAwait(false);
         MutableMetadata mutableMetadata = await JsonSerializer.DeserializeAsync(metadataStream, jsonContext.MutableMetadata, cancellationToken).ConfigureAwait(false)
             ?? throw new JsonException();
-        IEpubProjectMetadata metadata = mutableMetadata.ToImmutable();
 
         IFile navFile = projectDirectory.GetFile(".nav.json");
         Stream navStream = await navFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
         await using ConfiguredAsyncDisposable configuredNavStream = navStream.ConfigureAwait(false);
         List<MutableNavItem> mutableNavItems = await JsonSerializer.DeserializeAsync(navStream, jsonContext.ListMutableNavItem, cancellationToken).ConfigureAwait(false)
             ?? throw new JsonException();
-        ImmutableArray<IEpubProjectNavItem> navItems = mutableNavItems.Select(ni => ni.ToImmutable()).ToImmutableArray();
 
         IFile? coverFile = await FindCoverFileAsync(projectDirectory, _mediaTypeFileExtensionsMapping, cancellationToken).ConfigureAwait(false);
+
+        return await LoadAsync(contentsDirectory, mutableMetadata, mutableNavItems, coverFile, cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task<IEpubProject> LoadAsync(IDirectory contentsDirectory,
+        MutableMetadata mutableMetadata,
+        List<MutableNavItem> mutableNavItems,
+        IFile? coverFile,
+        CancellationToken cancellationToken = default)
+    {
+        IEpubProjectMetadata metadata = mutableMetadata.ToImmutable();
+        ImmutableArray<IEpubProjectNavItem> navItems = mutableNavItems.Select(ni => ni.ToImmutable()).ToImmutableArray();
 
         IConfiguration configuration = Configuration.Default;
         IBrowsingContext browsingContext = BrowsingContext.New(configuration);
@@ -56,7 +68,7 @@ public sealed class EpubProjectLoader : IEpubProjectLoader
         IImplementation domImplementation = document.Implementation;
         IMarkupFormatter markupFormatter = XhtmlMarkupFormatter.Instance;
 
-        return new EpubProject(projectDirectory, metadata, navItems, coverFile,
+        return new EpubProject(contentsDirectory, metadata, navItems, coverFile,
             _mediaTypeFileExtensionsMapping,
             htmlParser, domImplementation, markupFormatter);
     }
