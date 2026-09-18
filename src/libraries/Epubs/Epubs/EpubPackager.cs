@@ -99,6 +99,13 @@ public sealed class EpubPackager
         await WriteOpfAndNcxFilesAsync(contents, outputDirectory, newCoverName, xhtmlProperties, cancellationToken).ConfigureAwait(false);
     }
 
+    public async Task PackageAsync(IFile outputFile, CompressionLevel compressionLevel = CompressionLevel.NoCompression, CancellationToken cancellationToken = default)
+    {
+        Stream outputStream = await outputFile.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
+        await using ConfiguredAsyncDisposable configuredOutputStream = outputStream.ConfigureAwait(false);
+        await PackageAsync(outputStream, compressionLevel, cancellationToken).ConfigureAwait(false);
+    }
+
     private async Task<DateTimeOffset> GetTimestampAsync(CancellationToken cancellationToken)
     {
         IEpubMetadata metadata = await _container.GetMetadataAsync(cancellationToken).ConfigureAwait(false);
