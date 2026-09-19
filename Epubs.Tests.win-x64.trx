@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="665eda7d-fc8a-4f23-ad78-d8cf3484f08e" name="runneradmin@runnervmvmocb 2026-09-19 18:48:57" runUser="runnervmvmocb\runneradmin" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-19T18:48:57.1836335+00:00" queuing="2026-09-19T18:48:57.1836337+00:00" start="2026-09-19T18:48:56.4914653+00:00" finish="2026-09-19T18:48:57.2451089+00:00" />
+  <TestSettings name="default" id="5bccade5-5607-4d1d-b663-93e73f0bf47b">
+    <Deployment runDeploymentRoot="runneradmin_runnervmvmocb_2026-09-19_18_48_57" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="64ced19d-4375-4df0-9a23-49d54898335f" testId="1b20638b-a8a6-85af-8458-b3b7c366f1d5" testName="TestAddTitle (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0003487" startTime="2026-09-19T18:48:57.1449281+00:00" endTime="2026-09-19T18:48:57.1453076+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="64ced19d-4375-4df0-9a23-49d54898335f" />
+    <UnitTestResult executionId="b38ded87-6630-44e9-8202-7f93d2a02590" testId="10d1de2e-c930-8ee2-88dc-3fe7022492f4" testName="TestResolve (&quot;a/b/c&quot;,&quot;d/e&quot;,&quot;a/b/c/d/e&quot;)" computerName="runnervmvmocb" duration="00:00:00.0002001" startTime="2026-09-19T18:48:57.1083528+00:00" endTime="2026-09-19T18:48:57.1085839+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b38ded87-6630-44e9-8202-7f93d2a02590" />
+    <UnitTestResult executionId="ffd759e8-c44b-4d85-92fc-301731f1d37b" testId="132a3618-bc6c-8626-b378-85737c5c1ffb" testName="TestAddItemToSpine (Epub2,&quot;page-spread-left&quot;,&quot;epub2_properties.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0005902" startTime="2026-09-19T18:48:57.1309336+00:00" endTime="2026-09-19T18:48:57.1315551+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ffd759e8-c44b-4d85-92fc-301731f1d37b" />
+    <UnitTestResult executionId="4a58b00f-bd46-4a66-8e30-1345b3efd0fd" testId="1d6f9d40-3288-8453-b9b2-5ea56e2a4753" testName="TestAddItemToManifest (Epub3,&quot;cover.jpg&quot;,&quot;cover-image&quot;,&quot;cover-id&quot;,&quot;epub3_properties_id.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0358802" startTime="2026-09-19T18:48:57.0559734+00:00" endTime="2026-09-19T18:48:57.1186884+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4a58b00f-bd46-4a66-8e30-1345b3efd0fd" />
+    <UnitTestResult executionId="78240740-b539-454b-ae83-f948623e08e7" testId="17e7e5f5-8e92-8ea9-bd8b-79d2ff2868d6" testName="TestAddTitle (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0004013" startTime="2026-09-19T18:48:57.1444552+00:00" endTime="2026-09-19T18:48:57.1448927+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="78240740-b539-454b-ae83-f948623e08e7" />
+    <UnitTestResult executionId="e4129cb2-92a6-4dc7-9747-c748dc1a0dee" testId="17163b0e-a15f-81ae-864e-083555ff6db1" testName="TestAddPrePaginated (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0003126" startTime="2026-09-19T18:48:57.1490512+00:00" endTime="2026-09-19T18:48:57.1493956+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e4129cb2-92a6-4dc7-9747-c748dc1a0dee" />
+    <UnitTestResult executionId="ecbbe7d2-cb39-4f23-b4be-02e835d242f0" testId="16734436-cecd-83b5-8627-bcedb89c8296" testName="TestGetRelativePath (&quot;a/b/c&quot;,&quot;a/b/d&quot;,&quot;../c&quot;)" computerName="runnervmvmocb" duration="00:00:00.0004730" startTime="2026-09-19T18:48:57.1059161+00:00" endTime="2026-09-19T18:48:57.1068982+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ecbbe7d2-cb39-4f23-b4be-02e835d242f0" />
+    <UnitTestResult executionId="9e666865-20c2-4898-8853-b225a86157fa" testId="1cef8686-5f34-86de-a6a3-8d35bb7afd79" testName="TestAddLanguage (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0004187" startTime="2026-09-19T18:48:57.1348385+00:00" endTime="2026-09-19T18:48:57.1352964+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9e666865-20c2-4898-8853-b225a86157fa" />
+    <UnitTestResult executionId="c53ed37c-0606-4047-82eb-ff13e303d2dc" testId="11ca93a8-296b-8476-9f0b-6fc4b090990d" testName="TestGetRelativePath (&quot;a/b/c&quot;,&quot;&quot;,&quot;a/b/c&quot;)" computerName="runnervmvmocb" duration="00:00:00.0000105" startTime="2026-09-19T18:48:57.1077611+00:00" endTime="2026-09-19T18:48:57.1077895+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c53ed37c-0606-4047-82eb-ff13e303d2dc" />
+    <UnitTestResult executionId="d57039e4-9d0b-47c3-ba64-842d360779dc" testId="139f1cb2-b2ce-8c72-a0dc-23e529c29a74" testName="TestAddCreator (Epub2,[],&quot;epub2_no_roles.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0003838" startTime="2026-09-19T18:48:57.1391870+00:00" endTime="2026-09-19T18:48:57.1396063+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d57039e4-9d0b-47c3-ba64-842d360779dc" />
+    <UnitTestResult executionId="deb98336-6634-451f-9865-e9f1ad371c9b" testId="1a5dc06e-54fd-8d2c-a693-2b5cb2a6574b" testName="TestAddIdentifier (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0004608" startTime="2026-09-19T18:48:57.1439321+00:00" endTime="2026-09-19T18:48:57.1444254+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="deb98336-6634-451f-9865-e9f1ad371c9b" />
+    <UnitTestResult executionId="d5d51378-9220-4b4f-807a-1a6cc482a2f2" testId="1c344ecb-28e7-8e25-b223-6e397f5054f4" testName="TestAddDate (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0017546" startTime="2026-09-19T18:48:57.1438694+00:00" endTime="2026-09-19T18:48:57.1456559+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d5d51378-9220-4b4f-807a-1a6cc482a2f2" />
+    <UnitTestResult executionId="fec40ae1-aca8-4940-9bbe-65a7067e7f9e" testId="1a7fb99e-f52f-8ccc-ab1f-13586db79d1e" testName="TestAddItemToLandmarks (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0003142" startTime="2026-09-19T18:48:57.1400275+00:00" endTime="2026-09-19T18:48:57.1403804+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fec40ae1-aca8-4940-9bbe-65a7067e7f9e" />
+    <UnitTestResult executionId="7a20e1ba-3a2b-4c98-afb9-4113b25b505b" testId="18633743-5a95-84ca-aa1a-84a0ca6b512e" testName="TestAddCreator (Epub3,[],&quot;epub3_no_roles.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0011334" startTime="2026-09-19T18:48:57.1357380+00:00" endTime="2026-09-19T18:48:57.1369208+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7a20e1ba-3a2b-4c98-afb9-4113b25b505b" />
+    <UnitTestResult executionId="7487f459-ecdd-4629-8794-d139f289226b" testId="1ad59a54-6162-8915-b78f-cbce5547287d" testName="TestAddCreator (Epub2,[&quot;aut&quot;],&quot;epub2_one_role.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0000955" startTime="2026-09-19T18:48:57.1398344+00:00" endTime="2026-09-19T18:48:57.1399588+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7487f459-ecdd-4629-8794-d139f289226b" />
+    <UnitTestResult executionId="080186e6-2af9-4911-9c2e-1ab0a5b3e2fc" testId="18f58b21-b2c3-803b-8cb0-4e08dd113f73" testName="TestAddRightToLeft (Epub2,&quot;epub2_rtl.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0003159" startTime="2026-09-19T18:48:57.1479531+00:00" endTime="2026-09-19T18:48:57.1483078+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="080186e6-2af9-4911-9c2e-1ab0a5b3e2fc" />
+    <UnitTestResult executionId="9f1d0068-ed67-4bbb-850c-d18bf6f4827b" testId="1a00353d-820e-8fa3-9091-7b2ebff721ec" testName="TestAddItemToSpine (Epub3,null,&quot;epub3_noproperties.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0001039" startTime="2026-09-19T18:48:57.1320583+00:00" endTime="2026-09-19T18:48:57.1322145+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9f1d0068-ed67-4bbb-850c-d18bf6f4827b" />
+    <UnitTestResult executionId="3aba45af-553d-486d-8f59-3589b95459d7" testId="12fc392e-8199-86c7-8604-b296f0959a0f" testName="TestAddTitle (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0006347" startTime="2026-09-19T18:48:57.1314852+00:00" endTime="2026-09-19T18:48:57.1321569+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3aba45af-553d-486d-8f59-3589b95459d7" />
+    <UnitTestResult executionId="a4056f3a-da3f-4f51-9593-4fdcd4e14256" testId="1e13994d-6844-8233-9112-553b896408e8" testName="TestAddReferenceToGuide (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0006139" startTime="2026-09-19T18:48:57.1251623+00:00" endTime="2026-09-19T18:48:57.1273897+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4056f3a-da3f-4f51-9593-4fdcd4e14256" />
+    <UnitTestResult executionId="2728fd79-18e5-436c-b3fc-dc3b8687acff" testId="16e56989-76a7-8585-b943-e273cd2ed1c2" testName="TestAddDate (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0003393" startTime="2026-09-19T18:48:57.1478550+00:00" endTime="2026-09-19T18:48:57.1482363+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2728fd79-18e5-436c-b3fc-dc3b8687acff" />
+    <UnitTestResult executionId="eb0dfd8e-0127-444e-884a-028126a3f1cb" testId="124a442d-5cef-8a5e-832b-b6cc6c966046" testName="TestAddIdentifier (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0005230" startTime="2026-09-19T18:48:57.1308196+00:00" endTime="2026-09-19T18:48:57.1313746+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eb0dfd8e-0127-444e-884a-028126a3f1cb" />
+    <UnitTestResult executionId="4da72c59-d480-48c1-9585-6f9fc7061ff1" testId="1f027eb2-66bc-8be8-8300-bf63e361e75e" testName="TestGetRelativePath (&quot;a/b/c&quot;,&quot;b/c/d&quot;,&quot;../../../a/b/c&quot;)" computerName="runnervmvmocb" duration="00:00:00.0000090" startTime="2026-09-19T18:48:57.1078067+00:00" endTime="2026-09-19T18:48:57.1078273+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4da72c59-d480-48c1-9585-6f9fc7061ff1" />
+    <UnitTestResult executionId="80952018-ba2b-407b-b1e4-9333abbbc696" testId="15879af3-5667-8627-8798-073634574cfb" testName="TestAddPrePaginated (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0007150" startTime="2026-09-19T18:48:57.1482669+00:00" endTime="2026-09-19T18:48:57.1490160+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="80952018-ba2b-407b-b1e4-9333abbbc696" />
+    <UnitTestResult executionId="ecfce0de-821a-4d0e-8576-a32c47d8374c" testId="19fedbcf-3e8f-80d3-8f00-c9b50d3782b5" testName="TestAddItemToSpine (Epub3,&quot;page-spread-left&quot;,&quot;epub3_properties.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0010901" startTime="2026-09-19T18:48:57.1297415+00:00" endTime="2026-09-19T18:48:57.1309007+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ecfce0de-821a-4d0e-8576-a32c47d8374c" />
+    <UnitTestResult executionId="a86cab32-c551-44fb-bed2-b795eb8e2e2d" testId="13acc5b9-b971-8983-8930-49d6f4051f77" testName="TestAddDescription (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0003171" startTime="2026-09-19T18:48:57.1434746+00:00" endTime="2026-09-19T18:48:57.1438234+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a86cab32-c551-44fb-bed2-b795eb8e2e2d" />
+    <UnitTestResult executionId="6e13348f-bbfb-4130-8897-e733f8e76580" testId="1907624b-6009-89cb-a76c-8b426f68f298" testName="TestAddNcx (Epub2,&quot;epub2_ncx.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0003994" startTime="2026-09-19T18:48:57.1352013+00:00" endTime="2026-09-19T18:48:57.1356443+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6e13348f-bbfb-4130-8897-e733f8e76580" />
+    <UnitTestResult executionId="376b1642-5aa1-46a3-a489-ba0a82667630" testId="1dc58f02-8bfb-87ff-8152-97912961162e" testName="TestAddModified (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0003266" startTime="2026-09-19T18:48:57.1523279+00:00" endTime="2026-09-19T18:48:57.1526951+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="376b1642-5aa1-46a3-a489-ba0a82667630" />
+    <UnitTestResult executionId="75e352d2-b6cf-4a66-8674-e593ec2b6dcc" testId="17b70e0f-1bb5-8232-bb22-ad292bd4ca53" testName="TestAddDescription (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0004644" startTime="2026-09-19T18:48:57.1403242+00:00" endTime="2026-09-19T18:48:57.1408369+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="75e352d2-b6cf-4a66-8674-e593ec2b6dcc" />
+    <UnitTestResult executionId="3dbf89c0-96c3-47b2-b07d-f5e1993afff9" testId="14d0cd07-d554-8a17-ae84-6d68b4a68e29" testName="TestAddNcx (Epub3,&quot;epub3_ncx.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0003302" startTime="2026-09-19T18:48:57.1347956+00:00" endTime="2026-09-19T18:48:57.1351661+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3dbf89c0-96c3-47b2-b07d-f5e1993afff9" />
+    <UnitTestResult executionId="2fc4aa4b-bb25-4d94-b57f-e804e4408a6b" testId="12509452-eb51-8bd2-8023-5d9d95470f16" testName="TestAddReferenceToGuide (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0358953" startTime="2026-09-19T18:48:57.0559570+00:00" endTime="2026-09-19T18:48:57.1186854+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2fc4aa4b-bb25-4d94-b57f-e804e4408a6b" />
+    <UnitTestResult executionId="4eb92fff-b848-4848-a1ab-c9d5294e558f" testId="18b99c28-043f-8fa7-a585-45f8db35abe5" testName="TestAddItemToManifest (Epub3,&quot;cover.jpg&quot;,null,null,&quot;epub3_noproperties_noid.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0002676" startTime="2026-09-19T18:48:57.1260033+00:00" endTime="2026-09-19T18:48:57.1263075+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4eb92fff-b848-4848-a1ab-c9d5294e558f" />
+    <UnitTestResult executionId="21f1f582-aa7d-4b0b-9504-3df81078e837" testId="110d5f63-5620-8288-a852-48415a5701b6" testName="TestAddIdentifier (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0009605" startTime="2026-09-19T18:48:57.1297200+00:00" endTime="2026-09-19T18:48:57.1307849+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="21f1f582-aa7d-4b0b-9504-3df81078e837" />
+    <UnitTestResult executionId="b3d92820-90c9-420a-8a0f-a3bdacce5691" testId="1f86d215-1c27-8857-97b9-0ba7f808e19d" testName="TestGetRelativePath (&quot;a/b/c&quot;,&quot;a&quot;,&quot;b/c&quot;)" computerName="runnervmvmocb" duration="00:00:00.0131495" startTime="2026-09-19T18:48:57.0559808+00:00" endTime="2026-09-19T18:48:57.0984067+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b3d92820-90c9-420a-8a0f-a3bdacce5691" />
+    <UnitTestResult executionId="bdf29769-cb2c-4fa4-b5cf-6ce02b5d26d7" testId="178aa3ea-46b0-8718-8f38-a36a6d78e6f8" testName="TestAddItemToLandmarks (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0007369" startTime="2026-09-19T18:48:57.1392264+00:00" endTime="2026-09-19T18:48:57.1399982+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bdf29769-cb2c-4fa4-b5cf-6ce02b5d26d7" />
+    <UnitTestResult executionId="1110e0c3-acd5-47d2-97a1-f0ae46af4729" testId="1011288e-031f-8748-b274-76a1b0e99c39" testName="TestGetContainerXmlDocument (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0013012" startTime="2026-09-19T18:48:57.1483397+00:00" endTime="2026-09-19T18:48:57.1497014+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1110e0c3-acd5-47d2-97a1-f0ae46af4729" />
+    <UnitTestResult executionId="217a4aa4-e7ab-4417-b9bd-9ec0ad6b5673" testId="1576e578-fb17-8c86-9f06-aa7cda5c1b5a" testName="TestAddTitle (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0003240" startTime="2026-09-19T18:48:57.1321941+00:00" endTime="2026-09-19T18:48:57.1325613+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="217a4aa4-e7ab-4417-b9bd-9ec0ad6b5673" />
+    <UnitTestResult executionId="a951a899-a58f-4154-bc90-00dc0789e72d" testId="178c28d6-788e-8eb5-bd79-d8ce91ec7454" testName="TestAddCreator (Epub3,[&quot;aut&quot;],&quot;epub3_one_role.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0001165" startTime="2026-09-19T18:48:57.1396444+00:00" endTime="2026-09-19T18:48:57.1398037+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a951a899-a58f-4154-bc90-00dc0789e72d" />
+    <UnitTestResult executionId="ecbfaffc-175e-4120-8d2c-76e2785e9c67" testId="132c93fc-99cf-80a0-b0a6-22904c48670f" testName="TestAddNavItem (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0020160" startTime="2026-09-19T18:48:57.1359589+00:00" endTime="2026-09-19T18:48:57.1380066+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ecbfaffc-175e-4120-8d2c-76e2785e9c67" />
+    <UnitTestResult executionId="f8d8c3ca-93dc-4528-8b71-51fe4358961a" testId="101d1318-ed1a-8443-b35e-98ea1bfe93db" testName="TestResolve (&quot;a/b/c&quot;,&quot;../c&quot;,&quot;a/b/c&quot;)" computerName="runnervmvmocb" duration="00:00:00.0000215" startTime="2026-09-19T18:48:57.1250017+00:00" endTime="2026-09-19T18:48:57.1250595+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f8d8c3ca-93dc-4528-8b71-51fe4358961a" />
+    <UnitTestResult executionId="5a1a454b-e760-4b62-9192-10023602affb" testId="1b32fea3-b10c-804b-9dfa-95d7d35c9259" testName="TestResolve (&quot;&quot;,&quot;a/b/c&quot;,&quot;a/b/c&quot;)" computerName="runnervmvmocb" duration="00:00:00.0004573" startTime="2026-09-19T18:48:57.1078433+00:00" endTime="2026-09-19T18:48:57.1083233+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5a1a454b-e760-4b62-9192-10023602affb" />
+    <UnitTestResult executionId="42bf4478-3ff6-47ab-89cd-293bb9388491" testId="1584ef67-fe1c-864d-a045-629d708e2516" testName="TestAddModified (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0005138" startTime="2026-09-19T18:48:57.1494320+00:00" endTime="2026-09-19T18:48:57.1499799+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="42bf4478-3ff6-47ab-89cd-293bb9388491" />
+    <UnitTestResult executionId="9333a87e-1eaf-43b2-9c48-717b5318a769" testId="171fe247-fe14-853b-b238-26ef0867ddea" testName="TestResolve (&quot;a/b/c&quot;,&quot;../../../d/e&quot;,&quot;d/e&quot;)" computerName="runnervmvmocb" duration="00:00:00.0000284" startTime="2026-09-19T18:48:57.1252793+00:00" endTime="2026-09-19T18:48:57.1273840+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9333a87e-1eaf-43b2-9c48-717b5318a769" />
+    <UnitTestResult executionId="51bcd68b-97b7-4e4f-b08f-e2e22037d871" testId="18fb7630-93a1-828b-a9e1-500b27327666" testName="TestAddCreator (Epub2,[&quot;aut&quot;,&quot;ill&quot;],&quot;epub2_two_roles.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0001018" startTime="2026-09-19T18:48:57.1401638+00:00" endTime="2026-09-19T18:48:57.1402955+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="51bcd68b-97b7-4e4f-b08f-e2e22037d871" />
+    <UnitTestResult executionId="8992a6f5-e43b-4e22-a258-f6151d0ce02c" testId="17cbd791-edb7-8411-9f3d-d0fe1b2fcf02" testName="TestAddItemToSpine (Epub2,null,&quot;epub2_noproperties.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0001109" startTime="2026-09-19T18:48:57.1322528+00:00" endTime="2026-09-19T18:48:57.1324088+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8992a6f5-e43b-4e22-a258-f6151d0ce02c" />
+    <UnitTestResult executionId="5beaa74b-bc2e-4b00-b32f-912734149cfa" testId="1f20d052-efc6-827b-8ace-2d57870f3d7b" testName="TestGetRasterDocument (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0020351" startTime="2026-09-19T18:48:57.1527253+00:00" endTime="2026-09-19T18:48:57.1548236+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5beaa74b-bc2e-4b00-b32f-912734149cfa" />
+    <UnitTestResult executionId="14ed6421-0978-4d55-b31f-fd6e10e22aaf" testId="1e8f751a-7342-8e0a-8749-cd28c43d3882" testName="TestGetContainerXmlDocument (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0004464" startTime="2026-09-19T18:48:57.1497301+00:00" endTime="2026-09-19T18:48:57.1502258+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="14ed6421-0978-4d55-b31f-fd6e10e22aaf" />
+    <UnitTestResult executionId="fa6ef685-ebe8-4de9-b8e4-3ecf7bee33e1" testId="1c0b229c-cfde-842a-8c76-19a571413f49" testName="TestAddItemToManifest (Epub2,&quot;cover.jpg&quot;,&quot;cover-image&quot;,&quot;cover-id&quot;,&quot;epub2_properties_id.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0007330" startTime="2026-09-19T18:48:57.1251974+00:00" endTime="2026-09-19T18:48:57.1259671+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fa6ef685-ebe8-4de9-b8e4-3ecf7bee33e1" />
+    <UnitTestResult executionId="78299626-9ebd-48a1-8fdc-b1e0f83e291e" testId="1d890bf7-586d-85b6-b06c-8f6a41e0ae1e" testName="TestAddLeftToRight (Epub3,&quot;epub3_ltr.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0024250" startTime="2026-09-19T18:48:57.1356741+00:00" endTime="2026-09-19T18:48:57.1381326+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="78299626-9ebd-48a1-8fdc-b1e0f83e291e" />
+    <UnitTestResult executionId="c701b5cb-9cab-4ab0-a86d-614746640ca7" testId="13bb92f3-9643-8d68-aa0d-763f51bdbf81" testName="TestAddIdentifier (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0012401" startTime="2026-09-19T18:48:57.1424790+00:00" endTime="2026-09-19T18:48:57.1438948+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c701b5cb-9cab-4ab0-a86d-614746640ca7" />
+    <UnitTestResult executionId="6fd93f24-08f4-42e3-8d16-fffb29deab4a" testId="1555ea52-11b2-8b57-a008-a2494363d798" testName="TestResolve (&quot;a/b/c&quot;,&quot;../../d/e&quot;,&quot;a/d/e&quot;)" computerName="runnervmvmocb" duration="00:00:00.0000191" startTime="2026-09-19T18:48:57.1251968+00:00" endTime="2026-09-19T18:48:57.1252542+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6fd93f24-08f4-42e3-8d16-fffb29deab4a" />
+    <UnitTestResult executionId="1849cd33-d744-4ca1-8930-0d9271a86338" testId="12ab518a-33ba-8068-a833-7799730fcbd5" testName="TestAddCreator (Epub3,[&quot;aut&quot;,&quot;ill&quot;],&quot;epub3_two_roles.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0001057" startTime="2026-09-19T18:48:57.1399976+00:00" endTime="2026-09-19T18:48:57.1401332+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1849cd33-d744-4ca1-8930-0d9271a86338" />
+    <UnitTestResult executionId="511de5c2-7d92-45a7-90e3-76b94826a519" testId="14c058b4-2c86-895b-b0b1-cc5b57859157" testName="TestAddNavItem (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0003458" startTime="2026-09-19T18:48:57.1546737+00:00" endTime="2026-09-19T18:48:57.1550930+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="511de5c2-7d92-45a7-90e3-76b94826a519" />
+    <UnitTestResult executionId="71644620-2e58-4b19-97ce-68c848fe5e30" testId="1bf56acc-bc6b-8496-947d-aa65e255463c" testName="TestAddNavItem (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0048297" startTime="2026-09-19T18:48:57.1297335+00:00" endTime="2026-09-19T18:48:57.1346392+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="71644620-2e58-4b19-97ce-68c848fe5e30" />
+    <UnitTestResult executionId="1a9efa68-cd39-4f97-aa79-77361badf76c" testId="1229b021-b396-8067-9d67-6db2b8bc72b7" testName="TestAddNavItem (Epub3)" computerName="runnervmvmocb" duration="00:00:00.0072036" startTime="2026-09-19T18:48:57.1473934+00:00" endTime="2026-09-19T18:48:57.1546375+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1a9efa68-cd39-4f97-aa79-77361badf76c" />
+    <UnitTestResult executionId="a983eaae-26fe-49fb-9a00-984f1b39e64d" testId="1ec0effe-5d9b-8d26-ab26-1e26e51fca30" testName="TestAddItemToManifest (Epub2,&quot;cover.jpg&quot;,null,null,&quot;epub2_noproperties_noid.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0000867" startTime="2026-09-19T18:48:57.1263388+00:00" endTime="2026-09-19T18:48:57.1273714+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a983eaae-26fe-49fb-9a00-984f1b39e64d" />
+    <UnitTestResult executionId="94792cf1-67d2-40ba-976b-7515040cd2e8" testId="1606129a-0ad6-89b1-8eb5-de137dec383d" testName="TestAddLeftToRight (Epub2,&quot;epub2_ltr.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0003821" startTime="2026-09-19T18:48:57.1449099+00:00" endTime="2026-09-19T18:48:57.1453240+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="94792cf1-67d2-40ba-976b-7515040cd2e8" />
+    <UnitTestResult executionId="34f8c8f1-505b-42a8-80af-715ab2a9fb1a" testId="163d9d25-3781-8d01-aa89-fb0ed455ce67" testName="TestGetRelativePath (&quot;&quot;,&quot;a/b/c&quot;,&quot;../../..&quot;)" computerName="runnervmvmocb" duration="00:00:00.0000762" startTime="2026-09-19T18:48:57.1076067+00:00" endTime="2026-09-19T18:48:57.1077274+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="34f8c8f1-505b-42a8-80af-715ab2a9fb1a" />
+    <UnitTestResult executionId="9dd6fa7a-513f-4a05-b690-5e0afe2e267a" testId="1d853697-1c40-8ef7-b701-75fcb83d716c" testName="TestAddRightToLeft (Epub3,&quot;epub3_rtl.opf&quot;)" computerName="runnervmvmocb" duration="00:00:00.0003383" startTime="2026-09-19T18:48:57.1475456+00:00" endTime="2026-09-19T18:48:57.1479235+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9dd6fa7a-513f-4a05-b690-5e0afe2e267a" />
+    <UnitTestResult executionId="7fe4b5e1-9653-4125-be57-eb9b4cb8ecbf" testId="104fae68-6cd5-841d-8283-464853a139a3" testName="TestGetRasterDocument (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0008905" startTime="2026-09-19T18:48:57.1548604+00:00" endTime="2026-09-19T18:48:57.1581080+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7fe4b5e1-9653-4125-be57-eb9b4cb8ecbf" />
+    <UnitTestResult executionId="35e5bfef-4a48-4080-8535-0b3e09e5c67a" testId="196202e8-80f4-8220-b7a4-03bed006a872" testName="TestAddLanguage (Epub2)" computerName="runnervmvmocb" duration="00:00:00.0003482" startTime="2026-09-19T18:48:57.1353252+00:00" endTime="2026-09-19T18:48:57.1357041+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="35e5bfef-4a48-4080-8535-0b3e09e5c67a" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestAddReferenceToGuide (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1e13994d-6844-8233-9112-553b896408e8">
+      <Execution id="a4056f3a-da3f-4f51-9593-4fdcd4e14256" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.GuideTests" name="TestAddReferenceToGuide" />
+    </UnitTest>
+    <UnitTest name="TestAddModified (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1dc58f02-8bfb-87ff-8152-97912961162e">
+      <Execution id="376b1642-5aa1-46a3-a489-ba0a82667630" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddModified" />
+    </UnitTest>
+    <UnitTest name="TestAddTitle (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1576e578-fb17-8c86-9f06-aa7cda5c1b5a">
+      <Execution id="217a4aa4-e7ab-4417-b9bd-9ec0ad6b5673" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddTitle" />
+    </UnitTest>
+    <UnitTest name="TestGetRelativePath (&quot;a/b/c&quot;,&quot;a/b/d&quot;,&quot;../c&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="16734436-cecd-83b5-8627-bcedb89c8296">
+      <Execution id="ecbbe7d2-cb39-4f23-b4be-02e835d242f0" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.EpubPathsTests" name="TestGetRelativePath" />
+    </UnitTest>
+    <UnitTest name="TestAddLeftToRight (Epub3,&quot;epub3_ltr.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1d890bf7-586d-85b6-b06c-8f6a41e0ae1e">
+      <Execution id="78299626-9ebd-48a1-8fdc-b1e0f83e291e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.SpineTests" name="TestAddLeftToRight" />
+    </UnitTest>
+    <UnitTest name="TestAddIdentifier (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1a5dc06e-54fd-8d2c-a693-2b5cb2a6574b">
+      <Execution id="deb98336-6634-451f-9865-e9f1ad371c9b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.NavigationTests.NcxTests" name="TestAddIdentifier" />
+    </UnitTest>
+    <UnitTest name="TestAddItemToLandmarks (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="178aa3ea-46b0-8718-8f38-a36a6d78e6f8">
+      <Execution id="bdf29769-cb2c-4fa4-b5cf-6ce02b5d26d7" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.NavigationTests.NavigationDocumentTests" name="TestAddItemToLandmarks" />
+    </UnitTest>
+    <UnitTest name="TestGetContainerXmlDocument (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1e8f751a-7342-8e0a-8749-cd28c43d3882">
+      <Execution id="14ed6421-0978-4d55-b31f-fd6e10e22aaf" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.MetaInfTests.ContainerXmlTests" name="TestGetContainerXmlDocument" />
+    </UnitTest>
+    <UnitTest name="TestAddRightToLeft (Epub2,&quot;epub2_rtl.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="18f58b21-b2c3-803b-8cb0-4e08dd113f73">
+      <Execution id="080186e6-2af9-4911-9c2e-1ab0a5b3e2fc" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.SpineTests" name="TestAddRightToLeft" />
+    </UnitTest>
+    <UnitTest name="TestAddCreator (Epub2,[&quot;aut&quot;],&quot;epub2_one_role.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1ad59a54-6162-8915-b78f-cbce5547287d">
+      <Execution id="7487f459-ecdd-4629-8794-d139f289226b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddCreator" />
+    </UnitTest>
+    <UnitTest name="TestAddModified (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1584ef67-fe1c-864d-a045-629d708e2516">
+      <Execution id="42bf4478-3ff6-47ab-89cd-293bb9388491" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddModified" />
+    </UnitTest>
+    <UnitTest name="TestAddLanguage (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="196202e8-80f4-8220-b7a4-03bed006a872">
+      <Execution id="35e5bfef-4a48-4080-8535-0b3e09e5c67a" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddLanguage" />
+    </UnitTest>
+    <UnitTest name="TestAddDescription (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="13acc5b9-b971-8983-8930-49d6f4051f77">
+      <Execution id="a86cab32-c551-44fb-bed2-b795eb8e2e2d" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddDescription" />
+    </UnitTest>
+    <UnitTest name="TestAddNavItem (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="14c058b4-2c86-895b-b0b1-cc5b57859157">
+      <Execution id="511de5c2-7d92-45a7-90e3-76b94826a519" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.NavigationTests.NcxTests" name="TestAddNavItem" />
+    </UnitTest>
+    <UnitTest name="TestGetContainerXmlDocument (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1011288e-031f-8748-b274-76a1b0e99c39">
+      <Execution id="1110e0c3-acd5-47d2-97a1-f0ae46af4729" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.MetaInfTests.ContainerXmlTests" name="TestGetContainerXmlDocument" />
+    </UnitTest>
+    <UnitTest name="TestAddLeftToRight (Epub2,&quot;epub2_ltr.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1606129a-0ad6-89b1-8eb5-de137dec383d">
+      <Execution id="94792cf1-67d2-40ba-976b-7515040cd2e8" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.SpineTests" name="TestAddLeftToRight" />
+    </UnitTest>
+    <UnitTest name="TestAddNcx (Epub2,&quot;epub2_ncx.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1907624b-6009-89cb-a76c-8b426f68f298">
+      <Execution id="6e13348f-bbfb-4130-8897-e733f8e76580" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.SpineTests" name="TestAddNcx" />
+    </UnitTest>
+    <UnitTest name="TestGetRasterDocument (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1f20d052-efc6-827b-8ace-2d57870f3d7b">
+      <Execution id="5beaa74b-bc2e-4b00-b32f-912734149cfa" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.CoverXhtmlTests.RasterTests" name="TestGetRasterDocument" />
+    </UnitTest>
+    <UnitTest name="TestAddItemToManifest (Epub2,&quot;cover.jpg&quot;,null,null,&quot;epub2_noproperties_noid.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1ec0effe-5d9b-8d26-ab26-1e26e51fca30">
+      <Execution id="a983eaae-26fe-49fb-9a00-984f1b39e64d" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.ManifestTests" name="TestAddItemToManifest" />
+    </UnitTest>
+    <UnitTest name="TestAddRightToLeft (Epub3,&quot;epub3_rtl.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1d853697-1c40-8ef7-b701-75fcb83d716c">
+      <Execution id="9dd6fa7a-513f-4a05-b690-5e0afe2e267a" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.SpineTests" name="TestAddRightToLeft" />
+    </UnitTest>
+    <UnitTest name="TestAddNavItem (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1bf56acc-bc6b-8496-947d-aa65e255463c">
+      <Execution id="71644620-2e58-4b19-97ce-68c848fe5e30" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.NavigationTests.NavigationDocumentTests" name="TestAddNavItem" />
+    </UnitTest>
+    <UnitTest name="TestResolve (&quot;a/b/c&quot;,&quot;../c&quot;,&quot;a/b/c&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="101d1318-ed1a-8443-b35e-98ea1bfe93db">
+      <Execution id="f8d8c3ca-93dc-4528-8b71-51fe4358961a" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.EpubPathsTests" name="TestResolve" />
+    </UnitTest>
+    <UnitTest name="TestResolve (&quot;a/b/c&quot;,&quot;d/e&quot;,&quot;a/b/c/d/e&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="10d1de2e-c930-8ee2-88dc-3fe7022492f4">
+      <Execution id="b38ded87-6630-44e9-8202-7f93d2a02590" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.EpubPathsTests" name="TestResolve" />
+    </UnitTest>
+    <UnitTest name="TestAddDate (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="16e56989-76a7-8585-b943-e273cd2ed1c2">
+      <Execution id="2728fd79-18e5-436c-b3fc-dc3b8687acff" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddDate" />
+    </UnitTest>
+    <UnitTest name="TestResolve (&quot;a/b/c&quot;,&quot;../../../d/e&quot;,&quot;d/e&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="171fe247-fe14-853b-b238-26ef0867ddea">
+      <Execution id="9333a87e-1eaf-43b2-9c48-717b5318a769" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.EpubPathsTests" name="TestResolve" />
+    </UnitTest>
+    <UnitTest name="TestGetRelativePath (&quot;a/b/c&quot;,&quot;&quot;,&quot;a/b/c&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="11ca93a8-296b-8476-9f0b-6fc4b090990d">
+      <Execution id="c53ed37c-0606-4047-82eb-ff13e303d2dc" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.EpubPathsTests" name="TestGetRelativePath" />
+    </UnitTest>
+    <UnitTest name="TestGetRelativePath (&quot;a/b/c&quot;,&quot;a&quot;,&quot;b/c&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1f86d215-1c27-8857-97b9-0ba7f808e19d">
+      <Execution id="b3d92820-90c9-420a-8a0f-a3bdacce5691" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.EpubPathsTests" name="TestGetRelativePath" />
+    </UnitTest>
+    <UnitTest name="TestAddIdentifier (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="110d5f63-5620-8288-a852-48415a5701b6">
+      <Execution id="21f1f582-aa7d-4b0b-9504-3df81078e837" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddIdentifier" />
+    </UnitTest>
+    <UnitTest name="TestAddIdentifier (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="13bb92f3-9643-8d68-aa0d-763f51bdbf81">
+      <Execution id="c701b5cb-9cab-4ab0-a86d-614746640ca7" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.NavigationTests.NcxTests" name="TestAddIdentifier" />
+    </UnitTest>
+    <UnitTest name="TestGetRasterDocument (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="104fae68-6cd5-841d-8283-464853a139a3">
+      <Execution id="7fe4b5e1-9653-4125-be57-eb9b4cb8ecbf" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.CoverXhtmlTests.RasterTests" name="TestGetRasterDocument" />
+    </UnitTest>
+    <UnitTest name="TestAddPrePaginated (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="17163b0e-a15f-81ae-864e-083555ff6db1">
+      <Execution id="e4129cb2-92a6-4dc7-9747-c748dc1a0dee" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddPrePaginated" />
+    </UnitTest>
+    <UnitTest name="TestAddDescription (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="17b70e0f-1bb5-8232-bb22-ad292bd4ca53">
+      <Execution id="75e352d2-b6cf-4a66-8674-e593ec2b6dcc" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddDescription" />
+    </UnitTest>
+    <UnitTest name="TestAddItemToLandmarks (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1a7fb99e-f52f-8ccc-ab1f-13586db79d1e">
+      <Execution id="fec40ae1-aca8-4940-9bbe-65a7067e7f9e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.NavigationTests.NavigationDocumentTests" name="TestAddItemToLandmarks" />
+    </UnitTest>
+    <UnitTest name="TestAddReferenceToGuide (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="12509452-eb51-8bd2-8023-5d9d95470f16">
+      <Execution id="2fc4aa4b-bb25-4d94-b57f-e804e4408a6b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.GuideTests" name="TestAddReferenceToGuide" />
+    </UnitTest>
+    <UnitTest name="TestAddTitle (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="12fc392e-8199-86c7-8604-b296f0959a0f">
+      <Execution id="3aba45af-553d-486d-8f59-3589b95459d7" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddTitle" />
+    </UnitTest>
+    <UnitTest name="TestResolve (&quot;a/b/c&quot;,&quot;../../d/e&quot;,&quot;a/d/e&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1555ea52-11b2-8b57-a008-a2494363d798">
+      <Execution id="6fd93f24-08f4-42e3-8d16-fffb29deab4a" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.EpubPathsTests" name="TestResolve" />
+    </UnitTest>
+    <UnitTest name="TestAddNcx (Epub3,&quot;epub3_ncx.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="14d0cd07-d554-8a17-ae84-6d68b4a68e29">
+      <Execution id="3dbf89c0-96c3-47b2-b07d-f5e1993afff9" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.SpineTests" name="TestAddNcx" />
+    </UnitTest>
+    <UnitTest name="TestAddDate (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1c344ecb-28e7-8e25-b223-6e397f5054f4">
+      <Execution id="d5d51378-9220-4b4f-807a-1a6cc482a2f2" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddDate" />
+    </UnitTest>
+    <UnitTest name="TestAddCreator (Epub3,[&quot;aut&quot;,&quot;ill&quot;],&quot;epub3_two_roles.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="12ab518a-33ba-8068-a833-7799730fcbd5">
+      <Execution id="1849cd33-d744-4ca1-8930-0d9271a86338" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddCreator" />
+    </UnitTest>
+    <UnitTest name="TestAddCreator (Epub3,[&quot;aut&quot;],&quot;epub3_one_role.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="178c28d6-788e-8eb5-bd79-d8ce91ec7454">
+      <Execution id="a951a899-a58f-4154-bc90-00dc0789e72d" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddCreator" />
+    </UnitTest>
+    <UnitTest name="TestAddIdentifier (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="124a442d-5cef-8a5e-832b-b6cc6c966046">
+      <Execution id="eb0dfd8e-0127-444e-884a-028126a3f1cb" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddIdentifier" />
+    </UnitTest>
+    <UnitTest name="TestAddCreator (Epub2,[&quot;aut&quot;,&quot;ill&quot;],&quot;epub2_two_roles.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="18fb7630-93a1-828b-a9e1-500b27327666">
+      <Execution id="51bcd68b-97b7-4e4f-b08f-e2e22037d871" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddCreator" />
+    </UnitTest>
+    <UnitTest name="TestAddItemToSpine (Epub2,null,&quot;epub2_noproperties.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="17cbd791-edb7-8411-9f3d-d0fe1b2fcf02">
+      <Execution id="8992a6f5-e43b-4e22-a258-f6151d0ce02c" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.SpineTests" name="TestAddItemToSpine" />
+    </UnitTest>
+    <UnitTest name="TestAddItemToManifest (Epub3,&quot;cover.jpg&quot;,null,null,&quot;epub3_noproperties_noid.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="18b99c28-043f-8fa7-a585-45f8db35abe5">
+      <Execution id="4eb92fff-b848-4848-a1ab-c9d5294e558f" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.ManifestTests" name="TestAddItemToManifest" />
+    </UnitTest>
+    <UnitTest name="TestAddItemToSpine (Epub3,&quot;page-spread-left&quot;,&quot;epub3_properties.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="19fedbcf-3e8f-80d3-8f00-c9b50d3782b5">
+      <Execution id="ecfce0de-821a-4d0e-8576-a32c47d8374c" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.SpineTests" name="TestAddItemToSpine" />
+    </UnitTest>
+    <UnitTest name="TestAddPrePaginated (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="15879af3-5667-8627-8798-073634574cfb">
+      <Execution id="80952018-ba2b-407b-b1e4-9333abbbc696" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddPrePaginated" />
+    </UnitTest>
+    <UnitTest name="TestAddCreator (Epub2,[],&quot;epub2_no_roles.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="139f1cb2-b2ce-8c72-a0dc-23e529c29a74">
+      <Execution id="d57039e4-9d0b-47c3-ba64-842d360779dc" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddCreator" />
+    </UnitTest>
+    <UnitTest name="TestAddItemToSpine (Epub2,&quot;page-spread-left&quot;,&quot;epub2_properties.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="132a3618-bc6c-8626-b378-85737c5c1ffb">
+      <Execution id="ffd759e8-c44b-4d85-92fc-301731f1d37b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.SpineTests" name="TestAddItemToSpine" />
+    </UnitTest>
+    <UnitTest name="TestAddItemToManifest (Epub3,&quot;cover.jpg&quot;,&quot;cover-image&quot;,&quot;cover-id&quot;,&quot;epub3_properties_id.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1d6f9d40-3288-8453-b9b2-5ea56e2a4753">
+      <Execution id="4a58b00f-bd46-4a66-8e30-1345b3efd0fd" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.ManifestTests" name="TestAddItemToManifest" />
+    </UnitTest>
+    <UnitTest name="TestAddNavItem (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1229b021-b396-8067-9d67-6db2b8bc72b7">
+      <Execution id="1a9efa68-cd39-4f97-aa79-77361badf76c" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.NavigationTests.NcxTests" name="TestAddNavItem" />
+    </UnitTest>
+    <UnitTest name="TestGetRelativePath (&quot;a/b/c&quot;,&quot;b/c/d&quot;,&quot;../../../a/b/c&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1f027eb2-66bc-8be8-8300-bf63e361e75e">
+      <Execution id="4da72c59-d480-48c1-9585-6f9fc7061ff1" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.EpubPathsTests" name="TestGetRelativePath" />
+    </UnitTest>
+    <UnitTest name="TestAddTitle (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="17e7e5f5-8e92-8ea9-bd8b-79d2ff2868d6">
+      <Execution id="78240740-b539-454b-ae83-f948623e08e7" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.NavigationTests.NcxTests" name="TestAddTitle" />
+    </UnitTest>
+    <UnitTest name="TestAddItemToSpine (Epub3,null,&quot;epub3_noproperties.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1a00353d-820e-8fa3-9091-7b2ebff721ec">
+      <Execution id="9f1d0068-ed67-4bbb-850c-d18bf6f4827b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.SpineTests" name="TestAddItemToSpine" />
+    </UnitTest>
+    <UnitTest name="TestAddItemToManifest (Epub2,&quot;cover.jpg&quot;,&quot;cover-image&quot;,&quot;cover-id&quot;,&quot;epub2_properties_id.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1c0b229c-cfde-842a-8c76-19a571413f49">
+      <Execution id="fa6ef685-ebe8-4de9-b8e4-3ecf7bee33e1" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.ManifestTests" name="TestAddItemToManifest" />
+    </UnitTest>
+    <UnitTest name="TestAddTitle (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1b20638b-a8a6-85af-8458-b3b7c366f1d5">
+      <Execution id="64ced19d-4375-4df0-9a23-49d54898335f" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.NavigationTests.NcxTests" name="TestAddTitle" />
+    </UnitTest>
+    <UnitTest name="TestAddNavItem (Epub2)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="132c93fc-99cf-80a0-b0a6-22904c48670f">
+      <Execution id="ecbfaffc-175e-4120-8d2c-76e2785e9c67" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.NavigationTests.NavigationDocumentTests" name="TestAddNavItem" />
+    </UnitTest>
+    <UnitTest name="TestAddLanguage (Epub3)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1cef8686-5f34-86de-a6a3-8d35bb7afd79">
+      <Execution id="9e666865-20c2-4898-8853-b225a86157fa" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddLanguage" />
+    </UnitTest>
+    <UnitTest name="TestAddCreator (Epub3,[],&quot;epub3_no_roles.opf&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="18633743-5a95-84ca-aa1a-84a0ca6b512e">
+      <Execution id="7a20e1ba-3a2b-4c98-afb9-4113b25b505b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.WriterTests.PackageDocumentTests.MetadataTests" name="TestAddCreator" />
+    </UnitTest>
+    <UnitTest name="TestGetRelativePath (&quot;&quot;,&quot;a/b/c&quot;,&quot;../../..&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="163d9d25-3781-8d01-aa89-fb0ed455ce67">
+      <Execution id="34f8c8f1-505b-42a8-80af-715ab2a9fb1a" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.EpubPathsTests" name="TestGetRelativePath" />
+    </UnitTest>
+    <UnitTest name="TestResolve (&quot;&quot;,&quot;a/b/c&quot;,&quot;a/b/c&quot;)" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\epubs.tests\release_win-x64\epubs.tests.dll" id="1b32fea3-b10c-804b-9dfa-95d7d35c9259">
+      <Execution id="5a1a454b-e760-4b62-9192-10023602affb" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Epubs.Tests.EpubPathsTests" name="TestResolve" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="1b20638b-a8a6-85af-8458-b3b7c366f1d5" executionId="64ced19d-4375-4df0-9a23-49d54898335f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="10d1de2e-c930-8ee2-88dc-3fe7022492f4" executionId="b38ded87-6630-44e9-8202-7f93d2a02590" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="132a3618-bc6c-8626-b378-85737c5c1ffb" executionId="ffd759e8-c44b-4d85-92fc-301731f1d37b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d6f9d40-3288-8453-b9b2-5ea56e2a4753" executionId="4a58b00f-bd46-4a66-8e30-1345b3efd0fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17e7e5f5-8e92-8ea9-bd8b-79d2ff2868d6" executionId="78240740-b539-454b-ae83-f948623e08e7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17163b0e-a15f-81ae-864e-083555ff6db1" executionId="e4129cb2-92a6-4dc7-9747-c748dc1a0dee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="16734436-cecd-83b5-8627-bcedb89c8296" executionId="ecbbe7d2-cb39-4f23-b4be-02e835d242f0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1cef8686-5f34-86de-a6a3-8d35bb7afd79" executionId="9e666865-20c2-4898-8853-b225a86157fa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="11ca93a8-296b-8476-9f0b-6fc4b090990d" executionId="c53ed37c-0606-4047-82eb-ff13e303d2dc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="139f1cb2-b2ce-8c72-a0dc-23e529c29a74" executionId="d57039e4-9d0b-47c3-ba64-842d360779dc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1a5dc06e-54fd-8d2c-a693-2b5cb2a6574b" executionId="deb98336-6634-451f-9865-e9f1ad371c9b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1c344ecb-28e7-8e25-b223-6e397f5054f4" executionId="d5d51378-9220-4b4f-807a-1a6cc482a2f2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1a7fb99e-f52f-8ccc-ab1f-13586db79d1e" executionId="fec40ae1-aca8-4940-9bbe-65a7067e7f9e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18633743-5a95-84ca-aa1a-84a0ca6b512e" executionId="7a20e1ba-3a2b-4c98-afb9-4113b25b505b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1ad59a54-6162-8915-b78f-cbce5547287d" executionId="7487f459-ecdd-4629-8794-d139f289226b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18f58b21-b2c3-803b-8cb0-4e08dd113f73" executionId="080186e6-2af9-4911-9c2e-1ab0a5b3e2fc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1a00353d-820e-8fa3-9091-7b2ebff721ec" executionId="9f1d0068-ed67-4bbb-850c-d18bf6f4827b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="12fc392e-8199-86c7-8604-b296f0959a0f" executionId="3aba45af-553d-486d-8f59-3589b95459d7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1e13994d-6844-8233-9112-553b896408e8" executionId="a4056f3a-da3f-4f51-9593-4fdcd4e14256" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="16e56989-76a7-8585-b943-e273cd2ed1c2" executionId="2728fd79-18e5-436c-b3fc-dc3b8687acff" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="124a442d-5cef-8a5e-832b-b6cc6c966046" executionId="eb0dfd8e-0127-444e-884a-028126a3f1cb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f027eb2-66bc-8be8-8300-bf63e361e75e" executionId="4da72c59-d480-48c1-9585-6f9fc7061ff1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="15879af3-5667-8627-8798-073634574cfb" executionId="80952018-ba2b-407b-b1e4-9333abbbc696" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="19fedbcf-3e8f-80d3-8f00-c9b50d3782b5" executionId="ecfce0de-821a-4d0e-8576-a32c47d8374c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="13acc5b9-b971-8983-8930-49d6f4051f77" executionId="a86cab32-c551-44fb-bed2-b795eb8e2e2d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1907624b-6009-89cb-a76c-8b426f68f298" executionId="6e13348f-bbfb-4130-8897-e733f8e76580" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1dc58f02-8bfb-87ff-8152-97912961162e" executionId="376b1642-5aa1-46a3-a489-ba0a82667630" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17b70e0f-1bb5-8232-bb22-ad292bd4ca53" executionId="75e352d2-b6cf-4a66-8674-e593ec2b6dcc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="14d0cd07-d554-8a17-ae84-6d68b4a68e29" executionId="3dbf89c0-96c3-47b2-b07d-f5e1993afff9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="12509452-eb51-8bd2-8023-5d9d95470f16" executionId="2fc4aa4b-bb25-4d94-b57f-e804e4408a6b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18b99c28-043f-8fa7-a585-45f8db35abe5" executionId="4eb92fff-b848-4848-a1ab-c9d5294e558f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="110d5f63-5620-8288-a852-48415a5701b6" executionId="21f1f582-aa7d-4b0b-9504-3df81078e837" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f86d215-1c27-8857-97b9-0ba7f808e19d" executionId="b3d92820-90c9-420a-8a0f-a3bdacce5691" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="178aa3ea-46b0-8718-8f38-a36a6d78e6f8" executionId="bdf29769-cb2c-4fa4-b5cf-6ce02b5d26d7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1011288e-031f-8748-b274-76a1b0e99c39" executionId="1110e0c3-acd5-47d2-97a1-f0ae46af4729" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1576e578-fb17-8c86-9f06-aa7cda5c1b5a" executionId="217a4aa4-e7ab-4417-b9bd-9ec0ad6b5673" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="178c28d6-788e-8eb5-bd79-d8ce91ec7454" executionId="a951a899-a58f-4154-bc90-00dc0789e72d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="132c93fc-99cf-80a0-b0a6-22904c48670f" executionId="ecbfaffc-175e-4120-8d2c-76e2785e9c67" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="101d1318-ed1a-8443-b35e-98ea1bfe93db" executionId="f8d8c3ca-93dc-4528-8b71-51fe4358961a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1b32fea3-b10c-804b-9dfa-95d7d35c9259" executionId="5a1a454b-e760-4b62-9192-10023602affb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1584ef67-fe1c-864d-a045-629d708e2516" executionId="42bf4478-3ff6-47ab-89cd-293bb9388491" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="171fe247-fe14-853b-b238-26ef0867ddea" executionId="9333a87e-1eaf-43b2-9c48-717b5318a769" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18fb7630-93a1-828b-a9e1-500b27327666" executionId="51bcd68b-97b7-4e4f-b08f-e2e22037d871" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17cbd791-edb7-8411-9f3d-d0fe1b2fcf02" executionId="8992a6f5-e43b-4e22-a258-f6151d0ce02c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f20d052-efc6-827b-8ace-2d57870f3d7b" executionId="5beaa74b-bc2e-4b00-b32f-912734149cfa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1e8f751a-7342-8e0a-8749-cd28c43d3882" executionId="14ed6421-0978-4d55-b31f-fd6e10e22aaf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1c0b229c-cfde-842a-8c76-19a571413f49" executionId="fa6ef685-ebe8-4de9-b8e4-3ecf7bee33e1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d890bf7-586d-85b6-b06c-8f6a41e0ae1e" executionId="78299626-9ebd-48a1-8fdc-b1e0f83e291e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="13bb92f3-9643-8d68-aa0d-763f51bdbf81" executionId="c701b5cb-9cab-4ab0-a86d-614746640ca7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1555ea52-11b2-8b57-a008-a2494363d798" executionId="6fd93f24-08f4-42e3-8d16-fffb29deab4a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="12ab518a-33ba-8068-a833-7799730fcbd5" executionId="1849cd33-d744-4ca1-8930-0d9271a86338" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="14c058b4-2c86-895b-b0b1-cc5b57859157" executionId="511de5c2-7d92-45a7-90e3-76b94826a519" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1bf56acc-bc6b-8496-947d-aa65e255463c" executionId="71644620-2e58-4b19-97ce-68c848fe5e30" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1229b021-b396-8067-9d67-6db2b8bc72b7" executionId="1a9efa68-cd39-4f97-aa79-77361badf76c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1ec0effe-5d9b-8d26-ab26-1e26e51fca30" executionId="a983eaae-26fe-49fb-9a00-984f1b39e64d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1606129a-0ad6-89b1-8eb5-de137dec383d" executionId="94792cf1-67d2-40ba-976b-7515040cd2e8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="163d9d25-3781-8d01-aa89-fb0ed455ce67" executionId="34f8c8f1-505b-42a8-80af-715ab2a9fb1a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d853697-1c40-8ef7-b701-75fcb83d716c" executionId="9dd6fa7a-513f-4a05-b690-5e0afe2e267a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="104fae68-6cd5-841d-8283-464853a139a3" executionId="7fe4b5e1-9653-4125-be57-eb9b4cb8ecbf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="196202e8-80f4-8220-b7a4-03bed006a872" executionId="35e5bfef-4a48-4080-8535-0b3e09e5c67a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="60" executed="60" passed="60" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test Parallelization enabled for D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Epubs.Tests\release_win-x64\Epubs.Tests.dll (Workers: 4, Scope: ClassLevel)&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
