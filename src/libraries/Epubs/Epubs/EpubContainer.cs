@@ -1,5 +1,4 @@
 using FileStorage;
-using MediaTypes;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -129,7 +128,7 @@ public sealed class EpubContainer
             : new();
         filePaths.Remove(ncxFilePath);
 
-        ImmutableArray<EpubPath> expectedXhtmlPaths = GetXhtmlPaths(packageInfo);
+        ImmutableArray<EpubPath> expectedXhtmlPaths = packageInfo.GetOrderedXhtmlPaths(false);
         ImmutableArray<EpubPath>.Builder xhtmlPaths = ImmutableArray.CreateBuilder<EpubPath>();
         foreach (EpubPath expectedXhtmlPath in expectedXhtmlPaths)
         {
@@ -163,19 +162,6 @@ public sealed class EpubContainer
                 EpubPath currentPath = parentPath.Resolve(directory.Name);
                 await TraverseAsync(currentDirectory, currentPath, filePaths, cancellationToken).ConfigureAwait(false);
             }
-        }
-
-        static ImmutableArray<EpubPath> GetXhtmlPaths(EpubPackageInfo packageInfo)
-        {
-            ImmutableArray<EpubPath>.Builder xhtmlPaths = ImmutableArray.CreateBuilder<EpubPath>();
-            foreach (EpubManifestItem manifestItem in packageInfo.Manifest.Items)
-            {
-                string? manifestItemMediaType = manifestItem.MediaType;
-                if (manifestItemMediaType != MediaType.Application.Xhtml_Xml) continue;
-                EpubPath xhtmlPath = new(manifestItem.AbsoluteHref);
-                xhtmlPaths.Add(xhtmlPath);
-            }
-            return xhtmlPaths.ToImmutable();
         }
     }
 

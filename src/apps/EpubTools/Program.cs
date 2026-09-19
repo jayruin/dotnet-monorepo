@@ -7,10 +7,10 @@ class Program
 {
     static Task<int> Main(string[] args)
     {
-        var rootCommand = new RootCommand()
-        {
+        RootCommand rootCommand = [
             PackCli.CreateCommand(),
-        };
+            ExtractImagesCli.CreateCommand(),
+        ];
         return rootCommand.Parse(args).InvokeAsync();
     }
 }

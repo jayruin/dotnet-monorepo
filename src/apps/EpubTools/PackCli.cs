@@ -14,9 +14,9 @@ internal static class PackCli
 {
     public static Command CreateCommand()
     {
-        var directoryArgument = new Argument<string>("directory");
-        var outputOption = new Option<string>("--output", "-o");
-        var compressionOption = new Option<CompressionLevel>("--compression", "-c")
+        Argument<string> directoryArgument = new("directory");
+        Option<string> outputOption = new("--output", "-o");
+        Option<CompressionLevel> compressionOption = new("--compression", "-c")
         {
             DefaultValueFactory = _ => CompressionLevel.NoCompression,
         };
@@ -41,7 +41,7 @@ internal static class PackCli
         directory = Path.GetFullPath(directory);
         if (string.IsNullOrWhiteSpace(output))
         {
-            var parentDirectory = Directory.GetParent(directory)?.FullName
+            string parentDirectory = Directory.GetParent(directory)?.FullName
                 ?? throw new InvalidOperationException("No parent directory.");
             output = Path.Join(parentDirectory, $"{Path.GetFileName(directory)}.epub");
         }

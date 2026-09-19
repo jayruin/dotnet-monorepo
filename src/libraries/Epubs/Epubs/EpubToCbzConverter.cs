@@ -47,7 +47,7 @@ public sealed class EpubToCbzConverter
 
     private async Task WriteAsync(EpubPackageInfo packageInfo, IDirectory outputDirectory, CancellationToken cancellationToken = default)
     {
-        List<IFile> imageFiles = await GetPrePaginatedImageFilesAsync(packageInfo, cancellationToken)
+        List<IFile> imageFiles = await EnumeratePrePaginatedImageFilesAsync(packageInfo, cancellationToken)
             .ToListAsync(cancellationToken).ConfigureAwait(false);
 
         await outputDirectory.EnsureIsEmptyAsync(cancellationToken).ConfigureAwait(false);
@@ -55,7 +55,7 @@ public sealed class EpubToCbzConverter
         for (int i = 0; i < imageFiles.Count; i++)
         {
             IFile imageFile = imageFiles[i];
-            IFile outputFile = outputDirectory.GetFile($"{i.ToPaddedString(imageFiles.Count)}{imageFile.Extension}");
+            IFile outputFile = outputDirectory.GetFile($"{(i + 1).ToPaddedString(imageFiles.Count)}{imageFile.Extension}");
             await imageFile.CopyToAsync(outputFile, cancellationToken).ConfigureAwait(false);
         }
     }
@@ -67,19 +67,10 @@ public sealed class EpubToCbzConverter
         return timestamp.Clamp(ZipConstants.MinLastWriteTime, ZipConstants.MaxLastWriteTime);
     }
 
-    internal async IAsyncEnumerable<IFile> GetPrePaginatedImageFilesAsync(EpubPackageInfo packageInfo, [EnumeratorCancellation] CancellationToken cancellationToken)
+    private async IAsyncEnumerable<IFile> EnumeratePrePaginatedImageFilesAsync(EpubPackageInfo packageInfo, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        foreach (EpubSpineItem spineItem in packageInfo.Spine.Items)
+        foreach (EpubPath pageXhtmlPath in packageInfo.GetOrderedXhtmlPaths(true))
         {
-            if (!string.IsNullOrWhiteSpace(spineItem.Linear) && spineItem.Linear != "yes") continue;
-            string? pageXhtmlManifestHref = packageInfo.Manifest.Items
-                .Where(mi => mi.Id == spineItem.Idref)
-                .Select(mi => mi.AbsoluteHref)
-                .OfType<string>()
-                .FirstOrDefault();
-            if (string.IsNullOrWhiteSpace(pageXhtmlManifestHref)) continue;
-            EpubPath pageXhtmlPath = new(pageXhtmlManifestHref);
-            IDirectory pageXhtmlDirectory = _container.RootDirectory.GetDirectory(pageXhtmlPath.Parent.Parts);
             XDocument pageXhtmlDocument = await _container.LoadDocumentAsync(pageXhtmlPath, cancellationToken).ConfigureAwait(false);
             string? pageImageHref = pageXhtmlDocument
                 .Element((XNamespace)EpubXmlNamespaces.Xhtml + "html")
