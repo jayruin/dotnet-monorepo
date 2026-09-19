@@ -13,10 +13,10 @@ public class EpubPathsTests
     [DataRow("a/b/c", "b/c/d", "../../../a/b/c")]
     public void TestGetRelativePath(string path, string start, string expected)
     {
-        string actual = string.Join('/',
-            EpubPaths.GetRelativePath(
-                string.IsNullOrWhiteSpace(path) ? [] : [.. path.Split('/')],
-                string.IsNullOrWhiteSpace(start) ? [] : [.. start.Split('/')]));
+        EpubPath epubPath = new(path);
+        EpubPath startEpubPath = new(start);
+        EpubPath actualEpubPath = epubPath.GetRelativePath(startEpubPath);
+        string actual = actualEpubPath.ToString();
         Assert.AreEqual(expected, actual);
     }
 
@@ -26,11 +26,11 @@ public class EpubPathsTests
     [DataRow("a/b/c", "../c", "a/b/c")]
     [DataRow("a/b/c", "../../d/e", "a/d/e")]
     [DataRow("a/b/c", "../../../d/e", "d/e")]
-    public void TestResolvePath(string currentDirectoryPath, string epubPath, string expected)
+    public void TestResolve(string currentDirectoryPath, string epubPath, string expected)
     {
-        string actual = string.Join('/',
-            EpubPaths.ResolvePath(
-                string.IsNullOrWhiteSpace(currentDirectoryPath) ? [] : [.. currentDirectoryPath.Split('/')],
-                epubPath));
+        EpubPath path = new(currentDirectoryPath);
+        EpubPath actualPath = path.Resolve(epubPath);
+        string actual = actualPath.ToString();
+        Assert.AreEqual(expected, actual);
     }
 }

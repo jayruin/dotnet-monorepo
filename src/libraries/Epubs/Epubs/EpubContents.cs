@@ -5,10 +5,10 @@ namespace Epubs;
 internal sealed class EpubContents
 {
     public required int Version { get; init; }
-    public required ImmutableArray<string> MimetypeFilePath { get; init; }
-    public required ImmutableArray<string> OpfFilePath { get; init; }
-    public required ImmutableArray<string> CoverFilePath { get; init; }
-    public required ImmutableArray<string> NcxFilePath { get; init; }
-    public required ImmutableArray<ImmutableArray<string>> XhtmlPaths { get; init; }
-    public required ImmutableArray<ImmutableArray<string>> FilePaths { get; init; }
+    public required EpubPath MimetypeFilePath { get; init; }
+    public required EpubPath OpfFilePath { get; init; }
+    public required EpubPath CoverFilePath { get; init; }
+    public required EpubPath NcxFilePath { get; init; }
+    public required ImmutableArray<EpubPath> XhtmlPaths { get; init; }
+    public required ImmutableArray<EpubPath> FilePaths { get; init; }
 }

@@ -7,15 +7,15 @@ namespace Epubs;
 
 public sealed class EpubCover
 {
-    internal EpubCover(IFile coverFile, string relativePath, string mediaType)
+    internal EpubCover(IFile coverFile, EpubPath path, string mediaType)
     {
         CoverFile = coverFile;
-        RelativePath = relativePath;
+        Path = path;
         MediaType = mediaType;
     }
 
     internal IFile CoverFile { get; }
-    internal string RelativePath { get; }
+    internal EpubPath Path { get; }
     public string MediaType { get; }
 
     public Task<Stream> OpenReadAsync(CancellationToken cancellationToken = default)

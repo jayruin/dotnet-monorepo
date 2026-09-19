@@ -135,9 +135,10 @@ public sealed class EpubHandler
     public async Task<IEpubMetadata> GetEpubMetadataAsync(string contentId, CancellationToken cancellationToken)
     {
         EpubContainer container = await GetContainerAsync(contentId, cancellationToken).ConfigureAwait(false);
-        int version = await container.GetVersionAsync(cancellationToken).ConfigureAwait(false);
+        int version = await container.PeekVersionAsync(cancellationToken).ConfigureAwait(false);
         _strategy.VendorContext.Logger.LogRegeneratingEpubMetadata(_strategy.VendorContext.VendorId, contentId, version);
-        IEpubMetadata metadata = await container.GetMetadataAsync(cancellationToken).ConfigureAwait(false);
+        EpubPackageInfo packageInfo = await container.GetPackageInfoAsync(cancellationToken).ConfigureAwait(false);
+        IEpubMetadata metadata = packageInfo.Metadata;
         await ModifyMetadataAsync(contentId, version, container, metadata, cancellationToken).ConfigureAwait(false);
         return metadata;
     }
@@ -196,7 +197,8 @@ public sealed class EpubHandler
     private async Task<bool> ContainsCoverAsync(string contentId, CancellationToken cancellationToken)
     {
         EpubContainer container = await GetContainerAsync(contentId, cancellationToken).ConfigureAwait(false);
-        if (await container.GetCoverAsync(cancellationToken).ConfigureAwait(false) is not null)
+        EpubPackageInfo packageInfo = await container.GetPackageInfoAsync(cancellationToken).ConfigureAwait(false);
+        if (packageInfo.Cover is not null)
         {
             return true;
         }
@@ -211,7 +213,7 @@ public sealed class EpubHandler
     {
         if (!await ContainsEpubAsync(contentId, cancellationToken).ConfigureAwait(false)) return false;
         EpubContainer container = await GetContainerAsync(contentId, cancellationToken).ConfigureAwait(false);
-        return await container.IsPrePaginatedAsync(cancellationToken).ConfigureAwait(false);
+        return await container.PeekIsPrePaginatedAsync(cancellationToken).ConfigureAwait(false);
     }
 
     private async Task ExportEpubAsync(string contentId, Stream stream, CancellationToken cancellationToken)
@@ -248,7 +250,8 @@ public sealed class EpubHandler
         else
         {
             EpubContainer container = await GetContainerAsync(contentId, cancellationToken).ConfigureAwait(false);
-            EpubCover cover = await container.GetCoverAsync(cancellationToken).ConfigureAwait(false)
+            EpubPackageInfo packageInfo = await container.GetPackageInfoAsync(cancellationToken).ConfigureAwait(false);
+            EpubCover cover = packageInfo.Cover
                 ?? throw new InvalidOperationException($"No cover for {_strategy.VendorContext.VendorId}.{contentId}.");
             Stream coverStream = await cover.OpenReadAsync(cancellationToken).ConfigureAwait(false);
             await using (coverStream.ConfigureAwait(false))
@@ -300,7 +303,7 @@ public sealed class EpubHandler
 
         if (_strategy.AllowEpubMetadataOverrides || _strategy.ModifyMetadataAsync is not null)
         {
-            int version = await container.GetVersionAsync(cancellationToken).ConfigureAwait(false);
+            int version = await container.PeekVersionAsync(cancellationToken).ConfigureAwait(false);
             packager.WithMetadataHandler((metadata, metadataCancellationToken)
                 => ModifyMetadataAsync(contentId, version, container, metadata, metadataCancellationToken));
         }

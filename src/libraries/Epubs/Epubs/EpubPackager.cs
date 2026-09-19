@@ -108,7 +108,8 @@ public sealed class EpubPackager
 
     private async Task<DateTimeOffset> GetTimestampAsync(CancellationToken cancellationToken)
     {
-        IEpubMetadata metadata = await _container.GetMetadataAsync(cancellationToken).ConfigureAwait(false);
+        EpubPackageInfo packageInfo = await _container.GetPackageInfoAsync(cancellationToken).ConfigureAwait(false);
+        IEpubMetadata metadata = packageInfo.Metadata;
         if (HandleMetadataAsync is not null)
         {
             await HandleMetadataAsync(metadata, cancellationToken).ConfigureAwait(false);
@@ -117,16 +118,16 @@ public sealed class EpubPackager
         return timestamp.Clamp(ZipConstants.MinLastWriteTime, ZipConstants.MaxLastWriteTime);
     }
 
-    private async Task CopyFileAsync(ImmutableArray<string> path, IDirectory outputDirectory, CancellationToken cancellationToken)
+    private async Task CopyFileAsync(EpubPath path, IDirectory outputDirectory, CancellationToken cancellationToken)
     {
-        string? joinedDestinationPath = string.Join('/', path);
+        string? joinedDestinationPath = string.Join('/', path.Parts);
         if (FileNameOverrides is not null && FileNameOverrides.TryGetValue(joinedDestinationPath, out string? joinedDestinationPathOverride))
         {
             joinedDestinationPath = joinedDestinationPathOverride;
         }
         if (string.IsNullOrWhiteSpace(joinedDestinationPath)) return;
         string[] destinationPath = joinedDestinationPath.Split('/');
-        IFile sourceFile = _container.RootDirectory.GetFile(path);
+        IFile sourceFile = _container.RootDirectory.GetFile(path.Parts);
         IFile destinationFile = outputDirectory.GetFile(destinationPath);
         await sourceFile.CopyToAsync(destinationFile, cancellationToken).ConfigureAwait(false);
     }
@@ -138,13 +139,13 @@ public sealed class EpubPackager
 
     private async Task CopyRegularItemsAsync(EpubContents contents, IDirectory outputDirectory, CancellationToken cancellationToken)
     {
-        foreach (ImmutableArray<string> path in contents.FilePaths)
+        foreach (EpubPath path in contents.FilePaths)
         {
             await CopyFileAsync(path, outputDirectory, cancellationToken).ConfigureAwait(false);
         }
     }
 
-    private async Task<(string, ImmutableArray<string>)> GetNewCoverNameAndPathAsync(EpubContents contents, CancellationToken cancellationToken)
+    private async Task<(string, EpubPath)> GetNewCoverNameAndPathAsync(EpubContents contents, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(NewCoverMediaType))
         {
@@ -153,13 +154,13 @@ public sealed class EpubPackager
         string newCoverExtension = _mediaTypeFileExtensionsMapping.GetFileExtension(NewCoverMediaType)
             ?? throw new InvalidOperationException("Could not get new cover extension.");
         string newCoverName = $"cover{newCoverExtension}";
-        ImmutableArray<string> opfDirectoryPath = contents.OpfFilePath[..^1];
-        ImmutableArray<string> newCoverPath = opfDirectoryPath.Add(newCoverName);
+        EpubPath opfDirectoryPath = contents.OpfFilePath.Parent;
+        EpubPath newCoverPath = opfDirectoryPath.Resolve(newCoverName);
         int coverCounter = 1;
-        while (await _container.RootDirectory.GetFile(opfDirectoryPath.Add(newCoverName)).ExistsAsync(cancellationToken).ConfigureAwait(false))
+        while (await _container.RootDirectory.GetFile(opfDirectoryPath.Resolve(newCoverName).Parts).ExistsAsync(cancellationToken).ConfigureAwait(false))
         {
             newCoverName = $"cover{coverCounter}{newCoverExtension}";
-            newCoverPath = opfDirectoryPath.Add(newCoverName);
+            newCoverPath = opfDirectoryPath.Resolve(newCoverName);
             coverCounter += 1;
         }
         return (newCoverName, newCoverPath);
@@ -170,10 +171,10 @@ public sealed class EpubPackager
         string? newCoverName = null;
         if (HandleCoverAsync is not null)
         {
-            if (contents.CoverFilePath.IsDefaultOrEmpty)
+            if (contents.CoverFilePath.IsEmpty)
             {
-                (newCoverName, ImmutableArray<string> newCoverPath) = await GetNewCoverNameAndPathAsync(contents, cancellationToken).ConfigureAwait(false);
-                Stream destinationCoverStream = await outputDirectory.GetFile(newCoverPath).OpenWriteAsync(cancellationToken).ConfigureAwait(false);
+                (newCoverName, EpubPath newCoverPath) = await GetNewCoverNameAndPathAsync(contents, cancellationToken).ConfigureAwait(false);
+                Stream destinationCoverStream = await outputDirectory.GetFile(newCoverPath.Parts).OpenWriteAsync(cancellationToken).ConfigureAwait(false);
                 await using (destinationCoverStream.ConfigureAwait(false))
                 {
                     await HandleCoverAsync(null, destinationCoverStream, cancellationToken).ConfigureAwait(false);
@@ -181,25 +182,26 @@ public sealed class EpubPackager
             }
             else
             {
-                EpubCover sourceCover = await _container.GetCoverAsync(cancellationToken).ConfigureAwait(false)
+                EpubPackageInfo packageInfo = await _container.GetPackageInfoAsync(cancellationToken).ConfigureAwait(false);
+                EpubCover sourceCover = packageInfo.Cover
                     ?? throw new InvalidOperationException("Could not get cover.");
-                Stream destinationCoverStream = await outputDirectory.GetFile(contents.CoverFilePath).OpenWriteAsync(cancellationToken).ConfigureAwait(false);
+                Stream destinationCoverStream = await outputDirectory.GetFile(contents.CoverFilePath.Parts).OpenWriteAsync(cancellationToken).ConfigureAwait(false);
                 await using (destinationCoverStream.ConfigureAwait(false))
                 {
                     await HandleCoverAsync(sourceCover, destinationCoverStream, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
-        else if (!contents.CoverFilePath.IsDefaultOrEmpty)
+        else if (!contents.CoverFilePath.IsEmpty)
         {
             await CopyFileAsync(contents.CoverFilePath, outputDirectory, cancellationToken).ConfigureAwait(false);
         }
         return newCoverName;
     }
 
-    private async Task<XDocument> GetDocumentAsync(ImmutableArray<string> path, CancellationToken cancellationToken)
+    private async Task<XDocument> GetDocumentAsync(EpubPath path, CancellationToken cancellationToken)
     {
-        IFile sourceFile = _container.RootDirectory.GetFile(path);
+        IFile sourceFile = _container.RootDirectory.GetFile(path.Parts);
         Stream sourceStream = await sourceFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
         XDocument document;
         await using (sourceStream.ConfigureAwait(false))
@@ -209,18 +211,18 @@ public sealed class EpubPackager
         return document;
     }
 
-    private Dictionary<string, string?>? GetRelativeFileNameOverrides(ImmutableArray<string> start)
+    private Dictionary<string, string?>? GetRelativeFileNameOverrides(EpubPath start)
     {
         return FileNameOverrides?.ToDictionary(
-            kvp => string.Join('/', EpubPaths.GetRelativePath([.. kvp.Key.Split('/')], start)),
+            kvp => new EpubPath(kvp.Key).GetRelativePath(start).ToString(),
             kvp => string.IsNullOrWhiteSpace(kvp.Value)
                 ? null
-                : string.Join('/', EpubPaths.GetRelativePath([.. kvp.Value.Split('/')], start)));
+                : new EpubPath(kvp.Value).GetRelativePath(start).ToString());
     }
 
-    private void AdjustXhtmlReferences(ImmutableArray<string> xhtmlPath, XDocument xhtmlDocument)
+    private void AdjustXhtmlReferences(EpubPath xhtmlPath, XDocument xhtmlDocument)
     {
-        ImmutableArray<string> xhtmlDirectoryPath = xhtmlPath[..^1];
+        EpubPath xhtmlDirectoryPath = xhtmlPath.Parent;
         Dictionary<string, string?>? relativeFileNameOverrides = GetRelativeFileNameOverrides(xhtmlDirectoryPath);
         if (relativeFileNameOverrides is null) return;
         XElement? html = xhtmlDocument.Element((XNamespace)EpubXmlNamespaces.Xhtml + "html");
@@ -232,15 +234,15 @@ public sealed class EpubPackager
     }
 
     private static void AdjustElementReference(XElement element, XName attributeName,
-        Dictionary<string, string?> relativeFileNameOverrides, ImmutableArray<string> filePath)
+        Dictionary<string, string?> relativeFileNameOverrides, EpubPath filePath)
     {
-        ImmutableArray<string> directoryPath = filePath[..^1];
+        EpubPath directoryPath = filePath.Parent;
         string? reference = element.Attribute(attributeName)?.Value;
         if (string.IsNullOrWhiteSpace(reference)) return;
         string[] referenceParts = reference.Split('#');
         string path = referenceParts[0];
-        string absolutePath = string.Join('/', EpubPaths.ResolvePath(directoryPath, path));
-        string normalizedRelativePath = string.Join('/', EpubPaths.GetRelativePath([.. absolutePath.Split('/')], directoryPath));
+        EpubPath absolutePath = directoryPath.Resolve(path);
+        string normalizedRelativePath = absolutePath.GetRelativePath(directoryPath).ToString();
         if (relativeFileNameOverrides.TryGetValue(normalizedRelativePath, out string? overridePath))
         {
             if (string.IsNullOrWhiteSpace(overridePath))
@@ -257,7 +259,7 @@ public sealed class EpubPackager
 
     private static void AdjustXhtmlElementReferences(string elementName, string attributeName,
         Dictionary<string, string?> relativeFileNameOverrides,
-        XElement htmlElement, ImmutableArray<string> xhtmlPath)
+        XElement htmlElement, EpubPath xhtmlPath)
     {
         foreach (XElement element in htmlElement.Descendants((XNamespace)EpubXmlNamespaces.Xhtml + elementName).ToList())
         {
@@ -268,7 +270,7 @@ public sealed class EpubPackager
     private async Task<ImmutableArray<XhtmlProperties>> WriteXhtmlFilesAsync(EpubContents contents, IDirectory outputDirectory, CancellationToken cancellationToken)
     {
         ImmutableArray<XhtmlProperties>.Builder properties = ImmutableArray.CreateBuilder<XhtmlProperties>();
-        foreach (ImmutableArray<string> path in contents.XhtmlPaths)
+        foreach (EpubPath path in contents.XhtmlPaths)
         {
             if (HandleXhtml is null && FileNameOverrides is null)
             {
@@ -276,11 +278,11 @@ public sealed class EpubPackager
             }
             else
             {
-                ImmutableArray<string> destinationPath = path;
-                if (FileNameOverrides is not null && FileNameOverrides.TryGetValue(string.Join('/', path), out string? joinedDestinationPathOverride))
+                EpubPath destinationPath = path;
+                if (FileNameOverrides is not null && FileNameOverrides.TryGetValue(path.ToString(), out string? joinedDestinationPathOverride))
                 {
                     if (string.IsNullOrWhiteSpace(joinedDestinationPathOverride)) continue;
-                    destinationPath = [.. joinedDestinationPathOverride.Split('/')];
+                    destinationPath = new(joinedDestinationPathOverride);
                 }
                 XDocument xhtmlDocument = await GetDocumentAsync(path, cancellationToken).ConfigureAwait(false);
                 if (HandleXhtml is not null)
@@ -300,7 +302,7 @@ public sealed class EpubPackager
                         ?.Any()
                         ?? false,
                 });
-                IFile destinationFile = outputDirectory.GetFile(destinationPath);
+                IFile destinationFile = outputDirectory.GetFile(destinationPath.Parts);
                 Stream destinationStream = await destinationFile.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
                 await using (destinationStream.ConfigureAwait(false))
                 {
@@ -318,7 +320,7 @@ public sealed class EpubPackager
 
     private async Task<XDocument?> GetNcxDocumentAsync(EpubContents contents, CancellationToken cancellationToken)
     {
-        return contents.NcxFilePath.Length > 0
+        return !contents.NcxFilePath.IsEmpty
             ? await GetDocumentAsync(contents.NcxFilePath, cancellationToken).ConfigureAwait(false)
             : null;
     }
@@ -336,7 +338,7 @@ public sealed class EpubPackager
 
     private void AdjustOpfReferences(EpubContents contents, XDocument opfDocument, ImmutableArray<XhtmlProperties> xhtmlProperties)
     {
-        ImmutableArray<string> opfDirectoryPath = contents.OpfFilePath[..^1];
+        EpubPath opfDirectoryPath = contents.OpfFilePath.Parent;
         Dictionary<string, string?>? relativeFileNameOverrides = GetRelativeFileNameOverrides(opfDirectoryPath);
         if (relativeFileNameOverrides is null) return;
         XElement package = opfDocument.Element((XNamespace)EpubXmlNamespaces.Opf + "package")
@@ -349,7 +351,7 @@ public sealed class EpubPackager
             string? hrefPath = item.Attribute("href")?.Value?.Split('#')?[0];
             if (string.IsNullOrWhiteSpace(hrefPath)) continue;
             XhtmlProperties? matchingProperties = xhtmlProperties
-                .FirstOrDefault(p => string.Join('/', EpubPaths.GetRelativePath(p.Path, opfDirectoryPath)) == hrefPath);
+                .FirstOrDefault(p => p.Path.GetRelativePath(opfDirectoryPath).ToString() == hrefPath);
             if (matchingProperties is null) continue;
             if (contents.Version != 3) continue;
             HashSet<string> properties = item.Attribute("properties")?.Value?.Split(' ')?.ToHashSet() ?? [];
@@ -377,7 +379,7 @@ public sealed class EpubPackager
         }
     }
 
-    private void WriteMetadataToNcx(IEpubMetadata metadata, XDocument ncxDocument)
+    private static void WriteMetadataToNcx(IEpubMetadata metadata, XDocument ncxDocument)
     {
         XElement? uidElement = ncxDocument
             .Element((XNamespace)EpubXmlNamespaces.Ncx + "ncx")
@@ -389,7 +391,7 @@ public sealed class EpubPackager
 
     private void AdjustNcxReferences(EpubContents contents, XDocument ncxDocument)
     {
-        ImmutableArray<string> ncxDirectoryPath = contents.NcxFilePath[..^1];
+        EpubPath ncxDirectoryPath = contents.NcxFilePath.Parent;
         Dictionary<string, string?>? relativeFileNameOverrides = GetRelativeFileNameOverrides(ncxDirectoryPath);
         if (relativeFileNameOverrides is null) return;
         foreach (XElement contentElement in ncxDocument
@@ -407,7 +409,7 @@ public sealed class EpubPackager
         if (string.IsNullOrWhiteSpace(newCoverName) && HandleMetadataAsync is null && FileNameOverrides is null)
         {
             await CopyFileAsync(contents.OpfFilePath, outputDirectory, cancellationToken).ConfigureAwait(false);
-            if (contents.NcxFilePath.Length > 0)
+            if (!contents.NcxFilePath.IsEmpty)
             {
                 await CopyFileAsync(contents.NcxFilePath, outputDirectory, cancellationToken).ConfigureAwait(false);
             }
@@ -417,7 +419,7 @@ public sealed class EpubPackager
             XDocument opfDocument = await GetOpfDocumentAsync(contents, cancellationToken).ConfigureAwait(false);
             IEpubMetadata metadata = await WriteOpfMetadataAsync(contents, newCoverName, opfDocument, cancellationToken).ConfigureAwait(false);
             AdjustOpfReferences(contents, opfDocument, xhtmlProperties);
-            IFile destinationOpfFile = outputDirectory.GetFile(contents.OpfFilePath);
+            IFile destinationOpfFile = outputDirectory.GetFile(contents.OpfFilePath.Parts);
             Stream destinationOpfStream = await destinationOpfFile.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
             await using (destinationOpfStream.ConfigureAwait(false))
             {
@@ -429,7 +431,7 @@ public sealed class EpubPackager
             {
                 WriteMetadataToNcx(metadata, ncxDocument);
                 AdjustNcxReferences(contents, ncxDocument);
-                IFile destinationNcxFile = outputDirectory.GetFile(contents.NcxFilePath);
+                IFile destinationNcxFile = outputDirectory.GetFile(contents.NcxFilePath.Parts);
                 Stream destinationNcxStream = await destinationNcxFile.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
                 await using (destinationNcxStream.ConfigureAwait(false))
                 {
@@ -441,7 +443,7 @@ public sealed class EpubPackager
 
     private sealed class XhtmlProperties
     {
-        public required ImmutableArray<string> Path { get; init; }
+        public required EpubPath Path { get; init; }
         public required bool IsScripted { get; init; }
     }
 }
