@@ -22,17 +22,23 @@ internal static class ExtractImagesCli
         {
             DefaultValueFactory = _ => null,
         };
+        Option<bool> overwriteOption = new("--overwrite", "-o")
+        {
+            DefaultValueFactory = _ => false,
+        };
         Command command = new("extract-images")
         {
             inputPathArgument,
             outputDirectoryPathArgument,
             extensionOption,
+            overwriteOption,
         };
         command.SetAction((parseResult, cancellationToken) =>
             HandleExtractImagesCommandAsync(
                 parseResult.GetRequiredValue(inputPathArgument),
                 parseResult.GetRequiredValue(outputDirectoryPathArgument),
-                parseResult.GetValue(extensionOption),
+                parseResult.GetRequiredValue(extensionOption),
+                parseResult.GetRequiredValue(overwriteOption),
                 cancellationToken
             ));
         return command;
@@ -42,6 +48,7 @@ internal static class ExtractImagesCli
         string inputPath,
         string outputDirectoryPath,
         string? extension,
+        bool overwrite,
         CancellationToken cancellationToken)
     {
         FilesystemFileStorage filesystemFileStorage = new();
@@ -50,30 +57,43 @@ internal static class ExtractImagesCli
         if (File.Exists(inputPath))
         {
             IFile inputFile = filesystemFileStorage.GetFile(inputPath);
-            await ExtractImagesAsync(inputFile, outputDirectory, extension, cancellationToken).ConfigureAwait(false);
+            await ExtractImagesAsync(inputFile, outputDirectory, extension, overwrite, cancellationToken).ConfigureAwait(false);
         }
         else if (Directory.Exists(inputPath))
         {
             IDirectory inputDirectory = filesystemFileStorage.GetDirectory(inputPath);
-            await ExtractImagesAsync(inputDirectory, outputDirectory, extension, cancellationToken).ConfigureAwait(false);
+            await ExtractImagesAsync(inputDirectory, outputDirectory, extension, overwrite, cancellationToken).ConfigureAwait(false);
         }
     }
 
-    private static async Task ExtractImagesAsync(IDirectory inputDirectory, IDirectory outputDirectory, string? extension, CancellationToken cancellationToken)
+    private static async Task ExtractImagesAsync(IDirectory inputDirectory, IDirectory outputDirectory,
+        string? extension, bool overwrite,
+        CancellationToken cancellationToken)
     {
         await foreach (IFile file in inputDirectory.EnumerateFilesAsync(cancellationToken).ConfigureAwait(false))
         {
-            await ExtractImagesAsync(file, outputDirectory, extension, cancellationToken).ConfigureAwait(false);
+            await ExtractImagesAsync(file, outputDirectory, extension, overwrite, cancellationToken).ConfigureAwait(false);
         }
         await foreach (IDirectory directory in inputDirectory.EnumerateDirectoriesAsync(cancellationToken).ConfigureAwait(false))
         {
-            await ExtractImagesAsync(directory, outputDirectory, extension, cancellationToken).ConfigureAwait(false);
+            await ExtractImagesAsync(directory, outputDirectory, extension, overwrite, cancellationToken).ConfigureAwait(false);
         }
     }
 
-    private static async Task ExtractImagesAsync(IFile inputFile, IDirectory outputDirectory, string? extension, CancellationToken cancellationToken)
+    private static async Task ExtractImagesAsync(IFile inputFile, IDirectory outputDirectory,
+        string? extension, bool overwrite,
+        CancellationToken cancellationToken)
     {
         if (!IsEpub(inputFile)) return;
+        IDirectory imagesDirectory = outputDirectory.GetDirectory(inputFile.Stem);
+        IFile imagesZipFile = outputDirectory.GetFile($"{inputFile.Stem}.{extension}");
+        if (!overwrite && (
+            string.IsNullOrWhiteSpace(extension) && await imagesDirectory.ExistsAsync(cancellationToken).ConfigureAwait(false)
+            ||
+            !string.IsNullOrWhiteSpace(extension) && await imagesZipFile.ExistsAsync(cancellationToken).ConfigureAwait(false)))
+        {
+            return;
+        }
         Stream epubStream = await inputFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
         await using ConfiguredAsyncDisposable configuredStream = epubStream.ConfigureAwait(false);
         ZipFileStorageOptions epubZipOptions = new()
@@ -87,12 +107,10 @@ internal static class ExtractImagesCli
         EpubImageExtractor imageExtractor = new(container);
         if (string.IsNullOrWhiteSpace(extension))
         {
-            IDirectory imagesDirectory = outputDirectory.GetDirectory(inputFile.Stem);
             await imageExtractor.WriteAsync(imagesDirectory, cancellationToken).ConfigureAwait(false);
         }
         else
         {
-            IFile imagesZipFile = outputDirectory.GetFile($"{inputFile.Stem}.{extension}");
             await imageExtractor.WriteAsync(imagesZipFile, cancellationToken).ConfigureAwait(false);
         }
     }
