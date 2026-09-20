@@ -38,7 +38,7 @@ internal static class ExtractImagesCli
         return command;
     }
 
-    private static Task HandleExtractImagesCommandAsync(
+    private static async Task HandleExtractImagesCommandAsync(
         string inputPath,
         string outputDirectoryPath,
         string? extension,
@@ -46,17 +46,17 @@ internal static class ExtractImagesCli
     {
         FilesystemFileStorage filesystemFileStorage = new();
         IDirectory outputDirectory = filesystemFileStorage.GetDirectory(outputDirectoryPath);
+        await outputDirectory.CreateAsync(cancellationToken).ConfigureAwait(false);
         if (File.Exists(inputPath))
         {
             IFile inputFile = filesystemFileStorage.GetFile(inputPath);
-            return ExtractImagesAsync(inputFile, outputDirectory, extension, cancellationToken);
+            await ExtractImagesAsync(inputFile, outputDirectory, extension, cancellationToken).ConfigureAwait(false);
         }
         else if (Directory.Exists(inputPath))
         {
             IDirectory inputDirectory = filesystemFileStorage.GetDirectory(inputPath);
-            return ExtractImagesAsync(inputDirectory, outputDirectory, extension, cancellationToken);
+            await ExtractImagesAsync(inputDirectory, outputDirectory, extension, cancellationToken).ConfigureAwait(false);
         }
-        return Task.CompletedTask;
     }
 
     private static async Task ExtractImagesAsync(IDirectory inputDirectory, IDirectory outputDirectory, string? extension, CancellationToken cancellationToken)
