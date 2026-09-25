@@ -44,6 +44,14 @@ internal sealed class EpubProjMetadataAdapter : ISearchableMetadata, IUniversali
                 : [_epubProjectMetadata.Series.Name],
             ExactMatch = false,
         },
+        new()
+        {
+            Aliases = ["isbn"],
+            Values = IsbnIdentifier.TryParse(_epubProjectMetadata.Identifier, out IsbnIdentifier? isbn)
+                ? [isbn.Value]
+                : [],
+            ExactMatch = true,
+        },
     ];
 
     public UniversalMediaMetadata Universalize()
