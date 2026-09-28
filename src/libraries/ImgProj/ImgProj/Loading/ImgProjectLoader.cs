@@ -5,18 +5,25 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ImgProj.Loading;
 
 public static class ImgProjectLoader
 {
-    public static async Task<IImgProject> LoadFromDirectoryAsync(IDirectory projectDirectory)
+    public static async Task<IImgProject> LoadFromDirectoryAsync(IDirectory projectDirectory, CancellationToken cancellationToken = default)
     {
         IFile metadataFile = projectDirectory.GetFile(".metadata.json");
-        await using Stream stream = await metadataFile.OpenReadAsync();
-        MetadataJsonContext metadataContext = MetadataJsonContext.Default;
-        MetadataJson metadataJson = await JsonSerializer.DeserializeAsync(stream, metadataContext.MetadataJson) ?? throw new JsonException();
+        Stream stream = await metadataFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
+        MetadataJson metadataJson;
+        await using (stream.ConfigureAwait(false))
+        {
+            MetadataJsonContext metadataContext = MetadataJsonContext.Default;
+            metadataJson = await JsonSerializer.DeserializeAsync(stream, metadataContext.MetadataJson, cancellationToken).ConfigureAwait(false)
+                ?? throw new JsonException();
+        }
+
         return LoadProject(projectDirectory, metadataJson);
     }
 

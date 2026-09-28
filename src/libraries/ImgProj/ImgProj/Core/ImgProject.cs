@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ImgProj.Core;
@@ -54,18 +56,18 @@ internal sealed class ImgProject : IImgProject
         return project;
     }
 
-    public async IAsyncEnumerable<IPage> EnumeratePagesAsync(string version, bool recursive)
+    public async IAsyncEnumerable<IPage> EnumeratePagesAsync(string version, bool recursive, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         Stack<IImgProject> stack = new();
         stack.Push(this);
         while (stack.Count > 0)
         {
             IImgProject project = stack.Pop();
-            IReadOnlyDictionary<int, IDirectory> pageDirectories = await project.GetPageDirectoriesAsync();
+            IReadOnlyDictionary<int, IDirectory> pageDirectories = await project.GetPageDirectoriesAsync(cancellationToken).ConfigureAwait(false);
             int pageNumber = 1;
             while (pageDirectories.ContainsKey(pageNumber))
             {
-                IFile pageFile = await project.FindPageFileAsync(pageDirectories[pageNumber], version);
+                IFile pageFile = await project.FindPageFileAsync(pageDirectories[pageNumber], version, cancellationToken).ConfigureAwait(false);
                 yield return new Page(pageFile);
                 pageNumber += 1;
             }
@@ -77,7 +79,7 @@ internal sealed class ImgProject : IImgProject
         }
     }
 
-    public async Task<IPage> GetPageAsync(ImmutableArray<int> pageCoordinates, string version)
+    public async Task<IPage> GetPageAsync(ImmutableArray<int> pageCoordinates, string version, CancellationToken cancellationToken = default)
     {
         if (pageCoordinates.Length == 0)
         {
@@ -86,15 +88,17 @@ internal sealed class ImgProject : IImgProject
         ImmutableArray<int> coordinates = pageCoordinates[..^1];
         int pageNumber = pageCoordinates[^1];
         IImgProject project = GetSubProject(coordinates);
-        return await project.EnumeratePagesAsync(version, false).ElementAtAsync(pageNumber - 1);
+        return await project.EnumeratePagesAsync(version, false, cancellationToken)
+            .ElementAtAsync(pageNumber - 1, cancellationToken)
+            .ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyDictionary<int, IDirectory>> GetPageDirectoriesAsync()
+    public async Task<IReadOnlyDictionary<int, IDirectory>> GetPageDirectoriesAsync(CancellationToken cancellationToken = default)
     {
         try
         {
             Dictionary<int, IDirectory> pageDirectories = [];
-            await foreach (IDirectory directory in ProjectDirectory.EnumerateDirectoriesAsync())
+            await foreach (IDirectory directory in ProjectDirectory.EnumerateDirectoriesAsync(cancellationToken).ConfigureAwait(false))
             {
                 if (int.TryParse(directory.Name, NumberStyles.None, CultureInfo.InvariantCulture, out int pageNumber))
                 {
@@ -112,10 +116,10 @@ internal sealed class ImgProject : IImgProject
         }
     }
 
-    public async Task<IFile> FindPageFileAsync(IDirectory pageDirectory, string version)
+    public async Task<IFile> FindPageFileAsync(IDirectory pageDirectory, string version, CancellationToken cancellationToken = default)
     {
         IFile? mainVersionFile = null;
-        await foreach (IFile file in pageDirectory.EnumerateFilesAsync())
+        await foreach (IFile file in pageDirectory.EnumerateFilesAsync(cancellationToken).ConfigureAwait(false))
         {
             if (!ValidPageExtensions.Contains(file.Extension)) continue;
             if (file.Stem == version)
