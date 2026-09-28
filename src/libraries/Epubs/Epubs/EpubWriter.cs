@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Utils;
 
 namespace Epubs;
 
@@ -55,7 +56,7 @@ public sealed class EpubWriter : IDisposable, IAsyncDisposable
         get => IncludeStructuralComponents && (_options.Version == EpubVersion.Epub2 || (_options.Version == EpubVersion.Epub3 && IncludeLegacyFeatures));
     }
 
-    public string Identifier { get; set; } = $"urn:uuid:{Guid.CreateVersion7()}";
+    public string Identifier { get; set; } = Guid.CreateVersion7().ToUniformResourceName();
 
     public string Title { get; set; } = "Unknown Title";
 

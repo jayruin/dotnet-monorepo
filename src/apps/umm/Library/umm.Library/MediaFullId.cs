@@ -1,6 +1,5 @@
 using System;
-using System.Security.Cryptography;
-using System.Text;
+using Utils;
 
 namespace umm.Library;
 
@@ -23,16 +22,5 @@ public sealed record MediaFullId(string VendorId, string ContentId, string PartI
             : string.Join(Separator, VendorId, ContentId, PartId);
 
     public Guid GetDeterministicGuid()
-    {
-        // TODO replace with Guid.CreateVersion5
-        Guid namespaceGuid = Guid.Empty;
-        byte[] namespaceBytes = namespaceGuid.ToByteArray(true);
-        byte[] idCombinedBytes = new UTF8Encoding().GetBytes(ToCombinedString());
-        byte[] guidBytes = SHA1.HashData([.. namespaceBytes, .. idCombinedBytes])[..16];
-        // Set version
-        guidBytes[6] = (byte)((guidBytes[6] & 0b0000_1111) | 0b0101_0000);
-        // Set variant
-        guidBytes[8] = (byte)((guidBytes[8] & 0b0011_1111) | 0b1000_0000);
-        return new Guid(guidBytes, true);
-    }
+        => Guid.CreateVersion5(Guid.Empty, ToCombinedString());
 }

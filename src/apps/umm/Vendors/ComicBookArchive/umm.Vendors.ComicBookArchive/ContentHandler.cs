@@ -357,13 +357,13 @@ internal sealed class ContentHandler
 
     private void WriteEpubMetadata(EpubWriter epubWriter, EpubMetadataOverrideMetadataAdapter metadata, string partId, string fullTitle)
     {
-        if (!string.IsNullOrWhiteSpace(metadata.EpubMetadataOverride.Identifier))
-        {
-            epubWriter.Identifier = metadata.EpubMetadataOverride.Identifier;
-        }
+        MediaFullId fullId = new(_vendorContext.VendorId, metadata.ContentId, partId);
+        epubWriter.Identifier = partId.Length == 0 && !string.IsNullOrWhiteSpace(metadata.EpubMetadataOverride.Identifier)
+            ? metadata.EpubMetadataOverride.Identifier
+            : fullId.GetDeterministicGuid().ToUniformResourceName();
         string title = !string.IsNullOrWhiteSpace(metadata.EpubMetadataOverride.Title)
             ? fullTitle
-            : new MediaFullId(_vendorContext.VendorId, metadata.ContentId, partId).ToCombinedString();
+            : fullId.ToCombinedString();
         epubWriter.Title = title;
         if (metadata.EpubMetadataOverride.Creators is not null && metadata.EpubMetadataOverride.Creators.Count > 0)
         {

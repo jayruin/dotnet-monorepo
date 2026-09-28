@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Utils;
 
 namespace EpubProj;
 
@@ -13,7 +14,7 @@ public sealed class MutableMetadata
     public List<string> Languages { get; set; } = ["en"];
     public EpubProjectDirection Direction { get; set; } = EpubProjectDirection.Default;
     public string? Date { get; set; }
-    public string Identifier { get; set; } = $"urn:uuid:{Guid.CreateVersion7():D}";
+    public string Identifier { get; set; } = Guid.CreateVersion7().ToUniformResourceName();
     public DateTimeOffset Modified { get; set; } = DateTimeOffset.UtcNow;
     public MutableSeries? Series { get; set; }
 
