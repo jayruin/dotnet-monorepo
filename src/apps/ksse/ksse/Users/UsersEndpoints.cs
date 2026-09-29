@@ -23,9 +23,9 @@ internal static class UsersEndpoints
         group.MapPost("create", CreateUserAsync);
 
         // Extended endpoints
-        group.MapPost("changepassword", ChangePasswordAsync)
+        group.MapPut("password", ChangePasswordAsync)
             .RequireAuthorization();
-        group.MapDelete("", DeleteUserAsync)
+        group.MapDelete("me", DeleteUserAsync)
             .RequireAuthorization();
     }
 
@@ -47,12 +47,14 @@ internal static class UsersEndpoints
     {
         if (!await featureManager.IsEnabledAsync(UsersFeatures.CreateUsers))
         {
-            return TypedResults.Json(KoreaderErrors.UserRegistrationDisabled, statusCode: 402);
+            Error error = KoreaderErrors.UserRegistrationDisabled;
+            return TypedResults.Json(error.Response, statusCode: error.HttpStatusCode);
         }
         IdentityUser? existingUser = await userManager.FindByNameAsync(request.Username);
         if (existingUser is not null)
         {
-            return TypedResults.Json(KoreaderErrors.UserExists, statusCode: 402);
+            Error error = KoreaderErrors.UserExists;
+            return TypedResults.Json(error.Response, statusCode: error.HttpStatusCode);
         }
         IdentityUser user = new()
         {
@@ -74,21 +76,16 @@ internal static class UsersEndpoints
         ClaimsPrincipal principal,
         UserManager<IdentityUser> userManager,
         [FromBody] ChangePasswordRequest request,
+        [FromHeader(Name = KoreaderAuthOptions.PasswordHeader)] string currentPassword,
         CancellationToken cancellationToken)
     {
         IdentityUser? user = await userManager.GetUserAsync(principal).ConfigureAwait(false);
         if (user is null) return TypedResults.Unauthorized();
-        string currentPassword = request.CurrentPassword;
-        string newPassword = request.NewPassword;
-        if (request.ApplyClientHash)
-        {
-            currentPassword = ClientHash.HashPassword(currentPassword);
-            newPassword = ClientHash.HashPassword(newPassword);
-        }
+        string newPassword = request.Password;
         IdentityResult identityResult = await userManager.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
         if (identityResult.Succeeded)
         {
-            return TypedResults.Ok();
+            return TypedResults.Ok(ChangePasswordResponse.Ok);
         }
         return TypedResults.BadRequest();
     }
@@ -100,12 +97,16 @@ internal static class UsersEndpoints
         CancellationToken cancellationToken)
     {
         IdentityUser? user = await userManager.GetUserAsync(principal).ConfigureAwait(false);
-        if (user is null) return TypedResults.Unauthorized();
+        if (user is null)
+        {
+            Error error = KoreaderErrors.AccountNotFound;
+            return TypedResults.Json(error.Response, statusCode: error.HttpStatusCode);
+        }
         await progressManager.DeleteAllAsync(user.Id, cancellationToken).ConfigureAwait(false);
         IdentityResult identityResult = await userManager.DeleteAsync(user).ConfigureAwait(false);
         if (identityResult.Succeeded)
         {
-            return TypedResults.Ok();
+            return TypedResults.Ok(DeleteUserResponse.Ok);
         }
         return TypedResults.BadRequest();
     }

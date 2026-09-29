@@ -104,8 +104,8 @@ public sealed class UsersTests
             Assert.AreEqual(402, (int)responseMessage2.StatusCode);
             ErrorResponse? response2 = await responseMessage2.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
             Assert.IsNotNull(response2);
-            Assert.AreEqual(KoreaderErrors.UserExists.Code, response2.Code);
-            Assert.AreEqual(KoreaderErrors.UserExists.Message, response2.Message);
+            Assert.AreEqual(KoreaderErrors.UserExists.Response.Code, response2.Code);
+            Assert.AreEqual(KoreaderErrors.UserExists.Response.Message, response2.Message);
 
         }
         finally
@@ -143,8 +143,8 @@ public sealed class UsersTests
             Assert.AreEqual(402, (int)responseMessage.StatusCode);
             ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
             Assert.IsNotNull(response);
-            Assert.AreEqual(KoreaderErrors.UserRegistrationDisabled.Code, response.Code);
-            Assert.AreEqual(KoreaderErrors.UserRegistrationDisabled.Message, response.Message);
+            Assert.AreEqual(KoreaderErrors.UserRegistrationDisabled.Response.Code, response.Code);
+            Assert.AreEqual(KoreaderErrors.UserRegistrationDisabled.Response.Message, response.Message);
         }
         finally
         {
@@ -174,8 +174,8 @@ public sealed class UsersTests
             Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
             ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
             Assert.IsNotNull(response);
-            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
-            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
+            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Code, response.Code);
+            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Message, response.Message);
         }
         finally
         {
@@ -209,8 +209,8 @@ public sealed class UsersTests
             Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
             ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
             Assert.IsNotNull(response);
-            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
-            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
+            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Code, response.Code);
+            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Message, response.Message);
         }
         finally
         {
@@ -256,8 +256,8 @@ public sealed class UsersTests
             Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage2.StatusCode);
             ErrorResponse? response2 = await responseMessage2.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
             Assert.IsNotNull(response2);
-            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response2.Code);
-            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response2.Message);
+            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Code, response2.Code);
+            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Message, response2.Message);
         }
         finally
         {
@@ -333,22 +333,21 @@ public sealed class UsersTests
             string newPassword = $"Not{password}";
             ChangePasswordRequest request = new()
             {
-                CurrentPassword = password,
-                NewPassword = newPassword,
+                Password = newPassword,
             };
             using JsonContent content = JsonContent.Create(request, UsersJsonContext.Default.ChangePasswordRequest);
             using HttpRequestMessage requestMessage = new()
             {
-                RequestUri = new($"users/changepassword", UriKind.Relative),
-                Method = HttpMethod.Post,
+                RequestUri = new($"users/password", UriKind.Relative),
+                Method = HttpMethod.Put,
                 Content = content,
             };
             using HttpResponseMessage responseMessage = await client.SendAsync(requestMessage, TestContext.CancellationToken);
             Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
             ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
             Assert.IsNotNull(response);
-            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
-            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
+            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Code, response.Code);
+            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Message, response.Message);
         }
         finally
         {
@@ -382,14 +381,13 @@ public sealed class UsersTests
             string newPassword = $"Not{password}";
             ChangePasswordRequest request = new()
             {
-                CurrentPassword = password,
-                NewPassword = newPassword,
+                Password = newPassword,
             };
             using JsonContent content = JsonContent.Create(request, UsersJsonContext.Default.ChangePasswordRequest);
             using HttpRequestMessage requestMessage = new()
             {
-                RequestUri = new($"users/changepassword", UriKind.Relative),
-                Method = HttpMethod.Post,
+                RequestUri = new($"users/password", UriKind.Relative),
+                Method = HttpMethod.Put,
                 Content = content,
                 Headers = {
                     { KoreaderAuthOptions.UsernameHeader, username },
@@ -398,70 +396,14 @@ public sealed class UsersTests
             };
             using HttpResponseMessage responseMessage = await client.SendAsync(requestMessage, TestContext.CancellationToken);
             Assert.AreEqual(HttpStatusCode.OK, responseMessage.StatusCode);
+            ChangePasswordResponse? response = await responseMessage.Content.ReadFromJsonAsync(UsersJsonContext.Default.ChangePasswordResponse, TestContext.CancellationToken);
+            Assert.IsNotNull(response);
+            Assert.AreEqual(ChangePasswordResponse.Ok.Updated, response.Updated);
             await using AsyncServiceScope scope2 = app.Services.CreateAsyncScope();
             using UserManager<IdentityUser> userManager2 = scope2.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
             IdentityUser? user = await userManager2.FindByNameAsync(username);
             Assert.IsNotNull(user);
             Assert.IsTrue(await userManager2.CheckPasswordAsync(user, newPassword));
-        }
-        finally
-        {
-            await app.StopAsync(TestContext.CancellationToken);
-        }
-    }
-
-    [TestMethod]
-    public async Task Test_ChangeClientHashedPasswordWithCorrectAuth_Succeeds()
-    {
-        await using WebApplication app = WebApplicationForTesting.Create(new Dictionary<string, string?>()
-        {
-            { $"FeatureManagement:{UsersFeatures.CreateUsers}", "true" },
-            { $"Databases:{UsersDbContext.Id}:Provider", "InMemory" },
-            { $"Databases:{UsersDbContext.Id}:DatabaseName", nameof(UsersTests) },
-            { $"{nameof(IdentityOptions)}:{nameof(IdentityOptions.Password)}:{nameof(IdentityOptions.Password.RequireNonAlphanumeric)}", "false" },
-            { $"{nameof(IdentityOptions)}:{nameof(IdentityOptions.Password)}:{nameof(IdentityOptions.Password.RequireUppercase)}", "false" },
-        });
-        await app.StartAsync(TestContext.CancellationToken);
-        using HttpClient client = app.GetTestClient();
-        try
-        {
-            await using AsyncServiceScope scope1 = app.Services.CreateAsyncScope();
-            using UserManager<IdentityUser> userManager1 = scope1.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            string username = "testuser";
-            string password = "Password1!";
-            string hashedPassword = ClientHash.HashPassword(password);
-            await userManager1.CreateAsync(new()
-            {
-                UserName = username,
-            }, hashedPassword);
-            string? userId = (await userManager1.FindByNameAsync(username))?.Id;
-            Assert.IsNotNull(userId);
-            string newPassword = $"Not{password}";
-            string hashedNewPassword = ClientHash.HashPassword(newPassword);
-            ChangePasswordRequest request = new()
-            {
-                CurrentPassword = password,
-                NewPassword = newPassword,
-                ApplyClientHash = true,
-            };
-            using JsonContent content = JsonContent.Create(request, UsersJsonContext.Default.ChangePasswordRequest);
-            using HttpRequestMessage requestMessage = new()
-            {
-                RequestUri = new($"users/changepassword", UriKind.Relative),
-                Method = HttpMethod.Post,
-                Content = content,
-                Headers = {
-                    { KoreaderAuthOptions.UsernameHeader, username },
-                    { KoreaderAuthOptions.PasswordHeader, hashedPassword },
-                },
-            };
-            using HttpResponseMessage responseMessage = await client.SendAsync(requestMessage, TestContext.CancellationToken);
-            Assert.AreEqual(HttpStatusCode.OK, responseMessage.StatusCode);
-            await using AsyncServiceScope scope2 = app.Services.CreateAsyncScope();
-            using UserManager<IdentityUser> userManager2 = scope2.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            IdentityUser? user = await userManager2.FindByNameAsync(username);
-            Assert.IsNotNull(user);
-            Assert.IsTrue(await userManager2.CheckPasswordAsync(user, hashedNewPassword));
         }
         finally
         {
@@ -494,15 +436,15 @@ public sealed class UsersTests
             Assert.IsNotNull(userId);
             using HttpRequestMessage requestMessage = new()
             {
-                RequestUri = new($"users", UriKind.Relative),
+                RequestUri = new($"users/me", UriKind.Relative),
                 Method = HttpMethod.Delete,
             };
             using HttpResponseMessage responseMessage = await client.SendAsync(requestMessage, TestContext.CancellationToken);
             Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
             ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
             Assert.IsNotNull(response);
-            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
-            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
+            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Code, response.Code);
+            Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Message, response.Message);
         }
         finally
         {
@@ -563,7 +505,7 @@ public sealed class UsersTests
             Assert.IsNotNull(await progressManager1.GetAsync(userId, progressDocument2.Hash, TestContext.CancellationToken));
             using HttpRequestMessage requestMessage = new()
             {
-                RequestUri = new($"users", UriKind.Relative),
+                RequestUri = new($"users/me", UriKind.Relative),
                 Method = HttpMethod.Delete,
                 Headers = {
                     { KoreaderAuthOptions.UsernameHeader, username },
@@ -572,6 +514,9 @@ public sealed class UsersTests
             };
             using HttpResponseMessage responseMessage = await client.SendAsync(requestMessage, TestContext.CancellationToken);
             Assert.AreEqual(HttpStatusCode.OK, responseMessage.StatusCode);
+            DeleteUserResponse? response = await responseMessage.Content.ReadFromJsonAsync(UsersJsonContext.Default.DeleteUserResponse, TestContext.CancellationToken);
+            Assert.IsNotNull(response);
+            Assert.AreEqual(DeleteUserResponse.Ok.Deleted, response.Deleted);
             await using AsyncServiceScope scope2 = app.Services.CreateAsyncScope();
             using UserManager<IdentityUser> userManager2 = scope2.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
             IProgressManager progressManager2 = scope1.ServiceProvider.GetRequiredService<IProgressManager>();

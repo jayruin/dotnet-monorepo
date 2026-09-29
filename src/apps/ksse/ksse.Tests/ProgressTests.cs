@@ -75,8 +75,8 @@ public sealed class ProgressTests
         Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
         ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
         Assert.IsNotNull(response);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Code, response.Code);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Message, response.Message);
     }
 
     [TestMethod]
@@ -105,8 +105,8 @@ public sealed class ProgressTests
         Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
         ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
         Assert.IsNotNull(response);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Code, response.Code);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Message, response.Message);
     }
 
     [TestMethod]
@@ -241,8 +241,8 @@ public sealed class ProgressTests
         Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
         ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
         Assert.IsNotNull(response);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Code, response.Code);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Message, response.Message);
     }
 
     [TestMethod]
@@ -277,8 +277,8 @@ public sealed class ProgressTests
         Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
         ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
         Assert.IsNotNull(response);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Code, response.Code);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Message, response.Message);
     }
 
     [TestMethod]
@@ -372,8 +372,8 @@ public sealed class ProgressTests
         Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
         ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
         Assert.IsNotNull(response);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Code, response.Code);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Message, response.Message);
     }
 
     [TestMethod]
@@ -455,8 +455,8 @@ public sealed class ProgressTests
         Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
         ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
         Assert.IsNotNull(response);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Code, response.Code);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Message, response.Message);
     }
 
     [TestMethod]
@@ -553,8 +553,8 @@ public sealed class ProgressTests
         Assert.AreEqual(HttpStatusCode.Unauthorized, responseMessage.StatusCode);
         ErrorResponse? response = await responseMessage.Content.ReadFromJsonAsync(ErrorsJsonContext.Default.ErrorResponse, TestContext.CancellationToken);
         Assert.IsNotNull(response);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Code, response.Code);
-        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Message, response.Message);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Code, response.Code);
+        Assert.AreEqual(KoreaderErrors.UnauthorizedUser.Response.Message, response.Message);
     }
 
     [TestMethod]

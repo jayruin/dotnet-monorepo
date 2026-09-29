@@ -92,7 +92,7 @@ internal static class Initializations
         applicationBuilder.UseStatusCodePages(context =>
         {
             if (context.HttpContext.Response.StatusCode != StatusCodes.Status401Unauthorized) return Task.CompletedTask;
-            return context.HttpContext.Response.WriteAsJsonAsync(KoreaderErrors.UnauthorizedUser, ErrorsJsonContext.Default.ErrorResponse);
+            return context.HttpContext.Response.WriteAsJsonAsync(KoreaderErrors.UnauthorizedUser.Response, ErrorsJsonContext.Default.ErrorResponse);
         });
         applicationBuilder.UseAuthentication();
         applicationBuilder.UseAuthorization();
