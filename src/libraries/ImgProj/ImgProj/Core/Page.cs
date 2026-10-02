@@ -1,5 +1,6 @@
 using FileStorage;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ImgProj.Core;
@@ -17,5 +18,5 @@ internal sealed class Page : IPage
         _file = file;
     }
 
-    public Task<Stream> OpenReadAsync() => _file.OpenReadAsync();
+    public Task<Stream> OpenReadAsync(CancellationToken cancellationToken = default) => _file.OpenReadAsync(cancellationToken);
 }

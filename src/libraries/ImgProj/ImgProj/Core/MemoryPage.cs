@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ImgProj.Core;
@@ -18,5 +19,9 @@ public sealed class MemoryPage : IPage
         Extension = extension;
     }
 
-    public Task<Stream> OpenReadAsync() => Task.FromResult((Stream)new MemoryStream(_data, false));
+    public Task<Stream> OpenReadAsync(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        return Task.FromResult((Stream)new MemoryStream(_data, false));
+    }
 }
