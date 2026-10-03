@@ -15,7 +15,7 @@ namespace ImgProj.Exporting;
 
 public sealed class CbzExporter : IExporter, IDirectoryExporter
 {
-    private static readonly CompressionLevel Compression = CompressionLevel.NoCompression;
+    private static readonly CompressionLevel Compression = CompressionLevel.SmallestSize;
 
     private readonly ICoverGenerator _coverGenerator;
 

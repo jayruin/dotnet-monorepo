@@ -19,7 +19,7 @@ namespace ImgProj.Exporting;
 
 public sealed class Epub3Exporter : IExporter, IDirectoryExporter
 {
-    private static readonly CompressionLevel Compression = CompressionLevel.NoCompression;
+    private static readonly CompressionLevel Compression = CompressionLevel.SmallestSize;
 
     private readonly ICoverResolver _coverResolver;
     private readonly IImageLoader _imageLoader;
