@@ -270,7 +270,7 @@ public sealed class EpubHandler
         else
         {
             IImage image = await _strategy.ImageLoader.LoadImageAsync(sourceStream, cancellationToken).ConfigureAwait(false);
-            await image.SaveToAsync(destinationStream, ImageFormatParser.FromMediaType(destinationMediaType), cancellationToken).ConfigureAwait(false);
+            await image.SaveToAsync(destinationStream, ImageFormat.FromMediaType(destinationMediaType), cancellationToken).ConfigureAwait(false);
         }
     }
 

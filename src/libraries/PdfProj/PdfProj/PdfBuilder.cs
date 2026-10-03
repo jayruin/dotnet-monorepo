@@ -165,9 +165,8 @@ public sealed class PdfBuilder : IPdfBuilder
 
     private static async Task AddImagePageToPdfAsync(IPdfWritableDocument pdf, IImage image)
     {
-        await using MemoryStream memoryStream = new();
-        await image.SaveToAsync(memoryStream, ImageFormat.Jpeg);
-        pdf.AddImagePage(memoryStream.ToArray());
+        byte[] data = await image.ToBytesAsync(ImageFormat.Jpeg);
+        pdf.AddImagePage(data);
     }
 
     private static async Task<BuildTarget> LoadBuildTargetAsync(IFile jsonFile)

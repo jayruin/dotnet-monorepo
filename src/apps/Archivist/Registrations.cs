@@ -39,12 +39,16 @@ public static class Registrations
             .AddTransient<IImageLoader, ImageLoader>()
             .AddTransient<IPdfLoader, PdfLoader>()
             .AddTransient<ICoverGenerator, CoverGenerator>()
+            .AddTransient<ICoverResolver, CoverResolver>()
             .AddTransient<IPageComparer, PageComparer>()
             .AddTransient<IPageDeleter, PageDeleter>()
             .AddTransient<IPageImporter, PageImporter>()
             .AddTransient<IExporter, CbzExporter>()
             .AddTransient<IExporter, Epub3Exporter>()
-            .AddTransient<IExporter, PdfExporter>();
+            .AddTransient<IExporter, PdfExporter>()
+            .AddTransient<IExporter, JpegCoverExporter>()
+            .AddTransient<IExporter, PngCoverExporter>()
+            .AddTransient<IExporter, WebpCoverExporter>();
     }
 
     private static IServiceCollection AddPdfProject(this IServiceCollection services)

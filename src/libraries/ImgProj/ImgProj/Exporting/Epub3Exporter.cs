@@ -21,15 +21,15 @@ public sealed class Epub3Exporter : IExporter, IDirectoryExporter
 {
     private static readonly CompressionLevel Compression = CompressionLevel.NoCompression;
 
-    private readonly ICoverGenerator _coverGenerator;
+    private readonly ICoverResolver _coverResolver;
     private readonly IImageLoader _imageLoader;
     private readonly IMediaTypeFileExtensionsMapping _mediaTypeFileExtensionsMapping;
 
     public ExportFormat ExportFormat { get; } = ExportFormat.Epub3;
 
-    public Epub3Exporter(ICoverGenerator coverGenerator, IImageLoader imageLoader, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping)
+    public Epub3Exporter(ICoverResolver coverResolver, IImageLoader imageLoader, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping)
     {
-        _coverGenerator = coverGenerator;
+        _coverResolver = coverResolver;
         _imageLoader = imageLoader;
         _mediaTypeFileExtensionsMapping = mediaTypeFileExtensionsMapping;
     }
@@ -72,16 +72,14 @@ public sealed class Epub3Exporter : IExporter, IDirectoryExporter
         version ??= subProject.MainVersion;
         IMetadataVersion metadata = subProject.MetadataVersions[version];
         List<IPage> pages = [];
-        IPage? cover = coordinates.Length == 0
-            ? await _coverGenerator.CreateCoverGridAsync(subProject, version, cancellationToken).ConfigureAwait(false)
-            : await subProject.EnumeratePagesAsync(version, true, cancellationToken).FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
-        if (cover is not null)
+        using (IImage coverImage = await _coverResolver.GetCoverImageAsync(project, coordinates, version, cancellationToken).ConfigureAwait(false))
         {
-            Stream destinationCoverStream = await epubWriter.CreateRasterCoverAsync(cover.Extension, true, cancellationToken).ConfigureAwait(false);
-            await using ConfiguredAsyncDisposable configuredDestinationCoverStream = destinationCoverStream.ConfigureAwait(false);
-            Stream sourceCoverStream = await cover.OpenReadAsync(cancellationToken).ConfigureAwait(false);
-            await using ConfiguredAsyncDisposable configuredSourceCoverStream = sourceCoverStream.ConfigureAwait(false);
-            await sourceCoverStream.CopyToAsync(destinationCoverStream, cancellationToken).ConfigureAwait(false);
+            string coverMediaType = MediaType.Image.Jpeg;
+            string coverExtension = _mediaTypeFileExtensionsMapping.GetFileExtension(coverMediaType)
+                ?? throw new InvalidOperationException("Could not get cover extension.");
+            Stream epubCoverStream = await epubWriter.CreateRasterCoverAsync(coverExtension, true, cancellationToken).ConfigureAwait(false);
+            await using ConfiguredAsyncDisposable configuredEpubCoverStream = epubCoverStream.ConfigureAwait(false);
+            await coverImage.SaveToAsync(epubCoverStream, ImageFormat.FromMediaType(coverMediaType), cancellationToken).ConfigureAwait(false);
         }
         EpubNavItem navItem = await TraverseAsync(subProject, coordinates, version, pages, epubWriter, cancellationToken).ConfigureAwait(false);
         epubWriter.Identifier = GetIdentifier(metadata);

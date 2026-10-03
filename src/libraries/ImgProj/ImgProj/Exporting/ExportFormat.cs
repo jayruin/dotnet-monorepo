@@ -5,4 +5,7 @@ public enum ExportFormat
     Cbz,
     Epub3,
     Pdf,
+    CoverJpeg,
+    CoverPng,
+    CoverWebp,
 }

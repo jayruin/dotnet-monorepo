@@ -1,9 +1,7 @@
 using Images;
-using ImgProj.Core;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +16,7 @@ public sealed class CoverGenerator : ICoverGenerator
         _imageLoader = imageLoader;
     }
 
-    public async Task<IPage?> CreateCoverGridAsync(IImgProject project, string version, CancellationToken cancellationToken = default)
+    public async Task<IImage?> CreateCoverGridImageAsync(IImgProject project, string version, CancellationToken cancellationToken = default)
     {
         IMetadataVersion metadata = project.MetadataVersions[version];
         if (metadata.Cover.Count == 0) return null;
@@ -28,15 +26,11 @@ public sealed class CoverGenerator : ICoverGenerator
             IPage page = await project.GetPageAsync(pageCoordinates, version, cancellationToken).ConfigureAwait(false);
             imageStreams.Add(await page.OpenReadAsync(cancellationToken).ConfigureAwait(false));
         }
-        using IImage coverGrid = await _imageLoader.LoadImagesToGridAsync(imageStreams, cancellationToken: cancellationToken).ConfigureAwait(false);
-        MemoryStream memoryStream = new();
-        await using ConfiguredAsyncDisposable configuredMemoryStream = memoryStream.ConfigureAwait(false);
-        await coverGrid.SaveToAsync(memoryStream, ImageFormat.Jpeg, cancellationToken).ConfigureAwait(false);
-        byte[] data = memoryStream.ToArray();
+        IImage coverGrid = await _imageLoader.LoadImagesToGridAsync(imageStreams, cancellationToken: cancellationToken).ConfigureAwait(false);
         foreach (Stream imageStream in imageStreams)
         {
             await imageStream.DisposeAsync().ConfigureAwait(false);
         }
-        return new MemoryPage(data, version, ".jpg");
+        return coverGrid;
     }
 }

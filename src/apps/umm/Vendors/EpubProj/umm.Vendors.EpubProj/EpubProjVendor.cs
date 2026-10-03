@@ -118,7 +118,7 @@ public sealed class EpubProjVendor : IMediaVendor
                 else
                 {
                     IImage image = await _imageLoader.LoadImageAsync(sourceStream, cancellationToken).ConfigureAwait(false);
-                    await image.SaveToAsync(stream, ImageFormatParser.FromMediaType(mediaType), cancellationToken).ConfigureAwait(false);
+                    await image.SaveToAsync(stream, ImageFormat.FromMediaType(mediaType), cancellationToken).ConfigureAwait(false);
                 }
             }
             return;
