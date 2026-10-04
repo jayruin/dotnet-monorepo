@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="3013a0d1-8456-4d61-ac7e-b40765c529a8" name="@runnervm8df0l 2026-10-03 23:54:53" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-03T23:54:53.0740175+00:00" queuing="2026-10-03T23:54:53.0740176+00:00" start="2026-10-03T23:54:52.6167874+00:00" finish="2026-10-03T23:54:53.0796364+00:00" />
+  <TestSettings name="default" id="ed9387c1-a207-4910-a7cd-a80d6b608756">
+    <Deployment runDeploymentRoot="_runnervm8df0l_2026-10-03_23_54_53" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="c3f364b5-aedd-43b7-a7a4-039aa4916180" testId="16871a75-76f2-8de3-b59a-d29b6a96b288" testName="TestNoEmptyArrays" computerName="runnervm8df0l" duration="00:00:00.0111903" startTime="2026-10-03T23:54:52.9567773+00:00" endTime="2026-10-03T23:54:52.9823234+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c3f364b5-aedd-43b7-a7a4-039aa4916180" />
+    <UnitTestResult executionId="e84424ce-6a48-431d-a04e-915ea5e6553c" testId="116eae1f-9144-82c5-aecc-984dcda3184f" testName="TestMultipleFileExtensionsForOneMediaType" computerName="runnervm8df0l" duration="00:00:00.0094744" startTime="2026-10-03T23:54:52.9862550+00:00" endTime="2026-10-03T23:54:52.9988326+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e84424ce-6a48-431d-a04e-915ea5e6553c" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestNoEmptyArrays" storage="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/mediatypes.tests/release_linux-x64/mediatypes.tests.dll" id="16871a75-76f2-8de3-b59a-d29b6a96b288">
+      <Execution id="c3f364b5-aedd-43b7-a7a4-039aa4916180" />
+      <TestMethod codeBase="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/MediaTypes.Tests/release_linux-x64/MediaTypes.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="MediaTypes.Tests.MediaTypeFileExtensionsMappingTests" name="TestNoEmptyArrays" />
+    </UnitTest>
+    <UnitTest name="TestMultipleFileExtensionsForOneMediaType" storage="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/mediatypes.tests/release_linux-x64/mediatypes.tests.dll" id="116eae1f-9144-82c5-aecc-984dcda3184f">
+      <Execution id="e84424ce-6a48-431d-a04e-915ea5e6553c" />
+      <TestMethod codeBase="/home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/MediaTypes.Tests/release_linux-x64/MediaTypes.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="MediaTypes.Tests.MediaTypeFileExtensionsMappingTests" name="TestMultipleFileExtensionsForOneMediaType" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="16871a75-76f2-8de3-b59a-d29b6a96b288" executionId="c3f364b5-aedd-43b7-a7a4-039aa4916180" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="116eae1f-9144-82c5-aecc-984dcda3184f" executionId="e84424ce-6a48-431d-a04e-915ea5e6553c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test Parallelization enabled for /home/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/MediaTypes.Tests/release_linux-x64/MediaTypes.Tests.dll (Workers: 4, Scope: ClassLevel)
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

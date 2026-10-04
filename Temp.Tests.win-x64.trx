@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="4ab62c26-ec0b-4c91-a3de-00cdc1f6457c" name="runneradmin@runnervmfi6oq 2026-10-04 00:00:18" runUser="runnervmfi6oq\runneradmin" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-04T00:00:18.7060746+00:00" queuing="2026-10-04T00:00:18.7060748+00:00" start="2026-10-04T00:00:17.9529135+00:00" finish="2026-10-04T00:00:18.7125595+00:00" />
+  <TestSettings name="default" id="36b3660d-94e0-4569-90fc-3fc72780534f">
+    <Deployment runDeploymentRoot="runneradmin_runnervmfi6oq_2026-10-04_00_00_18" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="6bdb2688-500b-427b-a216-6eed10cb471c" testId="1a67efcf-1109-80ee-98c4-46e26240b504" testName="TestTempDirectory" computerName="runnervmfi6oq" duration="00:00:00.0033732" startTime="2026-10-04T00:00:18.5802265+00:00" endTime="2026-10-04T00:00:18.5881434+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6bdb2688-500b-427b-a216-6eed10cb471c" />
+    <UnitTestResult executionId="af40f62a-7d42-41d0-add4-a68ae49582b1" testId="1523ac92-df61-88d2-a0ce-9b36e35c85a2" testName="TestTempFile" computerName="runnervmfi6oq" duration="00:00:00.0113638" startTime="2026-10-04T00:00:18.5386397+00:00" endTime="2026-10-04T00:00:18.5737133+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="af40f62a-7d42-41d0-add4-a68ae49582b1" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestTempFile" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\temp.tests\release_win-x64\temp.tests.dll" id="1523ac92-df61-88d2-a0ce-9b36e35c85a2">
+      <Execution id="af40f62a-7d42-41d0-add4-a68ae49582b1" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Temp.Tests\release_win-x64\Temp.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Temp.Tests.TempTests" name="TestTempFile" />
+    </UnitTest>
+    <UnitTest name="TestTempDirectory" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\temp.tests\release_win-x64\temp.tests.dll" id="1a67efcf-1109-80ee-98c4-46e26240b504">
+      <Execution id="6bdb2688-500b-427b-a216-6eed10cb471c" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Temp.Tests\release_win-x64\Temp.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="Temp.Tests.TempTests" name="TestTempDirectory" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="1a67efcf-1109-80ee-98c4-46e26240b504" executionId="6bdb2688-500b-427b-a216-6eed10cb471c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1523ac92-df61-88d2-a0ce-9b36e35c85a2" executionId="af40f62a-7d42-41d0-add4-a68ae49582b1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test Parallelization enabled for D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\Temp.Tests\release_win-x64\Temp.Tests.dll (Workers: 4, Scope: ClassLevel)&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
