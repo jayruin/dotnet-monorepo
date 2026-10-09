@@ -179,7 +179,7 @@ internal sealed class Repo
             "new", "sln",
             "--name", slnxFileStem,
             "--format", "slnx");
-        ImmutableArray<Project> projects = GetProjectsAndDependencies();
+        ImmutableArray<Project> projects = GetProjects(true);
         foreach (Project project in projects)
         {
             Subprocess.RunAndCheck(SrcDirectory,
@@ -223,7 +223,7 @@ internal sealed class Repo
 
     public void Zero(params IEnumerable<string> projectNames)
     {
-        ImmutableArray<Project> projects = GetProjectsAndDependencies(projectNames);
+        ImmutableArray<Project> projects = GetProjects(true, projectNames);
         foreach (Project project in projects)
         {
             string[] directoriesToDelete = [
@@ -244,7 +244,7 @@ internal sealed class Repo
 
     public void Restore(params IEnumerable<string> projectNames)
     {
-        ImmutableArray<Project> projects = GetProjectsAndDependencies(projectNames);
+        ImmutableArray<Project> projects = GetProjects(false, projectNames);
         foreach (Project project in projects)
         {
             Subprocess.RunAndCheck(project.ProjectDirectory,
@@ -255,7 +255,7 @@ internal sealed class Repo
 
     public void Clean(params IEnumerable<string> projectNames)
     {
-        ImmutableArray<Project> projects = GetProjectsAndDependencies(projectNames);
+        ImmutableArray<Project> projects = GetProjects(false, projectNames);
         foreach (Project project in projects)
         {
             Subprocess.RunAndCheck(project.ProjectDirectory,
@@ -266,7 +266,7 @@ internal sealed class Repo
     }
     public void Build(params IEnumerable<string> projectNames)
     {
-        ImmutableArray<Project> projects = GetProjectsAndDependencies(projectNames);
+        ImmutableArray<Project> projects = GetProjects(false, projectNames);
         foreach (Project project in projects)
         {
             Subprocess.RunAndCheck(project.ProjectDirectory,
@@ -279,7 +279,7 @@ internal sealed class Repo
 
     public void Test(params IEnumerable<string> projectNames)
     {
-        ImmutableArray<Project> projects = GetProjectsAndDependencies(projectNames);
+        ImmutableArray<Project> projects = GetProjects(true, projectNames);
         Directory.CreateDirectory(TestResultsDirectory);
         foreach (Project project in projects)
         {
@@ -302,7 +302,7 @@ internal sealed class Repo
 
     public void Publish(params IEnumerable<string> projectNames)
     {
-        ImmutableArray<Project> projects = GetProjectsAndDependencies(projectNames);
+        ImmutableArray<Project> projects = GetProjects(false, projectNames);
         Directory.CreateDirectory(BinDirectory);
         foreach (Project project in projects)
         {
@@ -342,26 +342,27 @@ internal sealed class Repo
 
     }
 
-    private ImmutableArray<Project> GetProjectsAndDependencies(params IEnumerable<string> projectNames)
+    private ImmutableArray<Project> GetProjects(bool includeDependencies, params IEnumerable<string> projectNames)
     {
         HashSet<string> projectNamesSet = [.. projectNames];
-        List<Project> projectsAndDependencies = [];
+        List<Project> projects = [];
         foreach (Project project in AllProjects)
         {
             if (projectNamesSet.Count > 0
                 && !projectNamesSet.Any(pn => project.Name.Contains(pn, StringComparison.OrdinalIgnoreCase))) continue;
-            Traverse(project, projectsAndDependencies);
+            Traverse(project, projects, includeDependencies);
         }
-        ImmutableArray<Project> result = [.. projectsAndDependencies.DistinctBy(p => p.Name)];
+        ImmutableArray<Project> result = [.. projects.DistinctBy(p => p.Name)];
         return result;
     }
 
-    private static void Traverse(Project currentProject, List<Project> projectsAndDependencies)
+    private static void Traverse(Project currentProject, List<Project> projects, bool includeDependencies)
     {
-        projectsAndDependencies.Add(currentProject);
+        projects.Add(currentProject);
+        if (!includeDependencies) return;
         foreach (Project dependency in currentProject.Dependencies)
         {
-            Traverse(dependency, projectsAndDependencies);
+            Traverse(dependency, projects, includeDependencies);
         }
     }
 }
