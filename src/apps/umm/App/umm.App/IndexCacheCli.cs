@@ -23,6 +23,7 @@ internal static class IndexCacheCli
             CreateRebuildCommand(),
             CreateUpdateCommand(),
             CreateDeleteCommand(),
+            CreateClearCommand(),
         };
     }
 
@@ -32,7 +33,7 @@ internal static class IndexCacheCli
         {
             DefaultValueFactory = _ => [],
         };
-        Option<bool> searchIndexOption = CreateSearchQueryOption();
+        Option<bool> searchIndexOption = CreateSearchIndexOption();
         Option<bool> exportCacheOption = CreateExportCacheOption();
         Option<bool> hashCacheOption = CreateHashCacheOption();
         Command command = new("rebuild")
@@ -119,7 +120,7 @@ internal static class IndexCacheCli
     {
         Argument<string> vendorIdArgument = new("vendorId");
         Argument<IEnumerable<string>> contentIdsArgument = new("contentIds");
-        Option<bool> searchIndexOption = CreateSearchQueryOption();
+        Option<bool> searchIndexOption = CreateSearchIndexOption();
         Option<bool> exportCacheOption = CreateExportCacheOption();
         Option<bool> hashCacheOption = CreateHashCacheOption();
         Command command = new("update")
@@ -192,7 +193,7 @@ internal static class IndexCacheCli
     {
         Argument<string> vendorIdArgument = new("vendorId");
         Argument<IEnumerable<string>> contentIdsArgument = new("contentIds");
-        Option<bool> searchIndexOption = CreateSearchQueryOption();
+        Option<bool> searchIndexOption = CreateSearchIndexOption();
         Option<bool> exportCacheOption = CreateExportCacheOption();
         Option<bool> hashCacheOption = CreateHashCacheOption();
         Command command = new("delete")
@@ -247,7 +248,59 @@ internal static class IndexCacheCli
         }
     }
 
-    private static Option<bool> CreateSearchQueryOption() => new("--search-index", "-s")
+    private static Command CreateClearCommand()
+    {
+        Argument<string> vendorIdArgument = new("vendorId");
+        Option<bool> searchIndexOption = CreateSearchIndexOption();
+        Option<bool> exportCacheOption = CreateExportCacheOption();
+        Option<bool> hashCacheOption = CreateHashCacheOption();
+        Command command = new("clear")
+        {
+            vendorIdArgument,
+            searchIndexOption,
+            exportCacheOption,
+            hashCacheOption,
+        };
+        command.SetAction((parseResult, cancellationToken) => CliEndpoint.ExecuteAsync(
+            sp => HandleClearCommandAsync(sp,
+                parseResult.GetRequiredValue(vendorIdArgument),
+                parseResult.GetRequiredValue(searchIndexOption),
+                parseResult.GetRequiredValue(exportCacheOption),
+                parseResult.GetRequiredValue(hashCacheOption),
+                cancellationToken),
+            initializeServices: Initializations.InitializeServices));
+        return command;
+    }
+
+    private static async Task HandleClearCommandAsync(IServiceProvider serviceProvider,
+        string vendorId, bool handleSearchIndex, bool handleExportCache, bool handleHashCache,
+        CancellationToken cancellationToken)
+    {
+        if (!handleSearchIndex && !handleExportCache && !handleHashCache)
+        {
+            return;
+        }
+
+        if (handleSearchIndex)
+        {
+            ISearchIndex searchIndex = serviceProvider.GetRequiredService<ISearchIndex>();
+            await searchIndex.ClearAsync(vendorId, cancellationToken).ConfigureAwait(false);
+        }
+
+        if (handleExportCache)
+        {
+            IExportCache exportCache = serviceProvider.GetRequiredService<IExportCache>();
+            await exportCache.ClearAsync(vendorId, cancellationToken).ConfigureAwait(false);
+        }
+
+        if (handleHashCache)
+        {
+            IHashCache hashCache = serviceProvider.GetRequiredService<IHashCache>();
+            await hashCache.ClearAsync(vendorId, cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    private static Option<bool> CreateSearchIndexOption() => new("--search-index", "-s")
     {
         DefaultValueFactory = _ => false,
     };
