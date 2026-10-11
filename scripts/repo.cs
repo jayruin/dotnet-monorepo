@@ -8,6 +8,7 @@ using System.Collections.Immutable;
 using System.CommandLine;
 using System.Diagnostics;
 using System.IO.Compression;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
@@ -179,7 +180,7 @@ internal sealed class Repo
             "new", "sln",
             "--name", slnxFileStem,
             "--format", "slnx");
-        ImmutableArray<Project> projects = GetProjects(true);
+        ImmutableArray<Project> projects = GetProjects(true, false);
         foreach (Project project in projects)
         {
             Subprocess.RunAndCheck(SrcDirectory,
@@ -223,7 +224,7 @@ internal sealed class Repo
 
     public void Zero(params IEnumerable<string> projectNames)
     {
-        ImmutableArray<Project> projects = GetProjects(true, projectNames);
+        ImmutableArray<Project> projects = GetProjects(true, false, projectNames);
         foreach (Project project in projects)
         {
             string[] directoriesToDelete = [
@@ -244,7 +245,7 @@ internal sealed class Repo
 
     public void Restore(params IEnumerable<string> projectNames)
     {
-        ImmutableArray<Project> projects = GetProjects(false, projectNames);
+        ImmutableArray<Project> projects = GetProjects(false, true, projectNames);
         foreach (Project project in projects)
         {
             Subprocess.RunAndCheck(project.ProjectDirectory,
@@ -255,7 +256,7 @@ internal sealed class Repo
 
     public void Clean(params IEnumerable<string> projectNames)
     {
-        ImmutableArray<Project> projects = GetProjects(false, projectNames);
+        ImmutableArray<Project> projects = GetProjects(false, true, projectNames);
         foreach (Project project in projects)
         {
             Subprocess.RunAndCheck(project.ProjectDirectory,
@@ -266,7 +267,7 @@ internal sealed class Repo
     }
     public void Build(params IEnumerable<string> projectNames)
     {
-        ImmutableArray<Project> projects = GetProjects(false, projectNames);
+        ImmutableArray<Project> projects = GetProjects(false, true, projectNames);
         foreach (Project project in projects)
         {
             Subprocess.RunAndCheck(project.ProjectDirectory,
@@ -279,7 +280,7 @@ internal sealed class Repo
 
     public void Test(params IEnumerable<string> projectNames)
     {
-        ImmutableArray<Project> projects = GetProjects(true, projectNames);
+        ImmutableArray<Project> projects = GetProjects(true, false, projectNames);
         Directory.CreateDirectory(TestResultsDirectory);
         foreach (Project project in projects)
         {
@@ -302,7 +303,7 @@ internal sealed class Repo
 
     public void Publish(params IEnumerable<string> projectNames)
     {
-        ImmutableArray<Project> projects = GetProjects(false, projectNames);
+        ImmutableArray<Project> projects = GetProjects(false, false, projectNames);
         Directory.CreateDirectory(BinDirectory);
         foreach (Project project in projects)
         {
@@ -342,9 +343,11 @@ internal sealed class Repo
 
     }
 
-    private ImmutableArray<Project> GetProjects(bool includeDependencies, params IEnumerable<string> projectNames)
+    private ImmutableArray<Project> GetProjects(bool includeDependencies, bool minimal,
+        IEnumerable<string>? projectNames = null,
+        [CallerMemberName] string callerMemberName = "")
     {
-        HashSet<string> projectNamesSet = [.. projectNames];
+        HashSet<string> projectNamesSet = [.. projectNames ?? []];
         List<Project> projects = [];
         foreach (Project project in AllProjects)
         {
@@ -352,7 +355,18 @@ internal sealed class Repo
                 && !projectNamesSet.Any(pn => project.Name.Contains(pn, StringComparison.OrdinalIgnoreCase))) continue;
             Traverse(project, projects, includeDependencies);
         }
-        ImmutableArray<Project> result = [.. projects.DistinctBy(p => p.Name)];
+        IEnumerable<Project> filteredProjects = projects;
+        if (minimal)
+        {
+            filteredProjects = filteredProjects.Where(p1 => 
+                !projects.Any(p2 => 
+                    p2.Dependencies.Any(p3 => 
+                        p3.Name.Equals(p1.Name, StringComparison.OrdinalIgnoreCase))));
+        }
+        ImmutableArray<Project> result = filteredProjects
+            .DistinctBy(p => p.Name, StringComparer.OrdinalIgnoreCase)
+            .ToImmutableArray();
+        Console.WriteLine($"{callerMemberName}: {string.Join(", ", result.Select(p => p.Name))}");
         return result;
     }
 
