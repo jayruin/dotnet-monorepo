@@ -1,0 +1,825 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="0e7ce474-efda-4399-857b-0cae645abaab" name="runneradmin@runnervmfi6oq 2026-10-11 23:56:01" runUser="runnervmfi6oq\runneradmin" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-11T23:56:01.4502686+00:00" queuing="2026-10-11T23:56:01.4502689+00:00" start="2026-10-11T23:55:59.4799422+00:00" finish="2026-10-11T23:56:03.8556676+00:00" />
+  <TestSettings name="default" id="21582746-3f47-442c-b273-bc71b6cca4d0">
+    <Deployment runDeploymentRoot="runneradmin_runnervmfi6oq_2026-10-11_23_56_01" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="9136a2c3-b6bb-46d7-9c93-49d12fff5152" testId="11753310-0116-811b-a9d6-9e37c130b4c9" testName="Test_DeleteProgressWithoutAuth_Fails" computerName="runnervmfi6oq" duration="00:00:00.1059000" startTime="2026-10-11T23:56:02.9929354+00:00" endTime="2026-10-11T23:56:03.0989005+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9136a2c3-b6bb-46d7-9c93-49d12fff5152">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 DELETE http://localhost/syncs/progress/document - - -&#xD;
+info: Microsoft.AspNetCore.Authorization.DefaultAuthorizationService[2]&#xD;
+      Authorization failed. These requirements were not met:&#xD;
+      DenyAnonymousAuthorizationRequirement: Requires an authenticated user.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[12]&#xD;
+      AuthenticationScheme: KoreaderAuthScheme was challenged.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 DELETE http://localhost/syncs/progress/document - 401 - application/json;+charset=utf-8 2.4913ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="23812e04-658a-47a7-95da-07c6f7cea0d8" testId="1f4f93a2-a1d4-8964-a870-128e9bd4cfdb" testName="Test_GetProgressWithWrongPassword_Fails" computerName="runnervmfi6oq" duration="00:00:00.1494654" startTime="2026-10-11T23:56:02.5327864+00:00" endTime="2026-10-11T23:56:02.6823299+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="23812e04-658a-47a7-95da-07c6f7cea0d8">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/syncs/progress/document - - -&#xD;
+info: ksse.Auth.KoreaderAuthHandler[7]&#xD;
+      KoreaderAuthScheme was not authenticated. Failure message: Incorrect password.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[7]&#xD;
+      KoreaderAuthScheme was not authenticated. Failure message: Incorrect password.&#xD;
+info: Microsoft.AspNetCore.Authorization.DefaultAuthorizationService[2]&#xD;
+      Authorization failed. These requirements were not met:&#xD;
+      DenyAnonymousAuthorizationRequirement: Requires an authenticated user.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[12]&#xD;
+      AuthenticationScheme: KoreaderAuthScheme was challenged.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/syncs/progress/document - 401 - application/json;+charset=utf-8 65.3790ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="eb29baa6-2889-431d-bebb-321cc58688bd" testId="108ef64b-0942-857b-8a32-d8eeac5741d3" testName="Test_DeleteUserWithoutAuth_Fails" computerName="runnervmfi6oq" duration="00:00:00.0792426" startTime="2026-10-11T23:56:02.8099432+00:00" endTime="2026-10-11T23:56:02.8892606+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eb29baa6-2889-431d-bebb-321cc58688bd">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 DELETE http://localhost/users/me - - -&#xD;
+info: Microsoft.AspNetCore.Authorization.DefaultAuthorizationService[2]&#xD;
+      Authorization failed. These requirements were not met:&#xD;
+      DenyAnonymousAuthorizationRequirement: Requires an authenticated user.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[12]&#xD;
+      AuthenticationScheme: KoreaderAuthScheme was challenged.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 DELETE http://localhost/users/me - 401 - application/json;+charset=utf-8 4.4411ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6bd6cd98-006f-4bcf-a2c4-c4c82532aefa" testId="12be7870-acca-8189-83ba-8c71522f628a" testName="Test_InvalidUsersDatabase_ReturnsServiceUnavailable" computerName="runnervmfi6oq" duration="00:00:00.3780891" startTime="2026-10-11T23:56:01.1260936+00:00" endTime="2026-10-11T23:56:01.5050973+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6bd6cd98-006f-4bcf-a2c4-c4c82532aefa">
+      <Output>
+        <StdOut>warn: Microsoft.EntityFrameworkCore.Model.Validation[30000]&#xD;
+      The entity type 'IdentityRole' is configured to use schema 'users', but SQLite does not support schemas. This configuration will be ignored by the SQLite provider.&#xD;
+warn: Microsoft.EntityFrameworkCore.Model.Validation[30000]&#xD;
+      The entity type 'IdentityRoleClaim&lt;string&gt;' is configured to use schema 'users', but SQLite does not support schemas. This configuration will be ignored by the SQLite provider.&#xD;
+warn: Microsoft.EntityFrameworkCore.Model.Validation[30000]&#xD;
+      The entity type 'IdentityUser' is configured to use schema 'users', but SQLite does not support schemas. This configuration will be ignored by the SQLite provider.&#xD;
+warn: Microsoft.EntityFrameworkCore.Model.Validation[30000]&#xD;
+      The entity type 'IdentityUserClaim&lt;string&gt;' is configured to use schema 'users', but SQLite does not support schemas. This configuration will be ignored by the SQLite provider.&#xD;
+warn: Microsoft.EntityFrameworkCore.Model.Validation[30000]&#xD;
+      The entity type 'IdentityUserLogin&lt;string&gt;' is configured to use schema 'users', but SQLite does not support schemas. This configuration will be ignored by the SQLite provider.&#xD;
+warn: Microsoft.EntityFrameworkCore.Model.Validation[30000]&#xD;
+      The entity type 'IdentityUserRole&lt;string&gt;' is configured to use schema 'users', but SQLite does not support schemas. This configuration will be ignored by the SQLite provider.&#xD;
+warn: Microsoft.EntityFrameworkCore.Model.Validation[30000]&#xD;
+      The entity type 'IdentityUserToken&lt;string&gt;' is configured to use schema 'users', but SQLite does not support schemas. This configuration will be ignored by the SQLite provider.&#xD;
+info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/healthcheck - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'Health checks'&#xD;
+fail: Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService[103]&#xD;
+      Health check UsersDbContext with status Unhealthy completed after 30.4111ms with message '(null)'&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'Health checks'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/healthcheck - 503 - - 47.6479ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ec1222f5-1e2c-4c73-bd0d-4872462bf032" testId="137e5dc7-696f-82d0-9be2-c99e006bbf79" testName="Test_DeleteProgressWithCorrectAuth_Succeeds" computerName="runnervmfi6oq" duration="00:00:00.1593399" startTime="2026-10-11T23:56:03.0989608+00:00" endTime="2026-10-11T23:56:03.2583778+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ec1222f5-1e2c-4c73-bd0d-4872462bf032">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 DELETE http://localhost/syncs/progress/document - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: DELETE syncs/progress/{document} =&gt; DeleteProgressAsync'&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: DELETE syncs/progress/{document} =&gt; DeleteProgressAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 DELETE http://localhost/syncs/progress/document - 200 - - 82.4387ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a21ab0f1-4561-4931-b7ca-29c2c76657cd" testId="16a1c27b-d16e-8bad-a515-82515bf126eb" testName="Test_GetProgressWithCorrectAuth_Succeeds" computerName="runnervmfi6oq" duration="00:00:00.1617154" startTime="2026-10-11T23:56:02.6824159+00:00" endTime="2026-10-11T23:56:02.8442017+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a21ab0f1-4561-4931-b7ca-29c2c76657cd">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/syncs/progress/document - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: GET syncs/progress/{document} =&gt; GetProgressAsync'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'GetProgressResponse' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: GET syncs/progress/{document} =&gt; GetProgressAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/syncs/progress/document - 200 - application/json;+charset=utf-8 72.3575ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="efa1278b-01d6-4168-9538-e66fad9c319e" testId="1542a3bb-7a8a-8712-8727-d3cbb815d2f3" testName="Test_InvalidProgressDatabase_ReturnsServiceUnavailable" computerName="runnervmfi6oq" duration="00:00:00.1184168" startTime="2026-10-11T23:56:01.5059276+00:00" endTime="2026-10-11T23:56:01.6244073+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="efa1278b-01d6-4168-9538-e66fad9c319e">
+      <Output>
+        <StdOut>warn: Microsoft.EntityFrameworkCore.Model.Validation[30000]&#xD;
+      The entity type 'ProgressDocument' is configured to use schema 'progress', but SQLite does not support schemas. This configuration will be ignored by the SQLite provider.&#xD;
+info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/healthcheck - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'Health checks'&#xD;
+fail: Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService[103]&#xD;
+      Health check ProgressDbContext with status Unhealthy completed after 0.6127ms with message '(null)'&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'Health checks'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/healthcheck - 503 - - 5.1218ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="be6bbedd-904d-475e-87b2-80c3e2bf7f4a" testId="1908a3f0-f0f0-88c2-a93c-83a990030485" testName="Test_GetProgressWithoutAuth_Fails" computerName="runnervmfi6oq" duration="00:00:00.1193594" startTime="2026-10-11T23:56:02.4116580+00:00" endTime="2026-10-11T23:56:02.5310809+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="be6bbedd-904d-475e-87b2-80c3e2bf7f4a">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/syncs/progress/document - - -&#xD;
+info: Microsoft.AspNetCore.Authorization.DefaultAuthorizationService[2]&#xD;
+      Authorization failed. These requirements were not met:&#xD;
+      DenyAnonymousAuthorizationRequirement: Requires an authenticated user.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[12]&#xD;
+      AuthenticationScheme: KoreaderAuthScheme was challenged.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/syncs/progress/document - 401 - application/json;+charset=utf-8 2.5297ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="240797a7-1825-4d31-b427-109976ea32e6" testId="17ae3335-de08-8274-abf4-82d4bda2c6e4" testName="Test_InvalidAllDatabases_ReturnsServiceUnavailable" computerName="runnervmfi6oq" duration="00:00:00.0164815" startTime="2026-10-11T23:56:01.6244741+00:00" endTime="2026-10-11T23:56:01.6430350+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="240797a7-1825-4d31-b427-109976ea32e6">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/healthcheck - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'Health checks'&#xD;
+fail: Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService[103]&#xD;
+      Health check ProgressDbContext with status Unhealthy completed after 0.5093ms with message '(null)'&#xD;
+fail: Microsoft.Extensions.Diagnostics.HealthChecks.DefaultHealthCheckService[103]&#xD;
+      Health check UsersDbContext with status Unhealthy completed after 0.4879ms with message '(null)'&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'Health checks'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/healthcheck - 503 - - 4.3242ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="11c97c0b-dc08-47a8-b865-10803a48864e" testId="186d133a-e1bb-8efe-8510-063deb350373" testName="Test_AuthUserWithCorrectAuth_Succeeds" computerName="runnervmfi6oq" duration="00:00:00.2497832" startTime="2026-10-11T23:56:02.0450085+00:00" endTime="2026-10-11T23:56:02.2948684+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="11c97c0b-dc08-47a8-b865-10803a48864e">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/users/create - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST users/create =&gt; CreateUserAsync'&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Http.Result.CreatedResult[1]&#xD;
+      Setting HTTP status code 201.&#xD;
+info: Microsoft.AspNetCore.Http.Result.CreatedResult[3]&#xD;
+      Writing value of type 'CreateUserResponse' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST users/create =&gt; CreateUserAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/users/create - 201 - application/json;+charset=utf-8 109.6232ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/users/auth - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: GET users/auth =&gt; AuthUser'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'AuthUserResponse' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: GET users/auth =&gt; AuthUser'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/users/auth - 200 - application/json;+charset=utf-8 109.8041ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="76b4cf1b-531d-43e1-8259-1c278843d78b" testId="13a5cd0b-69fa-8c36-91a9-0fe254e7e6bd" testName="Test_PutProgressWithWrongPassword_Fails" computerName="runnervmfi6oq" duration="00:00:00.2544193" startTime="2026-10-11T23:56:01.5591023+00:00" endTime="2026-10-11T23:56:01.8135865+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="76b4cf1b-531d-43e1-8259-1c278843d78b">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 PUT http://localhost/syncs/progress - application/json;+charset=utf-8 -&#xD;
+info: ksse.Auth.KoreaderAuthHandler[7]&#xD;
+      KoreaderAuthScheme was not authenticated. Failure message: Incorrect password.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[7]&#xD;
+      KoreaderAuthScheme was not authenticated. Failure message: Incorrect password.&#xD;
+info: Microsoft.AspNetCore.Authorization.DefaultAuthorizationService[2]&#xD;
+      Authorization failed. These requirements were not met:&#xD;
+      DenyAnonymousAuthorizationRequirement: Requires an authenticated user.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[12]&#xD;
+      AuthenticationScheme: KoreaderAuthScheme was challenged.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 PUT http://localhost/syncs/progress - 401 - application/json;+charset=utf-8 136.9369ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="25103219-40f3-479c-a9b4-fdb16feabbb1" testId="1af89287-99f5-876a-b55a-701f9eb5be7c" testName="Test_ValidDatabases_ReturnsOkState" computerName="runnervmfi6oq" duration="00:00:00.9746115" startTime="2026-10-11T23:56:00.0996641+00:00" endTime="2026-10-11T23:56:01.1153675+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="25103219-40f3-479c-a9b4-fdb16feabbb1">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[58]&#xD;
+      Creating key {27cf5d9a-a235-4698-a16c-52d4bf9bf41b} with creation date 2026-10-11 23:56:00Z, activation date 2026-10-11 23:56:00Z, and expiration date 2027-01-09 23:56:00Z.&#xD;
+info: Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository[39]&#xD;
+      Writing data to file 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys\key-27cf5d9a-a235-4698-a16c-52d4bf9bf41b.xml'.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/healthcheck - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'Health checks'&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'Health checks'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/healthcheck - 200 - application/json;+charset=utf-8 78.3860ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0b0b3c3a-78a5-4a8d-b714-9e16c02b440c" testId="15201303-d604-8041-9655-9129f3963e8f" testName="Test_AuthUserWithWrongPassword_Fails" computerName="runnervmfi6oq" duration="00:00:00.1727961" startTime="2026-10-11T23:56:01.8720393+00:00" endTime="2026-10-11T23:56:02.0449181+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0b0b3c3a-78a5-4a8d-b714-9e16c02b440c">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/users/create - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST users/create =&gt; CreateUserAsync'&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Http.Result.CreatedResult[1]&#xD;
+      Setting HTTP status code 201.&#xD;
+info: Microsoft.AspNetCore.Http.Result.CreatedResult[3]&#xD;
+      Writing value of type 'CreateUserResponse' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST users/create =&gt; CreateUserAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/users/create - 201 - application/json;+charset=utf-8 89.7025ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/users/auth - - -&#xD;
+info: ksse.Auth.KoreaderAuthHandler[7]&#xD;
+      KoreaderAuthScheme was not authenticated. Failure message: Incorrect password.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[7]&#xD;
+      KoreaderAuthScheme was not authenticated. Failure message: Incorrect password.&#xD;
+info: Microsoft.AspNetCore.Authorization.DefaultAuthorizationService[2]&#xD;
+      Authorization failed. These requirements were not met:&#xD;
+      DenyAnonymousAuthorizationRequirement: Requires an authenticated user.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[12]&#xD;
+      AuthenticationScheme: KoreaderAuthScheme was challenged.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/users/auth - 401 - application/json;+charset=utf-8 70.1245ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="544ad162-bd61-4a89-a9ed-512b01725716" testId="132945f6-6e23-865e-85d1-b4595840936c" testName="Test_CreateSameUserTwice_Fails" computerName="runnervmfi6oq" duration="00:00:00.1521470" startTime="2026-10-11T23:56:01.6629434+00:00" endTime="2026-10-11T23:56:01.8151505+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="544ad162-bd61-4a89-a9ed-512b01725716">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/users/create - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST users/create =&gt; CreateUserAsync'&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Http.Result.CreatedResult[1]&#xD;
+      Setting HTTP status code 201.&#xD;
+info: Microsoft.AspNetCore.Http.Result.CreatedResult[3]&#xD;
+      Writing value of type 'CreateUserResponse' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST users/create =&gt; CreateUserAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/users/create - 201 - application/json;+charset=utf-8 107.9430ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/users/create - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST users/create =&gt; CreateUserAsync'&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[1]&#xD;
+      Setting HTTP status code 402.&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[3]&#xD;
+      Writing value of type 'ErrorResponse' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST users/create =&gt; CreateUserAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/users/create - 402 - application/json;+charset=utf-8 5.7692ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a519b256-edd5-467a-8d1c-4fa5ab1800a6" testId="192886f3-f09f-8e26-9120-75957a3fea42" testName="Test_GetProgressWithCorrectAuthButNoProgressDocument_SucceedsAndReturnsEmptyObject" computerName="runnervmfi6oq" duration="00:00:00.1467305" startTime="2026-10-11T23:56:02.8460506+00:00" endTime="2026-10-11T23:56:02.9928561+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a519b256-edd5-467a-8d1c-4fa5ab1800a6">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/syncs/progress/document - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: GET syncs/progress/{document} =&gt; GetProgressAsync'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'JsonObject' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: GET syncs/progress/{document} =&gt; GetProgressAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/syncs/progress/document - 200 - application/json;+charset=utf-8 69.0720ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8a73e0ba-490d-44a8-b891-1187e9e23be2" testId="155446e3-8a34-83e5-aee6-75e105570957" testName="Test_ChangePasswordWithoutAuth_Fails" computerName="runnervmfi6oq" duration="00:00:00.1192715" startTime="2026-10-11T23:56:02.2949550+00:00" endTime="2026-10-11T23:56:02.4142897+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8a73e0ba-490d-44a8-b891-1187e9e23be2">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 PUT http://localhost/users/password - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Authorization.DefaultAuthorizationService[2]&#xD;
+      Authorization failed. These requirements were not met:&#xD;
+      DenyAnonymousAuthorizationRequirement: Requires an authenticated user.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[12]&#xD;
+      AuthenticationScheme: KoreaderAuthScheme was challenged.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 PUT http://localhost/users/password - 401 - application/json;+charset=utf-8 4.7195ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cd48a46f-1c1d-496e-9881-e48b9b1d36a5" testId="15f5f23a-ae14-8d39-9383-0afe8eefc855" testName="Test_DeleteAllProgressWithoutAuth_Fails" computerName="runnervmfi6oq" duration="00:00:00.0925150" startTime="2026-10-11T23:56:03.2584589+00:00" endTime="2026-10-11T23:56:03.3510423+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cd48a46f-1c1d-496e-9881-e48b9b1d36a5">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 DELETE http://localhost/syncs/progress - - -&#xD;
+info: Microsoft.AspNetCore.Authorization.DefaultAuthorizationService[2]&#xD;
+      Authorization failed. These requirements were not met:&#xD;
+      DenyAnonymousAuthorizationRequirement: Requires an authenticated user.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[12]&#xD;
+      AuthenticationScheme: KoreaderAuthScheme was challenged.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 DELETE http://localhost/syncs/progress - 401 - application/json;+charset=utf-8 3.1792ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f729e455-b789-4b0b-954a-28992bc1490c" testId="1fcc2f72-d833-84dc-a917-4405961190c3" testName="Test_PutProgressWithCorrectAuth_Succeeds" computerName="runnervmfi6oq" duration="00:00:00.2857773" startTime="2026-10-11T23:56:01.8136648+00:00" endTime="2026-10-11T23:56:02.0995187+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f729e455-b789-4b0b-954a-28992bc1490c">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 PUT http://localhost/syncs/progress - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: PUT syncs/progress/ =&gt; PutProgressAsync'&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'PutProgressResponse' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: PUT syncs/progress/ =&gt; PutProgressAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 PUT http://localhost/syncs/progress - 200 - application/json;+charset=utf-8 184.9583ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="146e12a8-1381-4168-b834-5800e4b03223" testId="1264adfd-ff7f-8738-8b4f-c2ee71cba679" testName="Test_GetAllProgressWithoutAuth_Fails" computerName="runnervmfi6oq" duration="00:00:00.0948109" startTime="2026-10-11T23:56:03.4989727+00:00" endTime="2026-10-11T23:56:03.5938521+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="146e12a8-1381-4168-b834-5800e4b03223">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/syncs/progress - - -&#xD;
+info: Microsoft.AspNetCore.Authorization.DefaultAuthorizationService[2]&#xD;
+      Authorization failed. These requirements were not met:&#xD;
+      DenyAnonymousAuthorizationRequirement: Requires an authenticated user.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[12]&#xD;
+      AuthenticationScheme: KoreaderAuthScheme was challenged.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/syncs/progress - 401 - application/json;+charset=utf-8 3.7408ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f07b3e07-5cf7-434d-9711-97c4c53b9437" testId="112f889c-6e0f-89cb-a5bb-7e10d8d74f0f" testName="Test_PutProgressWithoutAuth_Fails" computerName="runnervmfi6oq" duration="00:00:01.4245903" startTime="2026-10-11T23:56:00.0996506+00:00" endTime="2026-10-11T23:56:01.5590425+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f07b3e07-5cf7-434d-9711-97c4c53b9437">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[58]&#xD;
+      Creating key {d3bc7fd7-db7f-4e89-829d-f11d4c89021c} with creation date 2026-10-11 23:56:00Z, activation date 2026-10-11 23:56:00Z, and expiration date 2027-01-09 23:56:00Z.&#xD;
+info: Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository[39]&#xD;
+      Writing data to file 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys\key-d3bc7fd7-db7f-4e89-829d-f11d4c89021c.xml'.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 PUT http://localhost/syncs/progress - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Authorization.DefaultAuthorizationService[2]&#xD;
+      Authorization failed. These requirements were not met:&#xD;
+      DenyAnonymousAuthorizationRequirement: Requires an authenticated user.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[12]&#xD;
+      AuthenticationScheme: KoreaderAuthScheme was challenged.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 PUT http://localhost/syncs/progress - 401 - application/json;+charset=utf-8 15.7831ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0b16bdb8-9220-4262-be21-29ec1e3a1398" testId="161fc569-3369-86c1-8e0d-6c373c25ff0b" testName="Test_CreateUserWhenFeatureIsDisabled_Fails" computerName="runnervmfi6oq" duration="00:00:00.0167148" startTime="2026-10-11T23:56:01.8152306+00:00" endTime="2026-10-11T23:56:01.8319983+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0b16bdb8-9220-4262-be21-29ec1e3a1398">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/users/create - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST users/create =&gt; CreateUserAsync'&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[1]&#xD;
+      Setting HTTP status code 402.&#xD;
+info: Microsoft.AspNetCore.Http.Result.JsonResult[3]&#xD;
+      Writing value of type 'ErrorResponse' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST users/create =&gt; CreateUserAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/users/create - 402 - application/json;+charset=utf-8 2.8967ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3dc9a575-5f3e-4432-9cd5-3874d89ec79e" testId="1df49f38-1207-8a30-88a1-aaca5355f62a" testName="Test_CreateSingleUser_Succeeds" computerName="runnervmfi6oq" duration="00:00:01.5284285" startTime="2026-10-11T23:56:00.0996660+00:00" endTime="2026-10-11T23:56:01.6628720+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3dc9a575-5f3e-4432-9cd5-3874d89ec79e">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[58]&#xD;
+      Creating key {5664fe3e-c71f-4960-89b3-2290121ab53d} with creation date 2026-10-11 23:56:00Z, activation date 2026-10-11 23:56:00Z, and expiration date 2027-01-09 23:56:00Z.&#xD;
+info: Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository[39]&#xD;
+      Writing data to file 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys\key-5664fe3e-c71f-4960-89b3-2290121ab53d.xml'.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 POST http://localhost/users/create - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: POST users/create =&gt; CreateUserAsync'&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Http.Result.CreatedResult[1]&#xD;
+      Setting HTTP status code 201.&#xD;
+info: Microsoft.AspNetCore.Http.Result.CreatedResult[3]&#xD;
+      Writing value of type 'CreateUserResponse' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: POST users/create =&gt; CreateUserAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 POST http://localhost/users/create - 201 - application/json;+charset=utf-8 532.5592ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="936df2c1-bd34-41bc-8cb6-a02e56bb6b1c" testId="173f52f6-fe2f-8ccc-bbde-bcea11e0654f" testName="Test_DeleteUserWithCorrectAuth_Succeeds" computerName="runnervmfi6oq" duration="00:00:00.2044396" startTime="2026-10-11T23:56:02.8893408+00:00" endTime="2026-10-11T23:56:03.0938768+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="936df2c1-bd34-41bc-8cb6-a02e56bb6b1c">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 DELETE http://localhost/users/me - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: DELETE users/me =&gt; DeleteUserAsync'&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 2 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'DeleteUserResponse' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: DELETE users/me =&gt; DeleteUserAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 DELETE http://localhost/users/me - 200 - application/json;+charset=utf-8 106.8361ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6d69deed-67d2-4cad-aa39-ddad019942bf" testId="1e11a824-50f6-8f93-b2fe-0420f6201f65" testName="Test_DeleteAllProgressWithCorrectAuth_Succeeds" computerName="runnervmfi6oq" duration="00:00:00.1460954" startTime="2026-10-11T23:56:03.3527285+00:00" endTime="2026-10-11T23:56:03.4989007+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6d69deed-67d2-4cad-aa39-ddad019942bf">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 DELETE http://localhost/syncs/progress - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: DELETE syncs/progress/ =&gt; DeleteAllProgressAsync'&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 2 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: DELETE syncs/progress/ =&gt; DeleteAllProgressAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 DELETE http://localhost/syncs/progress - 200 - - 68.0932ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4c676402-e564-41d0-93d7-13fdd1335dec" testId="16a2fc19-c0ac-83d7-b922-04ebb0e0c8fe" testName="Test_ChangePasswordWithCorrectAuth_Succeeds" computerName="runnervmfi6oq" duration="00:00:00.3954212" startTime="2026-10-11T23:56:02.4143490+00:00" endTime="2026-10-11T23:56:02.8098477+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4c676402-e564-41d0-93d7-13fdd1335dec">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 PUT http://localhost/users/password - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: PUT users/password =&gt; ChangePasswordAsync'&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'ChangePasswordResponse' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: PUT users/password =&gt; ChangePasswordAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 PUT http://localhost/users/password - 200 - application/json;+charset=utf-8 209.6629ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3abc822d-2ea7-4e7a-9106-4ad6b90cc9c3" testId="1724032a-64f1-8808-bb42-6938d7db544f" testName="Test_AuthNonExistentUser_Fails" computerName="runnervmfi6oq" duration="00:00:00.0178940" startTime="2026-10-11T23:56:01.8539945+00:00" endTime="2026-10-11T23:56:01.8719685+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3abc822d-2ea7-4e7a-9106-4ad6b90cc9c3">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/users/auth - - -&#xD;
+info: ksse.Auth.KoreaderAuthHandler[7]&#xD;
+      KoreaderAuthScheme was not authenticated. Failure message: User does not exist.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[7]&#xD;
+      KoreaderAuthScheme was not authenticated. Failure message: User does not exist.&#xD;
+info: Microsoft.AspNetCore.Authorization.DefaultAuthorizationService[2]&#xD;
+      Authorization failed. These requirements were not met:&#xD;
+      DenyAnonymousAuthorizationRequirement: Requires an authenticated user.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[12]&#xD;
+      AuthenticationScheme: KoreaderAuthScheme was challenged.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/users/auth - 401 - application/json;+charset=utf-8 4.3274ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9bc0348c-bfa1-44ae-937c-804729391d2f" testId="199f3463-3b26-8091-a133-d84de9085545" testName="Test_PutProgressTwiceWithCorrectAuth_SucceedsAndOverwrites" computerName="runnervmfi6oq" duration="00:00:00.3119124" startTime="2026-10-11T23:56:02.0996029+00:00" endTime="2026-10-11T23:56:02.4115885+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9bc0348c-bfa1-44ae-937c-804729391d2f">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 PUT http://localhost/syncs/progress - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: PUT syncs/progress/ =&gt; PutProgressAsync'&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'PutProgressResponse' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: PUT syncs/progress/ =&gt; PutProgressAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 PUT http://localhost/syncs/progress - 200 - application/json;+charset=utf-8 120.3923ms&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 PUT http://localhost/syncs/progress - application/json;+charset=utf-8 -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: PUT syncs/progress/ =&gt; PutProgressAsync'&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type 'PutProgressResponse' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: PUT syncs/progress/ =&gt; PutProgressAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 PUT http://localhost/syncs/progress - 200 - application/json;+charset=utf-8 87.7239ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f587ef8a-a65f-4962-bc2b-57ab2bd803a1" testId="102c7657-8154-8238-90b7-6e32f2a18fc7" testName="Test_AuthWithNoCredentials_Fails" computerName="runnervmfi6oq" duration="00:00:00.0194299" startTime="2026-10-11T23:56:01.8344064+00:00" endTime="2026-10-11T23:56:01.8539139+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f587ef8a-a65f-4962-bc2b-57ab2bd803a1">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/users/auth - - -&#xD;
+info: Microsoft.AspNetCore.Authorization.DefaultAuthorizationService[2]&#xD;
+      Authorization failed. These requirements were not met:&#xD;
+      DenyAnonymousAuthorizationRequirement: Requires an authenticated user.&#xD;
+info: ksse.Auth.KoreaderAuthHandler[12]&#xD;
+      AuthenticationScheme: KoreaderAuthScheme was challenged.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/users/auth - 401 - application/json;+charset=utf-8 3.2589ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1bc275f9-7823-4949-be7d-a3f716a86bbb" testId="17aa2d49-4588-833f-803d-ac33704ec19b" testName="Test_GetAllProgressWithCorrectAuth_Succeeds" computerName="runnervmfi6oq" duration="00:00:00.1849959" startTime="2026-10-11T23:56:03.5939218+00:00" endTime="2026-10-11T23:56:03.7810913+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1bc275f9-7823-4949-be7d-a3f716a86bbb">
+      <Output>
+        <StdOut>info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[63]&#xD;
+      User profile is available. Using 'C:\Users\runneradmin\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.EntityFrameworkCore.Update[30100]&#xD;
+      Saved 1 entities to in-memory store.&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]&#xD;
+      Request starting HTTP/1.1 GET http://localhost/syncs/progress - - -&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]&#xD;
+      Executing endpoint 'HTTP: GET syncs/progress/ =&gt; GetAllProgressAsync'&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[1]&#xD;
+      Setting HTTP status code 200.&#xD;
+info: Microsoft.AspNetCore.Http.Result.OkObjectResult[3]&#xD;
+      Writing value of type '&lt;&lt;Select&gt;g__Impl|127_0&gt;d`2' as Json.&#xD;
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]&#xD;
+      Executed endpoint 'HTTP: GET syncs/progress/ =&gt; GetAllProgressAsync'&#xD;
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]&#xD;
+      Request finished HTTP/1.1 GET http://localhost/syncs/progress - 200 - application/json;+charset=utf-8 90.0425ms</StdOut>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Test_PutProgressWithWrongPassword_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="13a5cd0b-69fa-8c36-91a9-0fe254e7e6bd">
+      <Execution id="76b4cf1b-531d-43e1-8259-1c278843d78b" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_PutProgressWithWrongPassword_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_CreateUserWhenFeatureIsDisabled_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="161fc569-3369-86c1-8e0d-6c373c25ff0b">
+      <Execution id="0b16bdb8-9220-4262-be21-29ec1e3a1398" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.UsersTests" name="Test_CreateUserWhenFeatureIsDisabled_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_InvalidAllDatabases_ReturnsServiceUnavailable" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="17ae3335-de08-8274-abf4-82d4bda2c6e4">
+      <Execution id="240797a7-1825-4d31-b427-109976ea32e6" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.HealthTests" name="Test_InvalidAllDatabases_ReturnsServiceUnavailable" />
+    </UnitTest>
+    <UnitTest name="Test_GetAllProgressWithoutAuth_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="1264adfd-ff7f-8738-8b4f-c2ee71cba679">
+      <Execution id="146e12a8-1381-4168-b834-5800e4b03223" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_GetAllProgressWithoutAuth_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_DeleteProgressWithoutAuth_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="11753310-0116-811b-a9d6-9e37c130b4c9">
+      <Execution id="9136a2c3-b6bb-46d7-9c93-49d12fff5152" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_DeleteProgressWithoutAuth_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_AuthUserWithWrongPassword_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="15201303-d604-8041-9655-9129f3963e8f">
+      <Execution id="0b0b3c3a-78a5-4a8d-b714-9e16c02b440c" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.UsersTests" name="Test_AuthUserWithWrongPassword_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_ChangePasswordWithCorrectAuth_Succeeds" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="16a2fc19-c0ac-83d7-b922-04ebb0e0c8fe">
+      <Execution id="4c676402-e564-41d0-93d7-13fdd1335dec" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.UsersTests" name="Test_ChangePasswordWithCorrectAuth_Succeeds" />
+    </UnitTest>
+    <UnitTest name="Test_PutProgressTwiceWithCorrectAuth_SucceedsAndOverwrites" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="199f3463-3b26-8091-a133-d84de9085545">
+      <Execution id="9bc0348c-bfa1-44ae-937c-804729391d2f" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_PutProgressTwiceWithCorrectAuth_SucceedsAndOverwrites" />
+    </UnitTest>
+    <UnitTest name="Test_AuthNonExistentUser_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="1724032a-64f1-8808-bb42-6938d7db544f">
+      <Execution id="3abc822d-2ea7-4e7a-9106-4ad6b90cc9c3" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.UsersTests" name="Test_AuthNonExistentUser_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_DeleteUserWithCorrectAuth_Succeeds" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="173f52f6-fe2f-8ccc-bbde-bcea11e0654f">
+      <Execution id="936df2c1-bd34-41bc-8cb6-a02e56bb6b1c" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.UsersTests" name="Test_DeleteUserWithCorrectAuth_Succeeds" />
+    </UnitTest>
+    <UnitTest name="Test_GetProgressWithWrongPassword_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="1f4f93a2-a1d4-8964-a870-128e9bd4cfdb">
+      <Execution id="23812e04-658a-47a7-95da-07c6f7cea0d8" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_GetProgressWithWrongPassword_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_DeleteUserWithoutAuth_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="108ef64b-0942-857b-8a32-d8eeac5741d3">
+      <Execution id="eb29baa6-2889-431d-bebb-321cc58688bd" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.UsersTests" name="Test_DeleteUserWithoutAuth_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_DeleteAllProgressWithCorrectAuth_Succeeds" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="1e11a824-50f6-8f93-b2fe-0420f6201f65">
+      <Execution id="6d69deed-67d2-4cad-aa39-ddad019942bf" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_DeleteAllProgressWithCorrectAuth_Succeeds" />
+    </UnitTest>
+    <UnitTest name="Test_DeleteProgressWithCorrectAuth_Succeeds" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="137e5dc7-696f-82d0-9be2-c99e006bbf79">
+      <Execution id="ec1222f5-1e2c-4c73-bd0d-4872462bf032" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_DeleteProgressWithCorrectAuth_Succeeds" />
+    </UnitTest>
+    <UnitTest name="Test_CreateSingleUser_Succeeds" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="1df49f38-1207-8a30-88a1-aaca5355f62a">
+      <Execution id="3dc9a575-5f3e-4432-9cd5-3874d89ec79e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.UsersTests" name="Test_CreateSingleUser_Succeeds" />
+    </UnitTest>
+    <UnitTest name="Test_InvalidUsersDatabase_ReturnsServiceUnavailable" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="12be7870-acca-8189-83ba-8c71522f628a">
+      <Execution id="6bd6cd98-006f-4bcf-a2c4-c4c82532aefa" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.HealthTests" name="Test_InvalidUsersDatabase_ReturnsServiceUnavailable" />
+    </UnitTest>
+    <UnitTest name="Test_PutProgressWithoutAuth_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="112f889c-6e0f-89cb-a5bb-7e10d8d74f0f">
+      <Execution id="f07b3e07-5cf7-434d-9711-97c4c53b9437" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_PutProgressWithoutAuth_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_GetProgressWithoutAuth_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="1908a3f0-f0f0-88c2-a93c-83a990030485">
+      <Execution id="be6bbedd-904d-475e-87b2-80c3e2bf7f4a" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_GetProgressWithoutAuth_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_GetAllProgressWithCorrectAuth_Succeeds" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="17aa2d49-4588-833f-803d-ac33704ec19b">
+      <Execution id="1bc275f9-7823-4949-be7d-a3f716a86bbb" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_GetAllProgressWithCorrectAuth_Succeeds" />
+    </UnitTest>
+    <UnitTest name="Test_DeleteAllProgressWithoutAuth_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="15f5f23a-ae14-8d39-9383-0afe8eefc855">
+      <Execution id="cd48a46f-1c1d-496e-9881-e48b9b1d36a5" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_DeleteAllProgressWithoutAuth_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_PutProgressWithCorrectAuth_Succeeds" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="1fcc2f72-d833-84dc-a917-4405961190c3">
+      <Execution id="f729e455-b789-4b0b-954a-28992bc1490c" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_PutProgressWithCorrectAuth_Succeeds" />
+    </UnitTest>
+    <UnitTest name="Test_GetProgressWithCorrectAuthButNoProgressDocument_SucceedsAndReturnsEmptyObject" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="192886f3-f09f-8e26-9120-75957a3fea42">
+      <Execution id="a519b256-edd5-467a-8d1c-4fa5ab1800a6" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_GetProgressWithCorrectAuthButNoProgressDocument_SucceedsAndReturnsEmptyObject" />
+    </UnitTest>
+    <UnitTest name="Test_GetProgressWithCorrectAuth_Succeeds" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="16a1c27b-d16e-8bad-a515-82515bf126eb">
+      <Execution id="a21ab0f1-4561-4931-b7ca-29c2c76657cd" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.ProgressTests" name="Test_GetProgressWithCorrectAuth_Succeeds" />
+    </UnitTest>
+    <UnitTest name="Test_ChangePasswordWithoutAuth_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="155446e3-8a34-83e5-aee6-75e105570957">
+      <Execution id="8a73e0ba-490d-44a8-b891-1187e9e23be2" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.UsersTests" name="Test_ChangePasswordWithoutAuth_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_AuthWithNoCredentials_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="102c7657-8154-8238-90b7-6e32f2a18fc7">
+      <Execution id="f587ef8a-a65f-4962-bc2b-57ab2bd803a1" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.UsersTests" name="Test_AuthWithNoCredentials_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_CreateSameUserTwice_Fails" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="132945f6-6e23-865e-85d1-b4595840936c">
+      <Execution id="544ad162-bd61-4a89-a9ed-512b01725716" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.UsersTests" name="Test_CreateSameUserTwice_Fails" />
+    </UnitTest>
+    <UnitTest name="Test_AuthUserWithCorrectAuth_Succeeds" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="186d133a-e1bb-8efe-8510-063deb350373">
+      <Execution id="11c97c0b-dc08-47a8-b865-10803a48864e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.UsersTests" name="Test_AuthUserWithCorrectAuth_Succeeds" />
+    </UnitTest>
+    <UnitTest name="Test_ValidDatabases_ReturnsOkState" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="1af89287-99f5-876a-b55a-701f9eb5be7c">
+      <Execution id="25103219-40f3-479c-a9b4-fdb16feabbb1" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.HealthTests" name="Test_ValidDatabases_ReturnsOkState" />
+    </UnitTest>
+    <UnitTest name="Test_InvalidProgressDatabase_ReturnsServiceUnavailable" storage="d:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.tests\release_win-x64\ksse.tests.dll" id="1542a3bb-7a8a-8712-8727-d3cbb815d2f3">
+      <Execution id="efa1278b-01d6-4168-9538-e66fad9c319e" />
+      <TestMethod codeBase="D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ksse.Tests.HealthTests" name="Test_InvalidProgressDatabase_ReturnsServiceUnavailable" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="11753310-0116-811b-a9d6-9e37c130b4c9" executionId="9136a2c3-b6bb-46d7-9c93-49d12fff5152" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f4f93a2-a1d4-8964-a870-128e9bd4cfdb" executionId="23812e04-658a-47a7-95da-07c6f7cea0d8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="108ef64b-0942-857b-8a32-d8eeac5741d3" executionId="eb29baa6-2889-431d-bebb-321cc58688bd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="12be7870-acca-8189-83ba-8c71522f628a" executionId="6bd6cd98-006f-4bcf-a2c4-c4c82532aefa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="137e5dc7-696f-82d0-9be2-c99e006bbf79" executionId="ec1222f5-1e2c-4c73-bd0d-4872462bf032" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="16a1c27b-d16e-8bad-a515-82515bf126eb" executionId="a21ab0f1-4561-4931-b7ca-29c2c76657cd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1542a3bb-7a8a-8712-8727-d3cbb815d2f3" executionId="efa1278b-01d6-4168-9538-e66fad9c319e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1908a3f0-f0f0-88c2-a93c-83a990030485" executionId="be6bbedd-904d-475e-87b2-80c3e2bf7f4a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17ae3335-de08-8274-abf4-82d4bda2c6e4" executionId="240797a7-1825-4d31-b427-109976ea32e6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="186d133a-e1bb-8efe-8510-063deb350373" executionId="11c97c0b-dc08-47a8-b865-10803a48864e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="13a5cd0b-69fa-8c36-91a9-0fe254e7e6bd" executionId="76b4cf1b-531d-43e1-8259-1c278843d78b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1af89287-99f5-876a-b55a-701f9eb5be7c" executionId="25103219-40f3-479c-a9b4-fdb16feabbb1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="15201303-d604-8041-9655-9129f3963e8f" executionId="0b0b3c3a-78a5-4a8d-b714-9e16c02b440c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="132945f6-6e23-865e-85d1-b4595840936c" executionId="544ad162-bd61-4a89-a9ed-512b01725716" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="192886f3-f09f-8e26-9120-75957a3fea42" executionId="a519b256-edd5-467a-8d1c-4fa5ab1800a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="155446e3-8a34-83e5-aee6-75e105570957" executionId="8a73e0ba-490d-44a8-b891-1187e9e23be2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="15f5f23a-ae14-8d39-9383-0afe8eefc855" executionId="cd48a46f-1c1d-496e-9881-e48b9b1d36a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1fcc2f72-d833-84dc-a917-4405961190c3" executionId="f729e455-b789-4b0b-954a-28992bc1490c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1264adfd-ff7f-8738-8b4f-c2ee71cba679" executionId="146e12a8-1381-4168-b834-5800e4b03223" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="112f889c-6e0f-89cb-a5bb-7e10d8d74f0f" executionId="f07b3e07-5cf7-434d-9711-97c4c53b9437" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="161fc569-3369-86c1-8e0d-6c373c25ff0b" executionId="0b16bdb8-9220-4262-be21-29ec1e3a1398" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1df49f38-1207-8a30-88a1-aaca5355f62a" executionId="3dc9a575-5f3e-4432-9cd5-3874d89ec79e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="173f52f6-fe2f-8ccc-bbde-bcea11e0654f" executionId="936df2c1-bd34-41bc-8cb6-a02e56bb6b1c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1e11a824-50f6-8f93-b2fe-0420f6201f65" executionId="6d69deed-67d2-4cad-aa39-ddad019942bf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="16a2fc19-c0ac-83d7-b922-04ebb0e0c8fe" executionId="4c676402-e564-41d0-93d7-13fdd1335dec" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1724032a-64f1-8808-bb42-6938d7db544f" executionId="3abc822d-2ea7-4e7a-9106-4ad6b90cc9c3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="199f3463-3b26-8091-a133-d84de9085545" executionId="9bc0348c-bfa1-44ae-937c-804729391d2f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="102c7657-8154-8238-90b7-6e32f2a18fc7" executionId="f587ef8a-a65f-4962-bc2b-57ab2bd803a1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17aa2d49-4588-833f-803d-ac33704ec19b" executionId="1bc275f9-7823-4949-be7d-a3f716a86bbb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="29" executed="29" passed="29" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test Parallelization enabled for D:\a\dotnet-monorepo\dotnet-monorepo\src\artifacts\bin\ksse.Tests\release_win-x64\ksse.Tests.dll (Workers: 4, Scope: ClassLevel)&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
