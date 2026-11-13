@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
-using System.Runtime.CompilerServices;
+using System.IO.Pipelines;
 using System.Threading;
 using System.Threading.Tasks;
 using umm.Library;
@@ -40,28 +40,22 @@ public static class HashCacheExtensions
                 {
                     continue;
                 }
-                // Streaming the export by writing to a non-seekable stream produces a file with a different hash
-                //Pipe pipe = new();
-                //Task exportTask = Task.Run(async () =>
-                //{
-                //    Stream writeStream = pipe.Writer.AsStream();
-                //    await using (writeStream.ConfigureAwait(false))
-                //    {
-                //        await mediaVendor.ExportAsync(entry.Id.ContentId, entry.Id.PartId, exportTarget.ExportId, writeStream).ConfigureAwait(false);
-                //    }
-                //}, cancellationToken);
-                //Stream readStream = pipe.Reader.AsStream();
-                //ImmutableSortedDictionary<string, string> hashes;
-                //await using (readStream.ConfigureAwait(false))
-                //{
-                //    hashes = await multiHashProvider.ComputeHashesAsync(readStream, cancellationToken).ConfigureAwait(false);
-                //}
-                //await exportTask.ConfigureAwait(false);
-                MemoryStream memoryStream = new();
-                await using ConfiguredAsyncDisposable configuredMemoryStream = memoryStream.ConfigureAwait(false);
-                await mediaVendor.ExportAsync(entry.Id.ContentId, entry.Id.PartId, exportTarget.ExportId, memoryStream, cancellationToken).ConfigureAwait(false);
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                ImmutableSortedDictionary<string, string> hashes = await multiHashProvider.ComputeHashesAsync(memoryStream, cancellationToken).ConfigureAwait(false);
+                Pipe pipe = new();
+                Task exportTask = Task.Run(async () =>
+                {
+                    Stream writeStream = pipe.Writer.AsStream();
+                    await using (writeStream.ConfigureAwait(false))
+                    {
+                        await mediaVendor.ExportAsync(entry.Id.ContentId, entry.Id.PartId, exportTarget.ExportId, writeStream).ConfigureAwait(false);
+                    }
+                }, cancellationToken);
+                Stream readStream = pipe.Reader.AsStream();
+                ImmutableSortedDictionary<string, string> hashes;
+                await using (readStream.ConfigureAwait(false))
+                {
+                    hashes = await multiHashProvider.ComputeHashesAsync(readStream, cancellationToken).ConfigureAwait(false);
+                }
+                await exportTask.ConfigureAwait(false);
                 await hashCache.SetHashesAsync(entry.Id, exportTarget.ExportId, hashes, cancellationToken).ConfigureAwait(false);
             }
         }

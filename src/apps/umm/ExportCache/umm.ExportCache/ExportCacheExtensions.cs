@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using umm.Library;
 using umm.Vendors.Abstractions;
+using Utils;
 
 namespace umm.ExportCache;
 
@@ -44,11 +45,12 @@ public static class ExportCacheExtensions
                         cancellationToken).ConfigureAwait(false);
                     await using (stream.ConfigureAwait(false))
                     {
+                        Stream restrictedStream = stream.Restrict(seek: true, read: true);
                         await mediaVendor.ExportAsync(
                             entry.Id.ContentId,
                             entry.Id.PartId,
                             exportTarget.ExportId,
-                            stream,
+                            restrictedStream,
                             cancellationToken).ConfigureAwait(false);
                     }
                 }

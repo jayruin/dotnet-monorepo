@@ -13,6 +13,7 @@ using umm.ExportCache;
 using umm.Library;
 using umm.SearchIndex;
 using umm.Vendors.Abstractions;
+using Utils;
 
 namespace umm.Catalog;
 
@@ -71,15 +72,16 @@ public sealed class MediaCatalog : IMediaCatalog
 
     public async Task ExportAsync(MediaFullId id, string exportId, Stream stream, CancellationToken cancellationToken = default)
     {
+        Stream restrictedStream = stream.Restrict(seek: true, read: true);
         if (_exportCache is not null && await _exportCache.HasFileAsync(id, exportId, cancellationToken).ConfigureAwait(false))
         {
             _logger.LogUsingExportCache();
-            await _exportCache.ExportAsync(id, exportId, stream, cancellationToken).ConfigureAwait(false);
+            await _exportCache.ExportAsync(id, exportId, restrictedStream, cancellationToken).ConfigureAwait(false);
         }
         else
         {
             _logger.LogUsingRawVendor();
-            await RawExportAsync(id, exportId, stream, cancellationToken).ConfigureAwait(false);
+            await RawExportAsync(id, exportId, restrictedStream, cancellationToken).ConfigureAwait(false);
         }
     }
 

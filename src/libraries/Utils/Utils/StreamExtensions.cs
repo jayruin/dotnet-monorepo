@@ -33,5 +33,8 @@ public static class StreamExtensions
             await stream.CopyToAsync(newMemoryStream, cancellationToken).ConfigureAwait(false);
             return newMemoryStream.ToArray();
         }
+
+        public Stream Restrict(bool seek = false, bool read = false, bool write = false)
+            => new RestrictedStream(stream, seek, read, write);
     }
 }
