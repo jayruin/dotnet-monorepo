@@ -24,7 +24,7 @@ internal sealed class ZipFile : IFile
         try
         {
             FullPath = path;
-            PathParts = ZipFileStorage.SplitFullPath(FullPath).ToImmutableArray();
+            PathParts = [.. ZipFileStorage.SplitFullPath(FullPath)];
         }
         catch (Exception exception)
         {
@@ -37,9 +37,9 @@ internal sealed class ZipFile : IFile
 
     public Task<bool> ExistsAsync(CancellationToken cancellationToken = default) => _asyncAdapter.ExistsAsync(cancellationToken);
 
-    public Stream OpenRead() => Open();
+    public Stream OpenRead() => Open(FileAccess.Read);
 
-    public Task<Stream> OpenReadAsync(CancellationToken cancellationToken = default) => OpenAsync(cancellationToken);
+    public Task<Stream> OpenReadAsync(CancellationToken cancellationToken = default) => OpenAsync(FileAccess.Read, cancellationToken);
 
     public Stream OpenWrite()
     {
@@ -52,10 +52,10 @@ internal sealed class ZipFile : IFile
         {
             entry.LastWriteTime = fixedTimestamp;
         }
-        return Open();
+        return Open(FileAccess.Write);
     }
 
-    public async Task<Stream> OpenWriteAsync(CancellationToken cancellationToken = default)
+    public Task<Stream> OpenWriteAsync(CancellationToken cancellationToken = default)
     {
         if (Exists())
         {
@@ -66,7 +66,7 @@ internal sealed class ZipFile : IFile
         {
             entry.LastWriteTime = fixedTimestamp;
         }
-        return await OpenAsync(cancellationToken);
+        return OpenAsync(FileAccess.Write, cancellationToken);
     }
 
     public void Delete()
@@ -83,12 +83,12 @@ internal sealed class ZipFile : IFile
 
     public Task DeleteAsync(CancellationToken cancellationToken = default) => _asyncAdapter.DeleteAsync(cancellationToken);
 
-    private Stream Open()
+    private Stream Open(FileAccess access)
     {
         Stream? stream;
         try
         {
-            stream = _fileStorage.GetEntry(FullPath)?.Open();
+            stream = _fileStorage.GetEntry(FullPath)?.Open(access);
         }
         catch (Exception exception)
         {
@@ -97,13 +97,13 @@ internal sealed class ZipFile : IFile
         return stream ?? throw new FileStorageException();
     }
 
-    private async Task<Stream> OpenAsync(CancellationToken cancellationToken)
+    private async Task<Stream> OpenAsync(FileAccess access, CancellationToken cancellationToken)
     {
         Stream? stream;
         try
         {
             ZipArchiveEntry? entry = _fileStorage.GetEntry(FullPath);
-            stream = entry is null ? null : await entry.OpenAsync(cancellationToken);
+            stream = entry is null ? null : await entry.OpenAsync(access, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception exception)
         {
