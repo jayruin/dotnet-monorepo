@@ -186,7 +186,8 @@ internal sealed class Repo
             Subprocess.RunAndCheck(SrcDirectory,
                 "dotnet",
                 "sln", slnxFile,
-                "add", project.PathToCsproj);
+                "add", project.PathToCsproj,
+                "--include-references", "false");
         }
     }
 
