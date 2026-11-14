@@ -1,9 +1,10 @@
-using Caching;
-using Microsoft.AspNetCore.Builder;
+using Apps;
+using Logging;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.IO;
 using System.Threading.Tasks;
@@ -14,42 +15,38 @@ class Program
 {
     static Task<int> Main(string[] args)
     {
-        var pathArgument = new Argument<string>("path");
-        var tempModeOption = new Option<TempMode>("--tempMode", "-t")
+        Argument<string> pathArgument = new("path");
+        Option<IEnumerable<string>> urlsOption = new("--urls")
         {
-            DefaultValueFactory = _ => TempMode.Memory,
+            DefaultValueFactory = _ => [],
         };
-        var rootCommand = new RootCommand()
-        {
+        RootCommand rootCommand =
+        [
             pathArgument,
-            tempModeOption,
-        };
-        rootCommand.SetAction((parseResult) =>
-        {
-            string path = parseResult.GetRequiredValue(pathArgument);
-            TempMode tempMode = parseResult.GetRequiredValue(tempModeOption);
-            return HandleRootAsync(path, tempMode);
-        });
+            urlsOption,
+        ];
+        rootCommand.SetAction(parseResult => HandleRootCommandAsync(
+            parseResult.GetRequiredValue(pathArgument),
+            parseResult.GetRequiredValue(urlsOption)
+            ));
         return rootCommand.Parse(args).InvokeAsync();
     }
 
-    private static Task HandleRootAsync(string path, TempMode tempMode)
+    private static Task HandleRootCommandAsync(string path, IEnumerable<string> urls)
     {
-        var builder = WebApplication.CreateSlimBuilder();
-        builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.GetFullPath(path), ExclusionFilters.None));
-        builder.Services.AddSingleton<IContentTypeProvider>(new FileExtensionContentTypeProvider());
-        if (tempMode is TempMode.Memory)
-        {
-            builder.Services.AddSingleton<IStreamCache, MemoryStreamCache>();
-        }
-        else if (tempMode is TempMode.File)
-        {
-            builder.Services.AddSingleton<IStreamCache, TempFileStreamCache>();
-        }
-        builder.Services.AddSingleton<IStaticFileServer, StaticFileServer>();
-
-        var app = builder.Build();
-        app.MapStaticFileServer();
-        return app.RunAsync();
+        IWebAppInitialization initialization = Initialization.CreateWebAppInitialization(
+            initializeServices: (services, configuration) =>
+            {
+                services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.GetFullPath(path), ExclusionFilters.None));
+                services.AddSingleton<IContentTypeProvider>(new FileExtensionContentTypeProvider());
+                services.AddSingleton<IStaticFileServer, StaticFileServer>();
+                services.AddConfiguredLogging(configuration);
+            },
+            initializeEndpoints: endpoints =>
+            {
+                endpoints.MapStaticFileServer();
+            });
+        // TODO cancellation token
+        return CliEndpoint.RunWebApplicationAsync(initialization, urls);
     }
 }

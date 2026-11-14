@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(Proj_Caching)" />
+    <ProjectReference Include="$(Proj_Apps)" />
+    <ProjectReference Include="$(Proj_Logging)" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,3 @@
-using Caching;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
@@ -7,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Serve;
@@ -47,19 +47,17 @@ public sealed class StaticFileServer : IStaticFileServer
         """;
     private readonly IFileProvider _fileProvider;
     private readonly IContentTypeProvider _contentTypeProvider;
-    private readonly IStreamCache _temp;
     private readonly ImmutableArray<string> _sizeUnits = ImmutableArray.Create("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB");
 
-    public StaticFileServer(IFileProvider fileProvider, IContentTypeProvider contentTypeProvider, IStreamCache temp)
+    public StaticFileServer(IFileProvider fileProvider, IContentTypeProvider contentTypeProvider)
     {
         _fileProvider = fileProvider;
         _contentTypeProvider = contentTypeProvider;
-        _temp = temp;
     }
 
-    public async Task<IResult> HandleBrowseAsync(string path)
+    public async Task<IResult> HandleBrowseAsync(string path, CancellationToken cancellationToken)
     {
-        await Task.Delay(0);
+        await Task.Delay(0, cancellationToken);
         path = NormalizePath(path);
         IDirectoryContents directoryContents = _fileProvider.GetDirectoryContents(path);
         if (directoryContents.Exists)
@@ -126,7 +124,7 @@ public sealed class StaticFileServer : IStaticFileServer
         return TypedResults.NotFound();
     }
 
-    public async Task<IResult> HandleDownloadAsync(string path)
+    public async Task<IResult> HandleDownloadAsync(string path, CancellationToken cancellationToken)
     {
         path = NormalizePath(path);
         IDirectoryContents directoryContents = _fileProvider.GetDirectoryContents(path);
@@ -136,7 +134,10 @@ public sealed class StaticFileServer : IStaticFileServer
             string stem = string.IsNullOrEmpty(fileInfo.Name) || fileInfo.Name == "." ? "root" : fileInfo.Name;
             string fileDownloadName = $"{stem}.zip";
             _contentTypeProvider.TryGetContentType(fileDownloadName, out string? contentType);
-            return TypedResults.File(await CreateZipFromDirectoryAsync(path), contentType, fileDownloadName);
+            return TypedResults.Stream(
+                stream => WriteZipFromDirectoryAsync(stream, path, cancellationToken),
+                contentType,
+                fileDownloadName);
         }
         if (fileInfo.Exists)
         {
@@ -146,18 +147,13 @@ public sealed class StaticFileServer : IStaticFileServer
         return TypedResults.NotFound();
     }
 
-    private async Task<Stream> CreateZipFromDirectoryAsync(string path)
+    private async Task WriteZipFromDirectoryAsync(Stream stream, string path, CancellationToken cancellationToken)
     {
-        Stream stream = _temp.CreateStream();
-        using (ZipArchive archive = new(stream, ZipArchiveMode.Create, true))
-        {
-            await AddToZipArchiveAsync(archive, path, path);
-        }
-        stream.Seek(0, SeekOrigin.Begin);
-        return stream;
+        await using ZipArchive archive = await ZipArchive.CreateAsync(stream, ZipArchiveMode.Create, true, null, cancellationToken);
+        await AddToZipArchiveAsync(archive, path, path, cancellationToken);
     }
 
-    private async Task AddToZipArchiveAsync(ZipArchive archive, string path, string start)
+    private async Task AddToZipArchiveAsync(ZipArchive archive, string path, string start, CancellationToken cancellationToken)
     {
         string entryName = path;
         if (!string.IsNullOrWhiteSpace(start) && start != "." && path != start)
@@ -172,7 +168,7 @@ public sealed class StaticFileServer : IStaticFileServer
             foreach (IFileInfo subFileInfo in directoryContents)
             {
                 isEmpty = false;
-                await AddToZipArchiveAsync(archive, JoinPaths(path, subFileInfo.Name), start);
+                await AddToZipArchiveAsync(archive, JoinPaths(path, subFileInfo.Name), start, cancellationToken);
             }
             if (isEmpty && path != start)
             {
@@ -183,8 +179,8 @@ public sealed class StaticFileServer : IStaticFileServer
         {
             ZipArchiveEntry entry = archive.CreateEntry(entryName, CompressionLevel.NoCompression);
             await using Stream source = fileInfo.CreateReadStream();
-            await using Stream destination = entry.Open();
-            await source.CopyToAsync(destination);
+            await using Stream destination = entry.Open(FileAccess.Write);
+            await source.CopyToAsync(destination, cancellationToken);
         }
     }
 

@@ -1,43 +1,45 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Serve;
 
 public static class StaticFileServerExtensions
 {
-    public static void MapStaticFileServer(this WebApplication app)
+    public static void MapStaticFileServer(this IEndpointRouteBuilder endpoints)
     {
-        app.MapGet("/", () =>
+        endpoints.MapGet("/", () =>
         {
             return "Hello World!";
         });
 
-        app.MapGet("/browse/", HandleBrowseRoot);
-        app.MapGet("/browse/{**slug}", HandleBrowse);
+        endpoints.MapGet("/browse/", HandleBrowseRoot);
+        endpoints.MapGet("/browse/{**slug}", HandleBrowse);
 
-        app.MapGet("/download/", HandleDownloadRoot);
-        app.MapGet("/download/{**slug}", HandleDownload);
+        endpoints.MapGet("/download/", HandleDownloadRoot);
+        endpoints.MapGet("/download/{**slug}", HandleDownload);
     }
 
-    private static Task<IResult> HandleBrowseRoot([FromServices] IStaticFileServer staticFileServer)
+    private static Task<IResult> HandleBrowseRoot([FromServices] IStaticFileServer staticFileServer, CancellationToken cancellationToken)
     {
-        return staticFileServer.HandleBrowseAsync(string.Empty);
+        return staticFileServer.HandleBrowseAsync(string.Empty, cancellationToken);
     }
 
-    private static Task<IResult> HandleBrowse([FromServices] IStaticFileServer staticFileServer, [FromRoute] string slug)
+    private static Task<IResult> HandleBrowse([FromServices] IStaticFileServer staticFileServer, [FromRoute] string slug, CancellationToken cancellationToken)
     {
-        return staticFileServer.HandleBrowseAsync(slug);
+        return staticFileServer.HandleBrowseAsync(slug, cancellationToken);
     }
 
-    private static Task<IResult> HandleDownloadRoot([FromServices] IStaticFileServer staticFileServer)
+    private static Task<IResult> HandleDownloadRoot([FromServices] IStaticFileServer staticFileServer, CancellationToken cancellationToken)
     {
-        return staticFileServer.HandleDownloadAsync(string.Empty);
+        return staticFileServer.HandleDownloadAsync(string.Empty, cancellationToken);
     }
 
-    private static Task<IResult> HandleDownload([FromServices] IStaticFileServer staticFileServer, [FromRoute] string slug)
+    private static Task<IResult> HandleDownload([FromServices] IStaticFileServer staticFileServer, [FromRoute] string slug, CancellationToken cancellationToken)
     {
-        return staticFileServer.HandleDownloadAsync(slug);
+        return staticFileServer.HandleDownloadAsync(slug, cancellationToken);
     }
 }
