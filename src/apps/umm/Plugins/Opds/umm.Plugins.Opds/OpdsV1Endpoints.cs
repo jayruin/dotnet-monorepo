@@ -150,7 +150,12 @@ internal static class OpdsV1Endpoints
     {
         OpdsRecipe? recipe = await recipeStorage.GetAsync(id, cancellationToken).ConfigureAwait(false);
         if (recipe is null) return TypedResults.NotFound();
-        SearchTerm searchTerm = SearchTerm.From(recipe.SearchQuery);
+        SearchTerm? searchTerm = recipe.SearchTerm is not null
+            ? recipe.SearchTerm
+            : recipe.SearchQuery is not null
+                ? SearchTerm.From(recipe.SearchQuery)
+                : null;
+        if (searchTerm is null) return TypedResults.NotFound();
         (string? prevUrl, MediaFullId? after) = Navigation.GetHistory(history, request);
         int pageSize = options.Value.PageSize;
         SearchOptions searchOptions = new()
