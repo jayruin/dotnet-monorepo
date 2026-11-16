@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -18,11 +17,11 @@ public sealed class MetadataOnlyUpdateHandler<TMetadata>
         _strategy = strategy;
     }
 
-    public async IAsyncEnumerable<string> UpdateContentAsync(IReadOnlyDictionary<string, StringValues> searchQuery, bool force, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<string> UpdateContentAsync(SearchTerm searchTerm, bool force, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         int total = 0;
         int metadataUpdates = 0;
-        await foreach (string contentId in _strategy.EnumerateLocalContentIdsAsync(searchQuery, cancellationToken).ConfigureAwait(false))
+        await foreach (string contentId in _strategy.EnumerateLocalContentIdsAsync(searchTerm, cancellationToken).ConfigureAwait(false))
         {
             MediaMainId id = new(_strategy.VendorContext.VendorId, contentId);
             total += 1;

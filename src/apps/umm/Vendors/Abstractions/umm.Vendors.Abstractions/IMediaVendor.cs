@@ -1,5 +1,4 @@
 using FileStorage;
-using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -16,5 +15,5 @@ public interface IMediaVendor
     Task<SearchableMediaEntry?> GetEntryAsync(string contentId, string partId, CancellationToken cancellationToken = default);
     Task ExportAsync(string contentId, string partId, string exportId, Stream stream, CancellationToken cancellationToken = default);
     Task ExportAsync(string contentId, string partId, string exportId, IDirectory directory, CancellationToken cancellationToken = default);
-    IAsyncEnumerable<string> UpdateContentAsync(IReadOnlyDictionary<string, StringValues> searchQuery, bool force, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<string> UpdateContentAsync(SearchTerm searchTerm, bool force, CancellationToken cancellationToken = default);
 }

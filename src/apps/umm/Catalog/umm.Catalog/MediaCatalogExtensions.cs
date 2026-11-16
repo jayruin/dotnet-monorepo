@@ -1,4 +1,5 @@
 using FileStorage;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -11,6 +12,9 @@ public static class MediaCatalogExtensions
 {
     extension(IMediaCatalog mediaCatalog)
     {
+        public IAsyncEnumerable<MediaEntry> EnumerateAsync(string searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
+            => mediaCatalog.EnumerateAsync(new SearchMatchTerm() { Name = null, Value = searchTerm, }, searchOptions, cancellationToken);
+
         public async Task ExportAsync(MediaFullId id, string exportId, IFile file, CancellationToken cancellationToken = default)
         {
             Stream stream = await file.OpenWriteAsync(cancellationToken).ConfigureAwait(false);

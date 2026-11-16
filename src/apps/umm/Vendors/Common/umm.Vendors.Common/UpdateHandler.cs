@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -18,7 +17,7 @@ public sealed class UpdateHandler<TMetadata>
         _strategy = strategy;
     }
 
-    public async IAsyncEnumerable<string> UpdateContentAsync(IReadOnlyDictionary<string, StringValues> searchQuery, bool force, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<string> UpdateContentAsync(SearchTerm searchTerm, bool force, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         int total = 0;
         int contentUpdates = 0;
@@ -27,7 +26,7 @@ public sealed class UpdateHandler<TMetadata>
         {
             MediaMainId id = new(_strategy.VendorContext.VendorId, remoteMetadata.ContentId);
             total += 1;
-            bool matches = SearchQuery.Matches(searchQuery, remoteMetadata.GetSearchFields());
+            bool matches = searchTerm.Matches(remoteMetadata.GetSearchFields());
             if (!matches)
             {
                 _strategy.VendorContext.Logger.LogDoesNotMatchSearchQuery(id.VendorId, id.ContentId);

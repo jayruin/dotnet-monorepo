@@ -1,5 +1,4 @@
 using FileStorage;
-using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,15 +23,7 @@ public sealed class JsonFileSearchIndex : ISearchIndex, IDisposable
         _allEntries = ReadAllEntries();
     }
 
-    public IAsyncEnumerable<MediaEntry> EnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, SearchOptions searchOptions, CancellationToken cancellationToken = default)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        IEnumerable<SearchableMediaEntry> results = Enumerate(searchQuery);
-        results = ApplySearchOptions(results, searchOptions);
-        return results.Select(e => e.MediaEntry).ToAsyncEnumerable();
-    }
-
-    public IAsyncEnumerable<MediaEntry> EnumerateAsync(string searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<MediaEntry> EnumerateAsync(SearchTerm searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         IEnumerable<SearchableMediaEntry> results = Enumerate(searchTerm);
@@ -104,22 +95,11 @@ public sealed class JsonFileSearchIndex : ISearchIndex, IDisposable
         _semaphoreSlim.Dispose();
     }
 
-    private IEnumerable<SearchableMediaEntry> Enumerate(IReadOnlyDictionary<string, StringValues> searchQuery)
-    {
-        return _allEntries
-            .Where(kvp => SearchQuery.MatchesExactly(searchQuery, [nameof(MediaFullId.VendorId)], [kvp.Key]))
-            .SelectMany(kvp => kvp.Value)
-            .Where(e => SearchQuery.Matches(searchQuery, e.MetadataSearchFields))
-            .OrderBy(e => e.MediaEntry.Id.VendorId)
-            .ThenBy(e => e.MediaEntry.Id.ContentId)
-            .ThenBy(e => e.MediaEntry.Id.PartId);
-    }
-
-    private IEnumerable<SearchableMediaEntry> Enumerate(string searchTerm)
+    private IEnumerable<SearchableMediaEntry> Enumerate(SearchTerm searchTerm)
     {
         return _allEntries
             .SelectMany(kvp => kvp.Value)
-            .Where(e => SearchQuery.Matches(searchTerm, e.MetadataSearchFields))
+            .Where(e => searchTerm.Matches(e.MetadataSearchFields))
             .OrderBy(e => e.MediaEntry.Id.VendorId)
             .ThenBy(e => e.MediaEntry.Id.ContentId)
             .ThenBy(e => e.MediaEntry.Id.PartId);

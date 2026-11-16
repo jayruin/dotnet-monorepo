@@ -3,7 +3,6 @@ using FileStorage;
 using Images;
 using MediaTypes;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -149,7 +148,7 @@ public sealed class EpubProjVendor : IMediaVendor
         throw new InvalidOperationException($"{VendorId} - Unsupported ExportId {exportId} for directory export.");
     }
 
-    public IAsyncEnumerable<string> UpdateContentAsync(IReadOnlyDictionary<string, StringValues> searchQuery, bool force, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<string> UpdateContentAsync(SearchTerm searchTerm, bool force, CancellationToken cancellationToken = default)
         => AsyncEnumerable.Empty<string>();
 
     private async IAsyncEnumerable<SearchableMediaEntry> EnumerateEntriesAsync(string contentId, [EnumeratorCancellation] CancellationToken cancellationToken)

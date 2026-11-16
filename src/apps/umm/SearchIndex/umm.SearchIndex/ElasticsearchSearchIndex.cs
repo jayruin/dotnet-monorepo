@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
@@ -33,13 +32,7 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         _httpClient.DefaultRequestHeaders.Authorization = authentication.Header;
     }
 
-    public IAsyncEnumerable<MediaEntry> EnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, SearchOptions searchOptions, CancellationToken cancellationToken = default)
-    {
-        JsonNode queryNode = CreateQueryNode(searchQuery, searchOptions.MediaFormats);
-        return EnumerateAsync(queryNode, searchOptions, cancellationToken);
-    }
-
-    public IAsyncEnumerable<MediaEntry> EnumerateAsync(string searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<MediaEntry> EnumerateAsync(SearchTerm searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
     {
         JsonNode queryNode = CreateQueryNode(searchTerm, searchOptions.MediaFormats);
         return EnumerateAsync(queryNode, searchOptions, cancellationToken);
@@ -83,10 +76,20 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
             ?? throw new InvalidOperationException("No JsonNamingPolicy");
         JsonNode payload = new JsonObject()
         {
-            ["query"] = CreateQueryNode(new Dictionary<string, StringValues>()
+            ["query"] = CreateQueryNode(new SearchAndTerm()
             {
-                { nameof(MediaMainId.VendorId), id.VendorId },
-                { nameof(MediaMainId.ContentId), id.ContentId },
+                Targets = [
+                    new SearchEqualsTerm()
+                    {
+                        Name = nameof(MediaFullId.VendorId),
+                        Value = id.VendorId,
+                    },
+                    new SearchEqualsTerm()
+                    {
+                        Name = nameof(MediaFullId.ContentId),
+                        Value = id.ContentId,
+                    },
+                ]
             }, []),
         };
         string[] indexTypes = [FullIndexType, MainIndexType];
@@ -132,74 +135,108 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         };
     }
 
-    private static JsonNode CreateQueryNode(IReadOnlyDictionary<string, StringValues> searchQuery, FrozenSet<MediaFormat> mediaFormats)
+    private static JsonNode CreateQueryNode(SearchTerm searchTerm, FrozenSet<MediaFormat> mediaFormats)
     {
-        JsonArray searchArray = searchQuery.Count > 0
-            ? new([.. searchQuery.Select(kvp =>
-            {
-                (string searchKey, StringValues searchValues) = kvp;
-                bool isNegative = searchKey.StartsWith('-');
-                string searchKeyToUse = searchKey.ToLowerInvariant();
-                if (isNegative)
-                {
-                    searchKeyToUse = searchKeyToUse.Trim('-');
-                }
-                return new JsonObject()
-                {
-                    ["bool"] = new JsonObject()
-                    {
-                        [!isNegative ? "should" : "must_not"] = new JsonArray([.. searchValues.Select(searchValue => new JsonObject()
-                        {
-                            ["match"] = new JsonObject()
-                            {
-                                [$"{SearchFieldsKey}.{searchKeyToUse}"] = new JsonObject()
-                                {
-                                    ["query"] = searchValue,
-                                    ["operator"] = "and",
-                                },
-                            },
-                        })]),
-                    },
-                };
-            })])
-            : [];
-        if (mediaFormats.Count > 0)
-        {
-            searchArray.Add(CreateMediaFormatsSearchNode(mediaFormats));
-        }
         return new JsonObject()
         {
             ["bool"] = new JsonObject()
             {
-                ["must"] = searchArray,
+                ["must"] = new JsonArray(CreateQueryNode(searchTerm), CreateMediaFormatsSearchNode(mediaFormats)),
             },
         };
     }
 
-    private static JsonNode CreateQueryNode(string searchTerm, FrozenSet<MediaFormat> mediaFormats)
+    private static JsonNode CreateQueryNode(SearchTerm searchTerm)
     {
-        JsonArray searchArray = !string.IsNullOrWhiteSpace(searchTerm)
-            ? new([
-                new JsonObject()
+        return searchTerm switch
+        {
+            SearchConstantTerm constantTerm => new JsonObject()
+            {
+                [constantTerm.Constant ? "match_all" : "match_none"] = new JsonObject(),
+            },
+            SearchMatchTerm matchTerm => string.IsNullOrWhiteSpace(matchTerm.Name)
+                ? new JsonObject()
                 {
                     ["simple_query_string"] = new JsonObject()
                     {
-                        ["query"] = searchTerm,
+                        ["query"] = matchTerm.Value,
                         ["default_operator"] = "and",
-                        ["fields"] = new JsonArray([$"{SearchFieldsKey}.*"]),
+                        ["fields"] = new JsonArray([$"{SearchFieldsKey}.*.default"])
+                    },
+                }
+                : new JsonObject()
+                {
+                    ["match"] = new JsonObject()
+                    {
+                        [$"{SearchFieldsKey}.{matchTerm.Name.ToLowerOrdinal()}.default"] = new JsonObject()
+                        {
+                            ["query"] = matchTerm.Value,
+                            ["operator"] = "and",
+                        },
                     },
                 },
-            ])
-            : [];
-        if (mediaFormats.Count > 0)
-        {
-            searchArray.Add(CreateMediaFormatsSearchNode(mediaFormats));
-        }
-        return new JsonObject()
-        {
-            ["bool"] = new JsonObject()
+            SearchEqualsTerm equalsTerm => string.IsNullOrWhiteSpace(equalsTerm.Name)
+                ? new JsonObject()
+                {
+                    ["simple_query_string"] = new JsonObject()
+                    {
+                        ["query"] = equalsTerm.Value,
+                        ["default_operator"] = "and",
+                        ["fields"] = new JsonArray([$"{SearchFieldsKey}.*.keyword"])
+                    },
+                }
+                : new JsonObject()
+                {
+                    ["match"] = new JsonObject()
+                    {
+                        [$"{SearchFieldsKey}.{equalsTerm.Name.ToLowerOrdinal()}.keyword"] = new JsonObject()
+                        {
+                            ["query"] = equalsTerm.Value,
+                            ["operator"] = "and",
+                        },
+                    },
+                },
+            SearchContainsTerm containsTerm => string.IsNullOrWhiteSpace(containsTerm.Name)
+                ? new JsonObject()
+                {
+                    ["simple_query_string"] = new JsonObject()
+                    {
+                        ["query"] = containsTerm.Value,
+                        ["default_operator"] = "and",
+                        ["fields"] = new JsonArray([$"{SearchFieldsKey}.*.text"])
+                    },
+                }
+                : new JsonObject()
+                {
+                    ["match"] = new JsonObject()
+                    {
+                        [$"{SearchFieldsKey}.{containsTerm.Name.ToLowerOrdinal()}.text"] = new JsonObject()
+                        {
+                            ["query"] = containsTerm.Value,
+                            ["operator"] = "and",
+                        },
+                    },
+                },
+            SearchNotTerm notTerm => new JsonObject()
             {
-                ["must"] = searchArray,
+                ["bool"] = new JsonObject()
+                {
+                    ["must_not"] = new JsonArray(CreateQueryNode(notTerm.Target)),
+                },
+            },
+            SearchAndTerm andTerm => new JsonObject()
+            {
+                ["bool"] = new JsonObject()
+                {
+                    ["must"] = new JsonArray([.. andTerm.Targets.Select(CreateQueryNode)]),
+                },
+            },
+            SearchOrTerm orTerm => new JsonObject()
+            {
+                ["bool"] = new JsonObject()
+                {
+                    ["should"] = new JsonArray([.. orTerm.Targets.Select(CreateQueryNode)]),
+                },
             },
         };
     }
@@ -368,18 +405,37 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         foreach (MetadataSearchField metadataSearchField in entry.MetadataSearchFields)
         {
             string mainAlias = metadataSearchField.Aliases[0];
-            string mainAliasLower = mainAlias.ToLowerInvariant();
-            searchFieldsProperties[mainAliasLower] = new JsonObject()
+            string mainAliasLower = mainAlias.ToLowerOrdinal();
+            searchFieldsProperties[$"{mainAliasLower}.default"] = new JsonObject()
             {
-                ["type"] = metadataSearchField.ExactMatch ? "keyword" : "text",
+                ["type"] = "alias",
+                ["path"] = $"{SearchFieldsKey}.{mainAliasLower}.{(metadataSearchField.ExactMatch ? "keyword" : "text")}"
+            };
+            searchFieldsProperties[$"{mainAliasLower}.keyword"] = new JsonObject()
+            {
+                ["type"] = "keyword",
+            };
+            searchFieldsProperties[$"{mainAliasLower}.text"] = new JsonObject()
+            {
+                ["type"] = "text",
             };
             foreach (string otherAlias in metadataSearchField.Aliases[1..])
             {
-                string otherAliasLower = otherAlias.ToLowerInvariant();
-                searchFieldsProperties[otherAliasLower] = new JsonObject()
+                string otherAliasLower = otherAlias.ToLowerOrdinal();
+                searchFieldsProperties[$"{otherAliasLower}.default"] = new JsonObject()
                 {
                     ["type"] = "alias",
-                    ["path"] = $"{SearchFieldsKey}.{mainAliasLower}",
+                    ["path"] = $"{SearchFieldsKey}.{mainAliasLower}.{(metadataSearchField.ExactMatch ? "keyword" : "text")}",
+                };
+                searchFieldsProperties[$"{otherAliasLower}.keyword"] = new JsonObject()
+                {
+                    ["type"] = "alias",
+                    ["path"] = $"{SearchFieldsKey}.{mainAliasLower}.keyword",
+                };
+                searchFieldsProperties[$"{otherAliasLower}.text"] = new JsonObject()
+                {
+                    ["type"] = "alias",
+                    ["path"] = $"{SearchFieldsKey}.{mainAliasLower}.text",
                 };
             }
         }
@@ -502,7 +558,14 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
         JsonNode searchFieldsNode = new JsonObject();
         foreach (MetadataSearchField metadataSearchField in entry.MetadataSearchFields)
         {
-            searchFieldsNode[metadataSearchField.Aliases[0].ToLowerInvariant()] = new JsonArray([
+            string mainAlias = metadataSearchField.Aliases[0];
+            string mainAliasLower = mainAlias.ToLowerOrdinal();
+            searchFieldsNode[$"{mainAliasLower}.keyword"] = new JsonArray([
+                .. metadataSearchField.Values
+                    .Where(v => !string.IsNullOrWhiteSpace(v))
+                    .Distinct()
+            ]);
+            searchFieldsNode[$"{mainAliasLower}.text"] = new JsonArray([
                 .. metadataSearchField.Values
                     .Where(v => !string.IsNullOrWhiteSpace(v))
                     .Distinct()

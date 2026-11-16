@@ -68,6 +68,7 @@ internal static class ExportCli
         FilesystemFileStorage filesystemFileStorage = new();
         IDirectory outputDirectory = filesystemFileStorage.GetDirectory(outputDirectoryPath);
         Dictionary<string, StringValues> searchQuery = QueryHelpers.ParseQuery(searchQueryString);
+        SearchTerm searchTerm = SearchTerm.From(searchQuery);
         List<string> formatsList = [.. formats];
         IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping = serviceProvider.GetRequiredService<IMediaTypeFileExtensionsMapping>();
         IMediaCatalog catalog = serviceProvider.GetRequiredService<IMediaCatalog>();
@@ -76,7 +77,7 @@ internal static class ExportCli
             IncludeParts = true,
             Pagination = null,
         };
-        await foreach (MediaEntry mediaEntry in catalog.EnumerateAsync(searchQuery, searchOptions, cancellationToken).ConfigureAwait(false))
+        await foreach (MediaEntry mediaEntry in catalog.EnumerateAsync(searchTerm, searchOptions, cancellationToken).ConfigureAwait(false))
         {
             foreach (MediaExportTarget exportTarget in mediaEntry.ExportTargets)
             {

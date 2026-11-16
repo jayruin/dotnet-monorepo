@@ -47,15 +47,21 @@ internal static class UpdateCli
         CancellationToken cancellationToken)
     {
         Dictionary<string, StringValues> searchQuery = QueryHelpers.ParseQuery(searchQueryString);
+        SearchTerm searchTerm = SearchTerm.From(searchQuery);
         ISearchIndex? searchIndex = serviceProvider.GetService<ISearchIndex>();
         IExportCache? exportCache = serviceProvider.GetService<IExportCache>();
         IHashCache? hashCache = serviceProvider.GetService<IHashCache>();
         IMultiHashProvider? multiHashProvider = serviceProvider.GetService<IMultiHashProvider>();
         foreach (IMediaVendor mediaVendor in serviceProvider.GetServices<IMediaVendor>())
         {
-            bool matchesVendorId = SearchQuery.MatchesExactly(searchQuery, ["vendorid"], [mediaVendor.VendorId]);
+            bool matchesVendorId = SearchTerm.From(searchQuery).Matches(new MetadataSearchField()
+            {
+                Aliases = [nameof(MediaFullId.VendorId)],
+                Values = [mediaVendor.VendorId],
+                ExactMatch = true,
+            });
             if (!matchesVendorId) continue;
-            await foreach (string contentId in mediaVendor.UpdateContentAsync(searchQuery, force, cancellationToken).ConfigureAwait(false))
+            await foreach (string contentId in mediaVendor.UpdateContentAsync(searchTerm, force, cancellationToken).ConfigureAwait(false))
             {
                 List<SearchableMediaEntry> searchableMediaEntries = await mediaVendor.EnumerateAsync(contentId, cancellationToken)
                     .ToListAsync(cancellationToken).ConfigureAwait(false);

@@ -1,6 +1,5 @@
 using FileStorage;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
@@ -33,20 +32,7 @@ public sealed class MediaCatalog : IMediaCatalog
         _exportCache = exportCache;
     }
 
-    public IAsyncEnumerable<MediaEntry> EnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, SearchOptions searchOptions, CancellationToken cancellationToken = default)
-    {
-        if (_searchIndex is not null)
-        {
-            _logger.LogUsingSearchIndex();
-            return _searchIndex.EnumerateAsync(searchQuery, searchOptions, cancellationToken);
-        }
-        _logger.LogUsingRawVendor();
-        IAsyncEnumerable<SearchableMediaEntry> results = RawEnumerateAsync(searchQuery, cancellationToken);
-        results = ApplySearchOptionsAsync(results, searchOptions);
-        return results.Select(e => e.MediaEntry);
-    }
-
-    public IAsyncEnumerable<MediaEntry> EnumerateAsync(string searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<MediaEntry> EnumerateAsync(SearchTerm searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
     {
         if (_searchIndex is not null)
         {
@@ -99,25 +85,7 @@ public sealed class MediaCatalog : IMediaCatalog
         }
     }
 
-    private async IAsyncEnumerable<SearchableMediaEntry> RawEnumerateAsync(IReadOnlyDictionary<string, StringValues> searchQuery, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        foreach (IMediaVendor mediaVendor in _mediaVendors.Values.OrderBy(v => v.VendorId))
-        {
-            bool matchesVendorId = SearchQuery.MatchesExactly(searchQuery, [nameof(MediaFullId.VendorId)], [mediaVendor.VendorId]);
-            if (!matchesVendorId) continue;
-
-            await foreach (SearchableMediaEntry searchableEntry in mediaVendor.EnumerateAsync(cancellationToken)
-                .OrderBy(e => e.MediaEntry.Id.ContentId)
-                .ThenBy(e => e.MediaEntry.Id.PartId).ConfigureAwait(false))
-            {
-                bool matches = SearchQuery.Matches(searchQuery, searchableEntry.MetadataSearchFields);
-                if (!matches) continue;
-                yield return searchableEntry;
-            }
-        }
-    }
-
-    private async IAsyncEnumerable<SearchableMediaEntry> RawEnumerateAsync(string searchTerm, [EnumeratorCancellation] CancellationToken cancellationToken)
+    private async IAsyncEnumerable<SearchableMediaEntry> RawEnumerateAsync(SearchTerm searchTerm, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         foreach (IMediaVendor mediaVendor in _mediaVendors.Values.OrderBy(v => v.VendorId))
         {
@@ -125,7 +93,7 @@ public sealed class MediaCatalog : IMediaCatalog
                 .OrderBy(e => e.MediaEntry.Id.ContentId)
                 .ThenBy(e => e.MediaEntry.Id.PartId).ConfigureAwait(false))
             {
-                bool matches = SearchQuery.Matches(searchTerm, searchableEntry.MetadataSearchFields);
+                bool matches = searchTerm.Matches(searchableEntry.MetadataSearchFields);
                 if (!matches) continue;
                 yield return searchableEntry;
             }
@@ -144,10 +112,20 @@ public sealed class MediaCatalog : IMediaCatalog
             results = results
                 .GroupBy(e => e.MediaEntry.Id.ToMainId())
                 .Select(g => g.Key)
-                .Select((id, ct) => RawEnumerateAsync(new Dictionary<string, StringValues>()
+                .Select((id, ct) => RawEnumerateAsync(new SearchAndTerm()
                 {
-                    { nameof(MediaFullId.VendorId), id.VendorId },
-                    { nameof(MediaFullId.ContentId), id.ContentId },
+                    Targets = [
+                        new SearchEqualsTerm()
+                        {
+                            Name = nameof(MediaFullId.VendorId),
+                            Value = id.VendorId,
+                        },
+                        new SearchEqualsTerm()
+                        {
+                            Name = nameof(MediaFullId.ContentId),
+                            Value = id.ContentId,
+                        },
+                    ]
                 }, ct).FirstAsync(ct));
         }
         if (searchOptions.Pagination is not null)

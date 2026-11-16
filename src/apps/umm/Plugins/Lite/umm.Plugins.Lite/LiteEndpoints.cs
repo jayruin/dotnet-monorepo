@@ -58,7 +58,8 @@ public static class LiteEndpoints
         if (isAdvanced)
         {
             Dictionary<string, StringValues> searchQuery = QueryHelpers.ParseQuery(search);
-            entriesStream = catalog.EnumerateAsync(searchQuery, searchOptions, cancellationToken);
+            SearchTerm searchTerm = SearchTerm.From(searchQuery);
+            entriesStream = catalog.EnumerateAsync(searchTerm, searchOptions, cancellationToken);
         }
         else
         {

@@ -1,7 +1,7 @@
-using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using umm.Library;
 using umm.Storages.Metadata;
 
 namespace umm.Vendors.Common;
@@ -11,7 +11,7 @@ public interface IMetadataOnlyUpdateHandlerStrategy<TMetadata>
 {
     MediaVendorContext VendorContext { get; }
     string MetadataKey { get; }
-    IAsyncEnumerable<string> EnumerateLocalContentIdsAsync(IReadOnlyDictionary<string, StringValues> searchQuery, CancellationToken cancellationToken);
+    IAsyncEnumerable<string> EnumerateLocalContentIdsAsync(SearchTerm searchTerm, CancellationToken cancellationToken);
     bool ShouldUpdate(TMetadata remoteMetadata, TMetadata localMetadata);
     Task<TMetadata> GetLatestMetadataAsync(string contentId, CancellationToken cancellationToken);
 }

@@ -2,7 +2,6 @@ using FileStorage;
 using Images;
 using MediaTypes;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -59,6 +58,6 @@ public sealed class GenericEpubVendor : IMediaVendor
     public Task ExportAsync(string contentId, string partId, string exportId, IDirectory directory, CancellationToken cancellationToken = default)
         => _epubHandler.ExportAsync(contentId, partId, exportId, directory, cancellationToken);
 
-    public IAsyncEnumerable<string> UpdateContentAsync(IReadOnlyDictionary<string, StringValues> searchQuery, bool force, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<string> UpdateContentAsync(SearchTerm searchTerm, bool force, CancellationToken cancellationToken = default)
         => AsyncEnumerable.Empty<string>();
 }

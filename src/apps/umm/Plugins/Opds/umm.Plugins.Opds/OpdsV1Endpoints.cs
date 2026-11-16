@@ -44,6 +44,7 @@ internal static class OpdsV1Endpoints
     {
         FrozenSet<MediaFormat> mediaFormats = Navigation.GetMediaFormatsFromQuery(request);
         Dictionary<string, StringValues> searchQuery = QueryHelpers.ParseQuery(queryString);
+        SearchTerm searchTerm = SearchTerm.From(searchQuery);
         (string? prevUrl, MediaFullId? after) = Navigation.GetHistory(history, request);
         int pageSize = options.Value.PageSize;
         SearchOptions searchOptions = new()
@@ -58,7 +59,7 @@ internal static class OpdsV1Endpoints
                 : null,
             MediaFormats = mediaFormats,
         };
-        List<MediaEntry> entries = await catalog.EnumerateAsync(searchQuery, searchOptions, cancellationToken)
+        List<MediaEntry> entries = await catalog.EnumerateAsync(searchTerm, searchOptions, cancellationToken)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
         string? nextUrl = Navigation.GetNextUrl(history, request, entries, pageSize);
@@ -154,6 +155,7 @@ internal static class OpdsV1Endpoints
     {
         OpdsRecipe? recipe = await recipeStorage.GetAsync(id, cancellationToken).ConfigureAwait(false);
         if (recipe is null) return TypedResults.NotFound();
+        SearchTerm searchTerm = SearchTerm.From(recipe.SearchQuery);
         (string? prevUrl, MediaFullId? after) = Navigation.GetHistory(history, request);
         int pageSize = options.Value.PageSize;
         SearchOptions searchOptions = new()
@@ -168,7 +170,7 @@ internal static class OpdsV1Endpoints
                 : null,
             MediaFormats = [.. recipe.MediaFormats],
         };
-        List<MediaEntry> entries = await catalog.EnumerateAsync(recipe.SearchQuery, searchOptions, cancellationToken)
+        List<MediaEntry> entries = await catalog.EnumerateAsync(searchTerm, searchOptions, cancellationToken)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
         string? nextUrl = Navigation.GetNextUrl(history, request, entries, pageSize);
