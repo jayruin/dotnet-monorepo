@@ -14,7 +14,7 @@ public class MetadataTests
     [DataRow(EpubVersion.Epub2)]
     public void TestAddIdentifier(EpubVersion epubVersion)
     {
-        string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
+        string fileName = $"{epubVersion.ToString().ToLowerOrdinal()}.opf";
         PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddIdentifier("urn:uuid:12345678-1234-1234-1234-123456789012");
         XDocument document = handler.GetDocument();
@@ -27,7 +27,7 @@ public class MetadataTests
     [DataRow(EpubVersion.Epub2)]
     public void TestAddTitle(EpubVersion epubVersion)
     {
-        string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
+        string fileName = $"{epubVersion.ToString().ToLowerOrdinal()}.opf";
         PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddTitle("Title");
         XDocument document = handler.GetDocument();
@@ -40,7 +40,7 @@ public class MetadataTests
     [DataRow(EpubVersion.Epub2)]
     public void TestAddLanguage(EpubVersion epubVersion)
     {
-        string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
+        string fileName = $"{epubVersion.ToString().ToLowerOrdinal()}.opf";
         PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddLanguage("en");
         XDocument document = handler.GetDocument();
@@ -69,7 +69,7 @@ public class MetadataTests
     [DataRow(EpubVersion.Epub2)]
     public void TestAddDescription(EpubVersion epubVersion)
     {
-        string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
+        string fileName = $"{epubVersion.ToString().ToLowerOrdinal()}.opf";
         PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddDescription("Description");
         XDocument document = handler.GetDocument();
@@ -82,7 +82,7 @@ public class MetadataTests
     [DataRow(EpubVersion.Epub2)]
     public void TestAddDate(EpubVersion epubVersion)
     {
-        string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
+        string fileName = $"{epubVersion.ToString().ToLowerOrdinal()}.opf";
         PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddDate(new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero));
         XDocument document = handler.GetDocument();
@@ -95,7 +95,7 @@ public class MetadataTests
     [DataRow(EpubVersion.Epub2)]
     public void TestAddPrePaginated(EpubVersion epubVersion)
     {
-        string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
+        string fileName = $"{epubVersion.ToString().ToLowerOrdinal()}.opf";
         PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddPrePaginated();
         XDocument document = handler.GetDocument();
@@ -108,7 +108,7 @@ public class MetadataTests
     [DataRow(EpubVersion.Epub2)]
     public void TestAddModified(EpubVersion epubVersion)
     {
-        string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
+        string fileName = $"{epubVersion.ToString().ToLowerOrdinal()}.opf";
         PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddModified(new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero));
         XDocument document = handler.GetDocument();

@@ -13,7 +13,7 @@ public class RasterTests
     {
         CoverXhtmlHandler handler = new(epubVersion);
         XDocument document = handler.GetRasterDocument("cover.jpg");
-        string expectedDocumentResource = $"WriterTests/Documents/CoverXhtml/Raster/{epubVersion.ToString().ToLowerInvariant()}.xhtml";
+        string expectedDocumentResource = $"WriterTests/Documents/CoverXhtml/Raster/{epubVersion.ToString().ToLowerOrdinal()}.xhtml";
         CustomAssert.AreDocumentsEqual(expectedDocumentResource, document);
     }
 }

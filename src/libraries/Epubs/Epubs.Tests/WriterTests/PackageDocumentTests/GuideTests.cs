@@ -13,7 +13,7 @@ public class GuideTests
     [DataRow(EpubVersion.Epub2)]
     public void TestAddReferenceToGuide(EpubVersion epubVersion)
     {
-        string fileName = $"{epubVersion.ToString().ToLowerInvariant()}.opf";
+        string fileName = $"{epubVersion.ToString().ToLowerOrdinal()}.opf";
         PackageDocumentHandler handler = new(epubVersion, MediaTypeFileExtensionsMapping.Default);
         handler.AddReferenceToGuide("cover", "Cover", "cover.xhtml");
         XDocument document = handler.GetDocument();

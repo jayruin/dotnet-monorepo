@@ -35,7 +35,7 @@ public static class StringExtensions
                         }
                         separatorSequence = false;
                         isStart = false;
-                        builder.Append(Rune.ToLowerInvariant(rune));
+                        builder.Append(Rune.ToLowerOrdinal(rune));
                         break;
                     default:
                         break;

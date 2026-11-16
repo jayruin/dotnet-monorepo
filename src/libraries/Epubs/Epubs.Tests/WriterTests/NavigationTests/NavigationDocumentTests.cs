@@ -11,7 +11,7 @@ public class NavigationDocumentTests
     [DataRow(EpubVersion.Epub2)]
     public void TestAddNavItem(EpubVersion epubVersion)
     {
-        string fileName = $"{epubVersion.ToString().ToLowerInvariant()}_toc.xhtml";
+        string fileName = $"{epubVersion.ToString().ToLowerOrdinal()}_toc.xhtml";
         NavigationDocumentHandler handler = new(epubVersion);
         EpubNavItem navItem1 = new()
         {
@@ -47,7 +47,7 @@ public class NavigationDocumentTests
     [DataRow(EpubVersion.Epub2)]
     public void TestAddItemToLandmarks(EpubVersion epubVersion)
     {
-        string fileName = $"{epubVersion.ToString().ToLowerInvariant()}_landmarks.xhtml";
+        string fileName = $"{epubVersion.ToString().ToLowerOrdinal()}_landmarks.xhtml";
         NavigationDocumentHandler handler = new(epubVersion);
         handler.AddItemToLandmarks("cover", "Cover", "cover.xhtml");
         XDocument document = handler.GetDocument();

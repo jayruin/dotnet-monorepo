@@ -7,7 +7,7 @@ public static class HashFunction
 {
     internal static IHashFunction? Create(string name)
     {
-        return name.ToLowerInvariant() switch
+        return name.ToLowerOrdinal() switch
         {
             MD5 => new IncrementalHashAdapter(IncrementalHash.CreateHash(HashAlgorithmName.MD5), MD5),
             SHA1 => new IncrementalHashAdapter(IncrementalHash.CreateHash(HashAlgorithmName.SHA1), SHA1),
