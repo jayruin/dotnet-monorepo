@@ -40,44 +40,23 @@ public sealed class SinglePartSearchEntryEnumerationHandler<TMetadata>
 
     private async Task<SearchableMediaEntry> GetRequiredEntryAsync(string contentId, string partId, CancellationToken cancellationToken)
     {
+        MediaFullId mediaFullId = new(_strategy.VendorContext.VendorId, contentId, string.Empty);
         TMetadata metadata = await _strategy.GetMetadataAsync(contentId, cancellationToken).ConfigureAwait(false);
         UniversalMediaMetadata universalMetadata = metadata.Universalize();
         ImmutableArray<MediaExportTarget> exportTargets = await _strategy.EnumerateExportTargetsAsync(contentId, partId, cancellationToken)
             .ToImmutableArrayAsync(cancellationToken).ConfigureAwait(false);
         ImmutableSortedSet<string> tags = await _strategy.GetTagsAsync(contentId, cancellationToken).ConfigureAwait(false);
         ImmutableArray<string> urls = await _strategy.GetUrlsAsync(metadata, cancellationToken).ConfigureAwait(false);
+        ImmutableArray<MetadataSearchField> sharedMetadataSearchFields = SharedMetadataSearchFields.GetAllSharedFields(mediaFullId, tags, exportTargets);
         ImmutableArray<MetadataSearchField> metadataSearchFields = [
             ..metadata.GetSearchFields(),
-                new()
-                {
-                    Aliases = ["tag"],
-                    Values = [..tags],
-                    ExactMatch = true,
-                },
-                new()
-                {
-                    Aliases = [nameof(MediaFullId.VendorId)],
-                    Values = [_strategy.VendorContext.VendorId],
-                    ExactMatch = true,
-                },
-                new()
-                {
-                    Aliases = [nameof(MediaFullId.ContentId)],
-                    Values = [contentId],
-                    ExactMatch = true,
-                },
-                new()
-                {
-                    Aliases = [nameof(MediaFullId.PartId)],
-                    Values = [string.Empty],
-                    ExactMatch = true,
-                },
-            ];
+            ..sharedMetadataSearchFields,
+        ];
         return new()
         {
             MediaEntry = new()
             {
-                Id = new(_strategy.VendorContext.VendorId, contentId, string.Empty),
+                Id = mediaFullId,
                 Metadata = universalMetadata,
                 ExportTargets = exportTargets,
                 Tags = tags,

@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
-using System;
-using System.Collections.Frozen;
 using System.Collections.Generic;
-using System.Linq;
 using umm.Library;
 
 namespace umm.Server;
@@ -52,18 +49,5 @@ public static class Navigation
             ? QueryHelpers.AddQueryString(request.Path, query)
             : null;
         return nextUrl;
-    }
-
-    public static FrozenSet<MediaFormat> GetMediaFormatsFromQuery(HttpRequest request)
-    {
-        return request.Query.TryGetValue("format", out StringValues formats)
-            ? formats
-                .Select<string, MediaFormat?>(s =>
-                    Enum.TryParse(s, true, out MediaFormat mediaFormat)
-                        ? mediaFormat
-                        : null)
-                .OfType<MediaFormat>()
-                .ToFrozenSet()
-            : [];
     }
 }

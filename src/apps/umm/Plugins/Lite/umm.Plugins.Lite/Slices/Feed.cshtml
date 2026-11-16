@@ -48,21 +48,6 @@
             }
         </label>
     </fieldset>
-    <fieldset>
-        <legend>Format Options</legend>
-        @foreach (MediaFormat mediaFormat in Enum.GetValues<MediaFormat>())
-        {
-            @mediaFormat.ToString()
-            @if (Model.MediaFormats.Contains(mediaFormat))
-            {
-                <input type="checkbox" name="format" value="@mediaFormat.ToString()" checked />
-            }
-            else
-            {
-                <input type="checkbox" name="format" value="@mediaFormat.ToString()" />
-            }
-        }
-    </fieldset>
     <input type="submit" value="Submit" />
 </form>
 

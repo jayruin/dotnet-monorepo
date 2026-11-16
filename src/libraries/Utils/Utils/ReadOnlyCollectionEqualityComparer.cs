@@ -23,6 +23,11 @@ public sealed class ReadOnlyCollectionEqualityComparer<TCollection, TItem> : IEq
 
     public int GetHashCode(TCollection obj)
     {
-        return HashCode.Combine(obj);
+        HashCode hashCode = new();
+        foreach (TItem item in obj)
+        {
+            hashCode.Add(item);
+        }
+        return hashCode.ToHashCode();
     }
 }

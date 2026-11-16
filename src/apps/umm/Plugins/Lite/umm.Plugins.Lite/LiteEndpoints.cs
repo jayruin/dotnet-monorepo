@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using System;
-using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -39,7 +38,6 @@ public static class LiteEndpoints
         [FromQuery] string? history = null,
         CancellationToken cancellationToken = default)
     {
-        FrozenSet<MediaFormat> mediaFormats = Navigation.GetMediaFormatsFromQuery(request);
         (string? prevUrl, MediaFullId? after) = Navigation.GetHistory(history, request);
         int pageSize = options.Value.PageSize;
         SearchOptions searchOptions = new()
@@ -52,7 +50,6 @@ public static class LiteEndpoints
                     Count = pageSize,
                 }
                 : null,
-            MediaFormats = mediaFormats,
         };
         IAsyncEnumerable<MediaEntry> entriesStream;
         if (isAdvanced)
@@ -79,7 +76,6 @@ public static class LiteEndpoints
             IsAdvanced = isAdvanced,
             IsPaginated = isPaginated,
             IncludeParts = includeParts,
-            MediaFormats = mediaFormats,
             PrevUrl = prevUrl,
             NextUrl = nextUrl,
         };

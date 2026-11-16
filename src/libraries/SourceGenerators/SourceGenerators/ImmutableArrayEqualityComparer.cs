@@ -22,6 +22,11 @@ public sealed class ImmutableArrayEqualityComparer<T> : IEqualityComparer<Immuta
 
     public int GetHashCode(ImmutableArray<T> obj)
     {
-        return HashCode.Combine(obj);
+        HashCode hashCode = new();
+        foreach (T item in obj)
+        {
+            hashCode.Add(item);
+        }
+        return hashCode.ToHashCode();
     }
 }

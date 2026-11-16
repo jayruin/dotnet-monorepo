@@ -32,17 +32,24 @@ public sealed class MediaCatalog : IMediaCatalog
         _exportCache = exportCache;
     }
 
-    public IAsyncEnumerable<MediaEntry> EnumerateAsync(SearchTerm searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<MediaEntry> EnumerateAsync(SearchTerm searchTerm, SearchOptions searchOptions, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
+        IAsyncEnumerable<MediaEntry> results;
         if (_searchIndex is not null)
         {
             _logger.LogUsingSearchIndex();
-            return _searchIndex.EnumerateAsync(searchTerm, searchOptions, cancellationToken);
+            results = _searchIndex.EnumerateAsync(searchTerm, searchOptions, cancellationToken);
         }
-        _logger.LogUsingRawVendor();
-        IAsyncEnumerable<SearchableMediaEntry> results = RawEnumerateAsync(searchTerm, cancellationToken);
-        results = ApplySearchOptionsAsync(results, searchOptions);
-        return results.Select(e => e.MediaEntry);
+        else
+        {
+            _logger.LogUsingRawVendor();
+            IAsyncEnumerable<SearchableMediaEntry> rawEntries = await GetRawEnumeratationAsync(searchTerm, searchOptions, cancellationToken).ConfigureAwait(false);
+            results = rawEntries.Select(e => e.MediaEntry);
+        }
+        await foreach (MediaEntry result in results.WithCancellation(cancellationToken))
+        {
+            yield return result;
+        }
     }
 
     public Task<MediaEntry?> GetMediaEntryAsync(MediaFullId id, CancellationToken cancellationToken = default)
@@ -85,6 +92,18 @@ public sealed class MediaCatalog : IMediaCatalog
         }
     }
 
+    private async Task<IAsyncEnumerable<SearchableMediaEntry>> GetRawEnumeratationAsync(SearchTerm searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
+    {
+        IAsyncEnumerable<SearchableMediaEntry> results = RawEnumerateAsync(searchTerm, cancellationToken);
+        if (!searchOptions.IncludeParts)
+        {
+            List<SearchableMediaEntry> resultsList = await results.ToListAsync(cancellationToken).ConfigureAwait(false);
+            results = MainSearchableMediaEntries.ConvertToMainEntries(resultsList).ToAsyncEnumerable();
+        }
+        results = ApplyPaginationOptionsAsync(results, searchOptions.Pagination);
+        return results;
+    }
+
     private async IAsyncEnumerable<SearchableMediaEntry> RawEnumerateAsync(SearchTerm searchTerm, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         foreach (IMediaVendor mediaVendor in _mediaVendors.Values.OrderBy(v => v.VendorId))
@@ -100,43 +119,18 @@ public sealed class MediaCatalog : IMediaCatalog
         }
     }
 
-    private IAsyncEnumerable<SearchableMediaEntry> ApplySearchOptionsAsync(IAsyncEnumerable<SearchableMediaEntry> entries, SearchOptions searchOptions)
+    private IAsyncEnumerable<SearchableMediaEntry> ApplyPaginationOptionsAsync(IAsyncEnumerable<SearchableMediaEntry> entries, PaginationOptions? paginationOptions)
     {
         IAsyncEnumerable<SearchableMediaEntry> results = entries;
-        if (searchOptions.MediaFormats.Count > 0)
+        if (paginationOptions is not null)
         {
-            results = results.Where(e => e.MediaFormats.Overlaps(searchOptions.MediaFormats));
-        }
-        if (!searchOptions.IncludeParts)
-        {
-            results = results
-                .GroupBy(e => e.MediaEntry.Id.ToMainId())
-                .Select(g => g.Key)
-                .Select((id, ct) => RawEnumerateAsync(new SearchAndTerm()
-                {
-                    Targets = [
-                        new SearchEqualsTerm()
-                        {
-                            Name = nameof(MediaFullId.VendorId),
-                            Value = id.VendorId,
-                        },
-                        new SearchEqualsTerm()
-                        {
-                            Name = nameof(MediaFullId.ContentId),
-                            Value = id.ContentId,
-                        },
-                    ]
-                }, ct).FirstAsync(ct));
-        }
-        if (searchOptions.Pagination is not null)
-        {
-            if (searchOptions.Pagination.After is not null)
+            if (paginationOptions.After is not null)
             {
                 results = results
-                    .SkipWhile(e => e.MediaEntry.Id != searchOptions.Pagination.After)
+                    .SkipWhile(e => e.MediaEntry.Id != paginationOptions.After)
                     .Skip(1);
             }
-            results = results.Take(searchOptions.Pagination.Count);
+            results = results.Take(paginationOptions.Count);
         }
         return results;
     }

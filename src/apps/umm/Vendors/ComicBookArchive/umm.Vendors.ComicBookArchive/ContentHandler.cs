@@ -111,40 +111,20 @@ internal sealed class ContentHandler
 
     private async IAsyncEnumerable<SearchableMediaEntry> EnumerateEntriesAsync(string contentId, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
+        MediaFullId mediaFullId = new(_vendorContext.VendorId, contentId, string.Empty);
         EpubMetadataOverrideMetadataAdapter metadata = await GetMetadataAsync(contentId, cancellationToken).ConfigureAwait(false);
         string title = !string.IsNullOrWhiteSpace(metadata.EpubMetadataOverride.Title)
             ? metadata.EpubMetadataOverride.Title
-            : new MediaMainId(_vendorContext.VendorId, contentId).ToCombinedString();
+            : mediaFullId.ToCombinedString();
         ComicBookArchiveStorageNode storageNode = await GetStorageNodeAsync(contentId, title, cancellationToken).ConfigureAwait(false);
         UniversalMediaMetadata universalMetadata = metadata.Universalize();
         ImmutableSortedSet<string> tags = await GetTagsAsync(contentId, cancellationToken).ConfigureAwait(false);
         ImmutableArray<string> urls = await GetUrlsAsync(contentId, cancellationToken).ConfigureAwait(false);
+        ImmutableArray<MediaExportTarget> exportTargets = GetExportTargets(storageNode);
+        ImmutableArray<MetadataSearchField> sharedMetadataSearchFields = SharedMetadataSearchFields.GetAllSharedFields(mediaFullId, tags, exportTargets);
         ImmutableArray<MetadataSearchField> searchFields = [
             ..metadata.GetSearchFields(),
-            new()
-            {
-                Aliases = ["tag"],
-                Values = [..tags],
-                ExactMatch = true,
-            },
-            new()
-            {
-                Aliases = [nameof(MediaFullId.VendorId)],
-                Values = [_vendorContext.VendorId],
-                ExactMatch = true,
-            },
-            new()
-            {
-                Aliases = [nameof(MediaFullId.ContentId)],
-                Values = [contentId],
-                ExactMatch = true,
-            },
-            new()
-            {
-                Aliases = [nameof(MediaFullId.PartId)],
-                Values = [string.Empty],
-                ExactMatch = true,
-            },
+            ..sharedMetadataSearchFields,
             new()
             {
                 Aliases = ["depth"],
@@ -156,9 +136,9 @@ internal sealed class ContentHandler
         {
             MediaEntry = new()
             {
-                Id = new(_vendorContext.VendorId, contentId, string.Empty),
+                Id = mediaFullId,
                 Metadata = universalMetadata,
-                ExportTargets = GetExportTargets(storageNode),
+                ExportTargets = exportTargets,
                 Tags = tags,
                 Urls = urls,
             },
@@ -173,48 +153,44 @@ internal sealed class ContentHandler
         {
             ImmutableArray<int> coordinates = coordinatesStack.Pop();
             string partId = string.Join(PartIdSeparator, coordinates);
+            MediaFullId childMediaFullId = new(_vendorContext.VendorId, contentId, partId);
             ComicBookArchiveStorageNode resolvedStorageNode = storageNode.Resolve(coordinates)
                 ?? throw new InvalidOperationException($"Could not resolve coordinates for contentId {contentId}.");
             string resolvedFullTitle = storageNode.ResolveFullTitle(coordinates);
-            ImmutableArray<MetadataSearchField>.Builder searchFieldsBuilder = searchFields.ToBuilder();
-            (int partIdSearchFieldIndex, MetadataSearchField partIdSearchField) = searchFieldsBuilder
-                .Index()
-                .First(t => t.Item.Aliases.Any(a => a == nameof(MediaFullId.PartId)));
-            searchFieldsBuilder[partIdSearchFieldIndex] = new()
-            {
-                Aliases = partIdSearchField.Aliases,
-                Values = [partId],
-                ExactMatch = partIdSearchField.ExactMatch,
-            };
-            (int titleSearchFieldIndex, MetadataSearchField titleSearchField) = searchFieldsBuilder
+            ImmutableArray<MediaExportTarget> childExportTargets = GetExportTargets(resolvedStorageNode);
+            ImmutableArray<MetadataSearchField> childSharedMetadataSearchFields = SharedMetadataSearchFields.GetAllSharedFields(
+                childMediaFullId, tags, childExportTargets);
+            ImmutableArray<MetadataSearchField> childSearchFields = [
+                ..metadata.GetSearchFields(),
+                ..childSharedMetadataSearchFields,
+                new()
+                {
+                    Aliases = ["depth"],
+                    Values = [coordinates.Length.ToString() ?? string.Empty],
+                    ExactMatch = true,
+                },
+            ];
+            ImmutableArray<MetadataSearchField>.Builder childSearchFieldsBuilder = childSearchFields.ToBuilder();
+            (int titleSearchFieldIndex, MetadataSearchField titleSearchField) = childSearchFieldsBuilder
                 .Index()
                 .First(t => t.Item.Aliases.Any(a => a.Equals("title", StringComparison.OrdinalIgnoreCase)));
-            searchFieldsBuilder[titleSearchFieldIndex] = new()
+            childSearchFieldsBuilder[titleSearchFieldIndex] = new()
             {
                 Aliases = titleSearchField.Aliases,
                 Values = [resolvedFullTitle],
                 ExactMatch = titleSearchField.ExactMatch,
             };
-            (int depthSearchFieldIndex, MetadataSearchField depthSearchField) = searchFieldsBuilder
-                .Index()
-                .First(t => t.Item.Aliases.Any(a => a.Equals("depth", StringComparison.OrdinalIgnoreCase)));
-            searchFieldsBuilder[depthSearchFieldIndex] = new()
-            {
-                Aliases = depthSearchField.Aliases,
-                Values = [coordinates.Length.ToString() ?? string.Empty],
-                ExactMatch = depthSearchField.ExactMatch,
-            };
             yield return new()
             {
                 MediaEntry = new()
                 {
-                    Id = new(_vendorContext.VendorId, contentId, partId),
+                    Id = childMediaFullId,
                     Metadata = universalMetadata.With(title: resolvedFullTitle),
-                    ExportTargets = GetExportTargets(resolvedStorageNode),
+                    ExportTargets = childExportTargets,
                     Tags = tags,
                     Urls = urls,
                 },
-                MetadataSearchFields = searchFieldsBuilder.ToImmutable(),
+                MetadataSearchFields = childSearchFieldsBuilder.ToImmutable(),
             };
             for (int coordinate = resolvedStorageNode.ChildNodes.Length; coordinate > 0; coordinate--)
             {

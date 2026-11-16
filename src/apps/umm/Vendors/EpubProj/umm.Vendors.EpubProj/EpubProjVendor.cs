@@ -153,6 +153,7 @@ public sealed class EpubProjVendor : IMediaVendor
 
     private async IAsyncEnumerable<SearchableMediaEntry> EnumerateEntriesAsync(string contentId, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
+        MediaFullId mediaFullId = new(VendorId, contentId, string.Empty);
         if (!await ContainsAsync(contentId, cancellationToken).ConfigureAwait(false)) yield break;
         EpubProjMetadataAdapter metadata = await GetMetadataAsync(contentId, cancellationToken).ConfigureAwait(false);
         UniversalMediaMetadata universalMetadata = metadata.Universalize();
@@ -160,38 +161,16 @@ public sealed class EpubProjVendor : IMediaVendor
             .ToImmutableArrayAsync(cancellationToken).ConfigureAwait(false);
         ImmutableSortedSet<string> tags = await GetTagsAsync(contentId, cancellationToken).ConfigureAwait(false);
         ImmutableArray<string> urls = await GetUrlsAsync(contentId, cancellationToken).ConfigureAwait(false);
+        ImmutableArray<MetadataSearchField> sharedMetadataSearchFields = SharedMetadataSearchFields.GetAllSharedFields(mediaFullId, tags, exportTargets);
         ImmutableArray<MetadataSearchField> searchFields = [
             ..metadata.GetSearchFields(),
-            new()
-            {
-                Aliases = ["tag"],
-                Values = [..tags],
-                ExactMatch = true,
-            },
-            new()
-            {
-                Aliases = [nameof(MediaFullId.VendorId)],
-                Values = [VendorId],
-                ExactMatch = true,
-            },
-            new()
-            {
-                Aliases = [nameof(MediaFullId.ContentId)],
-                Values = [contentId],
-                ExactMatch = true,
-            },
-            new()
-            {
-                Aliases = [nameof(MediaFullId.PartId)],
-                Values = [string.Empty],
-                ExactMatch = true,
-            },
+            ..sharedMetadataSearchFields,
         ];
         yield return new()
         {
             MediaEntry = new()
             {
-                Id = new(VendorId, contentId, string.Empty),
+                Id = mediaFullId,
                 Metadata = universalMetadata,
                 ExportTargets = exportTargets,
                 Tags = tags,

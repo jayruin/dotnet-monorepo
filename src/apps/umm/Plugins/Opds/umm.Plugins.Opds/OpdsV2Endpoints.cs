@@ -8,7 +8,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Opds;
 using System;
-using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -41,7 +40,6 @@ internal static class OpdsV2Endpoints
         [FromQuery] string? history = null,
         CancellationToken cancellationToken = default)
     {
-        FrozenSet<MediaFormat> mediaFormats = Navigation.GetMediaFormatsFromQuery(request);
         Dictionary<string, StringValues> searchQuery = QueryHelpers.ParseQuery(queryString);
         SearchTerm searchTerm = SearchTerm.From(searchQuery);
         (string? prevUrl, MediaFullId? after) = Navigation.GetHistory(history, request);
@@ -56,7 +54,6 @@ internal static class OpdsV2Endpoints
                     Count = pageSize,
                 }
                 : null,
-            MediaFormats = mediaFormats,
         };
         List<MediaEntry> entries = await catalog.EnumerateAsync(searchTerm, searchOptions, cancellationToken)
             .ToListAsync(cancellationToken)
@@ -83,7 +80,6 @@ internal static class OpdsV2Endpoints
         [FromQuery] string? history = null,
         CancellationToken cancellationToken = default)
     {
-        FrozenSet<MediaFormat> mediaFormats = Navigation.GetMediaFormatsFromQuery(request);
         (string? prevUrl, MediaFullId? after) = Navigation.GetHistory(history, request);
         int pageSize = options.Value.PageSize;
         SearchOptions searchOptions = new()
@@ -96,7 +92,6 @@ internal static class OpdsV2Endpoints
                     Count = pageSize,
                 }
                 : null,
-            MediaFormats = mediaFormats,
         };
         List<MediaEntry> entries = await catalog.EnumerateAsync(searchTerm ?? string.Empty, searchOptions, cancellationToken)
             .ToListAsync(cancellationToken)
@@ -147,7 +142,6 @@ internal static class OpdsV2Endpoints
                     Count = pageSize,
                 }
                 : null,
-            MediaFormats = [.. recipe.MediaFormats],
         };
         List<MediaEntry> entries = await catalog.EnumerateAsync(searchTerm, searchOptions, cancellationToken)
             .ToListAsync(cancellationToken)
