@@ -74,15 +74,15 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
             ?? throw new InvalidOperationException("No JsonNamingPolicy");
         JsonNode payload = new JsonObject()
         {
-            ["query"] = CreateQueryNode(new SearchAndTerm()
+            ["query"] = CreateQueryNode(new AndSearchTerm()
             {
                 Targets = [
-                    new SearchEqualsTerm()
+                    new EqualsSearchTerm()
                     {
                         Name = nameof(MediaFullId.VendorId),
                         Value = id.VendorId,
                     },
-                    new SearchEqualsTerm()
+                    new EqualsSearchTerm()
                     {
                         Name = nameof(MediaFullId.ContentId),
                         Value = id.ContentId,
@@ -117,11 +117,11 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
     {
         return searchTerm switch
         {
-            SearchConstantTerm constantTerm => new JsonObject()
+            ConstantSearchTerm constantTerm => new JsonObject()
             {
                 [constantTerm.Constant ? "match_all" : "match_none"] = new JsonObject(),
             },
-            SearchMatchTerm matchTerm => string.IsNullOrWhiteSpace(matchTerm.Name)
+            MatchSearchTerm matchTerm => string.IsNullOrWhiteSpace(matchTerm.Name)
                 ? new JsonObject()
                 {
                     ["simple_query_string"] = new JsonObject()
@@ -142,7 +142,7 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                         },
                     },
                 },
-            SearchEqualsTerm equalsTerm => string.IsNullOrWhiteSpace(equalsTerm.Name)
+            EqualsSearchTerm equalsTerm => string.IsNullOrWhiteSpace(equalsTerm.Name)
                 ? new JsonObject()
                 {
                     ["simple_query_string"] = new JsonObject()
@@ -163,7 +163,7 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                         },
                     },
                 },
-            SearchContainsTerm containsTerm => string.IsNullOrWhiteSpace(containsTerm.Name)
+            ContainsSearchTerm containsTerm => string.IsNullOrWhiteSpace(containsTerm.Name)
                 ? new JsonObject()
                 {
                     ["simple_query_string"] = new JsonObject()
@@ -184,21 +184,28 @@ public sealed class ElasticsearchSearchIndex : ISearchIndex
                         },
                     },
                 },
-            SearchNotTerm notTerm => new JsonObject()
+            HasSearchTerm hasTerm => new JsonObject()
+            {
+                ["exists"] = new JsonObject()
+                {
+                    ["field"] = $"{SearchFieldsKey}.{hasTerm.Name}.default",
+                },
+            },
+            NotSearchTerm notTerm => new JsonObject()
             {
                 ["bool"] = new JsonObject()
                 {
                     ["must_not"] = new JsonArray(CreateQueryNode(notTerm.Target)),
                 },
             },
-            SearchAndTerm andTerm => new JsonObject()
+            AndSearchTerm andTerm => new JsonObject()
             {
                 ["bool"] = new JsonObject()
                 {
                     ["must"] = new JsonArray([.. andTerm.Targets.Select(CreateQueryNode)]),
                 },
             },
-            SearchOrTerm orTerm => new JsonObject()
+            OrSearchTerm orTerm => new JsonObject()
             {
                 ["bool"] = new JsonObject()
                 {

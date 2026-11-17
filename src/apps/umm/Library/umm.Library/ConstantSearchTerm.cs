@@ -1,6 +1,6 @@
 namespace umm.Library;
 
-public sealed class SearchConstantTerm : SearchTerm
+public sealed class ConstantSearchTerm : SearchTerm
 {
     public required bool Constant { get; init; }
 }

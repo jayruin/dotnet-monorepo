@@ -13,7 +13,7 @@ public static class MediaCatalogExtensions
     extension(IMediaCatalog mediaCatalog)
     {
         public IAsyncEnumerable<MediaEntry> EnumerateAsync(string searchTerm, SearchOptions searchOptions, CancellationToken cancellationToken = default)
-            => mediaCatalog.EnumerateAsync(new SearchMatchTerm() { Name = null, Value = searchTerm, }, searchOptions, cancellationToken);
+            => mediaCatalog.EnumerateAsync(new MatchSearchTerm() { Name = null, Value = searchTerm, }, searchOptions, cancellationToken);
 
         public async Task ExportAsync(MediaFullId id, string exportId, IFile file, CancellationToken cancellationToken = default)
         {

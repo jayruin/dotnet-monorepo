@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 
 namespace umm.Library;
 
-public closed class SearchMultiTargetTerm : SearchTerm
+public closed class MultiTargetSearchTerm : SearchTerm
 {
     public required ImmutableArray<SearchTerm> Targets
     {

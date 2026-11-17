@@ -12,8 +12,8 @@ public static class SearchTermExtensions
     {
         public static SearchTerm From(IReadOnlyDictionary<string, StringValues> searchQuery)
             => searchQuery.Count == 0
-                ? new SearchConstantTerm() { Constant = true }
-                : new SearchAndTerm()
+                ? new ConstantSearchTerm() { Constant = true }
+                : new AndSearchTerm()
                 {
                     Targets = searchQuery.Select(kvp =>
                     {
@@ -30,10 +30,10 @@ public static class SearchTermExtensions
                             isNegative = false;
                             actualKey = key;
                         }
-                        SearchOrTerm orTerm = new()
+                        OrSearchTerm orTerm = new()
                         {
                             Targets = values
-                                .Select(value => new SearchMatchTerm()
+                                .Select(value => new MatchSearchTerm()
                                 {
                                     Name = actualKey,
                                     Value = value ?? string.Empty,
@@ -43,7 +43,7 @@ public static class SearchTermExtensions
                                 .ToImmutableArray(),
                         };
                         SearchTerm result = isNegative
-                            ? new SearchNotTerm() { Target = orTerm }
+                            ? new NotSearchTerm() { Target = orTerm }
                             : orTerm;
                         return result;
                     }).ToImmutableArray(),
@@ -53,20 +53,28 @@ public static class SearchTermExtensions
         {
             return searchTerm switch
             {
-                SearchConstantTerm constantTerm => constantTerm.Constant,
-                SearchBaseTerm baseTerm => MatchesBaseTerm(baseTerm, searchFields),
-                SearchNotTerm notTerm => !notTerm.Target.Matches(searchFields),
-                SearchAndTerm andTerm => andTerm.Targets.All(t => t.Matches(searchFields)),
-                SearchOrTerm orTerm => orTerm.Targets.Any(t => t.Matches(searchFields)),
+                ConstantSearchTerm constantTerm => constantTerm.Constant,
+                CompareSearchTerm compareTerm => MatchesCompareTerm(compareTerm, searchFields),
+                HasSearchTerm hasTerm => MatchesHasTerm(hasTerm, searchFields),
+                NotSearchTerm notTerm => !notTerm.Target.Matches(searchFields),
+                AndSearchTerm andTerm => andTerm.Targets.All(t => t.Matches(searchFields)),
+                OrSearchTerm orTerm => orTerm.Targets.Any(t => t.Matches(searchFields)),
             };
 
-            static bool MatchesBaseTerm(SearchBaseTerm baseTerm, IReadOnlyCollection<MetadataSearchField> searchFields)
+            static bool MatchesCompareTerm(CompareSearchTerm compareTerm, IReadOnlyCollection<MetadataSearchField> searchFields)
             {
                 return searchFields
-                    .Where(f => string.IsNullOrWhiteSpace(baseTerm.Name) || f.Aliases.Any(a => a.Equals(baseTerm.Name, StringComparison.OrdinalIgnoreCase)))
+                    .Where(f => string.IsNullOrWhiteSpace(compareTerm.Name) || f.Aliases.Contains(compareTerm.Name, StringComparer.OrdinalIgnoreCase))
                     .Any(f => f.Values.Any(v =>
-                        (baseTerm is SearchEqualsTerm || baseTerm is SearchMatchTerm && f.ExactMatch) && v.Equals(baseTerm.Value, StringComparison.Ordinal)
-                        || (baseTerm is SearchContainsTerm || baseTerm is SearchMatchTerm && !f.ExactMatch) && v.Contains(baseTerm.Value, StringComparison.OrdinalIgnoreCase)));
+                        (compareTerm is EqualsSearchTerm || compareTerm is MatchSearchTerm && f.ExactMatch) && v.Equals(compareTerm.Value, StringComparison.Ordinal)
+                        || (compareTerm is ContainsSearchTerm || compareTerm is MatchSearchTerm && !f.ExactMatch) && v.Contains(compareTerm.Value, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            static bool MatchesHasTerm(HasSearchTerm hasTerm, IReadOnlyCollection<MetadataSearchField> searchFields)
+            {
+                return searchFields.Where(f => f.Aliases.Contains(hasTerm.Name, StringComparer.OrdinalIgnoreCase))
+                    .SelectMany(f => f.Values)
+                    .Any();
             }
         }
     }
