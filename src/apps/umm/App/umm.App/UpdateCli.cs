@@ -54,12 +54,8 @@ internal static class UpdateCli
         IMultiHashProvider? multiHashProvider = serviceProvider.GetService<IMultiHashProvider>();
         foreach (IMediaVendor mediaVendor in serviceProvider.GetServices<IMediaVendor>())
         {
-            bool matchesVendorId = SearchTerm.From(searchQuery).Matches(new MetadataSearchField()
-            {
-                Aliases = [nameof(MediaFullId.VendorId)],
-                Values = [mediaVendor.VendorId],
-                ExactMatch = true,
-            });
+            bool matchesVendorId = !searchQuery.TryGetValue(nameof(MediaFullId.VendorId), out StringValues searchVendorIds)
+                || searchVendorIds.Contains(mediaVendor.VendorId, StringComparer.Ordinal);
             if (!matchesVendorId) continue;
             await foreach (string contentId in mediaVendor.UpdateContentAsync(searchTerm, force, cancellationToken).ConfigureAwait(false))
             {
