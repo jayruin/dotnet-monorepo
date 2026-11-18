@@ -46,6 +46,7 @@
   <ItemGroup Condition ="$(MSBuildProjectName.EndsWith('.Tests'))">
     <PackageReference Include="MSTest" />
     <PackageReference Include="NSubstitute" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.Testing" />
     <ProjectReference Include="$(MSBuildThisFileDirectory)**\$(MSBuildProjectName.Substring(0, $(MSBuildProjectName.LastIndexOf('.')))).csproj" />
     <AssemblyAttribute Include="Microsoft.VisualStudio.TestTools.UnitTesting.ParallelizeAttribute">
     </AssemblyAttribute>
