@@ -43,17 +43,22 @@ public sealed class OpdsSerializerV2_0
             },
             ["links"] = CreateFeedLinksNode(feed, options.OpenSearchTemplateUrl),
         };
-
-        if (feed.NavigationEntries.Length > 0)
+        if (feed.NavigationEntries.Length == 0 && feed.AcquisitionEntries.Length == 0)
         {
-            rootNode["navigation"] = new JsonArray([.. feed.NavigationEntries.Select(CreateNavigationNode)]);
+            rootNode["navigation"] = new JsonArray();
+            rootNode["publications"] = new JsonArray();
         }
-
-        if (feed.AcquisitionEntries.Length > 0)
+        else
         {
-            rootNode["publications"] = new JsonArray([.. feed.AcquisitionEntries.Select(e => CreatePublicationNode(e, feed.Modified))]);
+            if (feed.NavigationEntries.Length > 0)
+            {
+                rootNode["navigation"] = new JsonArray([.. feed.NavigationEntries.Select(CreateNavigationNode)]);
+            }
+            if (feed.AcquisitionEntries.Length > 0)
+            {
+                rootNode["publications"] = new JsonArray([.. feed.AcquisitionEntries.Select(e => CreatePublicationNode(e, feed.Modified))]);
+            }
         }
-
         return rootNode;
     }
 
