@@ -74,7 +74,7 @@ internal static class OpdsV2Endpoints
         HttpRequest request,
         IOptionsSnapshot<OpdsOptions> options,
         IMediaCatalog catalog, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, TimeProvider timeProvider,
-        [FromQuery(Name = "q")] string? searchTerm = null,
+        [FromQuery(Name = "q")] string? query = null,
         [FromQuery(Name = "paginated")] bool isPaginated = false,
         [FromQuery(Name = "acquisition")] bool isAcquisition = false,
         [FromQuery] string? history = null,
@@ -93,7 +93,7 @@ internal static class OpdsV2Endpoints
                 }
                 : null,
         };
-        List<MediaEntry> entries = await catalog.EnumerateAsync(searchTerm ?? string.Empty, searchOptions, cancellationToken)
+        List<MediaEntry> entries = await catalog.EnumerateAsync(query ?? string.Empty, searchOptions, cancellationToken)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
         string? nextUrl = Navigation.GetNextUrl(history, request, entries, pageSize);
@@ -102,11 +102,11 @@ internal static class OpdsV2Endpoints
             isAcquisition, isPaginated,
             prevUrl, nextUrl);
         string openSearchEndpoint = request.Path;
-        Dictionary<string, StringValues> query = QueryHelpers.ParseQuery(request.QueryString.Value);
-        query.Remove("q");
+        Dictionary<string, StringValues> requestQuery = QueryHelpers.ParseQuery(request.QueryString.Value);
+        requestQuery.Remove("q");
         string templateUrl = string.Concat(
-            QueryHelpers.AddQueryString(openSearchEndpoint, query),
-            query.Count > 0 ? "&" : "?",
+            QueryHelpers.AddQueryString(openSearchEndpoint, requestQuery),
+            requestQuery.Count > 0 ? "&" : "?",
             "q={query}"
         );
         OpdsSerializerFeedOptionsV2_0 serializerOptions = new()
@@ -124,6 +124,7 @@ internal static class OpdsV2Endpoints
         HttpRequest request,
         IOptionsSnapshot<OpdsOptions> options, IOpdsRecipeStorage recipeStorage,
         IMediaCatalog catalog, IMediaTypeFileExtensionsMapping mediaTypeFileExtensionsMapping, TimeProvider timeProvider,
+        [FromQuery(Name = "q")] string? query = null,
         [FromQuery] string? history = null,
         CancellationToken cancellationToken = default)
     {
@@ -135,6 +136,16 @@ internal static class OpdsV2Endpoints
                 ? SearchTerm.From(recipe.SearchQuery)
                 : null;
         if (searchTerm is null) return TypedResults.NotFound();
+        if (!string.IsNullOrWhiteSpace(query))
+        {
+            searchTerm = new AndSearchTerm()
+            {
+                Targets = [
+                    searchTerm,
+                    new MatchSearchTerm() { Name = null, Value = query, },
+                ],
+            };
+        }
         (string? prevUrl, MediaFullId? after) = Navigation.GetHistory(history, request);
         int pageSize = options.Value.PageSize;
         SearchOptions searchOptions = new()
@@ -156,7 +167,18 @@ internal static class OpdsV2Endpoints
             entries, timeProvider,
             recipe.Acquisition, recipe.Paginated,
             prevUrl, nextUrl);
-        OpdsSerializerFeedOptionsV2_0 serializerOptions = new();
+        string openSearchEndpoint = request.Path;
+        Dictionary<string, StringValues> requestQuery = QueryHelpers.ParseQuery(request.QueryString.Value);
+        requestQuery.Remove("q");
+        string templateUrl = string.Concat(
+            QueryHelpers.AddQueryString(openSearchEndpoint, requestQuery),
+            requestQuery.Count > 0 ? "&" : "?",
+            "q={query}"
+        );
+        OpdsSerializerFeedOptionsV2_0 serializerOptions = new()
+        {
+            OpenSearchTemplateUrl = templateUrl,
+        };
         return TypedResults.Stream(
             stream => OpdsSerializerV2_0.WriteFeedAsync(stream, feed, serializerOptions, cancellationToken),
             OpdsSerializerV2_0.FeedMediaType,

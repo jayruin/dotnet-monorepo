@@ -60,8 +60,7 @@ public static class LiteEndpoints
         }
         else
         {
-            string searchTerm = search ?? string.Empty;
-            entriesStream = catalog.EnumerateAsync(searchTerm, searchOptions, cancellationToken);
+            entriesStream = catalog.EnumerateAsync(search ?? string.Empty, searchOptions, cancellationToken);
         }
         List<MediaEntry> entries = await entriesStream
             .ToListAsync(cancellationToken)
