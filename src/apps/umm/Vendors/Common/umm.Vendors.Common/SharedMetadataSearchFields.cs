@@ -12,9 +12,7 @@ public static class SharedMetadataSearchFields
         IReadOnlySet<string> tags, IReadOnlyCollection<MediaExportTarget> exportTargets) =>
     [
         GetTagField(tags),
-        GetVendorIdField(mediaFullId.VendorId),
-        GetContentIdField(mediaFullId.ContentId),
-        GetPartIdField(mediaFullId.PartId),
+        ..GetMediaIdFields(mediaFullId),
         ..GetExportTargetFields(exportTargets),
     ];
 
@@ -24,6 +22,13 @@ public static class SharedMetadataSearchFields
         Values = [.. tags],
         ExactMatch = true,
     };
+
+    public static ImmutableArray<MetadataSearchField> GetMediaIdFields(MediaFullId mediaFullId) =>
+    [
+        GetVendorIdField(mediaFullId.VendorId),
+        GetContentIdField(mediaFullId.ContentId),
+        GetPartIdField(mediaFullId.PartId),
+    ];
 
     public static MetadataSearchField GetVendorIdField(string vendorId) => new()
     {

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,7 +27,11 @@ public sealed class UpdateHandler<TMetadata>
         {
             MediaMainId id = new(_strategy.VendorContext.VendorId, remoteMetadata.ContentId);
             total += 1;
-            bool matches = searchTerm.Matches(remoteMetadata.GetSearchFields());
+            ImmutableArray<MetadataSearchField> searchFields = [
+                ..remoteMetadata.GetSearchFields(),
+                ..SharedMetadataSearchFields.GetMediaIdFields(id.ToFullId()),
+            ];
+            bool matches = searchTerm.Matches(searchFields);
             if (!matches)
             {
                 _strategy.VendorContext.Logger.LogDoesNotMatchSearchQuery(id.VendorId, id.ContentId);
