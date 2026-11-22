@@ -30,13 +30,13 @@ jobs:
     steps:
       - uses: $/.github/actions/setup
       - name: Restore
-        run: dotnet run scripts/repo.cs -- -r
+        run: dotnet run scripts/repo.cs -- restore
       - name: Build
-        run: dotnet run scripts/repo.cs -- -b
+        run: dotnet run scripts/repo.cs -- build --single-step --ignore-test-projects
       - name: Test
-        run: dotnet run scripts/repo.cs -- -t
+        run: dotnet run scripts/repo.cs -- test --cleanup
       - name: Publish
-        run: dotnet run scripts/repo.cs -- -p
+        run: dotnet run scripts/repo.cs -- publish --single-step
       - name: Create Releases
         run: dotnet run scripts/ci.cs -- create-releases
   update-pages:

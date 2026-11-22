@@ -24,107 +24,181 @@ internal static class Cli
 {
     public static RootCommand CreateRootCommand(string rootDirectory)
     {
-        Argument<IEnumerable<string>> projectsArgument = new("projects")
-        {
-            DefaultValueFactory = _ => [],
-        };
-        Option<string> configurationOption = new("--configuration", "--config")
-        {
-            DefaultValueFactory = _ => "Release",
-        };
-        Option<bool> slnOption = new("--sln", "-s")
-        {
-            DefaultValueFactory = _ => false,
-        };
-        Option<bool> updateOption = new("--update", "-u")
-        {
-            DefaultValueFactory = _ => false,
-        };
-        Option<bool> zeroOption = new("--zero", "-z")
-        {
-            DefaultValueFactory = _ => false,
-        };
-        Option<bool> restoreOption = new("--restore", "-r")
-        {
-            DefaultValueFactory = _ => false,
-        };
-        Option<bool> cleanOption = new("--clean", "-c")
-        {
-            DefaultValueFactory = _ => false,
-        };
-        Option<bool> buildOption = new("--build", "-b")
-        {
-            DefaultValueFactory = _ => false,
-        };
-        Option<bool> testOption = new("--test", "-t")
-        {
-            DefaultValueFactory = _ => false,
-        };
-        Option<bool> publishOption = new("--publish", "-p")
-        {
-            DefaultValueFactory = _ => false,
-        };
         RootCommand rootCommand = [
+            CreateSlnCommand(rootDirectory),
+            CreateUpdateCommand(rootDirectory),
+            CreateZeroCommand(rootDirectory),
+            CreateRestoreCommand(rootDirectory),
+            CreateCleanCommand(rootDirectory),
+            CreateBuildCommand(rootDirectory),
+            CreateTestCommand(rootDirectory),
+            CreatePublishCommand(rootDirectory),
+        ];
+        return rootCommand;
+    }
+
+    private static Command CreateSlnCommand(string rootDirectory)
+    {
+        Command command = new("sln");
+        command.SetAction(parseResult =>
+        {
+            Repo repo = new(rootDirectory);
+            repo.Sln();
+        });
+        return command;
+    }
+
+    private static Command CreateUpdateCommand(string rootDirectory)
+    {
+        Command command = new("update");
+        command.SetAction(parseResult =>
+        {
+            Repo repo = new(rootDirectory);
+            repo.Update();
+        });
+        return command;
+    }
+
+    private static Command CreateZeroCommand(string rootDirectory)
+    {
+        Argument<IEnumerable<string>> projectsArgument = CreateProjectsArgument();
+        Command command = new("zero")
+        {
+            projectsArgument,
+        };
+        command.SetAction(parseResult =>
+        {
+            HashSet<string> projectNames = [.. parseResult.GetRequiredValue(projectsArgument)];
+            Repo repo = new(rootDirectory);
+            repo.Zero(projectNames);
+        });
+        return command;
+    }
+
+    private static Command CreateRestoreCommand(string rootDirectory)
+    {
+        Argument<IEnumerable<string>> projectsArgument = CreateProjectsArgument();
+        Command command = new("restore")
+        {
+            projectsArgument,
+        };
+        command.SetAction(parseResult =>
+        {
+            HashSet<string> projectNames = [.. parseResult.GetRequiredValue(projectsArgument)];
+            Repo repo = new(rootDirectory);
+            repo.Restore(projectNames);
+        });
+        return command;
+    }
+
+    private static Command CreateCleanCommand(string rootDirectory)
+    {
+        Argument<IEnumerable<string>> projectsArgument = CreateProjectsArgument();
+        Option<string> configurationOption = CreateConfigurationOption();
+        Command command = new("clean")
+        {
             projectsArgument,
             configurationOption,
-            slnOption,
-            updateOption,
-            zeroOption,
-            restoreOption,
-            cleanOption,
-            buildOption,
-            testOption,
-            publishOption,
-        ];
-        rootCommand.SetAction(parseResult =>
+        };
+        command.SetAction(parseResult =>
         {
             HashSet<string> projectNames = [.. parseResult.GetRequiredValue(projectsArgument)];
             string configuration = parseResult.GetRequiredValue(configurationOption);
-            bool sln = parseResult.GetRequiredValue(slnOption);
-            bool update = parseResult.GetRequiredValue(updateOption);
-            bool zero = parseResult.GetRequiredValue(zeroOption);
-            bool restore = parseResult.GetRequiredValue(restoreOption);
-            bool clean = parseResult.GetRequiredValue(cleanOption);
-            bool build = parseResult.GetRequiredValue(buildOption);
-            bool test = parseResult.GetRequiredValue(testOption);
-            bool publish = parseResult.GetRequiredValue(publishOption);
-
-            Repo repo = new(rootDirectory, configuration);
-            if (sln)
-            {
-                repo.Sln();
-            }
-            if (update)
-            {
-                repo.Update();
-            }
-            if (zero)
-            {
-                repo.Zero(projectNames);
-            }
-            if (restore)
-            {
-                repo.Restore(projectNames);
-            }
-            if (clean)
-            {
-                repo.Clean(projectNames);
-            }
-            if (build)
-            {
-                repo.Build(projectNames);
-            }
-            if (test)
-            {
-                repo.Test(projectNames);
-            }
-            if (publish)
-            {
-                repo.Publish(projectNames);
-            }
+            Repo repo = new(rootDirectory);
+            repo.Clean(projectNames, configuration);
         });
-        return rootCommand;
+        return command;
     }
+
+    private static Command CreateBuildCommand(string rootDirectory)
+    {
+        Argument<IEnumerable<string>> projectsArgument = CreateProjectsArgument();
+        Option<string> configurationOption = CreateConfigurationOption();
+        Option<bool> singleStepOption = CreateSingleStepOption();
+        Option<bool> ignoreTestProjectsOption = new("--ignore-test-projects")
+        {
+            DefaultValueFactory = _ => false,
+        };
+        Command command = new("build")
+        {
+            projectsArgument,
+            configurationOption,
+            singleStepOption,
+            ignoreTestProjectsOption,
+        };
+        command.SetAction(parseResult =>
+        {
+            HashSet<string> projectNames = [.. parseResult.GetRequiredValue(projectsArgument)];
+            string configuration = parseResult.GetRequiredValue(configurationOption);
+            bool singleStep = parseResult.GetRequiredValue(singleStepOption);
+            bool ignoreTestProjects = parseResult.GetRequiredValue(ignoreTestProjectsOption);
+            Repo repo = new(rootDirectory);
+            repo.Build(projectNames, configuration, singleStep, ignoreTestProjects);
+        });
+        return command;
+    }
+
+    private static Command CreateTestCommand(string rootDirectory)
+    {
+        Argument<IEnumerable<string>> projectsArgument = CreateProjectsArgument();
+        Option<string> configurationOption = CreateConfigurationOption();
+        Option<bool> singleStepOption = CreateSingleStepOption();
+        Option<bool> cleanupOption = new("--cleanup");
+        Command command = new("test")
+        {
+            projectsArgument,
+            configurationOption,
+            singleStepOption,
+            cleanupOption,
+        };
+        command.SetAction(parseResult =>
+        {
+            HashSet<string> projectNames = [.. parseResult.GetRequiredValue(projectsArgument)];
+            string configuration = parseResult.GetRequiredValue(configurationOption);
+            bool singleStep = parseResult.GetRequiredValue(singleStepOption);
+            bool cleanup = parseResult.GetRequiredValue(cleanupOption);
+            Repo repo = new(rootDirectory);
+            repo.Test(projectNames, configuration, singleStep, cleanup);
+        });
+        return command;
+    }
+
+    private static Command CreatePublishCommand(string rootDirectory)
+    {
+        Argument<IEnumerable<string>> projectsArgument = CreateProjectsArgument();
+        Option<string> configurationOption = CreateConfigurationOption();
+        Option<bool> singleStepOption = CreateSingleStepOption();
+        Command command = new("publish")
+        {
+            projectsArgument,
+            configurationOption,
+            singleStepOption,
+        };
+        command.SetAction(parseResult =>
+        {
+            HashSet<string> projectNames = [.. parseResult.GetRequiredValue(projectsArgument)];
+            string configuration = parseResult.GetRequiredValue(configurationOption);
+            bool singleStep = parseResult.GetRequiredValue(singleStepOption);
+            Repo repo = new(rootDirectory);
+            repo.Publish(projectNames, configuration, singleStep);
+        });
+        return command;
+    }
+
+    private static Argument<IEnumerable<string>> CreateProjectsArgument() => new("projects")
+    {
+        DefaultValueFactory = _ => [],
+    };
+
+    private static Option<string> CreateConfigurationOption() => new("--configuration", "--config")
+    {
+        DefaultValueFactory = _ => "Release",
+    };
+
+    private static Option<bool> CreateSingleStepOption() => new("--single-step")
+    {
+        DefaultValueFactory = _ => false,
+    };
 }
 
 internal sealed class Repo
@@ -135,10 +209,9 @@ internal sealed class Repo
     public string TestResultsDirectory { get; }
     public string BinDirectory { get; }
     public ImmutableArray<Project> AllProjects { get; }
-    public string Configuration { get; }
     public string Runtime { get; }
 
-    public Repo(string rootDirectory, string configuration)
+    public Repo(string rootDirectory)
     {
         RootDirectory = rootDirectory;
         SrcDirectory = Path.Join(RootDirectory, "src");
@@ -146,7 +219,6 @@ internal sealed class Repo
         TestResultsDirectory = Path.Join(RootDirectory, "TestResults");
         BinDirectory = Path.Join(RootDirectory, "bin");
         AllProjects = ProjectLoader.LoadAll(SrcDirectory);
-        Configuration = configuration;
         Runtime = GetRuntime();
     }
 
@@ -223,9 +295,14 @@ internal sealed class Repo
         Xml.SaveDocument(document, packagesFile);
     }
 
-    public void Zero(params IEnumerable<string> projectNames)
+    public void Zero(IEnumerable<string> projectNames)
     {
         ImmutableArray<Project> projects = GetProjects(true, false, projectNames);
+        Zero(projects);
+    }
+
+    private void Zero(IEnumerable<Project> projects)
+    {
         foreach (Project project in projects)
         {
             string[] directoriesToDelete = [
@@ -244,7 +321,7 @@ internal sealed class Repo
         }
     }
 
-    public void Restore(params IEnumerable<string> projectNames)
+    public void Restore(IEnumerable<string> projectNames)
     {
         ImmutableArray<Project> projects = GetProjects(false, true, projectNames);
         foreach (Project project in projects)
@@ -255,7 +332,7 @@ internal sealed class Repo
         }
     }
 
-    public void Clean(params IEnumerable<string> projectNames)
+    public void Clean(IEnumerable<string> projectNames, string configuration)
     {
         ImmutableArray<Project> projects = GetProjects(false, true, projectNames);
         foreach (Project project in projects)
@@ -263,57 +340,78 @@ internal sealed class Repo
             Subprocess.RunAndCheck(project.ProjectDirectory,
                 "dotnet",
                 "clean", Path.GetFileName(project.PathToCsproj),
-                "--configuration", Configuration);
+                "--configuration", configuration);
         }
     }
-    public void Build(params IEnumerable<string> projectNames)
+
+    public void Build(IEnumerable<string> projectNames, string configuration, bool singleStep, bool ignoreTestProjects)
     {
         ImmutableArray<Project> projects = GetProjects(false, true, projectNames);
         foreach (Project project in projects)
         {
-            Subprocess.RunAndCheck(project.ProjectDirectory,
+            if (ignoreTestProjects && project.IsTest) continue;
+            List<string> parameters = [
                 "dotnet",
                 "build", Path.GetFileName(project.PathToCsproj),
-                "--configuration", Configuration,
-                "--no-restore");
+                "--configuration", configuration,
+            ];
+            if (singleStep)
+            {
+                parameters.Add("--no-restore");
+            }
+            Subprocess.RunAndCheck(project.ProjectDirectory, [.. parameters]);
         }
     }
 
-    public void Test(params IEnumerable<string> projectNames)
+    public void Test(IEnumerable<string> projectNames, string configuration, bool singleStep, bool cleanup)
     {
         ImmutableArray<Project> projects = GetProjects(true, false, projectNames);
         Directory.CreateDirectory(TestResultsDirectory);
         foreach (Project project in projects)
         {
             if (!project.IsTest) continue;
-            Subprocess.RunAndCheck(project.ProjectDirectory,
+            List<string> parameters = [
                 "dotnet",
                 "test", Path.GetFileName(project.PathToCsproj),
-                "--configuration", Configuration,
-                "--no-build",
+                "--configuration", configuration,
                 "--logger", "trx",
-                "--logger", "html");
+                "--logger", "html",
+            ];
+            if (singleStep)
+            {
+                parameters.Add("--no-build");
+            }
+            Subprocess.RunAndCheck(project.ProjectDirectory, [.. parameters]);
             string projectTestResultsDirectory = Path.Join(project.ProjectDirectory, "TestResults");
             foreach (string testResultsFile in Directory.EnumerateFiles(projectTestResultsDirectory))
             {
                 string newFilePath = Path.Join(TestResultsDirectory, $"{project.Name}.{Runtime}{Path.GetExtension(testResultsFile)}");
                 File.Move(testResultsFile, newFilePath, true);
             }
+            if (cleanup)
+            {
+                Zero([project]);
+            }
         }
     }
 
-    public void Publish(params IEnumerable<string> projectNames)
+    public void Publish(IEnumerable<string> projectNames, string configuration, bool singleStep)
     {
         ImmutableArray<Project> projects = GetProjects(false, false, projectNames);
         Directory.CreateDirectory(BinDirectory);
         foreach (Project project in projects)
         {
             if (!project.IsExecutable) continue;
-            Subprocess.RunAndCheck(project.ProjectDirectory,
+            List<string> parameters = [
                 "dotnet",
                 "publish", Path.GetFileName(project.PathToCsproj),
-                "--configuration", Configuration,
-                "--no-build");
+                "--configuration", configuration,
+            ];
+            if (singleStep)
+            {
+                parameters.Add("--no-build");
+            }
+            Subprocess.RunAndCheck(project.ProjectDirectory, [.. parameters]);
             if (project.PublishSingleFile)
             {
                 string executableFileName = OperatingSystem.IsWindows()
@@ -323,7 +421,7 @@ internal sealed class Repo
                 string originalExecutableFile = Path.Join(ArtifactsDirectory,
                     "publish",
                     project.Name,
-                    $"{Configuration.ToLowerInvariant()}_{Runtime}",
+                    $"{configuration.ToLowerInvariant()}_{Runtime}",
                     executableFileName);
                 File.Move(originalExecutableFile, binExecutableFile, true);
             }
@@ -333,7 +431,7 @@ internal sealed class Repo
                 string outputDirectory = Path.Join(ArtifactsDirectory,
                     "publish",
                     project.Name,
-                    $"{Configuration.ToLowerInvariant()}_{Runtime}");
+                    $"{configuration.ToLowerInvariant()}_{Runtime}");
                 if (File.Exists(binZipFile))
                 {
                     File.Delete(binZipFile);
@@ -341,7 +439,6 @@ internal sealed class Repo
                 ZipFile.CreateFromDirectory(outputDirectory, binZipFile);
             }
         }
-
     }
 
     private ImmutableArray<Project> GetProjects(bool includeDependencies, bool minimal,
