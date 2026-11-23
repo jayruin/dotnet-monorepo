@@ -13,6 +13,8 @@ internal sealed class MetadataVersion : IMetadataVersion
 
     public IImmutableList<string> Languages { get; init; } = ImmutableArray<string>.Empty;
 
+    public string? Description { get; init; }
+
     public DateTimeOffset? Timestamp { get; init; }
 
     public IImmutableList<ImmutableArray<int>> Cover { get; init; } = ImmutableArray<ImmutableArray<int>>.Empty;

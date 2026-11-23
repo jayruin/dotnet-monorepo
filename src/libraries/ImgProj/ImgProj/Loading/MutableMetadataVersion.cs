@@ -15,6 +15,8 @@ internal sealed class MutableMetadataVersion
 
     public IList<string> Languages { get; set; } = new List<string>();
 
+    public string? Description { get; set; }
+
     public DateTimeOffset? Timestamp { get; set; }
 
     public IList<ImmutableArray<int>> Cover { get; set; } = new List<ImmutableArray<int>>();

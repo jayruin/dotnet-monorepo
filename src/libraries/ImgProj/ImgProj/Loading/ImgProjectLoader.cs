@@ -176,6 +176,15 @@ public static class ImgProjectLoader
             metadata.MergeLanguages(jsonLanguages);
         }
 
+        if (entryJson.Description.TryGetValue(version, out string? jsonDescription) && !string.IsNullOrWhiteSpace(jsonDescription))
+        {
+            metadata.Description = jsonDescription;
+        }
+        else if (!string.IsNullOrWhiteSpace(parentMetadata.Description))
+        {
+            metadata.Description = parentMetadata.Description;
+        }
+
         metadata.MergeTimestamp(parentMetadata.Timestamp);
         if (entryJson.Timestamp.TryGetValue(version, out DateTimeOffset jsonTimestamp))
         {

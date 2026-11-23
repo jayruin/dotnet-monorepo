@@ -67,6 +67,8 @@ Entry object (all properties optional)
 - languages: object
     - key is version and value is array of string
     - each string in value array must be a BCP-47 language code
+- description: object
+    - key is version and value is description
 - timestamp: object
     - key is version and value is string
     - value string must be in the ISO-8601 extended format
@@ -82,5 +84,6 @@ For Entry objects, some missing optional properties may be inferred or provided 
 
 - title will default to single coordinate for that entry
 - creators, languages may be inferred as the union of parent Entry and all child Entries
+- description may be inferred from parent Entry
 - timestamp may be inferred as the max of parent Entry and all child Entries
 - covers will inherit the relevant subcovers of the parent Entry

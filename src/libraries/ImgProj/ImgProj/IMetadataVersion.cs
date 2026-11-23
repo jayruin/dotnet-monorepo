@@ -9,6 +9,7 @@ public interface IMetadataVersion
     public IImmutableList<string> TitleParts { get; }
     public IImmutableDictionary<string, IImmutableSet<string>> Creators { get; }
     public IImmutableList<string> Languages { get; }
+    public string? Description { get; }
     public DateTimeOffset? Timestamp { get; }
     public IImmutableList<ImmutableArray<int>> Cover { get; }
     public IImmutableList<IPageSpread> PageSpreads { get; }

@@ -85,6 +85,7 @@ public sealed class Epub3Exporter : IExporter, IDirectoryExporter
         epubWriter.Identifier = GetIdentifier(metadata);
         epubWriter.Title = MetadataFlattener.GetTitle(metadata.TitleParts);
         epubWriter.Languages = metadata.Languages;
+        epubWriter.Description = metadata.Description;
         epubWriter.Creators = metadata.Creators.Select(c => new EpubCreator
         {
             Name = c.Key,
