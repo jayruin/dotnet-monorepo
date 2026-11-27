@@ -1,4 +1,5 @@
 using Apps;
+using Hashing;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;

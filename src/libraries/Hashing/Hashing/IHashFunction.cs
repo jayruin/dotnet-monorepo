@@ -1,8 +1,8 @@
 using System;
 
-namespace umm.HashCache;
+namespace Hashing;
 
-internal interface IHashFunction
+public interface IHashFunction
 {
     string Name { get; }
     int HashLengthInBytes { get; }

@@ -1,7 +1,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace umm.HashCache;
+namespace Hashing;
 
 internal sealed class Shake128Adapter : IHashFunction, IDisposable
 {

@@ -1,11 +1,14 @@
+using System.Collections.Generic;
 using System.IO.Hashing;
+using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 
-namespace umm.HashCache;
+namespace Hashing;
 
 public static class HashFunction
 {
-    internal static IHashFunction? Create(string name)
+    public static IHashFunction? Create(string name)
     {
         return name.ToLowerOrdinal() switch
         {
@@ -28,6 +31,12 @@ public static class HashFunction
             _ => null,
         };
     }
+
+    public static IEnumerable<string> GetAllNames() => typeof(HashFunction)
+        .GetFields(BindingFlags.Public | BindingFlags.Static)
+        .Where(fi => fi.IsLiteral && fi.FieldType == typeof(string))
+        .Select(fi => fi.GetRawConstantValue())
+        .OfType<string>();
 
     public const string MD5 = "md5";
     public const string SHA1 = "sha1";

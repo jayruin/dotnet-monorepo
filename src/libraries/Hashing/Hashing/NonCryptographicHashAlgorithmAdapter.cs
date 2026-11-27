@@ -1,7 +1,7 @@
 using System;
 using System.IO.Hashing;
 
-namespace umm.HashCache;
+namespace Hashing;
 
 internal sealed class NonCryptographicHashAlgorithmAdapter : IHashFunction
 {
