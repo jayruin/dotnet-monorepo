@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="57a315e4-81ea-4d97-98d2-38de93aad699" name="@sat12-bq146-ab7790a5-db20-4036-a600-fedf0840e0ef-1A98A0178EE5 2026-11-28 13:05:34" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-28T13:05:34.7250650+00:00" queuing="2026-11-28T13:05:34.7250650+00:00" start="2026-11-28T13:05:33.9408000+00:00" finish="2026-11-28T13:05:34.7305930+00:00" />
+  <TestSettings name="default" id="0fe2a6d4-152f-475f-b14d-507165613ecf">
+    <Deployment runDeploymentRoot="_sat12-bq146-ab7790a5-db20-4036-a600-fedf0840e0ef-1A98A0178EE5_2026-11-28_13_05_34" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="bb7f9bf8-113f-454e-9d3d-a68a67dcb65a" testId="1bbde17a-1320-88b7-997f-a81e5809a96f" testName="TestLoadReadingDirection (LTR)" computerName="sat12-bq146-ab7790a5-db20-4036-a600-fedf0840e0ef-1A98A0178EE5" duration="00:00:00.0007663" startTime="2026-11-28T13:05:34.6769070+00:00" endTime="2026-11-28T13:05:34.6799810+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bb7f9bf8-113f-454e-9d3d-a68a67dcb65a" />
+    <UnitTestResult executionId="8e9a8547-d22b-4a42-86b3-530bcabc2a90" testId="14c01320-3b2b-8e05-9233-caf8c40f8b20" testName="TestLoadPageSpreads" computerName="sat12-bq146-ab7790a5-db20-4036-a600-fedf0840e0ef-1A98A0178EE5" duration="00:00:00.0222200" startTime="2026-11-28T13:05:34.6327220+00:00" endTime="2026-11-28T13:05:34.6725010+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8e9a8547-d22b-4a42-86b3-530bcabc2a90" />
+    <UnitTestResult executionId="015dcbc0-4bf3-4629-b5d2-bfb3e935cc31" testId="1ffcac66-a9ef-849b-a991-465177e44551" testName="TestLoadReadingDirection (RTL)" computerName="sat12-bq146-ab7790a5-db20-4036-a600-fedf0840e0ef-1A98A0178EE5" duration="00:00:00.0001520" startTime="2026-11-28T13:05:34.6801550+00:00" endTime="2026-11-28T13:05:34.6814260+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="015dcbc0-4bf3-4629-b5d2-bfb3e935cc31" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestLoadReadingDirection (LTR)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/imgproj.tests/release_osx-arm64/imgproj.tests.dll" id="1bbde17a-1320-88b7-997f-a81e5809a96f">
+      <Execution id="bb7f9bf8-113f-454e-9d3d-a68a67dcb65a" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/ImgProj.Tests/release_osx-arm64/ImgProj.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ImgProj.Tests.LoadingTests" name="TestLoadReadingDirection" />
+    </UnitTest>
+    <UnitTest name="TestLoadReadingDirection (RTL)" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/imgproj.tests/release_osx-arm64/imgproj.tests.dll" id="1ffcac66-a9ef-849b-a991-465177e44551">
+      <Execution id="015dcbc0-4bf3-4629-b5d2-bfb3e935cc31" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/ImgProj.Tests/release_osx-arm64/ImgProj.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ImgProj.Tests.LoadingTests" name="TestLoadReadingDirection" />
+    </UnitTest>
+    <UnitTest name="TestLoadPageSpreads" storage="/users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/imgproj.tests/release_osx-arm64/imgproj.tests.dll" id="14c01320-3b2b-8e05-9233-caf8c40f8b20">
+      <Execution id="8e9a8547-d22b-4a42-86b3-530bcabc2a90" />
+      <TestMethod codeBase="/Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/ImgProj.Tests/release_osx-arm64/ImgProj.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ImgProj.Tests.LoadingTests" name="TestLoadPageSpreads" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="1bbde17a-1320-88b7-997f-a81e5809a96f" executionId="bb7f9bf8-113f-454e-9d3d-a68a67dcb65a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="14c01320-3b2b-8e05-9233-caf8c40f8b20" executionId="8e9a8547-d22b-4a42-86b3-530bcabc2a90" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1ffcac66-a9ef-849b-a991-465177e44551" executionId="015dcbc0-4bf3-4629-b5d2-bfb3e935cc31" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="3" executed="3" passed="3" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test Parallelization enabled for /Users/runner/work/dotnet-monorepo/dotnet-monorepo/src/artifacts/bin/ImgProj.Tests/release_osx-arm64/ImgProj.Tests.dll (Workers: 3, Scope: ClassLevel)
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
