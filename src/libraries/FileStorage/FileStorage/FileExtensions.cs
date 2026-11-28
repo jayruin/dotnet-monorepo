@@ -41,7 +41,7 @@ public static class FileExtensions
         {
             Stream stream = await file.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
             await using ConfiguredAsyncDisposable configuredStream = stream.ConfigureAwait(false);
-            StreamWriter streamWriter = new(stream, encoding);
+            StreamWriter streamWriter = new(stream, encoding, leaveOpen: true);
             await using ConfiguredAsyncDisposable configuredStreamWriter = streamWriter.ConfigureAwait(false);
             await streamWriter.WriteAsync(text.AsMemory(), cancellationToken).ConfigureAwait(false);
         }

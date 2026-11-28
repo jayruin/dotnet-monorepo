@@ -289,8 +289,11 @@ internal sealed class EpubProject : IEpubProject
                 };
                 Stream resourceStream = await epubWriter.CreateResourceAsync(epubResource, cancellationToken).ConfigureAwait(false);
                 await using ConfiguredAsyncDisposable configuredResourceStream = resourceStream.ConfigureAwait(false);
-                await using StreamWriter streamWriter = new(resourceStream, EpubProjectConstants.TextEncoding);
-                xhtmlDocument.ToHtml(streamWriter, _markupFormatter);
+                StreamWriter streamWriter = new(resourceStream, EpubProjectConstants.TextEncoding, leaveOpen: true);
+                await using ConfiguredAsyncDisposable configuredStreamWriter = streamWriter.ConfigureAwait(false);
+                //xhtmlDocument.ToHtml(streamWriter, _markupFormatter);
+                //TODO No ToHtmlAsync overload that accepts IMarkupFormatter and CancellationToken
+                await streamWriter.WriteAsync(xhtmlDocument.ToHtml(_markupFormatter), cancellationToken).ConfigureAwait(false);
             }
         }
     }
