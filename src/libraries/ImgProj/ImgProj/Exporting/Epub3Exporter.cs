@@ -106,7 +106,7 @@ public sealed class Epub3Exporter : IExporter, IDirectoryExporter
 
     private static string GetIdentifier(IMetadataVersion metadata)
     {
-        DateTimeOffset timestamp = metadata.Timestamp ?? DateTimeOffset.MinValue;
+        DateTimeOffset timestamp = metadata.Timestamp ?? ZipConstants.MinLastWriteTime;
         Guid namespaceGuid = Guid.CreateVersion7(timestamp);
         string data = MetadataFlattener.GetTitle(metadata.TitleParts);
         Guid guid = Guid.CreateVersion5(namespaceGuid, data);
