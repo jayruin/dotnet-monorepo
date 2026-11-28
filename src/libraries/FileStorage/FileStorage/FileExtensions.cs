@@ -33,7 +33,7 @@ public static class FileExtensions
         public void WriteText(string text, Encoding encoding)
         {
             using Stream stream = file.OpenWrite();
-            using StreamWriter streamWriter = new(stream, encoding);
+            using StreamWriter streamWriter = new(stream, encoding, leaveOpen: true);
             streamWriter.Write(text);
         }
 

@@ -71,7 +71,7 @@ internal sealed class EpubProjectConverter
         Stream textStream = await textFile.OpenReadAsync(cancellationToken).ConfigureAwait(false);
         await using (textStream.ConfigureAwait(false))
         {
-            using StreamReader streamReader = new(textStream, EpubProjectConstants.TextEncoding);
+            using StreamReader streamReader = new(textStream, EpubProjectConstants.TextEncoding, leaveOpen: true);
             string? line;
             while ((line = await streamReader.ReadLineAsync(cancellationToken).ConfigureAwait(false)) is not null)
             {

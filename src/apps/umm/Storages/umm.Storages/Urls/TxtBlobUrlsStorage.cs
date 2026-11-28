@@ -36,7 +36,7 @@ public sealed class TxtBlobUrlsStorage : IUrlsStorage
         IFile file = await GetTxtFileAsync(id, cancellationToken).ConfigureAwait(false);
         Stream stream = await file.OpenWriteAsync(cancellationToken).ConfigureAwait(false);
         await using ConfiguredAsyncDisposable configuredStream = stream.ConfigureAwait(false);
-        StreamWriter streamWriter = new(stream, FileEncoding);
+        StreamWriter streamWriter = new(stream, FileEncoding, leaveOpen: true);
         await using ConfiguredAsyncDisposable configuredStreamWriter = streamWriter.ConfigureAwait(false);
         IEnumerable<string> validUrls = urls
             .Where(url => !string.IsNullOrWhiteSpace(url))
@@ -64,7 +64,7 @@ public sealed class TxtBlobUrlsStorage : IUrlsStorage
         List<string> urls = [];
         Stream stream = await file.OpenReadAsync(cancellationToken).ConfigureAwait(false);
         await using ConfiguredAsyncDisposable configuredStream = stream.ConfigureAwait(false);
-        using StreamReader streamReader = new(stream, FileEncoding);
+        using StreamReader streamReader = new(stream, FileEncoding, leaveOpen: true);
         string? line;
         while ((line = await streamReader.ReadLineAsync(cancellationToken).ConfigureAwait(false)) != null)
         {

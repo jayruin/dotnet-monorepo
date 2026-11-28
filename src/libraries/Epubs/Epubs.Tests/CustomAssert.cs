@@ -13,8 +13,8 @@ public static class CustomAssert
         Assert.IsNotNull(expectedStream);
         EpubXml.Save(actualDocument, actualStream);
         actualStream.Seek(0, SeekOrigin.Begin);
-        using StreamReader expectedReader = new(expectedStream);
-        using StreamReader actualReader = new(actualStream);
+        using StreamReader expectedReader = new(expectedStream, leaveOpen: true);
+        using StreamReader actualReader = new(actualStream, leaveOpen: true);
         string expectedText = expectedReader.ReadToEnd().Replace("\r\n", "\n");
         string actualText = actualReader.ReadToEnd().Replace("\r\n", "\n");
         Assert.AreEqual(expectedText, actualText);

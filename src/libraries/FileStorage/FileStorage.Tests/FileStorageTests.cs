@@ -244,12 +244,12 @@ public abstract class FileStorageTests
         string input = "Hello World!";
         using (Stream writeStream = file.OpenWrite())
         {
-            using StreamWriter streamWriter = new(writeStream);
+            using StreamWriter streamWriter = new(writeStream, leaveOpen: true);
             streamWriter.Write(input);
         }
         Assert.IsTrue(file.Exists());
         using Stream readStream = file.OpenRead();
-        using StreamReader streamReader = new(readStream);
+        using StreamReader streamReader = new(readStream, leaveOpen: true);
         Assert.AreEqual(input, streamReader.ReadToEnd());
     }
 
@@ -261,18 +261,18 @@ public abstract class FileStorageTests
         string input = "Hello World!";
         using (Stream writeStream = file.OpenWrite())
         {
-            using StreamWriter streamWriter = new(writeStream);
+            using StreamWriter streamWriter = new(writeStream, leaveOpen: true);
             streamWriter.Write(input + input);
         }
         Assert.IsTrue(file.Exists());
         using (Stream writeStream = file.OpenWrite())
         {
-            using StreamWriter streamWriter = new(writeStream);
+            using StreamWriter streamWriter = new(writeStream, leaveOpen: true);
             streamWriter.Write(input);
         }
         Assert.IsTrue(file.Exists());
         using Stream readStream = file.OpenRead();
-        using StreamReader streamReader = new(readStream);
+        using StreamReader streamReader = new(readStream, leaveOpen: true);
         Assert.AreEqual(input, streamReader.ReadToEnd());
     }
 
